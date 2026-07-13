@@ -1,0 +1,12 @@
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+.Rproj.user/
+Rtmp*/
+.rlib_check*/
+results/
+benchmarks/results/
+src/*.o
+src/*.dll
+src/*.so

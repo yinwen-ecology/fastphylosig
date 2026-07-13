@@ -1,0 +1,8 @@
+useDynLib(fastphylosig, .registration = TRUE)
+importFrom(Rcpp, evalCpp)
+export(fast_signal)
+export(fast_d)
+export(fast_delta)
+export(fast_ace)
+export(match_phylo_data)
+export(plot_signal)

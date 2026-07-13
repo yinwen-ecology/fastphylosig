@@ -1,0 +1,37 @@
+Package: fastphylosig
+Type: Package
+Title: Fast Phylogenetic Signal Statistics
+Version: 0.0.1
+Authors@R:
+    person("Yin", "Wen", role = c("aut", "cre"),
+           email = "yinwen-ecology@users.noreply.github.com")
+Description: Computes selected phylogenetic signal statistics with R wrappers
+    and RcppArmadillo kernels. Continuous-trait Blomberg's K and Pagel's lambda
+    follow phytools::phylosig() for se = NULL, binary Fritz and Purvis D follows
+    caper::phylo.d(), and categorical Delta uses accelerated discrete
+    ancestral-state likelihoods. The package is designed for repeated
+    calculations on a shared tree, explicit tree/data matching, trait-wise
+    missing-data handling, and validation against reference implementations.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends:
+    R (>= 4.1.0)
+Imports:
+    ape,
+    parallel,
+    Rcpp,
+    stats
+LinkingTo:
+    Rcpp,
+    RcppArmadillo
+Suggests:
+    caper,
+    phytools,
+    testthat
+URL: https://github.com/yinwen-ecology/fastphylosig,
+    https://yinwen-ecology.github.io/fastphylosig/
+BugReports: https://github.com/yinwen-ecology/fastphylosig/issues
+SystemRequirements: C++11, OpenMP (optional)
+Config/testthat/edition: 3
+Config/Needs/website: pkgdown
+NeedsCompilation: yes

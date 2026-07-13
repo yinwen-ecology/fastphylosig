@@ -1,0 +1,34 @@
+url: https://yinwen-ecology.github.io/fastphylosig/
+
+template:
+  bootstrap: 5
+
+home:
+  title: Fast phylogenetic signal statistics
+  description: >
+    Fast, reference-validated phylogenetic signal calculations using R,
+    Rcpp, and RcppArmadillo.
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/yinwen-ecology/fastphylosig
+      aria-label: GitHub repository
+
+reference:
+- title: Continuous traits
+  contents:
+  - fast_signal
+- title: Binary and categorical traits
+  contents:
+  - fast_d
+  - fast_delta
+- title: Supporting tools
+  contents:
+  - fast_ace
+  - match_phylo_data
+  - plot_signal
