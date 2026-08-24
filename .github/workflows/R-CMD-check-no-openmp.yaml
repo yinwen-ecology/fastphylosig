@@ -46,8 +46,15 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
+          R CMD build .
+          shopt -s nullglob
+          tarballs=(fastphylosig_*.tar.gz)
+          if (( ${#tarballs[@]} != 1 )); then
+            echo "Expected exactly one built fastphylosig tarball."
+            exit 1
+          fi
           log_file="$RUNNER_TEMP/R-CMD-check-no-openmp.log"
-          R CMD check --no-manual --no-multiarch . 2>&1 | tee "$log_file"
+          R CMD check --no-manual --no-multiarch "${tarballs[0]}" 2>&1 | tee "$log_file"
           if grep -E -- '(^|[[:space:]])(-fopenmp|-qopenmp|-openmp|/openmp)([[:space:]]|$)' "$log_file"; then
             echo "An OpenMP compiler flag was present in the disabled build."
             exit 1
