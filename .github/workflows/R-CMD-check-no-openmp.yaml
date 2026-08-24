@@ -59,11 +59,14 @@ jobs:
             echo "An OpenMP compiler flag was present in the disabled build."
             exit 1
           fi
-      - name: Exercise the serial fallback
+      - name: Install the serial fallback build
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/fastphylosig-lib"
           R CMD INSTALL . --library="$RUNNER_TEMP/fastphylosig-lib"
+      - name: Exercise K serial fallback
+        shell: bash
+        run: |
           Rscript -e '
             stopifnot(identical(Sys.getenv("FASTPHYLOSIG_OPENMP_EXPECTED"), "disabled"))
             library(fastphylosig, lib.loc = file.path(Sys.getenv("RUNNER_TEMP"), "fastphylosig-lib"))
@@ -79,7 +82,15 @@ jobs:
                           verbose = FALSE, progress = FALSE)
             stopifnot(isTRUE(all.equal(one$K, two$K, tolerance = 1e-12)),
                       identical(one$P, two$P))
-
+          '
+      - name: Exercise D serial fallback
+        shell: bash
+        run: |
+          Rscript -e '
+            stopifnot(identical(Sys.getenv("FASTPHYLOSIG_OPENMP_EXPECTED"), "disabled"))
+            library(fastphylosig, lib.loc = file.path(Sys.getenv("RUNNER_TEMP"), "fastphylosig-lib"))
+            set.seed(811)
+            tree <- ape::rtree(12)
             binary <- stats::setNames(rep(0:1, 6), tree$tip.label)
             # Explicit binary fixtures make the D smoke deterministic and
             # exercise the controlled-state path rather than random draws.
@@ -98,7 +109,15 @@ jobs:
             stopifnot(isTRUE(all.equal(d1$DEstimate, d2$DEstimate,
                                       tolerance = 1e-12)),
                       identical(d1$P_random, d2$P_random))
-
+          '
+      - name: Exercise Delta serial fallback
+        shell: bash
+        run: |
+          Rscript -e '
+            stopifnot(identical(Sys.getenv("FASTPHYLOSIG_OPENMP_EXPECTED"), "disabled"))
+            library(fastphylosig, lib.loc = file.path(Sys.getenv("RUNNER_TEMP"), "fastphylosig-lib"))
+            set.seed(811)
+            tree <- ape::rtree(12)
             categorical <- stats::setNames(rep(c("A", "B", "C"), 4),
                                              tree$tip.label)
             delta_permutations <- rbind(c(2:12, 1), c(12, 1:11))
