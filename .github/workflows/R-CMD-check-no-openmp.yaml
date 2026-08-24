@@ -111,6 +111,8 @@ jobs:
                       identical(d1$P_random, d2$P_random))
           '
       - name: Exercise Delta serial fallback
+        env:
+          R_LIBS_USER: ${{ runner.temp }}/fastphylosig-lib
         shell: bash
         run: |
           Rscript -e '
@@ -128,8 +130,6 @@ jobs:
               permutations = delta_permutations, ncores = 2,
               verbose = FALSE, progress = FALSE
             ))
-            print(delta[c("delta", "successful_simulations", "n_failed_sim",
-                          "status", "note")])
             stopifnot(is.finite(delta$delta),
                       delta$successful_simulations == 2)
           '
