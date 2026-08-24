@@ -92,8 +92,10 @@ the preparation steps and method dispatch automatically. Advanced users run
 the tree and data preparation steps explicitly, then call `fast_k()`,
 `fast_lambda()`, `fast_d()`, or `fast_delta()` directly.
 
-The editable [draw.io source](technical-roadmap.drawio) and the
-[Mermaid source](technical-roadmap.md) are kept beside this page.
+The editable English [draw.io source](technical-roadmap.drawio) and
+[Mermaid source](technical-roadmap.md) are kept beside this page. The
+[Chinese guide](https://github.com/yinwen-ecology/fastphylosig/blob/main/USAGE_zh.md)
+uses a separate Chinese version of the same roadmap.
 
 ## Preparation boundaries
 

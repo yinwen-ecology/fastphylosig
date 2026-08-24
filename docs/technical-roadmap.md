@@ -1,33 +1,36 @@
-# fastphylosig 技术路线图
+# fastphylosig technical roadmap
 
-一般路径和高级路径按相同顺序排列：**输入 → 树与数据准备 → 系统发育信号计算 → 结果**。
+Routine and advanced use follow the same sequence: **input -> tree and data
+preparation -> phylogenetic signal calculation -> result**.
 
-- **一般使用**：只运行 `fast_signal()`，准备和计算均由包自动完成。
-- **高级使用**：先显式检查和准备树与数据，再调用对应的方法函数。
+- **Routine use** calls only `fast_signal()`; preparation and calculation are
+  automatic.
+- **Advanced use** prepares the tree and data explicitly, then calls the
+  method-specific function.
 
 ```mermaid
 flowchart LR
-    I["共同输入<br/>phylo 树 + 带物种名的性状数据"]
+    I["Common input<br/>phylo tree + named trait data"]
 
-    subgraph GENERAL["一般使用：简单的一条命令"]
+    subgraph GENERAL["Routine use: one command"]
         G1["fast_signal(tree, data, method)"]
-        subgraph AUTO["自动准备"]
-            G21["检查树"] --> G22["匹配物种"] --> G23["处理 NA"] --> G24["准备 context"]
+        subgraph AUTO["Automatic preparation"]
+            G21["Check tree"] --> G22["Match species"] --> G23["Handle NA"] --> G24["Prepare context"]
         end
-        G3["自动计算<br/>按 method 选择 K / lambda / D / Delta"]
+        G3["Automatic calculation<br/>method: K / lambda / D / Delta"]
         G1 --> G21
         G24 --> G3
     end
 
-    subgraph ADVANCED["高级使用：显式控制同一流程"]
-        subgraph PREP["树与数据整理"]
-            A21["check_tree()"] --> A22["resolve_tree()<br/>必要时"] --> A23["match_tree_data()"] --> A24["prepare_tree()"]
+    subgraph ADVANCED["Advanced use: explicit control of the same workflow"]
+        subgraph PREP["Tree and data preparation"]
+            A21["check_tree()"] --> A22["resolve_tree()<br/>when needed"] --> A23["match_tree_data()"] --> A24["prepare_tree()"]
         end
-        A3["选择方法函数<br/>K → fast_k()<br/>lambda → fast_lambda()<br/>D → fast_d()<br/>Delta → fast_delta()"]
+        A3["Method-specific function<br/>K: fast_k()<br/>lambda: fast_lambda()<br/>D: fast_d()<br/>Delta: fast_delta()"]
         A24 --> A3
     end
 
-    O["统一结果<br/>方法原生结果类与字段<br/>workflow / timing · P / MCSE · ESS / R-hat（按方法）"]
+    O["Unified results<br/>native result type and fields<br/>workflow / timing<br/>P / MCSE / ESS / R-hat when applicable"]
 
     I --> G1
     I --> A21
@@ -44,6 +47,5 @@ flowchart LR
     class O output
 ```
 
-网页若不启用 Mermaid，可直接使用同目录的
-[`technical-roadmap.svg`](technical-roadmap.svg)；需要继续编辑时打开
-[`technical-roadmap.drawio`](technical-roadmap.drawio)。
+The static page uses [`technical-roadmap.svg`](technical-roadmap.svg). The
+editable source is [`technical-roadmap.drawio`](technical-roadmap.drawio).

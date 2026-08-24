@@ -1,0 +1,94 @@
+<mxfile host="app.diagrams.net" modified="2026-08-20T06:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="fastphylosig-roadmap" name="技术路线图">
+    <mxGraphModel dx="1800" dy="820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="820" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="fastphylosig 技术路线图" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="50" y="24" width="520" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="同一份输入，两种用法：一般用户一条命令，高级用户逐步控制。" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=15;fontColor=#526171;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="50" y="67" width="760" height="28" as="geometry" />
+        </mxCell>
+
+        <mxCell id="source" value="&lt;b&gt;共同输入&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-family:Consolas&quot;&gt;phylo&lt;/font&gt; 树&lt;br&gt;带物种名的性状数据&lt;br&gt;&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:13px&quot;&gt;供两条路径使用&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7f8fa;strokeColor=#75808c;strokeWidth=2;fontSize=15;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="30" y="305" width="220" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="general" value="&lt;b&gt;一般使用&lt;/b&gt;　&lt;font color=&quot;#526171&quot; style=&quot;font-size:13px&quot;&gt;一条命令，自动完成&lt;/font&gt;" style="swimlane;horizontal=1;startSize=42;rounded=1;html=1;fillColor=#f5f9ff;swimlaneFillColor=#f5f9ff;strokeColor=#7ba2cc;strokeWidth=2;fontSize=18;fontColor=#255784;fontFamily=Microsoft YaHei;align=left;spacingLeft=18;" vertex="1" parent="1">
+          <mxGeometry x="290" y="130" width="1250" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="g-entry" value="&lt;b&gt;&lt;font style=&quot;font-family:Consolas&quot;&gt;fast_signal()&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-family:Consolas&quot;&gt;tree, data, method&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#4f7cac;strokeWidth=2;fontSize=15;fontFamily=Microsoft YaHei;" vertex="1" parent="general">
+          <mxGeometry x="40" y="105" width="190" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="g-prep" value="&lt;b&gt;自动准备&lt;/b&gt;" style="swimlane;horizontal=1;startSize=40;rounded=1;html=1;fillColor=#fbf9fc;swimlaneFillColor=#fbf9fc;strokeColor=#8b6b9b;strokeWidth=2;fontSize=17;fontFamily=Microsoft YaHei;" vertex="1" parent="general">
+          <mxGeometry x="270" y="60" width="610" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="g-check" value="检查树&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:12px&quot;&gt;方法就绪性&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eee6f3;strokeColor=#8b6b9b;fontSize=14;fontFamily=Microsoft YaHei;" vertex="1" parent="g-prep">
+          <mxGeometry x="25" y="56" width="125" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="g-match" value="匹配物种&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:12px&quot;&gt;按名称重排&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eee6f3;strokeColor=#8b6b9b;fontSize=14;fontFamily=Microsoft YaHei;" vertex="1" parent="g-prep">
+          <mxGeometry x="165" y="56" width="125" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="g-na" value="处理 NA&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:12px&quot;&gt;按性状保留&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eee6f3;strokeColor=#8b6b9b;fontSize=14;fontFamily=Microsoft YaHei;" vertex="1" parent="g-prep">
+          <mxGeometry x="305" y="56" width="125" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="g-context" value="准备 context&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:12px&quot;&gt;缓存树结构&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eee6f3;strokeColor=#8b6b9b;fontSize=14;fontFamily=Microsoft YaHei;" vertex="1" parent="g-prep">
+          <mxGeometry x="445" y="56" width="140" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="g-calc" value="&lt;b&gt;自动计算&lt;/b&gt;&lt;br&gt;按 &lt;font style=&quot;font-family:Consolas&quot;&gt;method&lt;/font&gt; 选择&lt;br&gt;K / lambda / D / Delta" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2df;strokeColor=#669c59;strokeWidth=2;fontSize=15;fontFamily=Microsoft YaHei;" vertex="1" parent="general">
+          <mxGeometry x="920" y="105" width="280" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="advanced" value="&lt;b&gt;高级使用&lt;/b&gt;　&lt;font color=&quot;#526171&quot; style=&quot;font-size:13px&quot;&gt;先整理树与数据，再调用专业函数&lt;/font&gt;" style="swimlane;horizontal=1;startSize=42;rounded=1;html=1;fillColor=#fffbf2;swimlaneFillColor=#fffbf2;strokeColor=#d6a84c;strokeWidth=2;fontSize=18;fontColor=#865b0b;fontFamily=Microsoft YaHei;align=left;spacingLeft=18;" vertex="1" parent="1">
+          <mxGeometry x="290" y="450" width="1250" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="a-prep" value="&lt;b&gt;树与数据整理&lt;/b&gt;" style="swimlane;horizontal=1;startSize=42;rounded=1;html=1;fillColor=#fbf9fc;swimlaneFillColor=#fbf9fc;strokeColor=#8b6b9b;strokeWidth=2;fontSize=17;fontFamily=Microsoft YaHei;" vertex="1" parent="advanced">
+          <mxGeometry x="40" y="50" width="800" height="205" as="geometry" />
+        </mxCell>
+        <mxCell id="a-check" value="&lt;font style=&quot;font-family:Consolas&quot;&gt;check_tree()&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:12px&quot;&gt;检查方法边界&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eee6f3;strokeColor=#8b6b9b;fontSize=14;fontFamily=Microsoft YaHei;" vertex="1" parent="a-prep">
+          <mxGeometry x="25" y="70" width="155" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="a-resolve" value="&lt;font style=&quot;font-family:Consolas&quot;&gt;resolve_tree()&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:12px&quot;&gt;必要时显式处理&lt;br&gt;树的表示或根&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eee6f3;strokeColor=#8b6b9b;fontSize=14;fontFamily=Microsoft YaHei;" vertex="1" parent="a-prep">
+          <mxGeometry x="215" y="70" width="155" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="a-match" value="&lt;font style=&quot;font-family:Consolas&quot;&gt;match_tree_data()&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:12px&quot;&gt;匹配并记录移除&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eee6f3;strokeColor=#8b6b9b;fontSize=14;fontFamily=Microsoft YaHei;" vertex="1" parent="a-prep">
+          <mxGeometry x="405" y="70" width="155" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="a-context" value="&lt;font style=&quot;font-family:Consolas&quot;&gt;prepare_tree()&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:12px&quot;&gt;建立可复用 context&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eee6f3;strokeColor=#8b6b9b;fontSize=14;fontFamily=Microsoft YaHei;" vertex="1" parent="a-prep">
+          <mxGeometry x="595" y="70" width="155" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="a-calc" value="&lt;b&gt;系统发育信号计算&lt;/b&gt;&lt;br&gt;&lt;table style=&quot;margin:auto;font-size:14px&quot;&gt;&lt;tr&gt;&lt;td style=&quot;text-align:left;padding-right:35px&quot;&gt;K&lt;/td&gt;&lt;td style=&quot;font-family:Consolas;text-align:left&quot;&gt;fast_k()&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;text-align:left;padding-right:35px&quot;&gt;lambda&lt;/td&gt;&lt;td style=&quot;font-family:Consolas;text-align:left&quot;&gt;fast_lambda()&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;text-align:left;padding-right:35px&quot;&gt;D&lt;/td&gt;&lt;td style=&quot;font-family:Consolas;text-align:left&quot;&gt;fast_d()&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;text-align:left;padding-right:35px&quot;&gt;Delta&lt;/td&gt;&lt;td style=&quot;font-family:Consolas;text-align:left&quot;&gt;fast_delta()&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2df;strokeColor=#669c59;strokeWidth=2;fontSize=15;fontFamily=Microsoft YaHei;spacingTop=8;" vertex="1" parent="advanced">
+          <mxGeometry x="890" y="65" width="310" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="output" value="&lt;b&gt;统一结果&lt;/b&gt;&lt;hr&gt;方法原生结果&lt;br&gt;估计值与检验&lt;br&gt;workflow / timing&lt;br&gt;&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:13px&quot;&gt;按方法提供&lt;/font&gt;&lt;br&gt;P / MCSE&lt;br&gt;ESS / R-hat&lt;br&gt;&lt;br&gt;&lt;font color=&quot;#526171&quot; style=&quot;font-size:13px&quot;&gt;一般与高级路径返回&lt;br&gt;相同类型的结果&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0d6;strokeColor=#c98718;strokeWidth=2;fontSize=15;fontFamily=Microsoft YaHei;spacingTop=16;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="230" width="190" height="430" as="geometry" />
+        </mxCell>
+
+        <mxCell id="eg1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;" edge="1" parent="g-prep" source="g-check" target="g-match"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="eg2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;" edge="1" parent="g-prep" source="g-match" target="g-na"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="eg3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;" edge="1" parent="g-prep" source="g-na" target="g-context"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="eg-entry" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;" edge="1" parent="general" source="g-entry" target="g-prep"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="eg-calc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;" edge="1" parent="general" source="g-prep" target="g-calc"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <mxCell id="ea1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;" edge="1" parent="a-prep" source="a-check" target="a-resolve"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;" edge="1" parent="a-prep" source="a-resolve" target="a-match"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;" edge="1" parent="a-prep" source="a-match" target="a-context"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea-calc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;" edge="1" parent="advanced" source="a-prep" target="a-calc"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <mxCell id="e-source-general" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;exitX=1;exitY=0.25;entryX=0;entryY=0.5;" edge="1" parent="1" source="source" target="g-entry">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="270" y="348" /><mxPoint x="270" y="278" /></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e-source-advanced" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;exitX=1;exitY=0.75;entryX=0;entryY=0.56;" edge="1" parent="1" source="source" target="a-check">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="270" y="433" /><mxPoint x="270" y="609" /></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e-general-output" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.11;" edge="1" parent="1" source="g-calc" target="output"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e-advanced-output" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#425466;strokeWidth=2;exitX=1;exitY=0.54;entryX=0;entryY=0.77;" edge="1" parent="1" source="a-calc" target="output">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1535" y="609" /><mxPoint x="1535" y="560" /></Array></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

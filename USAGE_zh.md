@@ -46,12 +46,12 @@ summary(fit)
 
 ## 分析流程
 
-![fastphylosig 技术路线图](docs/technical-roadmap.svg)
+![fastphylosig 技术路线图](docs/technical-roadmap-zh.svg)
 
 树和性状数据是两种用法的共同起点。一般用法由 `fast_signal()` 自动完成图中的
 准备步骤；高级用法按相同顺序显式整理树和数据，再调用对应的 `fast_*` 函数。
-网页可使用随包提供的 [draw.io 源文件](docs/technical-roadmap.drawio) 和
-[Mermaid 源文件](docs/technical-roadmap.md)。
+中文路线图的 [draw.io 源文件](docs/technical-roadmap-zh.drawio) 和
+[Mermaid 源文件](docs/technical-roadmap-zh.md) 与本指南放在同一仓库中。
 
 ## 高级用法：先整理树和数据，再计算
 
