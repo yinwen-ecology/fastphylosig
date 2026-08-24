@@ -128,6 +128,8 @@ jobs:
               permutations = delta_permutations, ncores = 2,
               verbose = FALSE, progress = FALSE
             ))
+            print(delta[c("delta", "successful_simulations", "n_failed_sim",
+                          "status", "note")])
             stopifnot(is.finite(delta$delta),
                       delta$successful_simulations == 2)
           '
