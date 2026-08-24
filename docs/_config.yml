@@ -1,0 +1,7 @@
+title: fastphylosig
+description: Fast reference-validated phylogenetic signal statistics for R
+theme: jekyll-theme-minimal
+show_downloads: false
+
+github:
+  repository_url: https://github.com/yinwen-ecology/fastphylosig

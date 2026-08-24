@@ -1,0 +1,64 @@
+name: R-CMD-check
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r-cmd-check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-validation:
+    name: Validate workflow and manifest syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Parse YAML and JSON
+        shell: bash
+        run: |
+          ruby -rjson -ryaml -e '
+            files = Dir[".github/workflows/*.{yml,yaml}"]
+            abort "no workflow files found" if files.empty?
+            files.each do |file|
+              text = File.read(file)
+              File.extname(file) == ".json" ? JSON.parse(text) : YAML.safe_load(text, aliases: true)
+              puts "validated #{file}"
+            end
+          '
+
+  check:
+    name: R-CMD-check (${{ matrix.os }}, ${{ matrix.r }})
+    needs: static-validation
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # Follow the current release; do not pin an obsolete R 4.1.x.
+        r: [release]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up current R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.r }}
+          use-public-rspm: true
+      - name: Set up R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          cache-version: 1
+          needs: check
+          extra-packages: any::rcmdcheck
+      - name: Run R CMD check
+        uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--no-manual")'
+          error-on: '"error"'

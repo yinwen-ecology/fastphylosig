@@ -1,0 +1,39 @@
+Package: fastphylosig
+Type: Package
+Title: Fast Phylogenetic Signal Statistics
+Version: 0.1.0
+Authors@R:
+    person("Yin", "Wen", role = c("aut", "cre"),
+           email = "yinwen-ecology@users.noreply.github.com")
+Description: Provides one-command and method-specific workflows for
+    phylogenetic signal in continuous, binary, and categorical traits. Compiled
+    tree-pruning algorithms implement Blomberg's K and Pagel's lambda without
+    constructing a dense phylogenetic covariance matrix in production.
+    Fritz and Purvis D retains separate random and Brownian null models, while
+    categorical Delta combines discrete ancestral-state likelihoods with MCMC
+    and permutation diagnostics. The package also provides reusable prepared
+    trees, explicit tree/data matching, trait-wise missing-value handling,
+    conservative tree diagnostics, bounded simulation memory, and structured
+    timing and Monte Carlo uncertainty metadata.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends:
+    R (>= 4.1.0)
+Imports:
+    ape,
+    parallel,
+    Rcpp,
+    stats
+LinkingTo:
+    Rcpp,
+    RcppArmadillo
+Suggests:
+    caper,
+    phytools,
+    testthat
+URL: https://github.com/yinwen-ecology/fastphylosig,
+    https://yinwen-ecology.github.io/fastphylosig/
+BugReports: https://github.com/yinwen-ecology/fastphylosig/issues
+SystemRequirements: C++17, OpenMP (optional)
+Config/testthat/edition: 3
+NeedsCompilation: yes

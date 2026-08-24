@@ -1,0 +1,16 @@
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+.Rproj.user/
+Rtmp*/
+.rlib_*/
+.bench_lib/
+*.Rcheck/
+results/
+benchmarks/results/
+src/*.o
+src/*.dll
+src/*.so
+src/symbols.rds
+fastphylosig_*.tar.gz
