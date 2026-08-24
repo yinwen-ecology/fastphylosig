@@ -910,8 +910,19 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
   g <- c(-beta_mean / alpha_mean^2, 1 / alpha_mean)
   mcse <- if (is.finite(alpha_mean) && alpha_mean != 0 &&
               all(is.finite(mean_cov))) {
-    var_delta <- as.numeric(crossprod(g, mean_cov %*% g))
-    if (is.finite(var_delta) && var_delta >= 0) sqrt(var_delta) else NA_real_
+    variance_terms <- c(
+      g[1L]^2 * mean_cov[1L, 1L],
+      2 * g[1L] * g[2L] * mean_cov[1L, 2L],
+      g[2L]^2 * mean_cov[2L, 2L]
+    )
+    var_delta <- sum(variance_terms)
+    roundoff_tol <- 64 * .Machine$double.eps *
+      max(1, sum(abs(variance_terms)))
+    if (is.finite(var_delta) && var_delta >= -roundoff_tol) {
+      sqrt(max(0, var_delta))
+    } else {
+      NA_real_
+    }
   } else {
     NA_real_
   }

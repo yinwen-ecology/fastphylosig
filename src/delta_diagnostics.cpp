@@ -214,8 +214,14 @@ Rcpp::List delta_diagnostics_cpp(const arma::mat& alpha_chain,
     const double variance = g_alpha * g_alpha * mean_cov(0, 0) +
       2.0 * g_alpha * g_beta * mean_cov(0, 1) +
       g_beta * g_beta * mean_cov(1, 1);
-    if (std::isfinite(variance) && variance >= 0.0) {
-      mcse_delta = std::sqrt(variance);
+    const double term_scale =
+      std::abs(g_alpha * g_alpha * mean_cov(0, 0)) +
+      std::abs(2.0 * g_alpha * g_beta * mean_cov(0, 1)) +
+      std::abs(g_beta * g_beta * mean_cov(1, 1));
+    const double roundoff_tol = 64.0 * std::numeric_limits<double>::epsilon() *
+      std::max(1.0, term_scale);
+    if (std::isfinite(variance) && variance >= -roundoff_tol) {
+      mcse_delta = std::sqrt(std::max(0.0, variance));
     }
   }
 

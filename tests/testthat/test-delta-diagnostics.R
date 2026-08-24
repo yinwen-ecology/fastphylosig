@@ -73,6 +73,10 @@ test_that("R diagnostics fallback accounts for alpha-beta covariance", {
   expect_true(is.finite(out$MCSE_Delta))
   expect_true(out$ESS_alpha <= length(alpha))
   expect_true(out$ESS_beta <= length(beta))
+
+  cpp <- fastphylosig:::delta_diagnostics_cpp(alpha, beta)
+  expect_true(is.finite(cpp$MCSE_Delta))
+  expect_equal(cpp$MCSE_Delta, out$MCSE_Delta, tolerance = 1e-12)
 })
 
 test_that("Delta reuses compact shared preparation metadata", {
