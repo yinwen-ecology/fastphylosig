@@ -111,10 +111,9 @@ jobs:
                       identical(d1$P_random, d2$P_random))
           '
       - name: Exercise Delta serial fallback
-        env:
-          R_LIBS_USER: ${{ runner.temp }}/fastphylosig-lib
         shell: bash
         run: |
+          export R_LIBS_USER="$RUNNER_TEMP/fastphylosig-lib${R_LIBS_USER:+:$R_LIBS_USER}"
           Rscript -e '
             stopifnot(identical(Sys.getenv("FASTPHYLOSIG_OPENMP_EXPECTED"), "disabled"))
             library(fastphylosig, lib.loc = file.path(Sys.getenv("RUNNER_TEMP"), "fastphylosig-lib"))
