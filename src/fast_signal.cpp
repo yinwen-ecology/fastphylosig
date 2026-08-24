@@ -819,7 +819,9 @@ Rcpp::List fast_k_chol_permutation_cpp(
         );
         sim_k.row(i) = kval.t();
         for (int j = 0; j < p; ++j) {
-          if (kval(j) >= observed(j)) local_counts[tid](j) += 1.0;
+          if (fastphylosig::inclusive_upper_tail(kval(j), observed(j))) {
+            local_counts[tid](j) += 1.0;
+          }
         }
       }
     }
@@ -837,7 +839,9 @@ Rcpp::List fast_k_chol_permutation_cpp(
       );
       sim_k.row(i) = kval.t();
       for (int j = 0; j < p; ++j) {
-        if (kval(j) >= observed(j)) ge_count(j) += 1.0;
+        if (fastphylosig::inclusive_upper_tail(kval(j), observed(j))) {
+          ge_count(j) += 1.0;
+        }
       }
     }
   }
@@ -908,7 +912,9 @@ Rcpp::List fast_k_chol_permutation_p_cpp(
           permuted, cholC, inv_one, norm_const, sum_invC
         );
         for (int j = 0; j < p; ++j) {
-          if (kval(j) >= observed(j)) local_counts[tid](j) += 1.0;
+          if (fastphylosig::inclusive_upper_tail(kval(j), observed(j))) {
+            local_counts[tid](j) += 1.0;
+          }
         }
       }
     }
@@ -925,7 +931,9 @@ Rcpp::List fast_k_chol_permutation_p_cpp(
         permuted, cholC, inv_one, norm_const, sum_invC
       );
       for (int j = 0; j < p; ++j) {
-        if (kval(j) >= observed(j)) ge_count(j) += 1.0;
+        if (fastphylosig::inclusive_upper_tail(kval(j), observed(j))) {
+          ge_count(j) += 1.0;
+        }
       }
     }
   }

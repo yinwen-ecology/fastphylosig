@@ -101,9 +101,11 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
   .runtime_stage(runtime, "Estimating ancestral states...")
   tree_workspace <- .fast_ace_tree_workspace(phy, nb_node = nb_node)
   workspace <- .fast_ace_workspace(tree_workspace, model = model, nl = nl)
+  # CI = FALSE is the explicit likelihood-only path; avoid a numerical
+  # Hessian/SE pass that the caller did not request.
   obj <- .fast_ace_fit_workspace(
     tip_state = tip_state, lvls = lvls, workspace = workspace, ip = ip,
-    CI = CI, marginal = marginal
+    CI = CI, marginal = marginal, estimate_se = isTRUE(CI)
   )
 
   obj$call <- match.call()

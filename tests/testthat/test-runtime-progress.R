@@ -23,9 +23,11 @@ test_that("progress output is method-level and reports elapsed runtime", {
     )),
     "\\[fastphylosig: Delta\\] Done \\| [0-9.]+ s"
   )
-  expect_message(
-    fast_ace(categorical, tree, CI = FALSE, progress = TRUE),
-    "\\[fastphylosig: ACE\\] Done \\| [0-9.]+ s"
+  expect_no_warning(
+    expect_message(
+      fast_ace(categorical, tree, CI = FALSE, progress = TRUE),
+      "\\[fastphylosig: ACE\\] Done \\| [0-9.]+ s"
+    )
   )
 })
 

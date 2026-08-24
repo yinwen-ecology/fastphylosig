@@ -17,6 +17,8 @@
 #include <string>
 #include <vector>
 
+#include "numeric_utils.h"
+
 #ifdef _OPENMP
 # include <omp.h>
 #endif
@@ -596,7 +598,7 @@ Rcpp::List fast_k_tree_permutation_cpp(
                                   static_cast<std::size_t>(nsim) *
                                   static_cast<std::size_t>(j)] = value;
           if (valid_observed[static_cast<std::size_t>(j)] &&
-              value >= observed[j]) local[static_cast<std::size_t>(tid)]
+              fastphylosig::inclusive_upper_tail(value, observed[j])) local[static_cast<std::size_t>(tid)]
             [static_cast<std::size_t>(j)] += 1.0;
         }
       }
@@ -623,7 +625,7 @@ Rcpp::List fast_k_tree_permutation_cpp(
                                 static_cast<std::size_t>(nsim) *
                                 static_cast<std::size_t>(j)] = value;
         if (valid_observed[static_cast<std::size_t>(j)] &&
-            value >= observed[j]) exceedance[j] += 1.0;
+            fastphylosig::inclusive_upper_tail(value, observed[j])) exceedance[j] += 1.0;
       }
     }
   } else {
@@ -678,7 +680,7 @@ Rcpp::List fast_k_tree_permutation_cpp(
                                       static_cast<std::size_t>(nsim) *
                                       static_cast<std::size_t>(j)] = value;
               if (valid_observed[static_cast<std::size_t>(j)] &&
-                  value >= observed[j]) local_counts[
+                  fastphylosig::inclusive_upper_tail(value, observed[j])) local_counts[
                     static_cast<std::size_t>(tid)
                   ][static_cast<std::size_t>(j)] += 1.0;
             }
@@ -710,7 +712,7 @@ Rcpp::List fast_k_tree_permutation_cpp(
                                     static_cast<std::size_t>(nsim) *
                                     static_cast<std::size_t>(j)] = value;
             if (valid_observed[static_cast<std::size_t>(j)] &&
-                value >= observed[j]) exceedance[j] += 1.0;
+                fastphylosig::inclusive_upper_tail(value, observed[j])) exceedance[j] += 1.0;
           }
         }
       }

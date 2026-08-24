@@ -151,14 +151,18 @@ test_that("golden K permutation values are stable and thread invariant", {
 
   expect_equal(one$K, 0.609682598152122, tolerance = 1e-8)
   # phytools uses the inclusive upper tail, so permutations tied with the
-  # observed K count as exceedances.
+  # observed K count as exceedances. The K kernel treats only machine-level
+  # cross-platform rounding as a tie; this keeps the contract stable without
+  # changing materially different permutation values.
   expect_equal(one$P, 1, tolerance = 1e-12)
+  expect_equal(one$exceedance_count, 4)
   expect_equal(one$sim.K,
                c(0.609682598152122, 0.619158721940097,
                  0.619158721940097, 0.609682598152122),
                tolerance = 1e-8)
   expect_equal(one$K, two$K, tolerance = 1e-12)
   expect_equal(one$P, two$P, tolerance = 1e-12)
+  expect_equal(one$exceedance_count, two$exceedance_count)
   expect_equal(one$sim.K, two$sim.K, tolerance = 1e-12)
 })
 

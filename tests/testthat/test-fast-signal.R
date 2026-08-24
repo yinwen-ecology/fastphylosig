@@ -398,7 +398,11 @@ test_that("fast_ace matches ape::ace for discrete ER and ARD likelihoods", {
   fast_er <- fast_ace(x_er, tree, model = "ER")
   expect_lt(abs(ref_er$loglik - fast_er$loglik), 1e-8)
   expect_lt(max(abs(ref_er$rates - fast_er$rates)), 1e-6)
-  expect_lt(max(abs(ref_er$se - fast_er$se)), 1e-5)
+  se_error_er <- max(abs(ref_er$se - fast_er$se))
+  se_scale_er <- max(1, abs(ref_er$se))
+  # The SE is obtained from a numerical Hessian; BLAS/LAPACK and compiler
+  # choices can perturb its last digits without changing the fitted model.
+  expect_lt(se_error_er, 1e-7 + 1e-5 * se_scale_er)
   expect_lt(max(abs(ref_er$lik.anc - fast_er$lik.anc)), 1e-7)
 
   q <- matrix(

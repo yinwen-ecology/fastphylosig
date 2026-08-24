@@ -1,3 +1,13 @@
+.k_inclusive_upper_tail <- function(value, observed) {
+  direct <- value >= observed
+  direct[is.na(direct)] <- FALSE
+  finite <- is.finite(value) & is.finite(observed)
+  scale <- pmax(1, abs(value), abs(observed))
+  tie <- finite & (observed - value <=
+    8 * .Machine$double.eps * scale)
+  direct | tie
+}
+
 test_that("bounded K permutation kernel matches dense controlled permutations", {
   skip_if_not(exists("fast_k_tree_permutation_cpp",
                      asNamespace("fastphylosig")))
@@ -28,8 +38,12 @@ test_that("bounded K permutation kernel matches dense controlled permutations", 
   expect_equal(as.numeric(got$K), as.numeric(dense$K), tolerance = 1e-8)
   expect_equal(as.numeric(got$sim_K), as.numeric(dense$sim_K),
                tolerance = 1e-8)
-  expect_equal(as.numeric(got$P),
-               mean(as.numeric(got$sim_K) >= as.numeric(got$K)),
+  expected_exceedance <- sum(.k_inclusive_upper_tail(
+    as.numeric(got$sim_K), as.numeric(got$K)
+  ))
+  expect_equal(as.numeric(got$P), expected_exceedance / nrow(perms),
+               tolerance = 0)
+  expect_equal(as.numeric(dense$P), expected_exceedance / nrow(perms),
                tolerance = 0)
   expect_equal(got$nsim_requested, nrow(perms))
   expect_equal(got$nsim_successful, nrow(perms))
@@ -74,9 +88,13 @@ test_that("finite controlled K grids preserve the inclusive tail and P lower bou
                  info = paste("observed", nsim))
     expect_equal(as.numeric(fast$sim_K), as.numeric(dense$sim_K), tolerance = 1e-10,
                  info = paste("simulated", nsim))
-    expected_exceedance <- sum(as.numeric(fast$sim_K) >= as.numeric(fast$K))
+    expected_exceedance <- sum(.k_inclusive_upper_tail(
+      as.numeric(fast$sim_K), as.numeric(fast$K)
+    ))
     expect_equal(fast$exceedance_count, expected_exceedance)
     expect_equal(fast$P, expected_exceedance / nsim, tolerance = 0)
+    expect_equal(as.numeric(dense$P), expected_exceedance / nsim,
+                 tolerance = 0)
     expect_true(fast$P >= 1 / nsim,
                 info = paste("identity permutation lower bound", nsim))
     expect_equal(fast$nsim_requested, nsim)
