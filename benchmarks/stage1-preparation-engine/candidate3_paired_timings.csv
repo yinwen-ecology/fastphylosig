@@ -1,0 +1,101 @@
+"workload","pair","position","version","elapsed_ms","statistic"
+"K prepared n=500",1,1,"before",30,0.12076994579695
+"K prepared n=500",1,2,"after",9.9999999999999,0.12076994579695
+"K prepared n=500",2,1,"after",20,0.12076994579695
+"K prepared n=500",2,2,"before",20,0.12076994579695
+"K prepared n=500",3,1,"before",20,0.12076994579695
+"K prepared n=500",3,2,"after",0,0.12076994579695
+"K prepared n=500",4,1,"after",0,0.12076994579695
+"K prepared n=500",4,2,"before",30,0.12076994579695
+"K prepared n=500",5,1,"before",30,0.12076994579695
+"K prepared n=500",5,2,"after",0,0.12076994579695
+"K prepared n=500",6,1,"after",0,0.12076994579695
+"K prepared n=500",6,2,"before",10,0.12076994579695
+"K prepared n=500",7,1,"before",20,0.12076994579695
+"K prepared n=500",7,2,"after",0,0.12076994579695
+"K prepared n=500",8,1,"after",0,0.12076994579695
+"K prepared n=500",8,2,"before",20,0.12076994579695
+"K prepared n=500",9,1,"before",40,0.12076994579695
+"K prepared n=500",9,2,"after",9.9999999999999,0.12076994579695
+"K prepared n=500",10,1,"after",20,0.12076994579695
+"K prepared n=500",10,2,"before",20,0.12076994579695
+"K prepared n=5000",1,1,"before",1470,0.0862308409606267
+"K prepared n=5000",1,2,"after",50.0000000000003,0.0862308409606267
+"K prepared n=5000",2,1,"after",50.0000000000003,0.0862308409606267
+"K prepared n=5000",2,2,"before",1500,0.0862308409606267
+"K prepared n=5000",3,1,"before",1440,0.0862308409606267
+"K prepared n=5000",3,2,"after",49.9999999999998,0.0862308409606267
+"K prepared n=5000",4,1,"after",49.9999999999998,0.0862308409606267
+"K prepared n=5000",4,2,"before",1450,0.0862308409606267
+"K prepared n=5000",5,1,"before",1470,0.0862308409606267
+"K prepared n=5000",5,2,"after",40,0.0862308409606267
+"K prepared n=5000",6,1,"after",40,0.0862308409606267
+"K prepared n=5000",6,2,"before",1500,0.0862308409606267
+"K prepared n=5000",7,1,"before",1510,0.0862308409606267
+"K prepared n=5000",7,2,"after",49.9999999999998,0.0862308409606267
+"K prepared n=5000",8,1,"after",40,0.0862308409606267
+"K prepared n=5000",8,2,"before",1460,0.0862308409606267
+"K prepared n=5000",9,1,"before",1480,0.0862308409606267
+"K prepared n=5000",9,2,"after",40,0.0862308409606267
+"K prepared n=5000",10,1,"after",49.9999999999998,0.0862308409606267
+"K prepared n=5000",10,2,"before",1450,0.0862308409606267
+"K raw n=5000",1,1,"before",7700,0.0862308409606267
+"K raw n=5000",1,2,"after",6500,0.0862308409606267
+"K raw n=5000",2,1,"after",6540,0.0862308409606267
+"K raw n=5000",2,2,"before",7840,0.0862308409606267
+"K raw n=5000",3,1,"before",7730,0.0862308409606267
+"K raw n=5000",3,2,"after",6480,0.0862308409606267
+"K raw n=5000",4,1,"after",6500,0.0862308409606267
+"K raw n=5000",4,2,"before",7730,0.0862308409606267
+"K raw n=5000",5,1,"before",7790,0.0862308409606267
+"K raw n=5000",5,2,"after",6520,0.0862308409606267
+"K raw n=5000",6,1,"after",6480,0.0862308409606267
+"K raw n=5000",6,2,"before",7950,0.0862308409606267
+"K raw n=5000",7,1,"before",7720,0.0862308409606267
+"K raw n=5000",7,2,"after",6530,0.0862308409606267
+"K raw n=5000",8,1,"after",6620,0.0862308409606267
+"K raw n=5000",8,2,"before",8120,0.0862308409606267
+"K raw n=5000",9,1,"before",7770,0.0862308409606267
+"K raw n=5000",9,2,"after",6450,0.0862308409606267
+"K raw n=5000",10,1,"after",6450,0.0862308409606267
+"K raw n=5000",10,2,"before",7750,0.0862308409606267
+"K prepared matrix n=500 traits=100",1,1,"before",50,0.145192162646695
+"K prepared matrix n=500 traits=100",1,2,"after",20,0.145192162646695
+"K prepared matrix n=500 traits=100",2,1,"after",30,0.145192162646695
+"K prepared matrix n=500 traits=100",2,2,"before",50,0.145192162646695
+"K prepared matrix n=500 traits=100",3,1,"before",30,0.145192162646695
+"K prepared matrix n=500 traits=100",3,2,"after",40,0.145192162646695
+"K prepared matrix n=500 traits=100",4,1,"after",30,0.145192162646695
+"K prepared matrix n=500 traits=100",4,2,"before",40,0.145192162646695
+"K prepared matrix n=500 traits=100",5,1,"before",40,0.145192162646695
+"K prepared matrix n=500 traits=100",5,2,"after",20,0.145192162646695
+"K prepared matrix n=500 traits=100",6,1,"after",30,0.145192162646695
+"K prepared matrix n=500 traits=100",6,2,"before",40,0.145192162646695
+"K prepared matrix n=500 traits=100",7,1,"before",50,0.145192162646695
+"K prepared matrix n=500 traits=100",7,2,"after",30,0.145192162646695
+"K prepared matrix n=500 traits=100",8,1,"after",10,0.145192162646695
+"K prepared matrix n=500 traits=100",8,2,"before",30,0.145192162646695
+"K prepared matrix n=500 traits=100",9,1,"before",50,0.145192162646695
+"K prepared matrix n=500 traits=100",9,2,"after",30,0.145192162646695
+"K prepared matrix n=500 traits=100",10,1,"after",10,0.145192162646695
+"K prepared matrix n=500 traits=100",10,2,"before",40,0.145192162646695
+"lambda prepared n=500",1,1,"before",30,6.6106961351896e-05
+"lambda prepared n=500",1,2,"after",9.9999999999999,6.6106961351896e-05
+"lambda prepared n=500",2,1,"after",9.9999999999999,6.6106961351896e-05
+"lambda prepared n=500",2,2,"before",30,6.6106961351896e-05
+"lambda prepared n=500",3,1,"before",30,6.6106961351896e-05
+"lambda prepared n=500",3,2,"after",0,6.6106961351896e-05
+"lambda prepared n=500",4,1,"after",20,6.6106961351896e-05
+"lambda prepared n=500",4,2,"before",30,6.6106961351896e-05
+"lambda prepared n=500",5,1,"before",30,6.6106961351896e-05
+"lambda prepared n=500",5,2,"after",9.9999999999999,6.6106961351896e-05
+"lambda prepared n=500",6,1,"after",20,6.6106961351896e-05
+"lambda prepared n=500",6,2,"before",10,6.6106961351896e-05
+"lambda prepared n=500",7,1,"before",30,6.6106961351896e-05
+"lambda prepared n=500",7,2,"after",20,6.6106961351896e-05
+"lambda prepared n=500",8,1,"after",9.9999999999999,6.6106961351896e-05
+"lambda prepared n=500",8,2,"before",30,6.6106961351896e-05
+"lambda prepared n=500",9,1,"before",30,6.6106961351896e-05
+"lambda prepared n=500",9,2,"after",9.9999999999999,6.6106961351896e-05
+"lambda prepared n=500",10,1,"after",20,6.6106961351896e-05
+"lambda prepared n=500",10,2,"before",30,6.6106961351896e-05

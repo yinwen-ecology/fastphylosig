@@ -1,0 +1,6 @@
+"workload","repeats","before_median_ms","before_iqr_ms","after_median_ms","after_iqr_ms","speedup","max_statistic_abs_diff"
+"K prepared n=500",10,50,10,29.9999999999999,7.50000000000004,1.66666666666667,0
+"K prepared n=5000",10,2290,739.999999999999,1980,740,1.15656565656566,0
+"K raw n=5000",10,8060,225,7865,150,1.02479338842975,0
+"K prepared matrix n=500 traits=100",10,65,20,50,7.5,1.3,0
+"lambda prepared n=500",10,60.0000000000001,10,30,10,2,0

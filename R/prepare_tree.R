@@ -60,6 +60,7 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
     canonicalizable = isTRUE(canonical_info$safe),
     issue = if (!is.null(canonical_info$reason)) canonical_info$reason else NULL
   )
+  fingerprint <- .tree_fingerprint(tree)
 
   structural_cache <- new.env(parent = emptyenv())
   numerical_cache <- new.env(parent = emptyenv())
@@ -72,11 +73,17 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
   full <- .prepare_tree_subset(
     tree, need_lambda = FALSE, need_matrix = FALSE
   )
-  full$.last_access <- cache_meta$clock
-  assign(
-    .tree_mask_key(seq_len(ape::Ntip(tree)), ape::Ntip(tree)),
-    full, structural_cache
+  full_key <- .tree_mask_key(seq_len(ape::Ntip(tree)), ape::Ntip(tree))
+  full <- .attach_structural_evidence(
+    full,
+    key = full_key,
+    keep = seq_len(ape::Ntip(tree)),
+    parent_fingerprint = fingerprint,
+    inspection = generic_summary,
+    subtree_fingerprint = fingerprint
   )
+  full$.last_access <- cache_meta$clock
+  assign(full_key, full, structural_cache)
 
   out <- list(
     tree = tree,
@@ -88,7 +95,7 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
     cache_meta = cache_meta,
     cache_budget = cache_budget,
     max_cached_subsets = max_cached_subsets,
-    fingerprint = .tree_fingerprint(tree),
+    fingerprint = fingerprint,
     # These fields are metadata only; dense numerical resources remain lazy.
     inspection = generic_summary,
     canonical_mapping = canonical_info$mapping,
@@ -178,6 +185,49 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
   out
 }
 
+.attach_structural_evidence <- function(entry, key, keep,
+                                        parent_fingerprint,
+                                        inspection = NULL,
+                                        subtree_fingerprint = NULL) {
+  if (is.null(inspection)) {
+    inspection <- .inspect_tree_core(
+      entry$tree, signal = c("K", "lambda", "D", "Delta")
+    )
+  }
+  if (is.null(subtree_fingerprint)) {
+    subtree_fingerprint <- .tree_fingerprint(entry$tree)
+  }
+  entry$inspection <- inspection
+  entry$method_readiness <- inspection$ready_by_signal
+  entry$topology_metadata <- list(
+    tree_summary = inspection$tree_summary,
+    traversal_order = "pruningwise",
+    edge_rows = nrow(entry$edge),
+    n_tip = entry$n_tip
+  )
+  entry$subtree_key <- key
+  entry$retained_parent_indices <- sort(as.integer(keep))
+  entry$parent_fingerprint <- parent_fingerprint
+  entry$subtree_fingerprint <- subtree_fingerprint
+  entry
+}
+
+.structural_evidence_matches <- function(entry, ctx, key, keep) {
+  is.list(entry$inspection) && !is.null(entry$method_readiness) &&
+    is.list(entry$topology_metadata) &&
+    identical(entry$subtree_key, key) &&
+    identical(entry$retained_parent_indices, sort(as.integer(keep))) &&
+    identical(entry$parent_fingerprint, ctx$fingerprint)
+}
+
+.structural_entry_check <- function(entry, signal) {
+  if (!is.list(entry$inspection)) {
+    stop("structural cache entry is missing tree inspection evidence.",
+         call. = FALSE)
+  }
+  .tree_check_select(entry$inspection, signal, prepared = TRUE)
+}
+
 .lambda_spectral_cache <- function(C) {
   d <- diag(C)
   if (any(!is.finite(d)) || any(d <= 0)) return(NULL)
@@ -213,9 +263,16 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
   key <- .tree_mask_key(keep, ctx$n_tip)
   need_matrix <- isTRUE(need_matrix) || isTRUE(need_lambda)
   structural_cache <- .structural_cache(ctx)
-  if (exists(key, structural_cache, inherits = FALSE)) {
+  cache_hit <- exists(key, structural_cache, inherits = FALSE)
+  if (cache_hit) {
     out <- get(key, structural_cache, inherits = FALSE)
     .validate_structural_entry(out, ctx)
+    if (!.structural_evidence_matches(out, ctx, key, keep)) {
+      rm(list = key, envir = structural_cache)
+      cache_hit <- FALSE
+    }
+  }
+  if (cache_hit) {
     .cache_record(ctx, "hits")
     out$.last_access <- .cache_tick(ctx)
     assign(key, out, structural_cache)
@@ -229,6 +286,12 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
     }
     out <- .prepare_tree_subset(
       subset_tree, need_lambda = FALSE, need_matrix = FALSE
+    )
+    out <- .attach_structural_evidence(
+      out,
+      key = key,
+      keep = keep,
+      parent_fingerprint = ctx$fingerprint
     )
     .validate_structural_entry(out, ctx)
     out$.last_access <- .cache_tick(ctx)
@@ -444,7 +507,34 @@ cache_info <- function(ctx) {
   prepare_tree(tree)
 }
 
+.context_validation_capability <- new.env(parent = emptyenv())
+
+.is_validated_context <- function(ctx) {
+  is.list(ctx) && inherits(ctx, "fastphylosig_validated_context") &&
+    identical(
+      attr(ctx, "fastphylosig_validation_capability", exact = TRUE),
+      .context_validation_capability
+    )
+}
+
+.validated_context <- function(ctx, verify = TRUE) {
+  if (.is_validated_context(ctx)) return(ctx)
+  if (isTRUE(verify)) {
+    .validate_prepared_context(ctx)
+  } else if (!is.list(ctx) || !inherits(ctx, "fastphylosig_tree") ||
+             is.null(ctx$tree) || is.null(ctx$fingerprint)) {
+    stop("invalid fastphylosig_tree context; call prepare_tree(tree) again.",
+         call. = FALSE)
+  }
+  out <- ctx
+  class(out) <- unique(c("fastphylosig_validated_context", class(ctx)))
+  attr(out, "fastphylosig_validation_capability") <-
+    .context_validation_capability
+  out
+}
+
 .validate_prepared_context <- function(ctx) {
+  if (.is_validated_context(ctx)) return(invisible(ctx))
   if (!is.list(ctx) || !inherits(ctx, "fastphylosig_tree") ||
       is.null(ctx$tree) || is.null(ctx$fingerprint)) {
     stop("invalid fastphylosig_tree context; call prepare_tree(tree) again.",

@@ -1,0 +1,10 @@
+"path","function_name","calls"
+"prepared_vector_n500",".validate_prepared_context",9
+"prepared_vector_n500",".tree_fingerprint",9
+"prepared_vector_n500",".inspect_tree_core",2
+"prepared_vector_n500",".as_named_trait_table",2
+"prepared_vector_n500",".analysis_na_groups",1
+"prepared_vector_n500",".prepared_tree_subset",6
+"prepared_vector_n500","group_na_masks_cpp",7
+"prepared_vector_n500",".as_trait_matrix",1
+"prepared_vector_n500",".match_tree_data_core",1

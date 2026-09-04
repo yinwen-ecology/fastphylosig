@@ -30,7 +30,8 @@ match_tree_data <- function(tree, data = NULL, prune = TRUE, verbose = TRUE,
 }
 
 .match_tree_data_core <- function(tree, data, prune = TRUE, verbose = TRUE,
-                                  allow_insufficient = FALSE) {
+                                  allow_insufficient = FALSE,
+                                  .return_group = FALSE) {
   if (!is.logical(prune) || length(prune) != 1L || is.na(prune) ||
       !is.logical(verbose) || length(verbose) != 1L || is.na(verbose)) {
     stop("prune and verbose must be TRUE or FALSE.", call. = FALSE)
@@ -50,13 +51,14 @@ match_tree_data <- function(tree, data = NULL, prune = TRUE, verbose = TRUE,
     stop("Fewer than two species are shared by tree and data.", call. = FALSE)
   }
 
-  matched_tree <- if (isTRUE(prune) && length(matched) >= 2L) {
+  matched_group <- if (isTRUE(prune) && length(matched) >= 2L) {
     .prepared_tree_subset(
       ctx, match(matched, tree_tips), need_matrix = FALSE
-    )$tree
+    )
   } else {
-    tree
+    NULL
   }
+  matched_tree <- if (is.list(matched_group)) matched_group$tree else tree
   matched_X <- if (length(matched)) X0[matched, , drop = FALSE] else
     X0[FALSE, , drop = FALSE]
 
@@ -90,6 +92,7 @@ match_tree_data <- function(tree, data = NULL, prune = TRUE, verbose = TRUE,
     base_keep = match(matched, tree_tips),
     insufficient_retained = length(matched) < 2L
   )
+  if (isTRUE(.return_group)) out$.prepared_group <- matched_group
   class(out) <- "fastphylosig_match"
   out
 }

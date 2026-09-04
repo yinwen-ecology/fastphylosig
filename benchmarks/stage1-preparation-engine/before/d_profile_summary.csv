@@ -1,0 +1,4 @@
+"workload","n","nsim","raw_total","prepared_total","fused_kernel","observed_statistic","combined_random_brownian_simulation","raw_preparation","prepared_wrapper_and_packaging","parallel_startup","note"
+"test_false",500,1000,0.318497538566589,0.152575016021729,0.10351550579071,0.00174260139465332,0.101772904396057,0.165922522544861,0.0490595102310181,0,"production stream ignores n_threads because RNG generation is serial"
+"test_199",500,199,0.236138343811035,0.0724799633026123,0.0220963954925537,0.00177788734436035,0.0203185081481934,0.163658380508423,0.0503835678100586,0,"production stream ignores n_threads because RNG generation is serial"
+"test_999",500,999,0.319664001464844,0.150921940803528,0.102578520774841,0.00179052352905273,0.100787997245789,0.168742060661316,0.0483434200286865,0,"production stream ignores n_threads because RNG generation is serial"

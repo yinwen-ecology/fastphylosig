@@ -1,0 +1,2 @@
+"n","raw_total","prepared_total","reference_time","direct_optimizer","fixed_lambda_kernel","likelihood_evaluations","counted_lambda","production_lambda","lambda_abs_difference","preparation_time","wrapper_and_result_time","speedup_raw","speedup_prepared"
+500,0.230276942253113,0.0627814531326294,9.03440761566162,0.00283896923065186,0.000163912773132324,22,6.61069613518961e-05,6.6106961351896e-05,1.35525271560688e-19,0.167495489120483,0.0599424839019775,39.2327930328834,143.902492931725

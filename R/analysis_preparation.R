@@ -124,6 +124,145 @@
 # Short alias retained for internal callers and downstream extensions.
 .actionable_condition <- .format_actionable_condition
 
+.edge_children_index <- function(edge) {
+  parents <- unique(edge[, 1L])
+  out <- split(
+    as.integer(edge[, 2L]),
+    factor(edge[, 1L], levels = parents)
+  )
+  names(out) <- as.character(parents)
+  out
+}
+
+.descendant_labels_iterative <- function(root, children, tip, n_tip) {
+  # Enter/exit events preserve the recursive path-specific cycle contract,
+  # while collecting terminal labels once avoids depth-dependent evaluation.
+  capacity <- sum(lengths(children)) + length(children) + 4L
+  node_stack <- integer(capacity)
+  exit_stack <- logical(capacity)
+  top <- 1L
+  node_stack[[top]] <- as.integer(root)
+  active <- new.env(hash = TRUE, parent = emptyenv())
+  labels <- character(capacity)
+  label_count <- 0L
+
+  while (top > 0L) {
+    node <- node_stack[[top]]
+    is_exit <- exit_stack[[top]]
+    top <- top - 1L
+    key <- as.character(node)
+
+    if (is_exit) {
+      if (exists(key, active, inherits = FALSE)) {
+        rm(list = key, envir = active)
+      }
+      next
+    }
+    if (node <= n_tip) {
+      label_count <- label_count + 1L
+      labels[[label_count]] <- tip[[node]]
+      next
+    }
+    if (exists(key, active, inherits = FALSE)) {
+      label_count <- label_count + 1L
+      labels[[label_count]] <- paste0("!cycle:", node)
+      next
+    }
+    kids <- children[[key]]
+    if (!length(kids)) {
+      label_count <- label_count + 1L
+      labels[[label_count]] <- paste0("!empty:", node)
+      next
+    }
+
+    assign(key, TRUE, envir = active)
+    top <- top + 1L
+    node_stack[[top]] <- node
+    exit_stack[[top]] <- TRUE
+    for (child in rev(kids)) {
+      top <- top + 1L
+      node_stack[[top]] <- child
+      exit_stack[[top]] <- FALSE
+    }
+  }
+  if (!label_count) return(character())
+  sort(labels[seq_len(label_count)])
+}
+
+.descendant_keys_iterative <- function(nodes, children, tip, n_tip) {
+  memo <- new.env(hash = TRUE, parent = emptyenv())
+  visiting <- new.env(hash = TRUE, parent = emptyenv())
+  capacity <- 2L * (sum(lengths(children)) + length(children) + 4L)
+  cycle_found <- FALSE
+
+  for (start in nodes) {
+    start_key <- as.character(start)
+    if (exists(start_key, memo, inherits = FALSE)) next
+    node_stack <- integer(capacity)
+    exit_stack <- logical(capacity)
+    top <- 1L
+    node_stack[[top]] <- as.integer(start)
+
+    while (top > 0L) {
+      node <- node_stack[[top]]
+      is_exit <- exit_stack[[top]]
+      top <- top - 1L
+      key <- as.character(node)
+      if (exists(key, memo, inherits = FALSE)) next
+
+      if (is_exit) {
+        kids <- children[[key]]
+        values <- unlist(lapply(kids, function(child) {
+          get(as.character(child), memo, inherits = FALSE)
+        }), use.names = FALSE)
+        assign(key, sort(values), envir = memo)
+        if (exists(key, visiting, inherits = FALSE)) {
+          rm(list = key, envir = visiting)
+        }
+        next
+      }
+      if (node <= n_tip) {
+        value <- if (length(tip) >= node) tip[[node]] else paste0("#", node)
+        assign(key, value, envir = memo)
+        next
+      }
+      if (exists(key, visiting, inherits = FALSE)) {
+        cycle_found <- TRUE
+        break
+      }
+      kids <- children[[key]]
+      if (!length(kids)) {
+        assign(key, paste0("!empty:", node), envir = memo)
+        next
+      }
+
+      assign(key, TRUE, envir = visiting)
+      top <- top + 1L
+      node_stack[[top]] <- node
+      exit_stack[[top]] <- TRUE
+      for (child in rev(kids)) {
+        child_key <- as.character(child)
+        if (!exists(child_key, memo, inherits = FALSE)) {
+          top <- top + 1L
+          node_stack[[top]] <- child
+          exit_stack[[top]] <- FALSE
+        }
+      }
+    }
+    if (cycle_found) break
+  }
+
+  if (cycle_found) {
+    return(vapply(nodes, function(node) {
+      paste(.descendant_labels_iterative(node, children, tip, n_tip),
+            collapse = "\r")
+    }, character(1L)))
+  }
+  vapply(nodes, function(node) {
+    paste(get(as.character(node), memo, inherits = FALSE), collapse = "\r")
+  }, character(1L))
+}
+
 .canonical_tree_signature <- function(tree) {
   if (!inherits(tree, "phylo")) return(NULL)
   edge <- tree$edge
@@ -137,15 +276,13 @@
   internal <- ids[ids > n_tip]
   root_candidates <- setdiff(unique(edge[, 1L]), unique(edge[, 2L]))
   root <- if (length(root_candidates) == 1L) root_candidates[[1L]] else NA_integer_
-  descendants <- function(node, active = integer()) {
-    if (node <= n_tip) return(tip[[node]])
-    if (node %in% active) return(paste0("!cycle:", node))
-    kids <- edge[edge[, 1L] == node, 2L]
-    if (!length(kids)) return(paste0("!empty:", node))
-    sort(unlist(lapply(kids, descendants, active = c(active, node)),
-                use.names = FALSE))
+  children <- .edge_children_index(edge)
+  root_key <- if (is.finite(root)) {
+    paste(.descendant_labels_iterative(root, children, tip, n_tip),
+          collapse = "\r")
+  } else {
+    NA_character_
   }
-  root_key <- if (is.finite(root)) paste(descendants(root), collapse = "\r") else NA_character_
   outdegree <- tabulate(edge[, 1L], nbins = max(c(n_tip, ids)))
   polytomy <- if (length(internal)) sum(outdegree[internal] > 2L) else 0L
   list(
@@ -204,26 +341,12 @@
   root <- roots[[1L]]
   parent <- edge[, 1L]
   child <- edge[, 2L]
-  children_of <- function(node) child[parent == node]
-  memo <- new.env(parent = emptyenv())
-  descendants <- function(node, active = integer()) {
-    key <- as.character(node)
-    if (exists(key, memo, inherits = FALSE)) return(get(key, memo, inherits = FALSE))
-    if (node <= n_tip) {
-      ans <- if (length(before$tip_label) >= node) before$tip_label[[node]] else paste0("#", node)
-      assign(key, ans, memo)
-      return(ans)
-    }
-    if (node %in% active) return(paste0("!cycle:", node))
-    kids <- children_of(node)
-    ans <- if (!length(kids)) paste0("!empty:", node) else
-      sort(unlist(lapply(kids, descendants, active = c(active, node)), use.names = FALSE))
-    assign(key, ans, memo)
-    ans
-  }
+  children <- .edge_children_index(edge)
   remaining <- setdiff(internal, root)
   if (length(remaining)) {
-    keys <- vapply(remaining, function(z) paste(descendants(z), collapse = "\r"), character(1L))
+    keys <- .descendant_keys_iterative(
+      remaining, children, before$tip_label, n_tip
+    )
     remaining <- remaining[order(keys, remaining)]
   }
   old_order <- c(root, remaining)
@@ -398,11 +521,14 @@
     check_after = NULL
   )
   if (prepared_input) {
-    .validate_prepared_context(tree)
-    ctx <- tree
+    ctx <- .validated_context(tree, verify = TRUE)
     working_tree <- ctx$tree
     tree_processing$original_fingerprint <- ctx$fingerprint
-    checked <- .inspect_tree_core(ctx, signal = signal)
+    checked <- if (is.list(ctx$inspection)) {
+      .tree_check_select(ctx$inspection, signal, prepared = TRUE)
+    } else {
+      .inspect_tree_core(ctx, signal = signal)
+    }
     tree_processing$check_before <- checked
     tree_processing$check_after <- checked
     # A prepared context is generic and may legitimately cache a tree that is
@@ -437,13 +563,18 @@
     if (!isTRUE(checked$ready_by_signal[[signal]])) {
       stop(.format_actionable_condition(checked, signal), call. = FALSE)
     }
-    ctx <- prepare_tree(working_tree)
+    # This context was created inside the current public call.  Mark the
+    # shallow internal copy as validated so downstream helpers do not
+    # fingerprint the same immutable boundary repeatedly.
+    ctx <- .validated_context(prepare_tree(working_tree), verify = FALSE)
   }
   tree_processing$final_fingerprint <- ctx$fingerprint
 
   table <- .analysis_data_table(data, ctx$tree, data_kind = data_kind)
-  matched <- .match_tree_data_core(ctx, data = table, prune = TRUE,
-                                  verbose = verbose, allow_insufficient = TRUE)
+  matched <- .match_tree_data_core(
+    ctx, data = table, prune = TRUE, verbose = verbose,
+    allow_insufficient = TRUE, .return_group = TRUE
+  )
   base_keep <- matched$base_keep
   retained <- length(base_keep)
   matching <- matched$report
@@ -452,7 +583,10 @@
   matching$kernel_ready <- retained >= 2L
   base_group <- NULL
   if (retained >= 2L) {
-    base_group <- .prepared_tree_subset(ctx, base_keep, need_matrix = FALSE)
+    base_group <- matched$.prepared_group
+    if (is.null(base_group)) {
+      base_group <- .prepared_tree_subset(ctx, base_keep, need_matrix = FALSE)
+    }
   }
 
   matched_data <- matched$data
@@ -477,16 +611,27 @@
     }
     if (exists(key, checked_subsets, inherits = FALSE)) return(get(key, checked_subsets, inherits = FALSE))
     result <- if (length(keep) < 2L) {
-      list(ready = FALSE, ready_by_signal = stats::setNames(FALSE, signal),
+      list(
+        check = list(ready = FALSE,
+          ready_by_signal = stats::setNames(FALSE, signal),
            issues = data.frame(code = "too_few_tips", severity = "ERROR",
                                signal = signal,
                                message = "fewer than two retained species",
                                check = "retained subset", problem = "fewer than two retained species",
                                action = "retain at least two species, then run check_tree()",
-                               auto_fixable = FALSE, stringsAsFactors = FALSE))
+                               auto_fixable = FALSE, stringsAsFactors = FALSE)),
+        group = NULL
+      )
     } else {
-      .inspect_tree_core(.prepared_tree_subset(ctx, base_keep[keep], need_matrix = FALSE)$tree,
-                         signal = signal)
+      retained_keep <- base_keep[keep]
+      group <- if (!is.null(base_group) &&
+                   identical(sort(as.integer(retained_keep)),
+                             sort(as.integer(base_keep)))) {
+        base_group
+      } else {
+        .prepared_tree_subset(ctx, retained_keep, need_matrix = FALSE)
+      }
+      list(check = .structural_entry_check(group, signal), group = group)
     }
     assign(key, result, checked_subsets)
     result
@@ -500,14 +645,15 @@
       } else {
         NULL
       }
-      check <- check_subset(keep, packed_key = packed_key)
+      subset <- check_subset(keep, packed_key = packed_key)
+      check <- subset$check
       groups[[i]] <- list(
         index = i,
         columns = cols,
         keep = keep,
         retained = length(keep),
         data = if (length(cols)) matched_data[keep, cols, drop = FALSE] else matched_data[keep, , drop = FALSE],
-        group = if (length(keep) >= 2L) .prepared_tree_subset(ctx, base_keep[keep], need_matrix = FALSE) else NULL,
+        group = subset$group,
         check = check,
         kernel_ready = length(keep) >= 2L && isTRUE(check$ready_by_signal[[signal]])
       )

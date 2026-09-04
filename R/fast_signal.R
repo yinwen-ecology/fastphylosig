@@ -513,10 +513,13 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
   need_dense <- !identical(engine, "tree")
   need_lambda_cache <- identical(method, "lambda") &&
     !identical(engine, "tree")
-  base_group <- .prepared_tree_subset(
-    ctx, base_keep, need_lambda = need_lambda_cache,
-    need_matrix = need_dense
-  )
+  base_group <- .analysis$base_group
+  if (is.null(base_group) || isTRUE(need_dense)) {
+    base_group <- .prepared_tree_subset(
+      ctx, base_keep, need_lambda = need_lambda_cache,
+      need_matrix = need_dense
+    )
+  }
   base_tree <- base_group$tree
   base_idx <- match(base_tree$tip.label, tree_tips)
   X0 <- X_raw[base_tree$tip.label, , drop = FALSE]
@@ -608,10 +611,13 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
       next
     }
 
-    group <- .prepared_tree_subset(
-      ctx, base_idx[keep], need_lambda = need_lambda_cache,
-      need_matrix = need_dense
-    )
+    group <- if (is.list(analysis_group)) analysis_group$group else NULL
+    if (is.null(group) || isTRUE(need_dense)) {
+      group <- .prepared_tree_subset(
+        ctx, base_idx[keep], need_lambda = need_lambda_cache,
+        need_matrix = need_dense
+      )
+    }
     group_tree <- group$tree
     C <- group$C
     Xg <- X0[group_tree$tip.label, idx, drop = FALSE]
