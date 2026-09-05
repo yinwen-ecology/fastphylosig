@@ -1,0 +1,28 @@
+* installing *source* package 'fastphylosig' ...
+** this is package 'fastphylosig' version '0.2.0.9000'
+** using staged installation
+** libs
+specified C++17
+using C++ compiler: 'G__~1.EXE (GCC) 14.3.0'
+using C++17
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include' -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/RcppArmadillo/include'   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"   -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c RcppExports.cpp -o RcppExports.o
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include' -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/RcppArmadillo/include'   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"   -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c d_stream.cpp -o d_stream.o
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include' -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/RcppArmadillo/include'   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"   -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c delta_diagnostics.cpp -o delta_diagnostics.o
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include' -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/RcppArmadillo/include'   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"   -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c fast_signal.cpp -o fast_signal.o
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include' -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/RcppArmadillo/include'   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"   -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c k_permutation.cpp -o k_permutation.o
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include' -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/RcppArmadillo/include'   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"   -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c k_tree.cpp -o k_tree.o
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include' -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/RcppArmadillo/include'   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"   -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c lambda_tree.cpp -o lambda_tree.o
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include' -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/RcppArmadillo/include'   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"   -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c na_mask.cpp -o na_mask.o
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include' -I'C:/Users/wenyi/AppData/Local/R/win-library/4.6/RcppArmadillo/include'   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"   -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c tree_core.cpp -o tree_core.o
+g++ -shared -s -static-libgcc -o fastphylosig.dll tmp.def RcppExports.o d_stream.o delta_diagnostics.o fast_signal.o k_permutation.o k_tree.o lambda_tree.o na_mask.o tree_core.o -fopenmp -LC:/Users/wenyi/AppData/Local/R/R-46~1.1/bin/x64 -lRlapack -LC:/Users/wenyi/AppData/Local/R/R-46~1.1/bin/x64 -lRblas -lgfortran -lquadmath -LC:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/lib/x64 -LC:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/lib -LC:/Users/wenyi/AppData/Local/R/R-46~1.1/bin/x64 -lR
+installing to C:/Users/wenyi/AppData/Local/Temp/fastphylosig-stage2b2b1-build/fastphylosig.Rcheck/00LOCK-FASTPH~1/00new/fastphylosig/libs/x64
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (fastphylosig)

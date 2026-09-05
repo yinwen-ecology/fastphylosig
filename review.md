@@ -1,4 +1,4 @@
-# fastphylosig 0.2.0 Stage 2B2A Expert Review
+# fastphylosig 0.2.0 Stage 2B2B Candidate 1 Expert Review
 
 ## Decision
 
@@ -6,213 +6,176 @@
 
 `RAW_ROUTE_SINGLE_PREPARATION_BOUNDARY = ACCEPTED_FROZEN`
 
-`STAGE2B2A_PRODUCTION_CODE_CHANGE = NONE`
-
 `STAGE2B2A_COMPLEXITY_ROOT_CAUSE = CONFIRMED`
 
-`STAGE2B2B_IMPLEMENTATION = NOT_STARTED`
+`INSPECTION_INTEGER_ADJACENCY = ACCEPTED_FROZEN`
 
-The current `prepare_tree()` behavior is near quadratic on this R/runtime, but
-not because it performs a per-node full scan of the edge matrix. Two distinct
-mechanisms explain the result: named-list child lookup plus repeatedly copied R
-stacks in structural inspection, and full descendant-key materialization in
-canonicalization. The latter becomes an additional dominant cost on pectinate
-trees.
+`CANDIDATE_2 = NOT_STARTED`
 
-## Provenance And Protocol
+Candidate 1 passed exact semantic equality, regression, package-check, and
+performance gates. It is accepted and frozen. This stage stops here.
 
-- Audit source: `21dd4e522de125d253ed5884b3e1fcc47c693f2a`.
-- Installed production source: `e265b47cd7abbb3c727ec466998c67e8eecdbc98`.
-- There is no production/test diff between those commits in `R/`, `src/`,
-  `DESCRIPTION`, `NAMESPACE`, `man/`, or `tests/`.
+## Scope And Provenance
+
+- Old-oracle baseline: `4dc4fa3b4eb6a0815789bdbd5276ec3063dcbda4`.
+- Candidate source commit: `1685d8f58dea6dfe0a3e3d519d58581b3bbae5b9`.
 - Package version: `0.2.0.9000`.
-- Runtime: R 4.6.1 UCRT, `x86_64-w64-mingw32`, Windows.
-- Compiler: GCC/G++ 14.3.0, C++17.
-- Fixed positive-length balanced, seeded random, and pectinate trees.
-- Serialized execution: one non-overlapping R process per shape; no benchmark
-  processes ran concurrently.
-- Five formal repeats through n=5,000 and three at n=10,000/20,000, after
-  warmup and alternating identical fixture copies. Every cell has median/IQR.
-- A 120-second per-call guard was active; no formal observation was censored or
-  failed.
-- Direct helper timings are independent inclusive timings. They must not be
-  added as if they were disjoint components.
+- Runtime: R 4.6.1 UCRT, `x86_64-w64-mingw32`, Windows 11 build 26200.
+- Compiler evidence: GCC/G++ 14.3.0; package compilation used C++17.
+- Production scope: `R/check_tree.R` only.
+- Test-only oracle: the complete baseline `.inspect_tree_core()` copied from
+  the baseline commit into a private test fixture.
+- No estimator, numerical formula, tolerance, fingerprint, canonicalization,
+  canonical-signature, RNG, thread-policy, result-structure, or public-API
+  change was made.
 
-## Tree-Shape Scaling
+## Implementation Audit
 
-Values are median seconds with IQR in brackets.
+The two structural traversals inside `.inspect_tree_core()` retain the same
+validation and visit semantics, but use different private workspaces:
 
-| Tips | Balanced | Random | Pectinate |
-|---:|---:|---:|---:|
-| 500 | 0.070 [0.010] | 0.080 [0.020] | 0.110 [0.000] |
-| 1,000 | 0.210 [0.020] | 0.200 [0.000] | 0.280 [0.010] |
-| 2,000 | 0.600 [0.020] | 0.600 [0.010] | 0.940 [0.000] |
-| 5,000 | 2.810 [0.080] | 2.830 [0.070] | 4.820 [0.070] |
-| 10,000 | 10.100 [0.135] | 10.070 [0.315] | 20.390 [0.060] |
-| 20,000 | 38.010 [1.970] | 37.330 [0.110] | 80.560 [1.490] |
-
-The descriptive public-path exponents are:
-
-| Shape | p, 5k to 10k | p, 10k to 20k |
-|---|---:|---:|
-| Balanced | 1.846 | 1.912 |
-| Random | 1.831 | 1.890 |
-| Pectinate | 2.081 | 1.982 |
-
-These exponents diagnose observed scaling; they are not mathematical proofs.
-
-## Major Helpers
-
-At n=20,000:
-
-| Shape | Inspection, s | p 10k-20k | Canonicalization, s | p 10k-20k | Signature, s |
-|---|---:|---:|---:|---:|---:|
-| Balanced | 20.85 | 1.960 | 16.47 | 1.837 | 3.85 |
-| Random | 20.22 | 1.937 | 16.58 | 1.797 | 3.50 |
-| Pectinate | 27.02 | 2.014 | 52.45 | 1.998 | 3.53 |
-
-From 5k to 10k, inspection p is 2.000, 2.000, and 2.020 for
-balanced, random, and pectinate trees. Canonicalization p is 1.709, 1.748, and
-2.135 respectively. Thus inspection is near quadratic for every shape, while
-canonicalization has an additional shape-specific quadratic term.
-
-Canonical signature p is 1.879/1.902 (balanced), 1.837/1.807 (random), and
-1.570/1.849 (pectinate) over 5k-10k/10k-20k. The signature cost is therefore
-also superlinear here, but it is not responsible for the pectinate-specific
-gap. Selected n=20,000 direct sub-helper medians are:
-
-| Phase | Balanced, s | Random, s | Pectinate, s |
-|---|---:|---:|---:|
-| Connectivity traversal | 10.08 | 9.53 | 12.99 |
-| Root-distance traversal | 10.56 | 10.11 | 13.59 |
-| Descendant-key construction | 8.46 | 7.78 | 44.42 |
-| Signature descendant traversal | 3.75 | 3.50 | 3.60 |
-
-Root identification, edge normalization, tip mapping, postorder reordering,
-and one parent/child construction were each 0-0.02 s at this scale. They are
-not current wall-time hotspots when measured independently.
-
-## Operation Evidence
-
-The public preparation call count is stable at every measured size and shape:
-one `.inspect_tree_core()`, one `.safe_canonicalize_core()`, two
-`.canonical_tree_signature()` calls, three `.edge_children_index()` calls, one
-`.descendant_keys_iterative()`, and five complete parent/child reconstructions
-when the two inspection `split()` constructions are included.
-
-For a valid binary n=20,000 fixture (`E = 39,998`):
-
-- per-node full-edge searches in inspection and canonicalization: **0**;
-- static full-edge/vector pass inventory: inspection 8, one signature 5,
-  canonicalization body 7;
-- structural inspection traversals: 2, connectivity and root distance;
-- root descendant traversals: 2 inside canonicalization, one per signature;
-- canonical descendant-key passes: 1;
-- named adjacency lookups across the measured preparation operations: 159,992;
-- descendant-key sort calls and string collapses: 19,998 each.
-
-The decisive shape-dependent operation count is descendant-tip payload visits:
-
-| Shape | Signature tip visits | Canonical total | Descendant-key payload only |
-|---|---:|---:|---:|
-| Balanced | 20,000 | 307,232 | 267,232 |
-| Random | 20,000 | 396,178 | 356,178 |
-| Pectinate | 20,000 | 200,029,999 | 199,989,999 |
-
-Instrumentation wrappers were used only for call counts, never for the direct
-timing tables. At n=20,000 their median calibration overhead was between
--0.281% and +0.284%, with maximum absolute overhead 1.351%. Smaller fast cells
-had timer-resolution noise above 5%; their instrumented wall times are not used
-as evidence, while their deterministic operation counts remain valid.
-
-## Source-Level Cause
-
-`.inspect_tree_core()` constructs child groups twice and both traversals use
-`children[[as.character(node)]]`, `stack[-length(stack)]`, and
-`c(stack, kid)` (`R/check_tree.R:307-325` and `R/check_tree.R:405-420`). There is
-no `which()`, `match()`, `%in%`, or `edge[edge[, 1] == node, ]` inside these
-loops. The stack operations copy active R vectors; named-list lookup may scan a
-growing name table. Because balanced and random inspection also have p near 2,
-the measured evidence implicates name lookup/copy cost rather than tree depth
-alone. Pectinate depth raises the constant through additional stack copying.
-
-`.descendant_keys_iterative()` memoizes graph visits, but each internal node
-still combines, sorts, stores, and finally collapses its complete descendant
-label vector (`R/analysis_preparation.R:192-264`). Its cumulative payload is
-approximately `sum_v s(v)`: near n log n for balanced/random trees and near
-n-squared for a pectinate tree. At n=20,000 this one direct helper took 44.42 s,
-55.14% of pectinate `prepare_tree()` wall time.
-
-The fixed number of full-edge passes and five adjacency reconstructions increase
-constants but cannot explain p near 2 by themselves. The compiled tree path in
-`src/tree_core.cpp` already uses indexed arrays and a reserved explicit stack;
-no corresponding superlinear scan was found there.
-
-## Evidence Reuse Safety
-
-| Class | Evidence | Reuse decision |
+| Concern | Frozen old implementation | Candidate 1 |
 |---|---|---|
-| A: invariant | tip labels/counts, topology-valid booleans, root degree, polytomy/unary counts, branch diagnostics | Safe as scalar or label-keyed facts after the existing proof |
-| B: remappable | parent/child arrays, adjacency, root ID, root distances, edge-associated lengths, preorder/postorder, method readiness | Safe only with exact node-ID and edge-row remaps |
-| C: representation proof/workspace | DFS stacks, before/after signatures, canonical map proof, edge-isomorphism records, canonicalization metadata, fingerprint | Not safe to reuse across canonicalization |
+| Child lookup | named split lists and character keys | integer `child_offsets`, `children`, and edge-row arrays |
+| Child order | source edge-row order | source edge-row order |
+| Stack | `stack[-length(stack)]` and `c(stack, kid)` | preallocated integer stack plus `top` cursor |
+| Connectivity traversal | independent named adjacency | shared integer adjacency |
+| Root-distance traversal | second named adjacency | same shared integer adjacency |
+| Representation | unchanged | unchanged |
 
-An index is safe when built and consumed within one unchanged representation.
-Blind pre-to-post canonicalization reuse is unsafe because canonicalization may
-change edge order, internal IDs, root representation, and pruning order. The
-before/after signatures and final fingerprint remain required.
+The integer adjacency is filled in original edge-row order. The LIFO traversal
+therefore visits children in exactly the same order as the old implementation.
+Arbitrary valid internal node numbers, shuffled edge rows, and supported
+polytomies remain valid. Cycle detection clears the effective stack and the
+`seen` vector exactly as before. The input tree is never modified.
 
-## Candidate Ranking
+## Exact-Equality Gate
 
-### Candidate 1: integer adjacency plus cursor stacks for inspection
+The old and new complete inspection objects were compared with
+`expect_identical()`, not with a numerical tolerance or selected booleans.
+The gate also compared status, method readiness, root, degree and branch
+diagnostics, issue classes and ordering, failure reasons, warning/error classes
+and messages, and serialized input trees before and after each call.
 
-- **Work:** replace character-keyed child lookup and copying R stack mutation in
-  the two inspection traversals, without removing any validation.
-- **Expected complexity:** the traversal/index component moves from observed
-  O(n-squared)-like behavior toward O(n + E); fixed validation passes remain.
-- **Measured share:** inspection is 54.85%, 54.17%, and 33.54% of n=20,000
-  preparation for balanced, random, and pectinate trees. The narrower sum of the
-  two traversal bodies gives theoretical ceilings of 54.30%, 52.61%, and
-  32.99%. Actual savings will be lower.
-- **Risk:** low to medium; preserve visit order, cycle handling, overflow,
-  issue order, and early-failure semantics.
-- **Equality fixtures:** balanced/random/pectinate, polytomy, shuffled edges,
-  safe renumbering, cycles/disconnection, unary/malformed trees, invalid root,
-  zero/negative branches, and exact complete inspection-object equality.
-- **Gate:** **GO** for a bounded future candidate.
+Valid fixtures:
 
-### Candidate 2: exact compact descendant-key ordering
+- balanced, seeded random, and pectinate trees;
+- polytomy, shuffled edge rows, safe internal renumbering, and alternate valid
+  root numbering;
+- two-tip and 1,000-tip large trees.
 
-- **Work:** eliminate repeated materialization/sort/collapse of every ancestor's
-  full descendant label payload in `.descendant_keys_iterative()`.
-- **Expected complexity:** target an exact collision-free persistent key or
-  comparator whose construction is O(n log n)-like rather than proportional to
-  the pectinate `sum_v s(v)`. This is a private computation change only;
-  `.canonical_tree_signature()` semantics and output must remain byte-identical.
-- **Measured share:** descendant-key timing is 22.26%, 20.84%, and 55.14% of
-  n=20,000 preparation for balanced, random, and pectinate trees. These are the
-  ideal end-to-end ceilings; actual savings will be lower.
-- **Risk:** medium to high because exact lexical ordering, arbitrary tip labels,
-  polytomies, cycles/fallback behavior, and stable tie-breaking must not drift.
-- **Equality fixtures:** exact old/new internal mapping and edge order for all
-  shape fixtures, shuffled edges, safe renumberings/root representations,
-  polytomies, adversarial labels, before/after signature identity, branch-edge
-  association, and canonicalization failure reasons.
-- **Gate:** **GO** for a bounded prototype with old-vs-new exact-equality gates.
+Failure fixtures:
 
-Cross-canonicalization reuse of a complete structural evidence package remains
-`NO-GO / NEED_MORE_EVIDENCE`; its remapping risk is higher and the reusable
-fraction has not been isolated from the two confirmed hotspots.
+- cycle, disconnected tree, unary node, malformed edge matrix;
+- invalid `Nnode`, invalid root representation;
+- negative branch length and zero terminal branch.
+
+All complete-object and input-immutability comparisons passed for the full
+signal set and selected signal subsets.
+
+## Formal Performance Protocol
+
+The formal benchmark used fixed positive-length balanced, random, and
+pectinate fixtures at 500, 1,000, 2,000, 5,000, 10,000, and 20,000 tips. One
+serialized R process performed warmup, old/new parity checks, fresh fixture
+clones, and alternating old/new order. Namespace binding changes, cloning, and
+garbage collection were outside the timer.
+
+- 10 paired repeats per cell through 5,000 tips.
+- 5 paired repeats per cell at 10,000 and 20,000 tips.
+- 36 workload cells and 300 paired timing records.
+- Every record: status `ok`, zero warnings, zero errors, zero censoring.
+- Results: median and IQR; exact values are retained in
+  `benchmarks/stage2b2b1/results/formal/`.
+
+### Direct Inspection
+
+Times are median seconds with IQR in brackets.
+
+| Shape | Tips | Old | New | Speedup |
+|---|---:|---:|---:|---:|
+| Balanced | 5,000 | 1.255 [0.020] | 0.020 [0.0175] | 62.75x |
+| Random | 5,000 | 1.330 [0.0375] | 0.025 [0.010] | 53.20x |
+| Pectinate | 5,000 | 1.515 [0.0575] | 0.030 [~0] | 50.50x |
+| Balanced | 20,000 | 21.910 [0.350] | 0.100 [0.020] | 219.10x |
+| Random | 20,000 | 21.230 [1.420] | 0.110 [0.010] | 193.00x |
+| Pectinate | 20,000 | 27.770 [1.330] | 0.170 [0.090] | 163.35x |
+
+The descriptive 10,000-to-20,000 empirical exponents changed from 1.973 to
+1.000 for balanced trees, 1.962 to 1.138 for random trees, and 2.077 to 1.766
+for pectinate trees. These are empirical diagnostics, not complexity proofs.
+
+### prepare_tree() End To End
+
+Times are median seconds with IQR in brackets.
+
+| Shape | Tips | Old | New | Speedup | Improvement |
+|---|---:|---:|---:|---:|---:|
+| Balanced | 5,000 | 2.645 [0.0425] | 1.405 [0.0275] | 1.88x | 46.88% |
+| Random | 5,000 | 2.800 [0.220] | 1.455 [0.065] | 1.92x | 48.04% |
+| Pectinate | 5,000 | 4.740 [0.065] | 3.235 [0.0425] | 1.47x | 31.75% |
+| Balanced | 20,000 | 38.920 [1.800] | 17.750 [0.590] | 2.19x | 54.39% |
+| Random | 20,000 | 39.160 [2.710] | 18.000 [1.420] | 2.18x | 54.03% |
+| Pectinate | 20,000 | 83.910 [2.060] | 55.250 [3.130] | 1.52x | 34.16% |
+
+The remaining pectinate scaling is expected because Candidate 1 did not touch
+canonical descendant-key construction. Candidate 2 was not started.
+
+## Small-Tree Resolution Gate
+
+The formal pectinate 500-tip direct cell initially showed 15 ms versus 20 ms,
+but both values were at the approximately 10 ms timer resolution and the IQR
+was 20 ms. A pre-specified supplemental run timed 50 calls per block over 24
+alternating paired blocks, with exact equality outside every timed block.
+
+| Shape | Old, ms/call | New, ms/call | Speedup | Slowdown gate |
+|---|---:|---:|---:|---:|
+| Balanced | 18.3 [2.05] | 3.3 [0.40] | 5.55x | PASS |
+| Random | 18.0 [0.80] | 3.4 [0.20] | 5.29x | PASS |
+| Pectinate | 20.6 [0.40] | 3.4 [0.40] | 6.06x | PASS |
+
+No representative workload has a confirmed slowdown greater than 5%.
+
+## Operation Counts
+
+For a binary 20,000-tip tree, both structural traversals together formerly
+performed 79,998 character lookups, 79,998 character-key materializations,
+79,998 stack pops, and 79,996 stack appends. The old copying-stack workload
+depended strongly on tree shape:
+
+| Shape | Old copied stack slots | New stack resize copied slots |
+|---|---:|---:|
+| Balanced | 1,033,732 | 0 |
+| Random | 1,463,388 | 0 |
+| Pectinate | 1,599,840,004 | 0 |
+
+The candidate instead performs fixed integer adjacency fills, offset/cursor
+reads, and preallocated stack writes. It does not remove either traversal or
+any structural validation.
+
+## Regression And Check Gates
+
+- Full `testthat`: **7,412 PASS, 0 FAIL, 0 WARN, 0 SKIP**.
+- `R CMD check --no-manual --timings`: **Status: OK**.
+- Package check: 0 ERROR, 0 WARNING, 0 NOTE.
+- Exact old/new inspection equality: PASS.
+- Input immutability: PASS.
+- Representative performance slowdown gate: PASS.
+
+Authoritative outputs are retained under
+`benchmarks/stage2b2b1/results/`, including the full paired timings,
+summaries, operation counts, provenance, `testthat.Rout`, `00install.out`, and
+`00check.log`.
 
 ## Final Gate
 
-`STAGE2B2A_AUDIT = PASS`
+The acceptance requirement was met by both independent routes:
 
-`CANDIDATE_1 = GO`
+- balanced/random 20,000-tip direct inspection speedup is far above 2x;
+- 20,000-tip `prepare_tree()` improvement is 54.39% and 54.03%, with 34.16%
+  improvement for pectinate trees;
+- no confirmed representative slowdown exceeds 5%.
 
-`CANDIDATE_2 = GO_FOR_BOUNDED_EXACT_EQUIVALENCE_PROTOTYPE`
+`INSPECTION_INTEGER_ADJACENCY = ACCEPTED_FROZEN`
 
-`CROSS_REPRESENTATION_EVIDENCE_REUSE = NO_GO_NEED_MORE_EVIDENCE`
-
-No estimator, numerical formula, tolerance, RNG behavior, thread policy,
-fingerprint semantics, canonical-signature semantics, public API, production
-R/C++ file, or test was changed. Stage 2B2A stops here.
+Stage 2B2B Candidate 1 ends here. Candidate 2 remains unimplemented.

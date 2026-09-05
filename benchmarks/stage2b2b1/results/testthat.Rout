@@ -1,0 +1,48 @@
+
+R version 4.6.1 (2026-06-24 ucrt) -- "Happy Hop"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(fastphylosig)
+> 
+> test_check("fastphylosig")
+[1] "some species in x are missing from tree, dropping missing taxa from x"
+[1] "some species in tree are missing from x , dropping missing taxa from the tree"
+[1] "some species in x are missing from tree, dropping missing taxa from x"
+[1] "some species in tree are missing from x , dropping missing taxa from the tree"
+[1] "some data in x given as 'NA', dropping corresponding species from tree"
+[1] "some species in x are missing from tree, dropping missing taxa from x"
+[1] "some species in tree are missing from x , dropping missing taxa from the tree"
+[fastphylosig: K] Checking tree...
+[fastphylosig: K] Calculating K...
+[fastphylosig: K] Done | 0.02 s
+[fastphylosig: D] Checking tree...
+[fastphylosig: D] Preparing data...
+[fastphylosig: D] Calculating observed D...
+[fastphylosig: D] Simulating random and Brownian nulls...
+[fastphylosig: Delta] Checking tree...
+[fastphylosig: Delta] Preparing data...
+[fastphylosig: Delta] Estimating ancestral states...
+[fastphylosig: Delta] Running MCMC...
+[fastphylosig: Delta] Finalizing diagnostics...
+[fastphylosig: ACE] Checking tree...
+[fastphylosig: ACE] Preparing data...
+[fastphylosig: ACE] Estimating ancestral states...
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 7412 ]
+> 
+> proc.time()
+   user  system elapsed 
+  30.68   15.76   50.39 
