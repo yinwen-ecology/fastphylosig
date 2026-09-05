@@ -1,4 +1,4 @@
-# fastphylosig 0.2.0 Stage 2B1 Expert Review
+# fastphylosig 0.2.0 Stage 2B2A Expert Review
 
 ## Decision
 
@@ -6,179 +6,213 @@
 
 `RAW_ROUTE_SINGLE_PREPARATION_BOUNDARY = ACCEPTED_FROZEN`
 
-Stage 2B1 meets every correctness, package-check, call-count, and performance
-gate. The candidate removes repeated raw-route preparation without weakening
-tree validation or changing any estimator, numerical formula, tolerance, RNG,
-thread policy, public argument, or public result structure.
+`STAGE2B2A_PRODUCTION_CODE_CHANGE = NONE`
 
-Stage 2B2 was not started.
+`STAGE2B2A_COMPLEXITY_ROOT_CAUSE = CONFIRMED`
 
-## Provenance
+`STAGE2B2B_IMPLEMENTATION = NOT_STARTED`
 
-- Frozen before commit: `017f39df1aa520f71fc2a0c5647bd598ff23e824`
-- Stage 2B1 candidate commit: `e265b47cd7abbb3c727ec466998c67e8eecdbc98`
-- Package version: `0.2.0.9000`
-- Runtime: R 4.6.1 UCRT, `x86_64-w64-mingw32`, Windows 11
-- Compiler: GCC 14.3.0, C++17
-- Candidate installation used `-fopenmp`; no thread or RNG policy changed
-- Fixed fixture: `ape::rtree(seed = 20260904 + n)`, postorder
-- Fixed trait: normal vector with seed `97531 + n`
-- Formal timing: warmup, alternating before/after order, 20 pairs for
-  `n < 10000`, 10 pairs for `n >= 10000`, median and IQR
-- Child startup and serialization were outside the timer
+The current `prepare_tree()` behavior is near quadratic on this R/runtime, but
+not because it performs a per-node full scan of the edge matrix. Two distinct
+mechanisms explain the result: named-list child lookup plus repeatedly copied R
+stacks in structural inspection, and full descendant-key materialization in
+canonicalization. The latter becomes an additional dominant cost on pectinate
+trees.
 
-The installed before and after libraries were loaded in separate child R
-sessions. The formal run was serialized; no competing R benchmark was run.
+## Provenance And Protocol
 
-## Production Change
+- Audit source: `21dd4e522de125d253ed5884b3e1fcc47c693f2a`.
+- Installed production source: `e265b47cd7abbb3c727ec466998c67e8eecdbc98`.
+- There is no production/test diff between those commits in `R/`, `src/`,
+  `DESCRIPTION`, `NAMESPACE`, `man/`, or `tests/`.
+- Package version: `0.2.0.9000`.
+- Runtime: R 4.6.1 UCRT, `x86_64-w64-mingw32`, Windows.
+- Compiler: GCC/G++ 14.3.0, C++17.
+- Fixed positive-length balanced, seeded random, and pectinate trees.
+- Serialized execution: one non-overlapping R process per shape; no benchmark
+  processes ran concurrently.
+- Five formal repeats through n=5,000 and three at n=10,000/20,000, after
+  warmup and alternating identical fixture copies. Every cell has median/IQR.
+- A 120-second per-call guard was active; no formal observation was censored or
+  failed.
+- Direct helper timings are independent inclusive timings. They must not be
+  added as if they were disjoint components.
 
-The public `prepare_tree()` wrapper is unchanged. A private
-`.prepare_tree_core()` now accepts package-owned inspection and
-canonicalization evidence created earlier in the same raw public call.
+## Tree-Shape Scaling
 
-The raw route is now:
+Values are median seconds with IQR in brackets.
 
-```text
-raw phylo
-  -> representation-safe canonicalization once
-  -> complete structural/method inspection once
-  -> private context compilation once
-  -> internal validated capability
-  -> common prepared analysis route
-```
-
-An external prepared call remains:
-
-```text
-prepared context supplied by user
-  -> one complete integrity fingerprint
-  -> internal validated capability
-  -> common prepared analysis route
-```
-
-The capability is private and cannot be requested through a public argument.
-Each independent public prepared call still revalidates its context. Protected
-mutations therefore remain detectable on the next call.
-
-## Helper Call Audit
-
-Counts are identical at n = 500 and n = 5000.
-
-| Helper | Raw before | Raw after | Prepared before | Prepared after |
-|---|---:|---:|---:|---:|
-| `.inspect_tree_core()` | 3 | 1 | 0 | 0 |
-| `.safe_canonicalize_core()` | 2 | 1 | 0 | 0 |
-| `.canonical_tree_signature()` | 4 | 2 | 0 | 0 |
-| `.tree_fingerprint()` | 2 | 1 | 1 | 1 |
-| `.prepare_tree_subset()` | 1 | 1 | 0 | 0 |
-| `.prepared_tree_subset()` | 1 | 1 | 1 | 1 |
-
-Every remaining scan is required:
-
-- The single inspection establishes structural validity and readiness for K,
-  lambda, D, and Delta.
-- The single canonicalization is the existing representation-safe raw-tree
-  normalization.
-- Its two canonical signatures are the unchanged before/after equivalence
-  proof; the signature definition was not modified.
-- The single fingerprint protects the newly compiled context and its retained
-  subtree cache.
-- The subset preparation seeds the full structural cache once.
-- The retained-subtree lookup enters the unchanged common analysis path once.
-- Downstream `.validate_prepared_context()` entries see the private validated
-  capability and perform only shallow capability checks, not new fingerprints
-  or tree scans.
-
-## Performance
-
-Times are formal medians in milliseconds. IQR values are in parentheses.
-
-| Tips | Raw before | Raw after | Speedup | Prepare after | Prepared after | Raw / (prepare + prepared) | Duplicate residual / raw |
-|---:|---:|---:|---:|---:|---:|---:|---:|
-| 500 | 186 (2.5) | 86 (1.75) | 2.16x | 85.75 (4.13) | 7 (0.5) | 0.927 | -7.85% |
-| 1,000 | 481 (3.25) | 216 (5.25) | 2.23x | 208 (4.25) | 13 (1) | 0.977 | -2.31% |
-| 2,000 | 1,412 (18) | 593 (11) | 2.38x | 590 (15.5) | 22 (2) | 0.969 | -3.20% |
-| 5,000 | 7,160 (1,191.25) | 2,827.5 (278.75) | 2.53x | 2,797.5 (41.25) | 45 (<0.01) | 0.995 | -0.53% |
-| 10,000 | 25,535 (210) | 10,015 (115) | 2.55x | 9,885 (110) | 95 (10) | 1.004 | 0.35% |
-| 20,000 | 103,655 (6,617.5) | 37,260 (2,487.5) | 2.78x | 37,230 (935) | 180 (10) | 0.996 | -0.40% |
-
-Negative residuals occur because the equation combines independent route
-medians at the Windows timer resolution. They are small and indicate no
-measurable duplicate residual, not negative computation.
-
-All mandatory performance gates pass:
-
-- n >= 5000 raw speedup is at least 1.7x.
-- n = 20000 raw speedup exceeds the preferred 2.0x target.
-- Absolute positive duplicate residual is below 15% of raw time.
-- `raw / (prepare + prepared)` is below 1.20 at every n.
-- K statistics are exactly equal between raw and prepared routes in every
-  formal observation (`max absolute difference = 0`).
-
-## Prepared-Path Stability
-
-| Tips | Prepared before (ms) | Prepared after (ms) | Before / after |
+| Tips | Balanced | Random | Pectinate |
 |---:|---:|---:|---:|
-| 500 | 7 | 7 | 1.000 |
-| 1,000 | 12 | 13 | 0.923 |
-| 2,000 | 22 | 22 | 1.000 |
-| 5,000 | 45 | 45 | 1.000 |
-| 10,000 | 90 | 95 | 0.947 |
-| 20,000 | 190 | 180 | 1.056 |
+| 500 | 0.070 [0.010] | 0.080 [0.020] | 0.110 [0.000] |
+| 1,000 | 0.210 [0.020] | 0.200 [0.000] | 0.280 [0.010] |
+| 2,000 | 0.600 [0.020] | 0.600 [0.010] | 0.940 [0.000] |
+| 5,000 | 2.810 [0.080] | 2.830 [0.070] | 4.820 [0.070] |
+| 10,000 | 10.100 [0.135] | 10.070 [0.315] | 20.390 [0.060] |
+| 20,000 | 38.010 [1.970] | 37.330 [0.110] | 80.560 [1.490] |
 
-There is no systematic prepared-path regression. Small differences are within
-timer resolution and run variability; the prepared integrity fingerprint
-remains exactly one call.
+The descriptive public-path exponents are:
 
-## Correctness and Failure Gates
+| Shape | p, 5k to 10k | p, 10k to 20k |
+|---|---:|---:|
+| Balanced | 1.846 | 1.912 |
+| Random | 1.831 | 1.890 |
+| Pectinate | 2.081 | 1.982 |
 
-Targeted tests confirm:
+These exponents diagnose observed scaling; they are not mathematical proofs.
 
-- raw/prepared parity for K, lambda, D, and Delta;
-- tree and trait input immutability;
-- root sensitivity and method-specific polytomy behavior;
-- unary-node rejection;
-- negative and zero-terminal branch failure behavior;
-- malformed edge and invalid `Nnode` rejection;
-- NA masks, species matching, duplicate/missing names, and retained-subtree
-  behavior through the existing full suite;
-- prepared mutation detection and one-fingerprint public boundary;
-- warning classes and failure/status semantics through the existing suite.
+## Major Helpers
 
-D depends on random and Brownian null expectations even when significance
-testing is disabled. Its raw/prepared parity gate therefore uses identical,
-explicit null-state matrices rather than comparing two different RNG streams.
-The numerical tolerance remains `1e-12`; no warning is suppressed to conceal a
-production failure.
+At n=20,000:
 
-## Verification
+| Shape | Inspection, s | p 10k-20k | Canonicalization, s | p 10k-20k | Signature, s |
+|---|---:|---:|---:|---:|---:|
+| Balanced | 20.85 | 1.960 | 16.47 | 1.837 | 3.85 |
+| Random | 20.22 | 1.937 | 16.58 | 1.797 | 3.50 |
+| Pectinate | 27.02 | 2.014 | 52.45 | 1.998 | 3.53 |
 
-- Targeted Stage 2B1 gate: `39 PASS, 0 FAIL, 0 WARN, 0 SKIP`
-- Full testthat: `6902 PASS, 0 FAIL, 0 WARN, 0 SKIP`
-- `R CMD check --no-manual --timings`: `Status: OK`
-- Compiler build and package load: PASS
-- Public API additions or changes: none
-- Scientific, numerical, tolerance, RNG, or thread-policy changes: none
+From 5k to 10k, inspection p is 2.000, 2.000, and 2.020 for
+balanced, random, and pectinate trees. Canonicalization p is 1.709, 1.748, and
+2.135 respectively. Thus inspection is near quadratic for every shape, while
+canonicalization has an additional shape-specific quadratic term.
 
-The first check attempt inherited `LC_ALL=C.UTF-8`, which Windows R cannot
-initialize, and stopped during DESCRIPTION metadata checking. The same tarball
-was rerun with the Windows-supported `LC_ALL=C`; it completed with `Status: OK`.
-This was an execution-environment correction, not a source change.
+Canonical signature p is 1.879/1.902 (balanced), 1.837/1.807 (random), and
+1.570/1.849 (pectinate) over 5k-10k/10k-20k. The signature cost is therefore
+also superlinear here, but it is not responsible for the pectinate-specific
+gap. Selected n=20,000 direct sub-helper medians are:
 
-## Evidence Index
+| Phase | Balanced, s | Random, s | Pectinate, s |
+|---|---:|---:|---:|
+| Connectivity traversal | 10.08 | 9.53 | 12.99 |
+| Root-distance traversal | 10.56 | 10.11 | 13.59 |
+| Descendant-key construction | 8.46 | 7.78 | 44.42 |
+| Signature descendant traversal | 3.75 | 3.50 | 3.60 |
 
-Formal evidence is stored under `benchmarks/stage2b1/results/`:
+Root identification, edge normalization, tip mapping, postorder reordering,
+and one parent/child construction were each 0-0.02 s at this scale. They are
+not current wall-time hotspots when measured independently.
 
-- `stage2b1_before_after_summary.csv`
-- `stage2b1_raw_preparation_summary.csv`
-- `stage2b1_raw_preparation_timings.csv`
-- `stage2b1_raw_helper_call_counts.csv`
-- `stage2b1_helper_call_contract.csv`
-- `stage2b1_provenance.csv`
-- `stage2b1_call_audit_provenance.csv`
-- `stage2b1_00check.log`
-- `stage2b1_testthat.Rout`
+## Operation Evidence
 
-The accepted production boundary is frozen. No structural traversal reuse,
-fingerprint optimization, numerical optimization, scheduler redesign, or
-Stage 2B2 work was performed.
+The public preparation call count is stable at every measured size and shape:
+one `.inspect_tree_core()`, one `.safe_canonicalize_core()`, two
+`.canonical_tree_signature()` calls, three `.edge_children_index()` calls, one
+`.descendant_keys_iterative()`, and five complete parent/child reconstructions
+when the two inspection `split()` constructions are included.
+
+For a valid binary n=20,000 fixture (`E = 39,998`):
+
+- per-node full-edge searches in inspection and canonicalization: **0**;
+- static full-edge/vector pass inventory: inspection 8, one signature 5,
+  canonicalization body 7;
+- structural inspection traversals: 2, connectivity and root distance;
+- root descendant traversals: 2 inside canonicalization, one per signature;
+- canonical descendant-key passes: 1;
+- named adjacency lookups across the measured preparation operations: 159,992;
+- descendant-key sort calls and string collapses: 19,998 each.
+
+The decisive shape-dependent operation count is descendant-tip payload visits:
+
+| Shape | Signature tip visits | Canonical total | Descendant-key payload only |
+|---|---:|---:|---:|
+| Balanced | 20,000 | 307,232 | 267,232 |
+| Random | 20,000 | 396,178 | 356,178 |
+| Pectinate | 20,000 | 200,029,999 | 199,989,999 |
+
+Instrumentation wrappers were used only for call counts, never for the direct
+timing tables. At n=20,000 their median calibration overhead was between
+-0.281% and +0.284%, with maximum absolute overhead 1.351%. Smaller fast cells
+had timer-resolution noise above 5%; their instrumented wall times are not used
+as evidence, while their deterministic operation counts remain valid.
+
+## Source-Level Cause
+
+`.inspect_tree_core()` constructs child groups twice and both traversals use
+`children[[as.character(node)]]`, `stack[-length(stack)]`, and
+`c(stack, kid)` (`R/check_tree.R:307-325` and `R/check_tree.R:405-420`). There is
+no `which()`, `match()`, `%in%`, or `edge[edge[, 1] == node, ]` inside these
+loops. The stack operations copy active R vectors; named-list lookup may scan a
+growing name table. Because balanced and random inspection also have p near 2,
+the measured evidence implicates name lookup/copy cost rather than tree depth
+alone. Pectinate depth raises the constant through additional stack copying.
+
+`.descendant_keys_iterative()` memoizes graph visits, but each internal node
+still combines, sorts, stores, and finally collapses its complete descendant
+label vector (`R/analysis_preparation.R:192-264`). Its cumulative payload is
+approximately `sum_v s(v)`: near n log n for balanced/random trees and near
+n-squared for a pectinate tree. At n=20,000 this one direct helper took 44.42 s,
+55.14% of pectinate `prepare_tree()` wall time.
+
+The fixed number of full-edge passes and five adjacency reconstructions increase
+constants but cannot explain p near 2 by themselves. The compiled tree path in
+`src/tree_core.cpp` already uses indexed arrays and a reserved explicit stack;
+no corresponding superlinear scan was found there.
+
+## Evidence Reuse Safety
+
+| Class | Evidence | Reuse decision |
+|---|---|---|
+| A: invariant | tip labels/counts, topology-valid booleans, root degree, polytomy/unary counts, branch diagnostics | Safe as scalar or label-keyed facts after the existing proof |
+| B: remappable | parent/child arrays, adjacency, root ID, root distances, edge-associated lengths, preorder/postorder, method readiness | Safe only with exact node-ID and edge-row remaps |
+| C: representation proof/workspace | DFS stacks, before/after signatures, canonical map proof, edge-isomorphism records, canonicalization metadata, fingerprint | Not safe to reuse across canonicalization |
+
+An index is safe when built and consumed within one unchanged representation.
+Blind pre-to-post canonicalization reuse is unsafe because canonicalization may
+change edge order, internal IDs, root representation, and pruning order. The
+before/after signatures and final fingerprint remain required.
+
+## Candidate Ranking
+
+### Candidate 1: integer adjacency plus cursor stacks for inspection
+
+- **Work:** replace character-keyed child lookup and copying R stack mutation in
+  the two inspection traversals, without removing any validation.
+- **Expected complexity:** the traversal/index component moves from observed
+  O(n-squared)-like behavior toward O(n + E); fixed validation passes remain.
+- **Measured share:** inspection is 54.85%, 54.17%, and 33.54% of n=20,000
+  preparation for balanced, random, and pectinate trees. The narrower sum of the
+  two traversal bodies gives theoretical ceilings of 54.30%, 52.61%, and
+  32.99%. Actual savings will be lower.
+- **Risk:** low to medium; preserve visit order, cycle handling, overflow,
+  issue order, and early-failure semantics.
+- **Equality fixtures:** balanced/random/pectinate, polytomy, shuffled edges,
+  safe renumbering, cycles/disconnection, unary/malformed trees, invalid root,
+  zero/negative branches, and exact complete inspection-object equality.
+- **Gate:** **GO** for a bounded future candidate.
+
+### Candidate 2: exact compact descendant-key ordering
+
+- **Work:** eliminate repeated materialization/sort/collapse of every ancestor's
+  full descendant label payload in `.descendant_keys_iterative()`.
+- **Expected complexity:** target an exact collision-free persistent key or
+  comparator whose construction is O(n log n)-like rather than proportional to
+  the pectinate `sum_v s(v)`. This is a private computation change only;
+  `.canonical_tree_signature()` semantics and output must remain byte-identical.
+- **Measured share:** descendant-key timing is 22.26%, 20.84%, and 55.14% of
+  n=20,000 preparation for balanced, random, and pectinate trees. These are the
+  ideal end-to-end ceilings; actual savings will be lower.
+- **Risk:** medium to high because exact lexical ordering, arbitrary tip labels,
+  polytomies, cycles/fallback behavior, and stable tie-breaking must not drift.
+- **Equality fixtures:** exact old/new internal mapping and edge order for all
+  shape fixtures, shuffled edges, safe renumberings/root representations,
+  polytomies, adversarial labels, before/after signature identity, branch-edge
+  association, and canonicalization failure reasons.
+- **Gate:** **GO** for a bounded prototype with old-vs-new exact-equality gates.
+
+Cross-canonicalization reuse of a complete structural evidence package remains
+`NO-GO / NEED_MORE_EVIDENCE`; its remapping risk is higher and the reusable
+fraction has not been isolated from the two confirmed hotspots.
+
+## Final Gate
+
+`STAGE2B2A_AUDIT = PASS`
+
+`CANDIDATE_1 = GO`
+
+`CANDIDATE_2 = GO_FOR_BOUNDED_EXACT_EQUIVALENCE_PROTOTYPE`
+
+`CROSS_REPRESENTATION_EVIDENCE_REUSE = NO_GO_NEED_MORE_EVIDENCE`
+
+No estimator, numerical formula, tolerance, RNG behavior, thread policy,
+fingerprint semantics, canonical-signature semantics, public API, production
+R/C++ file, or test was changed. Stage 2B2A stops here.
