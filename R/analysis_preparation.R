@@ -546,27 +546,35 @@
                                         reason = "tree must be a phylo object"),
            call. = FALSE)
     }
-    tree_processing$original_fingerprint <- tryCatch(.tree_fingerprint(tree), error = function(e) NULL)
-    before <- .inspect_tree_core(tree, signal = signal)
-    tree_processing$check_before <- before
     working_tree <- .safe_canonicalize_core(tree)
     info <- .canonicalization_info(working_tree)
     tree_processing$canonicalized <- isTRUE(info$changed)
     tree_processing$canonical_mapping <- info$mapping
-    # A failed invariant check returns an unchanged copy.  It is safe to
-    # continue only when the selected method was already ready.
-    if (!isTRUE(info$safe) && !isTRUE(before$ready_by_signal[[signal]])) {
-      stop(.format_actionable_condition(before, signal), call. = FALSE)
-    }
-    checked <- .inspect_tree_core(working_tree, signal = signal)
+    # The complete post-normalisation inspection is the single tree-readiness
+    # pass for this raw public call.  It replaces the former before/after
+    # pair; representation-safe canonicalisation preserves the same selected
+    # method contract, while an unsafe result is still rejected here.
+    inspected <- .inspect_tree_core(
+      working_tree, signal = c("K", "lambda", "D", "Delta")
+    )
+    checked <- .tree_check_select(inspected, signal, prepared = FALSE)
+    tree_processing$check_before <- checked
     tree_processing$check_after <- checked
     if (!isTRUE(checked$ready_by_signal[[signal]])) {
       stop(.format_actionable_condition(checked, signal), call. = FALSE)
     }
-    # This context was created inside the current public call.  Mark the
-    # shallow internal copy as validated so downstream helpers do not
-    # fingerprint the same immutable boundary repeatedly.
-    ctx <- .validated_context(prepare_tree(working_tree), verify = FALSE)
+    # This context was created inside the current public call.  The core reuses
+    # the inspection and canonicalisation evidence just established above;
+    # the private validation capability prevents downstream helpers from
+    # treating this as a second external public boundary.
+    ctx <- .validated_context(
+      .prepare_tree_core(
+        working_tree,
+        generic_summary = inspected,
+        canonical_info = info
+      ),
+      verify = FALSE
+    )
   }
   tree_processing$final_fingerprint <- ctx$fingerprint
 

@@ -23,16 +23,37 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
   if (!inherits(tree, "phylo")) {
     stop("tree should be an object of class \"phylo\".", call. = FALSE)
   }
+  .prepare_tree_core(
+    tree,
+    max_cached_subsets = max_cached_subsets,
+    cache_budget = cache_budget
+  )
+}
+
+# Compile a phylo object after its representation and inspection evidence have
+# been established.  The public wrapper above supplies no evidence and thus
+# retains the ordinary preparation contract.  Raw analysis can supply the
+# evidence it just computed so the same public call does not inspect and
+# canonicalise the tree a second time.
+.prepare_tree_core <- function(tree, max_cached_subsets = 16L,
+                               cache_budget = 512 * 1024^2,
+                               generic_summary = NULL,
+                               canonical_info = NULL) {
+  if (!inherits(tree, "phylo")) {
+    stop("tree should be an object of class \"phylo\".", call. = FALSE)
+  }
   max_cached_subsets <- .validate_cache_limit(max_cached_subsets)
   cache_budget <- .validate_cache_budget(cache_budget)
 
   # Cache representation diagnostics and method capabilities alongside the
   # structural context.  This pass is read-only and intentionally does not
   # allocate a VCV matrix, Cholesky factor, or eigendecomposition.
-  generic_summary <- tryCatch(
-    .inspect_tree_core(tree, signal = c("K", "lambda", "D", "Delta")),
-    error = function(e) NULL
-  )
+  if (is.null(generic_summary)) {
+    generic_summary <- tryCatch(
+      .inspect_tree_core(tree, signal = c("K", "lambda", "D", "Delta")),
+      error = function(e) NULL
+    )
+  }
   if (!is.list(generic_summary) ||
       !isTRUE(generic_summary$tree_summary$valid)) {
     generic_check <- generic_summary
@@ -47,10 +68,12 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
     ), call. = FALSE)
   }
   .validate_prepare_tree(tree)
-  canonical_probe <- tryCatch(.safe_canonicalize_core(tree),
-                              error = function(e) tree)
-  canonical_info <- tryCatch(.canonicalization_info(canonical_probe),
-                             error = function(e) list(changed = FALSE, safe = FALSE))
+  if (is.null(canonical_info)) {
+    canonical_probe <- tryCatch(.safe_canonicalize_core(tree),
+                                error = function(e) tree)
+    canonical_info <- tryCatch(.canonicalization_info(canonical_probe),
+                               error = function(e) list(changed = FALSE, safe = FALSE))
+  }
   structural_entry_validation <- list(
     valid = if (is.list(generic_summary)) isTRUE(generic_summary$tree_summary$valid) else FALSE,
     n_tip = ape::Ntip(tree),

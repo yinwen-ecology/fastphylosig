@@ -39,6 +39,52 @@ test_that("one prepared public call performs one complete fingerprint", {
   expect_null(attr(ctx, "fastphylosig_validation_capability", exact = TRUE))
 })
 
+test_that("raw continuous analysis uses one preparation boundary", {
+  fixture <- .single_boundary_fixture()
+  originals <- lapply(
+    c(".tree_fingerprint", ".inspect_tree_core", ".safe_canonicalize_core",
+      ".canonical_tree_signature"),
+    getFromNamespace,
+    ns = "fastphylosig"
+  )
+  names(originals) <- c(
+    ".tree_fingerprint", ".inspect_tree_core", ".safe_canonicalize_core",
+    ".canonical_tree_signature"
+  )
+  calls <- new.env(parent = emptyenv())
+  calls$fingerprint <- 0L
+  calls$inspect <- 0L
+  calls$canonicalize <- 0L
+  calls$signature <- 0L
+
+  testthat::local_mocked_bindings(
+    .tree_fingerprint = function(tree) {
+      calls$fingerprint <- calls$fingerprint + 1L
+      originals$.tree_fingerprint(tree)
+    },
+    .inspect_tree_core = function(...) {
+      calls$inspect <- calls$inspect + 1L
+      originals$.inspect_tree_core(...)
+    },
+    .safe_canonicalize_core = function(...) {
+      calls$canonicalize <- calls$canonicalize + 1L
+      originals$.safe_canonicalize_core(...)
+    },
+    .canonical_tree_signature = function(...) {
+      calls$signature <- calls$signature + 1L
+      originals$.canonical_tree_signature(...)
+    },
+    .package = "fastphylosig"
+  )
+
+  invisible(fast_k(fixture$tree, fixture$trait, test = FALSE,
+                   verbose = FALSE, progress = FALSE))
+  expect_identical(calls$fingerprint, 1L)
+  expect_identical(calls$inspect, 1L)
+  expect_identical(calls$canonicalize, 1L)
+  expect_identical(calls$signature, 2L)
+})
+
 test_that("each protected structural mutation is rejected on the next call", {
   fixture <- .single_boundary_fixture()
   mutations <- list(

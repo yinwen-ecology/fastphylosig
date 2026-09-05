@@ -14,5 +14,7 @@
 ^src/.*[.](o|dll|so)$
 ^src/symbols[.]rds$
 ^docs$
+^paper$
+^review[.]md$
 ^\.github$
 ^inst/(EXPERT_REVIEW|POST_0.1.0_TECH_DEBT|RC_READINESS)[.]md$
