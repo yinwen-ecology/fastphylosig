@@ -1,53 +1,8 @@
-# Read-only tree preflight ----------------------------------------------------
-
-.tree_check_select <- function(check, signal, prepared = FALSE) {
-  if (!is.list(check) || is.null(check$ready_by_signal) ||
-      is.null(check$tree_summary) || is.null(check$issues)) {
-    stop("invalid cached tree inspection.", call. = FALSE)
-  }
-  signal <- unique(as.character(signal))
-  if (!length(signal) || any(!signal %in% names(check$ready_by_signal))) {
-    stop("cached tree inspection does not contain the requested signal.",
-         call. = FALSE)
-  }
-  ready_by_signal <- check$ready_by_signal[signal]
-  issues <- check$issues
-  if (nrow(issues)) {
-    issues <- issues[issues$signal %in% c("all", signal), , drop = FALSE]
-    rownames(issues) <- NULL
-  }
-  tree_summary <- check$tree_summary
-  tree_summary$prepared <- isTRUE(prepared)
-  out <- list(
-    ready = all(ready_by_signal),
-    ready_by_signal = ready_by_signal,
-    tree_summary = tree_summary,
-    issues = issues
-  )
-  class(out) <- c("fastphylosig_tree_check", "list")
-  out
-}
-
-#' Check a phylogenetic tree before signal calculations
-#'
-#' `check_tree()` inspects a `phylo` object (or a prepared
-#' `fastphylosig_tree`) without reordering, pruning, compiling, or otherwise
-#' changing it.  Readiness is reported separately for each selected signal.
-#' K, lambda, and D use the tree-pruning representations and can retain
-#' polytomies; Delta follows `fast_ace()` and therefore needs a rooted,
-#' fully-dichotomous tree with strictly positive branch lengths.
-#'
-#' @param tree A `phylo` object or an object returned by [prepare_tree()].
-#' @param signal Character vector selecting one or more signal methods.  The
-#'   default checks all four public methods (`"K"`, `"lambda"`, `"D"`, and
-#'   `"Delta"`).
-#' @return An object of class `fastphylosig_tree_check`.  It contains
-#'   `ready`, `ready_by_signal`, `tree_summary`, and an `issues` data frame
-#'   with `code`, `severity`, `signal`, `message`, `check`, `problem`,
-#'   `action`, and `auto_fixable` columns.  `issues` is
-#'   diagnostic only; this function does not stop for an invalid tree.
-#' @rdname check_tree
-.inspect_tree_core <- function(tree, signal = c("K", "lambda", "D", "Delta")) {
+# Stage 2B2B Candidate 1 test-only oracle.
+#
+# This function is copied from baseline commit 4dc4fa3. It is intentionally
+# kept outside R/ so production code cannot call or silently replace it.
+.stage2b2b_old_inspect_tree_core <- function(tree, signal = c("K", "lambda", "D", "Delta")) {
   supported <- c("K", "lambda", "D", "Delta")
   signal_missing <- missing(signal)
   if (is.null(signal)) signal <- character()
@@ -304,45 +259,25 @@
       if (is.finite(root) && length(parent) == n_total - 1L &&
           !anyDuplicated(child) && !any(parent == child) && tips_ok &&
           internals_ok) {
-        # Build one compact, edge-order-preserving adjacency representation for
-        # both traversals below.  Counting offsets avoid character-keyed list
-        # lookups while the cursor fill keeps the original edge-row order.
-        child_counts <- tabulate(parent, nbins = n_total)
-        child_offsets <- integer(n_total + 1L)
-        child_offsets[-1L] <- cumsum(child_counts)
-        adjacency_children <- integer(length(child))
-        adjacency_edge_rows <- integer(length(child))
-        adjacency_cursor <- child_offsets[seq_len(n_total)] + 1L
-        for (row in seq_along(child)) {
-          parent_node <- parent[[row]]
-          position <- adjacency_cursor[[parent_node]]
-          adjacency_children[[position]] <- child[[row]]
-          adjacency_edge_rows[[position]] <- row
-          adjacency_cursor[[parent_node]] <- position + 1L
-        }
-
-        stack <- integer(max(1L, n_total))
-        top <- 1L
-        stack[[top]] <- root
+        children <- split(child, parent)
         seen <- rep(FALSE, n_total)
+        stack <- root
         seen[[root]] <- TRUE
-        while (top > 0L) {
-          node <- stack[[top]]
-          top <- top - 1L
-          start <- child_offsets[[node]] + 1L
-          end <- child_offsets[[node + 1L]]
-          if (start > end) next
-          for (position in seq.int(start, end)) {
-            kid <- adjacency_children[[position]]
+        while (length(stack)) {
+          node <- stack[[length(stack)]]
+          stack <- stack[-length(stack)]
+          kids <- children[[as.character(node)]]
+          if (is.null(kids)) next
+          for (kid in kids) {
+            kid <- as.integer(kid)
             if (seen[[kid]]) {
               # Repeated nodes/cycles are not connected rooted trees.
-              top <- 0L
+              stack <- integer()
               seen[] <- FALSE
               break
             }
             seen[[kid]] <- TRUE
-            top <- top + 1L
-            stack[[top]] <- kid
+            stack <- c(stack, kid)
           }
         }
         connected <- all(seen)
@@ -422,25 +357,22 @@
   if (topology_basic && branch_valid_for_geometry && length(edge_index)) {
     root_distance[] <- NA_real_
     root_distance[[root]] <- 0
-    top <- 1L
-    stack[[top]] <- root
-    while (top > 0L) {
-      node <- stack[[top]]
-      top <- top - 1L
-      start <- child_offsets[[node]] + 1L
-      end <- child_offsets[[node + 1L]]
-      if (start > end) next
-      for (position in seq.int(start, end)) {
-        row <- adjacency_edge_rows[[position]]
-        kid <- adjacency_children[[position]]
+    children <- split(seq_along(child), parent)
+    stack <- root
+    while (length(stack)) {
+      node <- stack[[length(stack)]]
+      stack <- stack[-length(stack)]
+      edge_rows <- children[[as.character(node)]]
+      if (is.null(edge_rows)) next
+      for (row in edge_rows) {
+        kid <- child[[row]]
         distance <- root_distance[[node]] + branch_values[[row]]
         if (!is.finite(distance)) {
           root_distance_overflow <- TRUE
           next
         }
         root_distance[[kid]] <- distance
-        top <- top + 1L
-        stack[[top]] <- kid
+        stack <- c(stack, kid)
       }
     }
   }
@@ -682,49 +614,4 @@
   out
 }
 
-#' @rdname check_tree
-#' @export
-check_tree <- function(tree, signal = c("K", "lambda", "D", "Delta")) {
-  .inspect_tree_core(tree, signal = signal)
-}
 
-#' @export
-print.fastphylosig_tree_check <- function(x, ...) {
-  if (!inherits(x, "fastphylosig_tree_check")) {
-    stop("x must be a fastphylosig_tree_check object.", call. = FALSE)
-  }
-  s <- x$tree_summary
-  cat("Tree check\n\n")
-  cat("Tips: ", if (length(s$n_tip)) as.character(s$n_tip[[1L]]) else "NA",
-      "\n\n", sep = "")
-  ready <- x$ready_by_signal
-  if (length(ready)) {
-    width <- max(nchar(names(ready))) + 2L
-    for (i in seq_along(ready)) {
-      cat(sprintf("%-*s%s\n", width, names(ready)[[i]],
-                  if (isTRUE(ready[[i]])) "READY" else "NOT READY"))
-    }
-  }
-  issues <- x$issues
-  if (is.null(issues) || !nrow(issues)) {
-    cat("\nIssues: none\n")
-  } else {
-    cat("\nIssues:\n")
-    key <- paste(issues$severity, issues$message, sep = "\r")
-    first <- which(!duplicated(key))
-    max_show <- min(6L, length(first))
-    for (j in seq_len(max_show)) {
-      i <- first[[j]]
-      same <- key == key[[i]]
-      methods <- unique(as.character(issues$signal[same]))
-      methods <- methods[!is.na(methods) & nzchar(methods) & methods != "all"]
-      scope <- if (length(methods)) paste0("; ", paste(methods, collapse = "/")) else ""
-      cat(sprintf("- [%s%s] %s\n", issues$severity[[i]], scope,
-                  issues$message[[i]]))
-    }
-    if (length(first) > max_show) {
-      cat(sprintf("- ... %d more issue(s)\n", length(first) - max_show))
-    }
-  }
-  invisible(x)
-}
