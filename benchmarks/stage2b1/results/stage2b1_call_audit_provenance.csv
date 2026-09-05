@@ -1,0 +1,8 @@
+"key","value"
+"before_commit","017f39df1aa520f71fc2a0c5647bd598ff23e824"
+"after_commit","e265b47cd7abbb3c727ec466998c67e8eecdbc98"
+"R_version","R version 4.6.1 (2026-06-24 ucrt)"
+"R_platform","x86_64-w64-mingw32"
+"before_library","C:/Users/wenyi/AppData/Local/Temp/fastphylosig-stage2a-lib"
+"after_library","C:/Users/wenyi/AppData/Local/Temp/fastphylosig-stage2b1-lib-20260905"
+"audit_scope","one raw and one prepared fast_k call at n=500 and n=5000; package bindings restored in child"
