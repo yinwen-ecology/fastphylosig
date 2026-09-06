@@ -1,0 +1,13 @@
+fastphylosig 0.2.0 Stage 2B2C downstream propagation audit
+source_commit=654eb8e
+package_version=0.2.0.9000
+LC_COLLATE_before=C
+LC_COLLATE_used=C
+fixed_permutation_rows=4
+fixed_brownian_states=12x4
+delta_seed=20260906; delta ncores=1; ACE CI=TRUE
+comparison_rows=753
+all_comparison_rows_pass=TRUE
+comparison_error_rows=0
+D/Delta/ACE are recorded as executed results or explicit errors; no method was silently omitted.
+output_dir=C:/Users/wenyi/AppData/Local/Temp/fastphylosig-stage2b2c-results-downstream-final6-20260906

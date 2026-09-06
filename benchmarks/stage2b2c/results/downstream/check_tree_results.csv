@@ -1,0 +1,5 @@
+"fixture","status","ready","ready_by_signal","tree_summary","issues","warning","warning_class","error","error_class"
+"base","ok","TRUE","TRUE,TRUE,TRUE,TRUE","<tree_summary:list>","<issues:data.frame>","","","",""
+"internal_renumbered","ok","TRUE","TRUE,TRUE,TRUE,TRUE","<tree_summary:list>","<issues:data.frame>","","","",""
+"edge_rows_shuffled","ok","TRUE","TRUE,TRUE,TRUE,TRUE","<tree_summary:list>","<issues:data.frame>","","","",""
+"renumbered_and_shuffled","ok","TRUE","TRUE,TRUE,TRUE,TRUE","<tree_summary:list>","<issues:data.frame>","","","",""

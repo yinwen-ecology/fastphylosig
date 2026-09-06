@@ -1,0 +1,5 @@
+"fixture","route","fingerprint","cache_key_count","cache_keys","inspection_present","canonical_mapping_present","error"
+"base","prepared_context","a\rb\rc\ra\rb\rc|5,6,6,5,7,7,6,1,2,7,3,4|1.1000000000000001,0.69999999999999996,0.90000000000000002,               1.2,0.80000000000000004,              1.05|3",1,"n=4;000000000000000f",TRUE,TRUE,""
+"internal_renumbered","prepared_context","a\rb\rc\ra\rb\rc|5,7,7,5,6,6,7,1,2,6,3,4|1.1000000000000001,0.69999999999999996,0.90000000000000002,               1.2,0.80000000000000004,              1.05|3",1,"n=4;000000000000000f",TRUE,TRUE,""
+"edge_rows_shuffled","prepared_context","a\rb\rc\ra\rb\rc|6,5,7,5,6,7,2,6,4,7,1,3|0.90000000000000002,1.1000000000000001,              1.05,               1.2,0.69999999999999996,0.80000000000000004|3",1,"n=4;000000000000000f",TRUE,TRUE,""
+"renumbered_and_shuffled","prepared_context","a\rb\rc\ra\rb\rc|7,5,6,5,7,6,2,7,4,6,1,3|0.90000000000000002,1.1000000000000001,              1.05,               1.2,0.69999999999999996,0.80000000000000004|3",1,"n=4;000000000000000f",TRUE,TRUE,""

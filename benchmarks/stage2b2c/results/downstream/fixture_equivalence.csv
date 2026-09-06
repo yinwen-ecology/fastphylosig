@@ -1,0 +1,5 @@
+"fixture","rooted","patristic_vs_base","edge_rows","tip_label_count","Nnode","structural_descendant_sets"
+"base",TRUE,TRUE,6,4,3,TRUE
+"internal_renumbered",TRUE,TRUE,6,4,3,TRUE
+"edge_rows_shuffled",TRUE,TRUE,6,4,3,TRUE
+"renumbered_and_shuffled",TRUE,TRUE,6,4,3,TRUE

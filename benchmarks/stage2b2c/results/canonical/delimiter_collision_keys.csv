@@ -1,0 +1,4 @@
+"representation","clade_keys","clade_keys_identical","expected_key"
+"base","a\rb\rc;a\rb\rc",TRUE,"a\rb\rc"
+"internal_renumbered","a\rb\rc;a\rb\rc",TRUE,"a\rb\rc"
+"edge_rows_shuffled","a\rb\rc;a\rb\rc",TRUE,"a\rb\rc"

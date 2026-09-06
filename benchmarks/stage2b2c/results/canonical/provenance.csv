@@ -1,0 +1,8 @@
+"item","value"
+"source_commit","654eb8e"
+"R_version","R version 4.6.1 (2026-06-24 ucrt)"
+"platform","x86_64-w64-mingw32"
+"locale_normal","C"
+"package_load","pkgload::load_all(source)"
+"script","audit_canonical_contract.R"
+"scope","read-only canonicalization/fingerprint contract audit"

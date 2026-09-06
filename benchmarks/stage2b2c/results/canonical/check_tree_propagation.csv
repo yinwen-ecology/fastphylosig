@@ -1,0 +1,4 @@
+"representation","status","ready","ready_by_signal","issue_codes","warning_classes","error_message"
+"base","ok","TRUE","K=TRUE;lambda=TRUE;D=TRUE;Delta=TRUE","nonultrametric_tree;nonultrametric_tree;nonultrametric_tree;nonultrametric_tree","",""
+"internal_renumbered","ok","TRUE","K=TRUE;lambda=TRUE;D=TRUE;Delta=TRUE","nonultrametric_tree;nonultrametric_tree;nonultrametric_tree;nonultrametric_tree","",""
+"edge_rows_shuffled","ok","TRUE","K=TRUE;lambda=TRUE;D=TRUE;Delta=TRUE","nonultrametric_tree;nonultrametric_tree;nonultrametric_tree;nonultrametric_tree","",""

@@ -1,0 +1,3 @@
+"comparison","prepared_status_identical","fingerprint_identical","cache_key_names_identical","retained_species_contract"
+"base_vs_internal_renumbered",TRUE,FALSE,TRUE,"all four unique labels retained"
+"base_vs_edge_rows_shuffled",TRUE,FALSE,TRUE,"all four unique labels retained"

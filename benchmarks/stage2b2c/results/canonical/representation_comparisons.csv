@@ -1,0 +1,3 @@
+"pair","lhs","rhs","biology_equivalent","canonical_edge_identical","canonical_edge_length_identical","canonical_edge_length_association_identical","canonical_tip_label_identical","canonical_Nnode_identical","mapping_identical","metadata_identical","metadata_safety_flags_identical","before_signature_identical","after_signature_identical","before_fingerprint_identical","after_fingerprint_identical","lhs_safe","rhs_safe"
+"base_vs_internal_renumbered","base","internal_renumbered",TRUE,FALSE,FALSE,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE
+"base_vs_edge_rows_shuffled","base","edge_rows_shuffled",TRUE,FALSE,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE
