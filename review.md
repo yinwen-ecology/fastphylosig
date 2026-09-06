@@ -1,246 +1,141 @@
-# fastphylosig 0.2.0 Stage 2B2C Expert Review
-
-## Decision
-
-This was a read-only correctness-contract audit of production source commit
-`654eb8e` with fastphylosig `0.2.0.9000` and R 4.6.1 UCRT on Windows.
-Production code, public APIs, estimator definitions, RNG policy, threading,
-and existing test expectations were not changed.
-
-`PREPARATION_ENGINE_STAGE1 = ACCEPTED_FROZEN`
-
-`RAW_ROUTE_SINGLE_PREPARATION_BOUNDARY = ACCEPTED_FROZEN`
-
-`INSPECTION_INTEGER_ADJACENCY = ACCEPTED_FROZEN`
-
-`CANDIDATE_2 = REJECTED`
-
-`CANONICALIZATION_CONTRACT_BUG = YES`
-
-`PUBLIC_RELEASE_BLOCKER_0_2_0 = YES`
-
-`NEXT_STEP = CANONICALIZATION_CONTRACT_V2`
-
-## 1. Delimiter-Collision Fixture
-
-The audit used four unique, non-empty labels that are legal under the current
-input contract:
-
-```text
-clade A: "a",    "b\rc"
-clade B: "a\rb", "c"
-```
-
-Two rooted binary trees were constructed with identical topology, branch
-lengths, tip labels, and tip-to-tip patristic distances, but different internal
-node numbering. A third tree retained the same biology and changed only edge
-row order while preserving each edge-length association. All fixtures were
-accepted as rooted, structurally valid trees.
-
-Under the frozen implementation, both non-root clades produce the identical
-descendant key `"a\rb\rc"`. The collision is therefore demonstrated with valid
-inputs; it is not based on duplicate or empty labels.
-
-`DELIMITER_COLLISION_FIXTURE = CONFIRMED`
-
-Evidence: `benchmarks/stage2b2c/results/canonical/delimiter_collision_keys.csv`
-and `representation_comparisons.csv`.
-
-## 2. Internal Renumbering Invariance
-
-`CANONICAL_RENUMBERING_INVARIANCE = FAIL`
-
-For the biologically equivalent internally renumbered tree, `identical()` was
-false for:
-
-- canonical edge matrix;
-- canonical edge-length vector and canonical edge-length association;
-- before and after canonical signatures;
-- before and after tree fingerprints.
-
-Tip labels and `Nnode` remained identical, and both canonicalizations reported
-their safety checks as passing. Numeric mapping metadata was identical, but it
-did not identify that the tied numeric node IDs referred to different clades.
-The original-node-ID tie break is therefore representation dependent when
-descendant keys collide.
-
-## 3. Edge-Order Invariance
-
-`CANONICAL_EDGE_ORDER_INVARIANCE = FAIL`
-
-For edge rows reordered together with their branch lengths, biological
-equivalence and canonical edge-length association were preserved. However,
-the canonical edge matrix, edge-length sequence, after signature, and final
-fingerprint were not identical. The current canonicalization is safe in the
-narrow sense that it preserves the weighted biological tree, but it does not
-produce one edge-row-independent canonical object.
-
-This distinction matters because the public fingerprint encodes edge rows and
-edge lengths in their current order.
-
-## 4. Locale Dependence
-
-`CANONICALIZATION_LOCALE_DEPENDENT = TRUE`
-
-The current normal `LC_COLLATE` was `C`. The audit also successfully switched
-only `LC_COLLATE` to these supported locales:
-
-- `English_United States.1252`;
-- `German_Germany.1252`;
-- `Chinese (Simplified)_China.936`;
-- `en_US.UTF-8`.
-
-The fixture included lowercase and uppercase ASCII, prefixes, accented labels,
-punctuation, numeric-looking labels, and separator-containing labels. Relative
-internal ordering changed from:
-
-```text
-C:       19,17,13,18,16,14,15
-non-C:   19,17,16,13,18,14,15
-```
-
-Canonical edges and canonical fingerprints differed from the C-locale result.
-A separate deterministic, fully binary fixture (`seed = 20260906`) confirmed
-that the canonical fingerprint differs between C and Windows English while
-remaining valid for every audited estimator.
-
-Evidence: `locale_comparisons.csv` and
-`results/downstream/locale_fixture.csv`.
-
-## 5. Fingerprint Propagation
-
-Independently prepared, representation-equivalent trees had different public
-fingerprints even though their readiness status and retained-tip cache key were
-the same. Representation identity is therefore fragmented across internal
-renumbering and edge-row order.
-
-More importantly, the delimiter encoding creates a direct integrity failure.
-Starting from a prepared context, the audit changed the protected tip-label
-vector from:
-
-```text
-c("a", "b\rc", "a\rb", "c")
-```
-
-to another unique, non-empty vector:
-
-```text
-c("a\rb", "c", "a", "b\rc")
-```
-
-The concatenated fingerprint was identical. Prepared-context validation
-returned successfully instead of rejecting the mutation. The stale prepared
-cache then produced:
-
-```text
-prepared K:     1.41323926109659
-raw mutated K:  1.22889253471746
-absolute diff:  0.184346726379132
-relative diff:  0.130442686849847
-```
-
-`FINGERPRINT_MUTATION_COLLISION = TRUE`
-
-`FINGERPRINT_MUTATION_REJECTED = FALSE`
-
-`STALE_CACHE_NUMERICAL_PROPAGATION = TRUE`
-
-Evidence: `fingerprint_mutation_collision.csv`, `prepared_contexts.csv`, and
-`fingerprint_cache_identity.csv`.
-
-## 6. K, Lambda, D, Delta, And ACE Propagation
-
-For the unmutated representation-equivalent collision fixtures, 753 comparison
-rows covered raw and prepared routes, controlled K permutations, lambda
-likelihood/LR, controlled D random and Brownian nulls, fixed-seed serial Delta,
-and ACE with CI. All comparisons passed with no comparison errors:
-
-| Method | Compared outputs | Maximum absolute difference | Maximum relative difference |
-|---|---|---:|---:|
-| K | estimate, P, MCSE, status, retained species | 0 | 0 |
-| lambda | estimate, logLik, LR, P, status, retained species | 0 | 0 |
-| D | estimate, null P/MCSE/accounting, status, retained species | 0 | 0 |
-| Delta | estimate, P/MCSE/diagnostics, status, retained species | 0 | 0 |
-| ACE | logLik, aligned ancestral likelihoods, rates, SE, status | 0 | 0 |
-
-The locale-sensitive fully binary fixture was then run under C and Windows
-English using identical permutations, Brownian states, Delta seed, and one
-worker. `check_tree()`, raw/prepared K, lambda, D, Delta, and ACE all completed;
-their reported estimates, likelihood fields, P/MCSE fields, statuses, warning
-classes, failure semantics, and retained-species fields were exactly equal.
-The canonical fingerprint itself still differed across locales, as recorded by
-the fixture provenance.
-
-Thus ordinary independent analyses are numerically invariant on these fixed
-fixtures. The user-visible numerical failure occurs when the fingerprint
-collision permits a mutated prepared context to reuse stale cached evidence.
-
-Evidence: `results/downstream/propagation_comparisons.csv` and
-`locale_propagation.csv`.
-
-## 7. Documentation Contract Audit
-
-`DOCUMENTATION_CONTRACT_MISMATCH = CONFIRMED`
-
-| Claim | Location | Classification | Reason |
-|---|---|---|---|
-| Normalization changes representation only | `README.md:74-76,134-138`; `USAGE_zh.md:64-68,115-117`; `NEWS.md:18-20` | SUPPORTED, narrow meaning | Weighted topology, tips, root, polytomies, and branch lengths are preserved. |
-| Edge order and internal IDs are canonicalized/standardized | `NEWS.md:54-56`; `man/resolve_tree.Rd:22-33`; `man/fast_d.Rd:13-16` | TOO_STRONG if read as a unique canonical form | Equivalent representations can retain different canonical edges and fingerprints. |
-| Protected tree-field changes are rejected on context reuse | `README.md:127-130`; `USAGE_zh.md:107-110`; `man/prepare_tree.Rd:33-36` | TOO_STRONG | A valid separator-label mutation preserved the fingerprint and was accepted. |
-| Prepared cache is invalidation-safe | `R/prepare_tree.R:5-8` | TOO_STRONG | The demonstrated collision reused stale computational evidence. |
-| C locale does not change package behavior | `inst/RC_READINESS.md:42-43` | TOO_STRONG | Canonical internal ordering and canonical fingerprints changed by locale. |
-| Cross-platform qualification remains deferred | `README.md:228-234`; `docs/index.md:121-124` | SUPPORTED | The package does not claim completed cross-platform qualification there. |
-| Representation-safe canonicalization preserves method contracts | `R/analysis_preparation.R:553-556` | NOT FULLY SUPPORTED | Estimators were stable for independent inputs, but mutation safety failed. |
-
-Documentation narrowing alone would not repair the stale-cache numerical
-failure, so this is not only Case C.
-
-## 8. Contract-Bug Decision
-
-`CANONICALIZATION_CONTRACT_BUG = YES`
-
-The findings satisfy Case B. Internal numbering and edge order can produce
-different canonical/fingerprint identities under the current representation-
-safe wording, locale changes canonical ordering, and the same delimiter design
-allows a protected-field mutation to evade integrity validation. The observed
-stale-cache numerical propagation is a correctness defect, not merely an
-internal performance limitation.
-
-Candidate 2 remains rejected. Its compact descendant-key proposal is neither
-revived nor used as a remedy.
-
-## 9. Release-Blocker Decision
-
-`PUBLIC_RELEASE_BLOCKER_0_2_0 = YES`
-
-Version 0.2.0 should not proceed to release or Stage 2C optimization while a
-documented prepared-context integrity check can accept a computationally
-relevant tree mutation and return a stale numerical result. The accepted Stage
-1, Stage 2B1, and Candidate 1 work remains frozen; the blocker is confined to
-the canonicalization/fingerprint contract exposed by this audit.
-
-No full test suite, package check, or performance benchmark was run because
-this stage changed no production or existing test code. Both audit scripts
-completed with R exit status 0 on their final valid fixtures.
-
-## 10. Required Next Step
-
-Proceed with a separately designed `CANONICALIZATION_CONTRACT_V2`, not Stage
-2C. Requirements are:
-
-- collision-free ordering truth;
-- locale-independent comparison;
-- independence from original internal node IDs;
-- independence from edge-row order;
-- deterministic output;
-- no quadratic descendant-label payload;
-- no probabilistic hash as ordering truth;
-- unambiguous, domain-separated or length-delimited fingerprint encoding;
-- complete mutation detection for all computationally relevant protected
-  fields under the documented contract;
-- input immutability;
-- unchanged K, lambda, D, Delta, and ACE estimator definitions;
-- exact fixtures for delimiter labels, locale switches, internal renumbering,
-  edge-row shuffling, branch-row association, and stale-cache rejection.
-
-Stage 2C is not authorized. Stop after this audit.
+# fastphylosig 0.2.0 Canonicalization Contract V2-A Expert Review
+
+Production oracle: `dd8ec252ba0f2742895403f755951397c0554233`  
+Environment: fastphylosig 0.2.0.9000, R 4.6.1 UCRT,
+`x86_64-w64-mingw32`  
+Scope: formal contract and private exact prototype only. Production
+canonicalization, estimators, API, RNG, threading, and tolerances were not
+changed. Candidate 2 remains rejected and Stage 2C remains unauthorized.
+
+## 1. V2 formal canonicalization definition
+
+The normative contract is in
+`benchmarks/stage2b2c_v2a/FORMAL_CONTRACT.md`. V2 validates one finite rooted
+weighted labeled tree, retains public tip IDs and stored `tip.label`, derives
+locale-independent label ranks, builds exact bottom-up subtree descriptors,
+orders children deterministically, numbers internal nodes in canonical
+preorder with root `n_tip + 1`, and emits edges in canonical postorder. Source
+internal IDs and source edge-row positions are lookup data only. No biological
+rerooting, polytomy resolution, branch repair, or tip deletion is permitted.
+
+## 2. V2 label ordering definition
+
+Each valid label is converted with `enc2utf8()` only to form a comparison key.
+The exact UTF-8 bytes are compared as unsigned bytes from left to right; the
+shorter byte sequence sorts first when it is a strict prefix. No Unicode
+normalization, case folding, trimming, `sort(character)`, `order(character)`,
+or active collation is canonical truth. Missing, empty, conversion-invalid,
+or byte-duplicate labels fail. The input and output `tip.label` vectors remain
+`identical()`; carriage returns, line feeds, punctuation, prefixes, accented
+text, and Unicode remain legal label content.
+
+## 3. V2 subtree identity algorithm
+
+A tip descriptor is `Tip(byte-rank)`. An internal descriptor is a typed record
+containing arity and references to its canonically ordered child descriptors.
+Descriptor IDs are separate from public node IDs: tip descriptor IDs are
+byte-ranks, and internal descriptor IDs follow canonical internal traversal.
+Children are ordered by minimum descendant tip rank. The minima of disjoint,
+non-empty child subtrees cannot tie when tip labels are unique; an observed tie
+fails closed. Equality follows the typed descriptor table exactly. No digest,
+delimiter string, original node ID, or row position determines identity.
+
+## 4. V2 internal numbering and edge ordering
+
+Public tip IDs remain `1:n_tip`, preserving controlled permutation/null index
+semantics. The root is always `n_tip + 1`; other internal IDs follow canonical
+preorder through children ordered by minimum UTF-8 tip rank. Edge rows follow
+canonical postorder. Each edge length is carried by its original biological
+child-edge identity before endpoint remapping. Seven representation pairs,
+including shuffled rows, internal renumbering, alternate root numbering, and
+combined changes, had `identical()` edge matrices, lengths, label vectors,
+Nnode, internal mapping, descriptor tables, ordering metadata, roots, and
+fingerprints.
+
+## 5. V2 fingerprint encoding
+
+The V2 fingerprint is the complete exact canonical byte stream, rendered as
+hex, not a probabilistic digest. It uses domain tag
+`fastphylosig.canonical.tree`, schema 2, typed fields, unsigned big-endian
+32-bit lengths/counts/endpoints, explicit matrix dimensions, length-delimited
+UTF-8 labels, and big-endian IEEE-754 binary64 branch values. It covers
+`tip.label`, `Nnode`, `edge`, `edge.length`, and their shape/order metadata.
+Delimiter bytes have no syntactic role, so different valid protected states
+cannot collide through concatenation ambiguity.
+
+## 6. Exact mutation-safety mechanism
+
+Mutation safety is independent of the canonical fingerprint. Preparation
+stores an exact source-order S2 snapshot under a private registry token and
+also places a copy in the prototype context. At validation, schema and token
+are checked first, then the public snapshot and current protected fields are
+compared with the package-owned snapshot before any cache or estimator route.
+Mutations of `tip.label`, `edge`, `edge.length`, and `Nnode` were all rejected.
+Input immutability and stored-label preservation also passed for all 14 valid
+fixtures.
+
+## 7. Context schema policy
+
+The private prototype requires `context_schema_version = 2`,
+`canonical_contract_version = 2`, `protected_snapshot_version = 2`, and a
+known package-owned token. A missing, V1, unknown, or altered marker/token is
+rejected with an instruction to prepare the tree again. Unknown old contexts
+are not migrated and cannot be silently interpreted as V2. Production context
+schema is unchanged in this stage.
+
+## 8. Invariance fixture results
+
+All exact gates passed: `V2_RENUMBERING_INVARIANCE`,
+`V2_EDGE_ORDER_INVARIANCE`, `V2_LOCALE_INVARIANCE`,
+`V2_DELIMITER_SAFETY`, and `V2_BRANCH_ASSOCIATION`. Coverage included balanced,
+random, pectinate, polytomous, two-tip, heterogeneous-length, delimiter,
+prefix, punctuation, numeric-looking, accented, and Unicode fixtures. Exact
+locale equality was observed under C, English US CP1252, German CP1252,
+Chinese Simplified CP936, and `en_US.UTF-8` collations available on the host.
+Eleven malformed/failure fixtures were rejected without repair.
+
+## 9. Estimator parity results
+
+The gate compared frozen raw production results directly with V2-canonical
+representations using the same biological trait mapping and controlled
+stochastic inputs. All 234 V2 rows passed existing parity rules: K 45/45,
+lambda 36/36, D 54/54, Delta 45/45, and ACE 54/54. The maximum absolute
+difference among comparable numerical fields was 0. No tolerance, estimator,
+RNG stream, thread policy, status contract, or public result structure was
+changed.
+
+## 10. Delimiter mutation blocker
+
+The Stage 2B2C protected-label mutation was reproduced exactly:
+`c("a", "b\rc", "a\rb", "c")` became
+`c("a\rb", "c", "a", "b\rc")`. Under V2, both the source snapshot and
+canonical fingerprint changed, and context validation rejected the mutation
+before cache reuse. `V2_MUTATION_REJECTION = PASS` and
+`STALE_CACHE_PROPAGATION = IMPOSSIBLE_BY_VALIDATION`. The delimiter-based
+release blocker is removed in the private V2 design, but remains a production
+blocker until separately authorized integration is completed.
+
+## 11. Complexity and stored payload
+
+Counter evidence covered balanced, random, and pectinate trees at 32, 64,
+128, 256, 512, and 1024 tips. For a binary tree with 1024 tips, V2 stored 2046
+child-tuple entries and 2047 descriptor entries, with peak child-arity proxy 2.
+The same linear counts held for all three shapes; `payload_max / n_tip^2`
+decreased to 0.001952. The prototype reports zero materialized descendant-label
+vectors and contains no n-by-n matrix, bitset, quadratic persistent key, or
+hash-based identity. These are storage-complexity findings, not performance
+claims.
+
+## 12. V2 prototype decision
+
+`CANONICALIZATION_CONTRACT_V2_PROTOTYPE = PASS`.
+
+All formal consistency, exact representation, locale, delimiter, branch,
+mutation, stale-cache, failure, estimator, immutability, stored-label, and
+linear-payload gates passed. Evidence is under
+`benchmarks/stage2b2c_v2a/results/v2a/`. This decision authorizes neither
+production integration nor Stage 2C. A future integration stage must update
+README, `USAGE_zh`, NEWS, `man/`, and generated docs to describe only the
+tested representation invariance, locale independence, schema rejection, and
+exact mutation detection; it must not claim new performance or broader
+cross-platform validation.

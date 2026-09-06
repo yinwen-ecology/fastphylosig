@@ -1,0 +1,7 @@
+"locale","requested","actual","status","fixture","canonical_fields_identical_to_C","fingerprint_identical_to_C","missing_required_fields","error"
+"C","C","C","PASS","labels_all_classes",TRUE,TRUE,"",""
+"normal","C","C","PASS","labels_all_classes",TRUE,TRUE,"",""
+"English_United_States","English_United States.1252","English_United States.1252","PASS","labels_all_classes",TRUE,TRUE,"",""
+"German_Germany","German_Germany.1252","German_Germany.1252","PASS","labels_all_classes",TRUE,TRUE,"",""
+"Chinese_Simplified","Chinese (Simplified)_China.936","Chinese (Simplified)_China.936","PASS","labels_all_classes",TRUE,TRUE,"",""
+"en_US_UTF8","en_US.UTF-8","en_US.UTF-8","PASS","labels_all_classes",TRUE,TRUE,"",""

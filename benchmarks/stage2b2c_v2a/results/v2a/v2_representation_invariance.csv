@@ -1,0 +1,8 @@
+"group","reference","candidate","biology_fixture","canonical_fields_identical","edge_identical","edge_length_identical","tip_label_identical","Nnode_identical","internal_mapping_identical","edge_order_identical","root_identical","fingerprint_identical","reference_missing","candidate_missing"
+"random_representations","random","edge_shuffled",TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,"",""
+"random_representations","random","internal_renumbered",TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,"",""
+"random_representations","random","alternate_root_numbering",TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,"",""
+"random_representations","random","renumbered_and_shuffled",TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,"",""
+"delimiter_representations","delimiter","delimiter_edge_shuffled",TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,"",""
+"delimiter_representations","delimiter","delimiter_internal_renumbered",TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,"",""
+"delimiter_representations","delimiter","delimiter_renumbered_shuffled",TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,"",""

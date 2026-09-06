@@ -1,0 +1,6 @@
+"field","context_prepared","mutation_applied","snapshot_changed","fingerprint_changed","validation_rejected","validation_status","validation_error"
+"tip.label",TRUE,TRUE,TRUE,TRUE,TRUE,"error","V2 prototype: protected tree fields changed; re-run v2_prepare_context()"
+"edge",TRUE,TRUE,TRUE,FALSE,TRUE,"error","V2 prototype: unary internal nodes are not valid rooted phylo trees"
+"edge.length",TRUE,TRUE,TRUE,TRUE,TRUE,"error","V2 prototype: protected tree fields changed; re-run v2_prepare_context()"
+"Nnode",TRUE,TRUE,TRUE,FALSE,TRUE,"error","V2 prototype: edge row count is inconsistent with tip and internal-node counts"
+"old_schema",TRUE,TRUE,,,TRUE,"error","V2 prototype: context schema is unknown or not version 2; re-run v2_prepare_context()"
