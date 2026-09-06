@@ -1,0 +1,16 @@
+fastphylosig 0.2.0 Stage 2B2B Candidate 2 ordering-contract smoke
+status=PASS
+source_commit=1685d8f58dea6dfe0a3e3d519d58581b3bbae5b9
+package_version=0.2.0.9000
+LC_COLLATE=C
+clade_A={a,b\rc}
+clade_B={a\rb,c}
+clade_A_key=a\rb\rc
+clade_B_key=a\rb\rc
+collapsed_keys_identical=TRUE
+old_internal_order=7,5,6
+new_internal_order=5,6,7
+numeric_node_id_tie_break=TRUE
+input_immutable=TRUE
+csv=C:/Users/wenyi/AppData/Local/Temp/fastphylosig-stage2b2b2-contract-final-20260906/ordering_contract.csv
+txt=C:/Users/wenyi/AppData/Local/Temp/fastphylosig-stage2b2b2-contract-final-20260906/ordering_contract.txt

@@ -1,4 +1,4 @@
-# fastphylosig 0.2.0 Stage 2B2B Candidate 1 Expert Review
+# fastphylosig 0.2.0 Stage 2B2B Candidate 2 Expert Review
 
 ## Decision
 
@@ -10,172 +10,213 @@
 
 `INSPECTION_INTEGER_ADJACENCY = ACCEPTED_FROZEN`
 
-`CANDIDATE_2 = NOT_STARTED`
+`CANDIDATE_2_PROOF_GATE = FAIL`
 
-Candidate 1 passed exact semantic equality, regression, package-check, and
-performance gates. It is accepted and frozen. This stage stops here.
+`CANDIDATE_2 = REJECTED`
 
-## Scope And Provenance
+No Candidate 2 production code was written. The required exact-ordering proof
+failed before prototype integration: the current contract is a locale-sensitive
+comparison of delimiter-collapsed strings, not an ordering of descendant sets.
+The authorized compact set/rank candidates cannot preserve that contract for
+all currently valid labels. Candidate 1 remains the frozen production state.
 
-- Old-oracle baseline: `4dc4fa3b4eb6a0815789bdbd5276ec3063dcbda4`.
-- Candidate source commit: `1685d8f58dea6dfe0a3e3d519d58581b3bbae5b9`.
-- Package version: `0.2.0.9000`.
-- Runtime: R 4.6.1 UCRT, `x86_64-w64-mingw32`, Windows 11 build 26200.
-- Compiler evidence: GCC/G++ 14.3.0; package compilation used C++17.
-- Production scope: `R/check_tree.R` only.
-- Test-only oracle: the complete baseline `.inspect_tree_core()` copied from
-  the baseline commit into a private test fixture.
-- No estimator, numerical formula, tolerance, fingerprint, canonicalization,
-  canonical-signature, RNG, thread-policy, result-structure, or public-API
-  change was made.
+## 1. Candidate-1 Post-Freeze Baseline
 
-## Implementation Audit
+The baseline used Candidate 1 production commit
+`1685d8f58dea6dfe0a3e3d519d58581b3bbae5b9`, package version `0.2.0.9000`,
+and R 4.6.1 UCRT on Windows. Fixed balanced, seeded-random, and pectinate
+fixtures were timed in one serialized R process. Calls used warmup, alternating
+serialized fixture copies and helper order, and median/IQR reporting. There
+were 144 successful raw timings and no failed cells.
 
-The two structural traversals inside `.inspect_tree_core()` retain the same
-validation and visit semantics, but use different private workspaces:
+Times below are median seconds with IQR in brackets.
 
-| Concern | Frozen old implementation | Candidate 1 |
-|---|---|---|
-| Child lookup | named split lists and character keys | integer `child_offsets`, `children`, and edge-row arrays |
-| Child order | source edge-row order | source edge-row order |
-| Stack | `stack[-length(stack)]` and `c(stack, kid)` | preallocated integer stack plus `top` cursor |
-| Connectivity traversal | independent named adjacency | shared integer adjacency |
-| Root-distance traversal | second named adjacency | same shared integer adjacency |
-| Representation | unchanged | unchanged |
+| Tips | Helper | Balanced | Random | Pectinate |
+|---:|---|---:|---:|---:|
+| 2,000 | descendant keys | 0.170 [0.020] | 0.170 [0.020] | 0.470 [0.010] |
+| 2,000 | canonicalization | 0.330 [0.010] | 0.330 [~0] | 0.630 [0.010] |
+| 2,000 | `prepare_tree()` | 0.340 [0.010] | 0.370 [0.010] | 0.660 [~0] |
+| 5,000 | descendant keys | 0.720 [0.010] | 0.720 [0.020] | 2.370 [0.010] |
+| 5,000 | canonicalization | 1.360 [0.040] | 1.390 [0.010] | 2.970 [0.320] |
+| 5,000 | `prepare_tree()` | 1.410 [0.030] | 1.450 [0.010] | 3.110 [0.100] |
+| 10,000 | descendant keys | 2.330 [0.065] | 2.390 [0.095] | 10.580 [0.015] |
+| 10,000 | canonicalization | 4.560 [0.025] | 4.750 [0.200] | 12.820 [0.100] |
+| 10,000 | `prepare_tree()` | 4.720 [0.105] | 4.910 [0.055] | 13.190 [0.945] |
+| 20,000 | descendant keys | 7.940 [0.080] | 8.430 [0.170] | 42.020 [1.775] |
+| 20,000 | canonicalization | 15.950 [0.515] | 18.160 [0.430] | 51.360 [0.355] |
+| 20,000 | `prepare_tree()` | 16.660 [0.050] | 18.970 [0.195] | 52.940 [0.250] |
 
-The integer adjacency is filled in original edge-row order. The LIFO traversal
-therefore visits children in exactly the same order as the old implementation.
-Arbitrary valid internal node numbers, shuffled edge rows, and supported
-polytomies remain valid. Cycle detection clears the effective stack and the
-`seen` vector exactly as before. The input tree is never modified.
+For pectinate trees from 10,000 to 20,000 tips, the descriptive empirical
+exponents were 1.990 for descendant keys, 2.002 for canonicalization, and
+2.005 for `prepare_tree()`. These are empirical diagnostics, not mathematical
+proofs.
 
-## Exact-Equality Gate
+## 2. Exact Old Ordering Contract
 
-The old and new complete inspection objects were compared with
-`expect_identical()`, not with a numerical tolerance or selected booleans.
-The gate also compared status, method readiness, root, degree and branch
-diagnostics, issue classes and ordering, failure reasons, warning/error classes
-and messages, and serialized input trees before and after each call.
+The contract was extracted from `R/analysis_preparation.R`, not inferred from
+function names:
 
-Valid fixtures:
+1. `.edge_children_index()` preserves the child order induced by edge rows.
+2. A tip contributes its exact `tip.label` string.
+3. An empty internal node contributes `!empty:<node>`.
+4. Cycle fallback contributes `!cycle:<node>` through the existing iterative
+   descendant traversal.
+5. Every internal node concatenates all child memo values, applies base R
+   `sort(values)` with its current defaults, and stores the complete sorted
+   descendant-label vector.
+6. `.descendant_keys_iterative()` collapses that vector using the literal
+   separator `"\r"`.
+7. `.safe_canonicalize_core()` orders non-root internal nodes with
+   `order(keys, remaining)`: the collapsed key is primary and the original
+   internal node ID is the numeric tie-break.
+8. The structural root is always placed first.
+9. All children of a polytomy participate. Child order is normally erased by
+   the final label sort on valid trees, but remains part of traversal and
+   failure behavior.
+10. Neither `sort()` nor `order()` fixes a method, encoding, or collation.
+    Ordering therefore inherits the active base R `LC_COLLATE` behavior.
 
-- balanced, seeded random, and pectinate trees;
-- polytomy, shuffled edge rows, safe internal renumbering, and alternate valid
-  root numbering;
-- two-tip and 1,000-tip large trees.
+The package currently accepts unique, non-empty labels containing punctuation
+and control separators. It does not forbid an embedded `"\r"`.
 
-Failure fixtures:
+## 3. Exact Representation Assessment
 
-- cycle, disconnected tree, unary node, malformed edge matrix;
-- invalid `Nnode`, invalid root representation;
-- negative branch length and zero terminal branch.
+No bounded compact representation met the proof gate:
 
-All complete-object and input-immutability comparisons passed for the full
-signal set and selected signal subsets.
+- Minimum descendant rank is insufficient: sets such as `{a,b}` and `{a,c}`
+  share the same minimum but have different old keys.
+- Any fixed-length prefix can be defeated by clades sharing that prefix and
+  differing later.
+- A complete global-rank vector retains the same
+  `sum_v descendant_count(v)` payload and therefore fails the complexity gate.
+- A DFS interval is invalid because label order and topology order are
+  independent; a clade need not be contiguous in globally sorted label order.
+- A probabilistic hash cannot be the ordering truth under the explicit task
+  contract.
+- A persistent rope or sparse set might reduce storage, but no bounded design
+  was found that proves exact equivalence to base R's locale-sensitive
+  comparison of the complete collapsed strings. It therefore cannot enter an
+  exact-equivalence prototype as an asserted solution.
 
-## Formal Performance Protocol
+## 4. Collision And Ordering-Drift Proof
 
-The formal benchmark used fixed positive-length balanced, random, and
-pectinate fixtures at 500, 1,000, 2,000, 5,000, 10,000, and 20,000 tips. One
-serialized R process performed warmup, old/new parity checks, fresh fixture
-clones, and alternating old/new order. Namespace binding changes, cloning, and
-garbage collection were outside the timer.
+The collapse operation is not an injective encoding of descendant labels. In
+the C locale, two valid binary clades can contain these four distinct labels:
 
-- 10 paired repeats per cell through 5,000 tips.
-- 5 paired repeats per cell at 10,000 and 20,000 tips.
-- 36 workload cells and 300 paired timing records.
-- Every record: status `ok`, zero warnings, zero errors, zero censoring.
-- Results: median and IQR; exact values are retained in
-  `benchmarks/stage2b2b1/results/formal/`.
+```text
+clade A: "a",    "b\rc"
+clade B: "a\rb", "c"
+```
 
-### Direct Inspection
+Both old keys are exactly `"a\rb\rc"`. The old implementation therefore uses
+the original internal node ID to break the tie. A collision-free descendant-
+set representation distinguishes the clades and can reverse that tie, causing
+canonical mapping, edge order, node labels, and metadata to drift. Treating
+the sets as equal without reproducing the exact collapsed string would instead
+make the proposed representation non-exact.
 
-Times are median seconds with IQR in brackets.
+This contract was also executed against the frozen source with
+`benchmarks/stage2b2b2/verify_ordering_contract.R`. The smoke confirmed a valid
+rooted binary tree, identical collapsed keys, numeric node-ID tie-breaking,
+safe canonicalization, and serialized input immutability. The machine-readable
+result is retained in `benchmarks/stage2b2b2/results/contract/`.
 
-| Shape | Tips | Old | New | Speedup |
-|---|---:|---:|---:|---:|
-| Balanced | 5,000 | 1.255 [0.020] | 0.020 [0.0175] | 62.75x |
-| Random | 5,000 | 1.330 [0.0375] | 0.025 [0.010] | 53.20x |
-| Pectinate | 5,000 | 1.515 [0.0575] | 0.030 [~0] | 50.50x |
-| Balanced | 20,000 | 21.910 [0.350] | 0.100 [0.020] | 219.10x |
-| Random | 20,000 | 21.230 [1.420] | 0.110 [0.010] | 193.00x |
-| Pectinate | 20,000 | 27.770 [1.330] | 0.170 [0.090] | 163.35x |
+Locale adds a separate obstruction: ordering label tokens independently does
+not prove the same result as collating their complete separator-joined string.
+Prefix-like, punctuation, accent/case, encoding, and separator-adjacent labels
+may be treated differently by the active collation. The old locale is not
+fixed or included in a canonical fingerprint.
 
-The descriptive 10,000-to-20,000 empirical exponents changed from 1.973 to
-1.000 for balanced trees, 1.962 to 1.138 for random trees, and 2.077 to 1.766
-for pectinate trees. These are empirical diagnostics, not complexity proofs.
+## 5. Exact-Equivalence Result
 
-### prepare_tree() End To End
+`CANDIDATE_2_PROTOTYPE = NOT_INTEGRATED`
 
-Times are median seconds with IQR in brackets.
+`EXACT_ORDERING_PROOF = FAIL`
 
-| Shape | Tips | Old | New | Speedup | Improvement |
-|---|---:|---:|---:|---:|---:|
-| Balanced | 5,000 | 2.645 [0.0425] | 1.405 [0.0275] | 1.88x | 46.88% |
-| Random | 5,000 | 2.800 [0.220] | 1.455 [0.065] | 1.92x | 48.04% |
-| Pectinate | 5,000 | 4.740 [0.065] | 3.235 [0.0425] | 1.47x | 31.75% |
-| Balanced | 20,000 | 38.920 [1.800] | 17.750 [0.590] | 2.19x | 54.39% |
-| Random | 20,000 | 39.160 [2.710] | 18.000 [1.420] | 2.18x | 54.03% |
-| Pectinate | 20,000 | 83.910 [2.060] | 55.250 [3.130] | 1.52x | 34.16% |
+The proof gate failed before a candidate could legitimately be presented as an
+exact implementation. Accordingly, no production binding was replaced and no
+old oracle was removed. Equality requirements, label rules, canonical
+signature semantics, child ordering, and failure semantics were not relaxed.
 
-The remaining pectinate scaling is expected because Candidate 1 did not touch
-canonical descendant-key construction. Candidate 2 was not started.
+The required adversarial fixture plan remains documented for any future,
+independently authorized design: balanced/random/pectinate/polytomy/two-tip,
+edge shuffling, safe internal renumbering, alternate root numbering, exact
+branch-row association, prefix/numeric/punctuation/separator labels, delimiter
+collisions, duplicate-name failure, malformed topology, invalid `Nnode`, and
+invalid root representation.
 
-## Small-Tree Resolution Gate
+## 6. Pectinate Payload Operations
 
-The formal pectinate 500-tip direct cell initially showed 15 ms versus 20 ms,
-but both values were at the approximately 10 ms timer resolution and the IQR
-was 20 ms. A pre-specified supplemental run timed 50 calls per block over 24
-alternating paired blocks, with exact equality outside every timed block.
+For the current pectinate fixture, `.descendant_keys_iterative()` excludes the
+root and stores descendant payload for clades of size 2 through `n - 1`:
 
-| Shape | Old, ms/call | New, ms/call | Speedup | Slowdown gate |
-|---|---:|---:|---:|---:|
-| Balanced | 18.3 [2.05] | 3.3 [0.40] | 5.55x | PASS |
-| Random | 18.0 [0.80] | 3.4 [0.20] | 5.29x | PASS |
-| Pectinate | 20.6 [0.40] | 3.4 [0.40] | 6.06x | PASS |
+```text
+old payload = 2 + 3 + ... + (n - 1) = n(n - 1)/2 - 1
+```
 
-No representative workload has a confirmed slowdown greater than 5%.
+| Tips | Old descendant-label payload visits | Candidate 2 |
+|---:|---:|---:|
+| 5,000 | 12,497,499 | not implemented |
+| 10,000 | 49,994,999 | not implemented |
+| 20,000 | 199,989,999 | not implemented |
 
-## Operation Counts
+No new `n x n` matrix, bitset, probabilistic ordering hash, or quadratic
+persistent structure was introduced.
 
-For a binary 20,000-tip tree, both structural traversals together formerly
-performed 79,998 character lookups, 79,998 character-key materializations,
-79,998 stack pops, and 79,996 stack appends. The old copying-stack workload
-depended strongly on tree shape:
+## 7. Canonicalization Before And After
 
-| Shape | Old copied stack slots | New stack resize copied slots |
+| Shape, 20,000 tips | Before, median [IQR] | After |
 |---|---:|---:|
-| Balanced | 1,033,732 | 0 |
-| Random | 1,463,388 | 0 |
-| Pectinate | 1,599,840,004 | 0 |
+| Balanced | 15.950 [0.515] s | not run: exact gate failed |
+| Random | 18.160 [0.430] s | not run: exact gate failed |
+| Pectinate | 51.360 [0.355] s | not run: exact gate failed |
 
-The candidate instead performs fixed integer adjacency fills, offset/cursor
-reads, and preallocated stack writes. It does not remove either traversal or
-any structural validation.
+The protocol explicitly authorizes formal after timing only after exact
+equivalence passes. Reporting an after value here would violate that gate.
 
-## Regression And Check Gates
+## 8. prepare_tree() Before And After
 
-- Full `testthat`: **7,412 PASS, 0 FAIL, 0 WARN, 0 SKIP**.
-- `R CMD check --no-manual --timings`: **Status: OK**.
-- Package check: 0 ERROR, 0 WARNING, 0 NOTE.
-- Exact old/new inspection equality: PASS.
-- Input immutability: PASS.
-- Representative performance slowdown gate: PASS.
+| Shape, 20,000 tips | Before, median [IQR] | After |
+|---|---:|---:|
+| Balanced | 16.660 [0.050] s | not run: no production candidate |
+| Random | 18.970 [0.195] s | not run: no production candidate |
+| Pectinate | 52.940 [0.250] s | not run: no production candidate |
 
-Authoritative outputs are retained under
-`benchmarks/stage2b2b1/results/`, including the full paired timings,
-summaries, operation counts, provenance, `testthat.Rout`, `00install.out`, and
-`00check.log`.
+The required pectinate 1.5x or 30% production acceptance threshold was not
+evaluated because correctness and complexity are prerequisite gates.
 
-## Final Gate
+## 9. Small-Tree Slowdown Gate
 
-The acceptance requirement was met by both independent routes:
+`SMALL_TREE_SLOWDOWN_GATE = NOT_RUN`
 
-- balanced/random 20,000-tip direct inspection speedup is far above 2x;
-- 20,000-tip `prepare_tree()` improvement is 54.39% and 54.03%, with 34.16%
-  improvement for pectinate trees;
-- no confirmed representative slowdown exceeds 5%.
+There is no Candidate 2 implementation to compare. The Candidate 1 frozen
+small-tree evidence remains PASS and was not rerun or relabeled as Candidate 2
+evidence.
 
-`INSPECTION_INTEGER_ADJACENCY = ACCEPTED_FROZEN`
+## 10. Test And Package Check
 
-Stage 2B2B Candidate 1 ends here. Candidate 2 remains unimplemented.
+No production or package test file changed in this stage, so the full suite and
+package check were not repeated after the proof-gate rejection. The unchanged
+Candidate 1 authoritative evidence remains:
+
+- full `testthat`: 7,412 PASS, 0 FAIL, 0 WARN, 0 SKIP;
+- `R CMD check --no-manual --timings`: Status: OK;
+- package check: 0 ERROR, 0 WARNING, 0 NOTE.
+
+These results are historical frozen-production evidence, not falsely labeled
+as a Candidate 2 integration check.
+
+## 11. Final Status
+
+`CANDIDATE_2 = REJECTED`
+
+Reason: no proposed smaller representation simultaneously preserved the full
+delimiter-collapsed, locale-sensitive old ordering contract and removed the
+quadratic descendant-label payload. The rejection occurred before production
+integration, exactly as required by the correctness-first gate.
+
+Candidate 1 remains unchanged and frozen. Stage 2C was not started.
+
+Formal baseline data and provenance are retained under
+`benchmarks/stage2b2b2/results/baseline/`; executable contract evidence is
+retained under `benchmarks/stage2b2b2/results/contract/`.

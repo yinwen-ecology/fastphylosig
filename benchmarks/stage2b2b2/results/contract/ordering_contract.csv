@@ -1,0 +1,20 @@
+"check","observed","expected","pass"
+"source_commit","1685d8f58dea6dfe0a3e3d519d58581b3bbae5b9","recorded",TRUE
+"package_version","0.2.0.9000","0.2.0.9000",TRUE
+"R_version","R version 4.6.1 (2026-06-24 ucrt)","recorded",TRUE
+"platform","x86_64-w64-mingw32","recorded",TRUE
+"package_load","pkgload::load_all(source)","recorded",TRUE
+"protocol","non-benchmark smoke; frozen descendant keys; safe canonicalization; serialized input check","recorded",TRUE
+"LC_COLLATE","C","C",TRUE
+"tree_is_rooted_binary_and_positive","TRUE","TRUE",TRUE
+"clade_A_labels","a,b\rc","a,b\rc",TRUE
+"clade_B_labels","a\rb,c","a\rb,c",TRUE
+"clade_A_key","a\rb\rc","a\rb\rc",TRUE
+"clade_B_key","a\rb\rc","a\rb\rc",TRUE
+"collapsed_keys_identical","TRUE","TRUE",TRUE
+"collapsed_key_matches_expected","TRUE","TRUE",TRUE
+"safe_canonicalization","TRUE","TRUE",TRUE
+"old_internal_order","7,5,6","7,5,6",TRUE
+"new_internal_order","5,6,7","5,6,7",TRUE
+"numeric_node_id_tie_break","TRUE","TRUE",TRUE
+"input_immutable","TRUE","TRUE",TRUE
