@@ -1,0 +1,7 @@
+"version","shape","n","phase","observations","median_ms","IQR_ms"
+"v2","pectinate",20000,"context_validation",10,175.000000000001,24.9999999999994
+"v2","random",20000,"context_validation",10,190,17.5000000000004
+"v2","pectinate",20000,"k_kernel",10,0,0
+"v2","random",20000,"k_kernel",10,0,0
+"v2","pectinate",20000,"validated_subset_lookup",10,0,0
+"v2","random",20000,"validated_subset_lookup",10,0,0

@@ -124,19 +124,30 @@ cache_info(ctx)
 Preparation compiles topology and traversal data. Dense covariance,
 Cholesky, and spectral payloads are not created by the production K, lambda,
 D, or Delta paths. A prepared context is a snapshot: later changes to the
-original `phylo` object do not update it. On reuse, its fingerprint checks the
-cached tree's tip labels, edge matrix, branch lengths, and `Nnode` value and
-rejects changes to those fields. Node labels and other non-computational
-attributes are not part of this fingerprint.
+original `phylo` object do not update it. On every external reuse, the V2
+context schema and an exact protected snapshot check the cached tree's tip
+labels, edge matrix, branch lengths, and `Nnode` value before any cache or
+numerical kernel is used. Changes to those fields are rejected. `node.label`
+and other non-computational attributes are outside this integrity contract;
+`node.label` may be reordered when internal nodes are renumbered.
+V2 contexts can be saved with `saveRDS()` and reused after `readRDS()`; older
+or unrecognized context schemas must be rebuilt with `prepare_tree()`.
 
 ## Tree and data details
 
 `check_tree()` is read only. `resolve_tree()` may reorder edges and renumber
-internal nodes on a copy when this changes representation only. These
-functions do not guess a biological root, select an outgroup, invent or
-jitter branch lengths, resolve biological polytomies, ultrametricize a tree,
-or silently delete tips. `match_phylo_data()` remains a deprecated alias for
-`match_tree_data()`.
+internal nodes on a copy when this changes representation only. V2 keeps tip
+IDs and `tip.label` unchanged, assigns the root to `n_tip + 1`, orders child
+subtrees by the exact UTF-8 byte order of their minimum descendant tip, and
+numbers remaining internal nodes in canonical preorder. Edges are emitted in
+canonical postorder while each branch length stays associated with its
+biological child edge. The canonical computational representation,
+fingerprint, and estimator outputs are invariant to valid internal-node
+renumbering and edge-row order in the tested fixtures and locales. These
+functions do not guess a biological root, select
+an outgroup, invent or jitter branch lengths, resolve biological polytomies,
+ultrametricize a tree, or silently delete tips. `match_phylo_data()` remains a
+deprecated alias for `match_tree_data()`.
 
 Method boundaries are intentional:
 
@@ -225,10 +236,12 @@ Null-distribution plots require retained simulations. Use
 `return_sim = TRUE` for K and Delta; D requires both `return_sim = TRUE` and
 `keep_null = TRUE`.
 
-## Compatibility and release status
+## Compatibility and development status
 
-The package is version 0.1.0. Production estimators, defaults, numerical
-tolerances, and the public API are frozen. Local source-tarball checks pass on
-Windows with R 4.6.1/Rtools 4.5; the package declares and retains compatibility
-with R 4.1.0 and above. Public-release and cross-platform qualification are
-deliberately deferred and are not implied by the local check.
+The development version is 0.2.0.9000 and retains declared compatibility with
+R 4.1.0 and above. Production estimators, defaults, numerical tolerances, RNG,
+thread policy, and the public API are unchanged. Canonicalization Contract V2
+has local representation, locale, mutation, persistence, estimator-parity,
+and performance evidence on Windows with R 4.6.1/Rtools 4.5. Cross-platform,
+R-devel, and second-BLAS qualification remain outside this local validation
+scope.

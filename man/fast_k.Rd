@@ -23,7 +23,7 @@ The \code{data} spelling is an alias for \code{x}; supply only one spelling.}
 \item{verbose}{Whether to report species matching.}
 \item{ncores}{Number of OpenMP threads for randomization.}
 \item{prepared}{Optional object returned by \code{prepare_tree()}; when
-supplied it is used in place of \code{tree}.}
+supplied it is used in place of \code{tree} after V2 integrity validation.}
 \item{trait_chunk}{Positive integer number of traits processed per C++ block.}
 \item{simulation_chunk}{Positive integer number of randomizations processed
 per streaming block.}

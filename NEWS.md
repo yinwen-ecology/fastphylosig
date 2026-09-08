@@ -1,3 +1,21 @@
+# fastphylosig 0.2.0.9000
+
+- Integrated Canonicalization Contract V2 for deterministic,
+  representation-safe tree preparation. Tip IDs and labels are preserved;
+  internal nodes and edge rows are canonicalized without using source
+  internal-node IDs, source edge order, locale collation, delimiters, or a
+  probabilistic hash as ordering truth.
+- Replaced the legacy delimiter-based prepared-tree identity with versioned,
+  exact structured encodings of `tip.label`, `Nnode`, `edge`, and
+  `edge.length`. A package-owned protected record is checked before cached
+  evidence or a numerical kernel can be used.
+- V2 prepared contexts support `saveRDS()`/`readRDS()` reuse across R sessions.
+  Missing, legacy, or unknown context schemas are rejected with an instruction
+  to run `prepare_tree()` again.
+- Added representation, heterogeneous-branch, locale, mutation, persistence,
+  and K/lambda/D/Delta/ACE parity gates. Estimator definitions, RNG streams,
+  threading policy, numerical tolerances, and public APIs are unchanged.
+
 # fastphylosig 0.1.0
 
 - Consolidated repeated trait-table validation and C++ quantile code, removed

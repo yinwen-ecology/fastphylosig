@@ -23,7 +23,7 @@ the default is \code{"ER"}.}
 \code{FALSE} matches the default path used by \code{ape::ace()}.}
 \item{prepared}{An optional object returned by \code{prepare_tree()}. When
 supplied, it supplies a validated phylogenetic tree and takes precedence over
-\code{phy}. The ACE likelihood itself
+\code{phy}. V2 integrity is checked before cached evidence is reused. The ACE likelihood itself
 uses the tree edges and does not require the dense covariance cache.}
 \item{progress}{Whether to report method-level progress stages and elapsed
 runtime. Defaults to \code{interactive()}. Setting this to \code{FALSE}

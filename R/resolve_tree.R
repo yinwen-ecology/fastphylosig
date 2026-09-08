@@ -4,7 +4,10 @@
 #'
 #' `resolve_tree()` performs only representation-preserving repairs that can
 #' be made without changing the biological tree: edge ordering and internal
-#' node numbering are canonicalised, and an unrooted tree is rooted only when
+#' node numbering are canonicalised by Contract V2. Tip IDs and labels remain
+#' unchanged; the root is `n_tip + 1`, and remaining ordering is derived from
+#' exact UTF-8 tip-label bytes rather than locale collation, source internal
+#' node IDs, or source edge-row order. An unrooted tree is rooted only when
 #' the selected signal requires a root and the caller supplies an explicit
 #' outgroup.  It deliberately does not infer an outgroup, midpoint-root,
 #' resolve polytomies, collapse unary nodes, alter branch lengths, add a small

@@ -1,141 +1,156 @@
-# fastphylosig 0.2.0 Canonicalization Contract V2-A Expert Review
+# fastphylosig 0.2.0 Canonicalization Contract V2-B Expert Review
 
-Production oracle: `dd8ec252ba0f2742895403f755951397c0554233`  
-Environment: fastphylosig 0.2.0.9000, R 4.6.1 UCRT,
-`x86_64-w64-mingw32`  
-Scope: formal contract and private exact prototype only. Production
-canonicalization, estimators, API, RNG, threading, and tolerances were not
-changed. Candidate 2 remains rejected and Stage 2C remains unauthorized.
+Package state: `0.2.0.9000` on `codex/fastphylosig-0.2.0-dev`  
+Production implementation commits: `7888f38`, `34ae5de`  
+Comparison baseline: `7d0d6e38756f271e48a74a4ac890f64b186674f3`  
+Local qualification: R 4.6.1 UCRT, Windows 11 x64, GCC 14.3.0,
+Rtools 4.5, OpenMP enabled
 
-## 1. V2 formal canonicalization definition
+## 1. Persistence Decision
 
-The normative contract is in
-`benchmarks/stage2b2c_v2a/FORMAL_CONTRACT.md`. V2 validates one finite rooted
-weighted labeled tree, retains public tip IDs and stored `tip.label`, derives
-locale-independent label ranks, builds exact bottom-up subtree descriptors,
-orders children deterministically, numbers internal nodes in canonical
-preorder with root `n_tip + 1`, and emits edges in canonical postorder. Source
-internal IDs and source edge-row positions are lookup data only. No biological
-rerooting, polytomy resolution, branch repair, or tip deletion is permitted.
+`V2_CONTEXT_PERSISTENCE_DECISION = SELF_CONTAINED_EXACT_SNAPSHOT_SUPPORT`.
+A valid V2 context may be saved with `saveRDS()` and reused after `readRDS()`
+in a fresh R process. Fresh-process K and lambda reuse and mutation-after-load
+rejection passed. The decision and pre-integration audit are recorded in
+`benchmarks/stage2b2c_v2b/V2_CONTEXT_PERSISTENCE_DECISION.md`.
 
-## 2. V2 label ordering definition
+## 2. Production Canonicalization
 
-Each valid label is converted with `enc2utf8()` only to form a comparison key.
-The exact UTF-8 bytes are compared as unsigned bytes from left to right; the
-shorter byte sequence sorts first when it is a strict prefix. No Unicode
-normalization, case folding, trimming, `sort(character)`, `order(character)`,
-or active collation is canonical truth. Missing, empty, conversion-invalid,
-or byte-duplicate labels fail. The input and output `tip.label` vectors remain
-`identical()`; carriage returns, line feeds, punctuation, prefixes, accented
-text, and Unicode remain legal label content.
+V2 is the production canonicalizer. It preserves public tip IDs and the stored
+`tip.label`, assigns the root to `n_tip + 1`, orders children by the exact
+unsigned UTF-8 byte order of each subtree's minimum descendant tip, numbers
+remaining internal nodes in canonical preorder, and emits edges in canonical
+postorder. Branch lengths follow the original biological child edge through
+endpoint remapping. Original internal-node IDs, original edge-row positions,
+locale collation, delimiter strings, and probabilistic hashes are not ordering
+truth. Candidate 2 remains rejected and was not revived.
 
-## 3. V2 subtree identity algorithm
+## 3. Fingerprint And Protected Snapshot
 
-A tip descriptor is `Tip(byte-rank)`. An internal descriptor is a typed record
-containing arity and references to its canonically ordered child descriptors.
-Descriptor IDs are separate from public node IDs: tip descriptor IDs are
-byte-ranks, and internal descriptor IDs follow canonical internal traversal.
-Children are ordered by minimum descendant tip rank. The minima of disjoint,
-non-empty child subtrees cannot tie when tip labels are unique; an observed tie
-fails closed. Equality follows the typed descriptor table exactly. No digest,
-delimiter string, original node ID, or row position determines identity.
+The canonical fingerprint and protected source snapshot are separate exact,
+versioned structured encodings. Both cover the type, shape, order, and content
+of `tip.label`, `Nnode`, `edge`, and `edge.length`; branch values use exact
+binary64 bytes. A locked package-owned integrity record holds the authoritative
+schema, snapshot, fingerprint, fixed metadata, and cache identities. External
+prepared-context reuse validates this evidence before cache lookup or a
+numerical kernel. Delimiter collapse and probabilistic hash collisions are not
+part of the V2 integrity decision.
 
-## 4. V2 internal numbering and edge ordering
+## 4. Old Context Handling
 
-Public tip IDs remain `1:n_tip`, preserving controlled permutation/null index
-semantics. The root is always `n_tip + 1`; other internal IDs follow canonical
-preorder through children ordered by minimum UTF-8 tip rank. Edge rows follow
-canonical postorder. Each edge length is carried by its original biological
-child-edge identity before endpoint remapping. Seven representation pairs,
-including shuffled rows, internal renumbering, alternate root numbering, and
-combined changes, had `identical()` edge matrices, lengths, label vectors,
-Nnode, internal mapping, descriptor tables, ordering metadata, roots, and
-fingerprints.
+Missing, V1, altered, or unknown context schema markers are rejected with a
+clear instruction to run `prepare_tree()` again. V2 does not silently migrate
+old contexts, accept a legacy fingerprint, reconstruct evidence from mutable
+public fields, or reuse an old cache. A raw tree remains the supported route
+for rebuilding a context.
 
-## 5. V2 fingerprint encoding
+## 5. Representation Invariance
 
-The V2 fingerprint is the complete exact canonical byte stream, rendered as
-hex, not a probabilistic digest. It uses domain tag
-`fastphylosig.canonical.tree`, schema 2, typed fields, unsigned big-endian
-32-bit lengths/counts/endpoints, explicit matrix dimensions, length-delimited
-UTF-8 labels, and big-endian IEEE-754 binary64 branch values. It covers
-`tip.label`, `Nnode`, `edge`, `edge.length`, and their shape/order metadata.
-Delimiter bytes have no syntactic role, so different valid protected states
-cannot collide through concatenation ambiguity.
+Exact gates passed for balanced, random, pectinate, polytomous, two-tip,
+delimiter-containing, prefix, punctuation, accented, Unicode, and
+heterogeneous-branch fixtures. Safe internal-node renumbering, shuffled edge
+rows, alternate valid root numbering, and combined representation changes
+produced identical canonical computational trees and fingerprints. Input trees
+and traits remained immutable. `node.label` is non-computational metadata and
+may be remapped with internal nodes; it is not part of the integrity contract.
 
-## 6. Exact mutation-safety mechanism
+## 6. Locale Audit
 
-Mutation safety is independent of the canonical fingerprint. Preparation
-stores an exact source-order S2 snapshot under a private registry token and
-also places a copy in the prototype context. At validation, schema and token
-are checked first, then the public snapshot and current protected fields are
-compared with the package-owned snapshot before any cache or estimator route.
-Mutations of `tip.label`, `edge`, `edge.length`, and `Nnode` were all rejected.
-Input immutability and stored-label preservation also passed for all 14 valid
-fixtures.
+Canonical trees and fingerprints were identical to the C-locale oracle under
+all six available test cases: current C, explicit C, English US CP1252, German
+CP1252, Chinese Simplified CP936, and `en_US.UTF-8`. Therefore
+`V2_LOCALE_INVARIANCE = PASS` for the tested host and locales. This is not a
+claim of qualification for every operating system, R build, or locale.
 
-## 7. Context schema policy
+## 7. Mutation And Cache Safety
 
-The private prototype requires `context_schema_version = 2`,
-`canonical_contract_version = 2`, `protected_snapshot_version = 2`, and a
-known package-owned token. A missing, V1, unknown, or altered marker/token is
-rejected with an instruction to prepare the tree again. Unknown old contexts
-are not migrated and cannot be silently interpreted as V2. Production context
-schema is unchanged in this stage.
+Mutations of `tip.label`, `edge`, `edge.length`, or `Nnode` reject before cache
+or estimator use. Tests also reject synchronized tampering with public
+fingerprint/snapshot fields, protected fixed metadata, cache replacement,
+missing integrity records, and changed schema markers. Cache identity and the
+current exact snapshot are checked against the locked record on every external
+public boundary. Valid V2 serialization recreates a self-contained record;
+stale-cache propagation is blocked by validation.
 
-## 8. Invariance fixture results
+## 8. Estimator Parity
 
-All exact gates passed: `V2_RENUMBERING_INVARIANCE`,
-`V2_EDGE_ORDER_INVARIANCE`, `V2_LOCALE_INVARIANCE`,
-`V2_DELIMITER_SAFETY`, and `V2_BRANCH_ASSOCIATION`. Coverage included balanced,
-random, pectinate, polytomous, two-tip, heterogeneous-length, delimiter,
-prefix, punctuation, numeric-looking, accented, and Unicode fixtures. Exact
-locale equality was observed under C, English US CP1252, German CP1252,
-Chinese Simplified CP936, and `en_US.UTF-8` collations available on the host.
-Eleven malformed/failure fixtures were rejected without repair.
+Raw/prepared and representation-equivalent parity passed for K, lambda, D,
+Delta, and ACE, including controlled permutation or null inputs where methods
+are stochastic. Checked fields include estimates, P values, MCSE, logLik/LR,
+rates, ancestral likelihoods, statuses, warnings, failure semantics, and
+retained species where applicable. ACE likelihood rows are restored to the
+source internal-node order at the public boundary. No estimator definition,
+numerical formula, tolerance, RNG stream, thread policy, or public result
+structure changed.
 
-## 9. Estimator parity results
+## 9. Tests, Check, And Clean Smoke
 
-The gate compared frozen raw production results directly with V2-canonical
-representations using the same biological trait mapping and controlled
-stochastic inputs. All 234 V2 rows passed existing parity rules: K 45/45,
-lambda 36/36, D 54/54, Delta 45/45, and ACE 54/54. The maximum absolute
-difference among comparable numerical fields was 0. No tolerance, estimator,
-RNG stream, thread policy, status contract, or public result structure was
-changed.
+Final testthat result: `8336 PASS / 0 FAIL / 0 WARN / 0 SKIP` in 59.9 seconds.
+`R CMD check --no-manual --timings` on the built
+`fastphylosig_0.2.0.9000.tar.gz` ended with `Status: OK`, hence 0 ERROR,
+0 WARNING, and 0 NOTE. The authoritative check used `LC_ALL=C`; an earlier
+attempt inherited an unsupported Windows `C.UTF-8` startup setting and stopped
+at DESCRIPTION metadata, without a package-code failure. A fresh-library,
+fresh-session tarball install loaded the package and ran `check_tree()`,
+`prepare_tree()`, `fast_k()`, `fast_lambda()`, `fast_d()`, `fast_delta()`,
+`fast_ace()`, and `fast_signal()` successfully. Evidence is in
+`benchmarks/stage2b2c_v2b/formal/`.
 
-## 10. Delimiter mutation blocker
+## 10. Performance Evidence
 
-The Stage 2B2C protected-label mutation was reproduced exactly:
-`c("a", "b\rc", "a\rb", "c")` became
-`c("a\rb", "c", "a", "b\rc")`. Under V2, both the source snapshot and
-canonical fingerprint changed, and context validation rejected the mutation
-before cache reuse. `V2_MUTATION_REJECTION = PASS` and
-`STALE_CACHE_PROPAGATION = IMPOSSIBLE_BY_VALIDATION`. The delimiter-based
-release blocker is removed in the private V2 design, but remains a production
-blocker until separately authorized integration is completed.
+Serialized alternating benchmarks used fixed balanced, random, and pectinate
+fixtures; 10 repeats below 10,000 tips and 5 repeats at 10,000/20,000 tips.
+At 20,000 tips V2 canonicalization took 1.36 s balanced, 1.47 s pectinate, and
+1.72 s random, versus 17.25 s and 25.14 s for the two completed Candidate-1
+comparators; the Candidate-1 pectinate comparator failed before a median.
+V2 `prepare_tree()` took 1.97/2.92/2.90 s and raw K took 2.03/3.08/2.02 s for
+balanced/pectinate/random, representing 8.98x to 10.67x completed preparation
+speedups and 8.80x to 9.09x completed raw-K speedups at that size.
 
-## 11. Complexity and stored payload
+The formal five-observation prepared-K signal exceeded 25% on two 20,000-tip
+shapes and therefore triggered a targeted confirmation. Twenty paired
+observations with five inner iterations measured Candidate 1 versus V2 at
+172 versus 209 ms for pectinate (+21.5%) and 168 versus 208 ms for random
+(+23.8%). Neither confirmed regression exceeds the 25% release-pause rule.
+Correctness was not rolled back. Timing evidence is tied to implementation
+commit `34ae5de`; it is not a universal performance guarantee.
 
-Counter evidence covered balanced, random, and pectinate trees at 32, 64,
-128, 256, 512, and 1024 tips. For a binary tree with 1024 tips, V2 stored 2046
-child-tuple entries and 2047 descriptor entries, with peak child-arity proxy 2.
-The same linear counts held for all three shapes; `payload_max / n_tip^2`
-decreased to 0.001952. The prototype reports zero materialized descendant-label
-vectors and contains no n-by-n matrix, bitset, quadratic persistent key, or
-hash-based identity. These are storage-complexity findings, not performance
-claims.
+## 11. Complexity And Context Size
 
-## 12. V2 prototype decision
+For a 20,000-tip pectinate tree, V2 recorded 39,998 child-tuple entries,
+39,999 descriptor entries, 39,998 edges, and zero materialized descendant
+payloads. The exact fingerprint and snapshot were 849,176 and 849,126 bytes;
+the full prepared context was 53,654,896 bytes. Persistent descriptor and
+adjacency entry counts are linear in tree size, with no n-by-n matrix,
+quadratic descendant-label payload, or probabilistic identity table. These are
+measured storage facts, not a proof of universal runtime complexity.
 
-`CANONICALIZATION_CONTRACT_V2_PROTOTYPE = PASS`.
+## 12. Documentation Audit
 
-All formal consistency, exact representation, locale, delimiter, branch,
-mutation, stale-cache, failure, estimator, immutability, stored-label, and
-linear-payload gates passed. Evidence is under
-`benchmarks/stage2b2c_v2a/results/v2a/`. This decision authorizes neither
-production integration nor Stage 2C. A future integration stage must update
-README, `USAGE_zh`, NEWS, `man/`, and generated docs to describe only the
-tested representation invariance, locale independence, schema rejection, and
-exact mutation detection; it must not claim new performance or broader
-cross-platform validation.
+`README.md`, `USAGE_zh.md`, `NEWS.md`, `docs/index.md`, relevant Rd pages, and
+`inst/POST_0.1.0_TECH_DEBT.md` now describe the V2 normalization, exact
+integrity boundary, old-schema rejection, persistence support, branch
+association, and tested-locale limitation. Public K/lambda documentation no
+longer implies that production paths allocate dense covariance payloads.
+Historical 0.1.0 release evidence in `inst/EXPERT_REVIEW.md`,
+`inst/RC_READINESS.md`, and `docs/validation_manifest.md` remains historical
+and is not presented as V2-B evidence.
+
+## 13. Canonicalization Contract V2 Decision
+
+`CANONICALIZATION_CONTRACT_V2 = ACCEPTED`.
+
+All atomic production-integration gates passed: deterministic canonical form,
+exact identity, exact mutation detection, schema rejection, persistence,
+representation and locale fixtures, estimator parity, complete tests, package
+check, clean install, performance threshold, and linear persistent evidence.
+
+## 14. Public Release Blocker Decision
+
+`PUBLIC_RELEASE_BLOCKER_0_2_0 = CLEARED`.
+
+The delimiter-collision and representation-safety blocker identified in Stage
+2B2C is removed by the accepted production V2 contract. This decision clears
+that blocker only. Linux, macOS, R-devel, alternate BLAS, no-OpenMP, and other
+deferred platform qualifications are not converted to PASS. Stage 2C remains
+unauthorized and was not started.

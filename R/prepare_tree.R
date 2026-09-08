@@ -6,6 +6,10 @@
 #' cache. K, lambda, D, Delta, and fast_ace() accept this object anywhere a
 #' phylo object is accepted. Dense numerical resources are prepared lazily, so
 #' D/Delta/ACE-only workflows do not allocate a VCV matrix or factorization.
+#' Every external reuse validates the V2 context schema and exact protected
+#' snapshot of `tip.label`, `Nnode`, `edge`, and `edge.length` before cached or
+#' numerical work. V2 contexts support `saveRDS()`/`readRDS()` across sessions;
+#' older or unrecognized schemas must be prepared again.
 #'
 #' @param tree A rooted phylo object with finite, non-negative branch lengths.
 #' @param max_cached_subsets Maximum number of full or NA-pruned subset entries

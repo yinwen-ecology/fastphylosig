@@ -103,6 +103,22 @@ Representation normalization does not make biological choices. The package
 does not guess roots, invent branch lengths, jitter zero branches, resolve
 biological polytomies, or silently remove species.
 
+Canonicalization Contract V2 preserves public tip IDs and `tip.label`, assigns
+the root to `n_tip + 1`, and derives child and internal-node order from exact
+UTF-8 tip-label bytes rather than locale collation, source node IDs, or source
+edge-row order. Edges are emitted in canonical postorder and branch lengths
+remain associated with their biological child edges. The prepared context
+stores a versioned, exact protected
+snapshot of `tip.label`, `Nnode`, `edge`, and `edge.length`; external reuse is
+validated against a locked package-owned record before any cache or numerical
+kernel is used. V2 contexts can be
+saved with `saveRDS()` and reused after `readRDS()`. Older or unrecognized
+schemas must be rebuilt with `prepare_tree()`.
+
+The representation and locale claims above are limited to the package's
+tested fixtures and available locales; they are not a universal platform
+qualification.
+
 ## Delta controls
 
 The public defaults are `mcmc_sim = 10000`, `thin = 10`, and `burn = 100`.
@@ -116,9 +132,10 @@ with the saved result. Changing the worker count can repartition parallel
 random-number streams, and small jobs may be faster in serial. These are
 reproducibility rules; the public estimators and defaults are unchanged.
 
-## 0.1.0 status
+## 0.2.0 development status
 
-Version 0.1.0 declares compatibility with R 4.1.0 and above. The source package
-passes local checks on Windows with R 4.6.1/Rtools 4.5. Public-release,
-cross-platform, R-devel, and second-BLAS qualification remain outside this
-local validation scope.
+The development version retains declared compatibility with R 4.1.0 and
+above. Canonicalization Contract V2 has local representation, locale,
+mutation, persistence, estimator-parity, and performance evidence on Windows
+with R 4.6.1/Rtools 4.5. Cross-platform, R-devel, and second-BLAS
+qualification remain outside this local validation scope.

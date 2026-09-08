@@ -103,7 +103,7 @@ timeout_seconds <- suppressWarnings(as.numeric(
 ))
 if (!length(timeout_seconds) || is.na(timeout_seconds) ||
     !is.finite(timeout_seconds) || timeout_seconds <= 0) {
-  timeout_seconds <- Inf
+  timeout_seconds <- if (quick_mode) Inf else 30
 }
 
 complexity_n <- suppressWarnings(as.integer(Sys.getenv(
@@ -255,7 +255,7 @@ commit_for <- function(version) {
   switch(
     version,
     candidate1 = "7d0d6e38756f271e48a74a4ac890f64b186674f3",
-    v2 = "7888f38",
+    v2 = "34ae5de",
     "<unspecified>"
   )
 }
@@ -412,6 +412,7 @@ on.exit({
 
 timing_rows <- list()
 timing_id <- 0L
+checkpoint_file <- file.path(out_dir, "v2b_benchmark_timings_checkpoint.csv")
 message("[stage2b2c-v2b] sequential paired benchmark starting")
 for (shape in shape_names) {
   for (n in n_grid) {
@@ -421,11 +422,12 @@ for (shape in shape_names) {
     repeats <- repeats_for(n)
     for (route in route_names) {
       # Route-specific warmups are deliberately outside formal observations.
+      warmups <- list()
       for (version in versions) {
-        invisible(time_route(
+        warmups[[version]] <- time_route(
           sessions[[version]], route, clone_fixture(fixture),
           clone_fixture(trait), timeout_seconds
-        ))
+        )
       }
       for (pair in seq_len(repeats)) {
         order_for_pair <- if (length(versions) == 2L && pair %% 2L == 0L) {
@@ -435,7 +437,15 @@ for (shape in shape_names) {
         }
         for (position in seq_along(order_for_pair)) {
           version <- order_for_pair[[position]]
-          measured <- tryCatch(
+          measured <- if (!identical(warmups[[version]]$status, "ok")) {
+            list(
+              elapsed_ms = NA_real_, statistic = NA_real_,
+              status = paste0("not_run_after_warmup_", warmups[[version]]$status),
+              error_message = warmups[[version]]$error_message,
+              error_class = warmups[[version]]$error_class,
+              inner_iterations = warmups[[version]]$inner_iterations
+            )
+          } else tryCatch(
             time_route(
               sessions[[version]], route, clone_fixture(fixture),
               clone_fixture(trait), timeout_seconds
@@ -468,6 +478,10 @@ for (shape in shape_names) {
         }
       }
     }
+    utils::write.csv(
+      if (length(timing_rows)) do.call(rbind, timing_rows) else data.frame(),
+      checkpoint_file, row.names = FALSE
+    )
     rm(fixture, trait)
     gc(FALSE)
   }

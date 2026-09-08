@@ -17,7 +17,8 @@ names must be species names. Supply only one spelling.}
 \code{Delta}/\code{delta}. The method is explicit and is never inferred from
 the trait type; omitting it or supplying an unknown selector is an error.}
 \item{prepared, trait_chunk}{Compatibility formals for prepared tree contexts
-and C++ trait blocks; they are forwarded only to targets that support them.}
+and C++ trait blocks; prepared contexts undergo V2 integrity validation, and
+the formals are forwarded only to targets that support them.}
 \item{...}{Arguments for the selected production function. K and lambda
 accept the arguments documented by \code{fast_k()} and \code{fast_lambda()};
 D and Delta accept those documented by \code{fast_d()} and

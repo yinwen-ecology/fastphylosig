@@ -1,0 +1,3 @@
+"version","shape","n","edge_count","child_tuple_entries","descriptor_entries","fingerprint_bytes","snapshot_bytes","context_object_bytes","descendant_payload_count","context_schema_version","status","error_message","error_class","source_commit","R_version","R_platform","R_arch","compiler","package_version"
+"candidate1","pectinate",20000,39998,NA,NA,1395732,0,7506248,NA,NA,"ok","","","7d0d6e38756f271e48a74a4ac890f64b186674f3","R version 4.6.1 (2026-06-24 ucrt)","x86_64-w64-mingw32","x86_64","<unknown>","0.2.0.9000"
+"v2","pectinate",20000,39998,39998,39999,849176,849126,53654896,0,2,"ok","","","34ae5de","R version 4.6.1 (2026-06-24 ucrt)","x86_64-w64-mingw32","x86_64","<unknown>","0.2.0.9000"

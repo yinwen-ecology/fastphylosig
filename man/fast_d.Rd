@@ -39,7 +39,8 @@ kernel. Binary trees can use multiple threads, although scaling is often modest
 because traversal is memory-bandwidth bound. Polytomies fall back to the
 serial vectorized path to preserve caper-compatible handling.}
 \item{prepared}{An optional object returned by \code{prepare_tree()}. When
-supplied, its cached tree calculations are reused and \code{tree} is ignored.}
+supplied, its V2 integrity is validated before cached tree calculations are
+reused and \code{tree} is ignored.}
 \item{chunk_size}{Integer from 32 to 512 controlling the number of null states
 generated and traversed per streaming block.}
 \item{keep_null}{Whether full random and Brownian null-statistic vectors may

@@ -5,13 +5,15 @@ It is excluded from source-package builds by `.Rbuildignore`.
 
 ## Prepared-tree integrity
 
-The current prepared context is an R snapshot. Its reuse check fingerprints
-tip labels, the edge matrix, branch lengths, and `Nnode` of `ctx$tree`; it neither tracks
-later mutation of the original `phylo` object nor covers node labels or other
-attributes. A future integrity contract should define the complete set of
-calculation-relevant fields, use a compact versioned digest, test every covered
-mutation, and state whether unsupported attribute mutation is ignored or
-rejected.
+Resolved in 0.2.0 development by Canonicalization Contract V2. A prepared
+context stores versioned, exact structured encodings of `tip.label`, `Nnode`,
+`edge`, and `edge.length` in a locked package-owned record. Every external
+reuse validates the schema, public evidence, protected snapshot, and cache
+identity before numerical work. V2 contexts support `saveRDS()`/`readRDS()`;
+missing, legacy, and unknown schemas are rejected and must be rebuilt. Later
+mutation of the original `phylo` object still does not update an existing
+snapshot. `node.label` and other non-computational metadata remain deliberately
+outside this integrity contract.
 
 ## Input identity and ordering
 

@@ -42,7 +42,8 @@ still signalled.}
 jobs can be slower in parallel because process startup is not free. Replaying
 stochastic results requires a fixed worker count; changing it repartitions
 worker RNG streams and is not draw-for-draw reproducible.}
-\item{prepared}{Optional object returned by \code{prepare_tree()}.}
+\item{prepared}{Optional object returned by \code{prepare_tree()}; its V2
+integrity is validated before cached evidence is reused.}
 }
 \description{
 Computes the single-tree Delta statistic for categorical traits. Ancestral

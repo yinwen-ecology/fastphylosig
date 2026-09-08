@@ -2,9 +2,12 @@
 \alias{prepare_tree}
 \title{Prepare a phylogenetic tree for repeated signal calculations}
 \description{
-Builds a reusable tree context containing O(n) topology and traversal data.
+Builds a reusable tree context containing linear-size topology and traversal
+data.
 Dense covariance matrices, Cholesky factors, lambda spectral data, and
 trait-specific numerical subsets are cached lazily when first requested.
+Every external reuse validates the V2 context schema and exact protected
+snapshot before cached or numerical work.
 }
 \usage{
 prepare_tree(tree, max_cached_subsets = 16L,
@@ -30,15 +33,18 @@ as the first argument to \code{fast_signal()}, \code{fast_k()},
 \details{
 The tree context does not alter the tree or raw trait data. Initial preparation
 stores a snapshot; later changes to the original \code{phylo} object do not
-update it. On reuse, a fingerprint covers the cached tree's tip labels, edge
-matrix, branch lengths, and \code{Nnode}. Changes to those fields inside the
-context are rejected, while node labels and other non-computational attributes
-are outside the fingerprint. Initial preparation stores only topology, tip mappings, and
-traversal data. Dense K requests a VCV
-and Cholesky factor; tree-engine K does not. Lambda additionally requests an
-eigendecomposition of the standardized covariance. These dense numerical payloads require quadratic
-memory and are evicted by least-recently-used order when the byte budget is
-exceeded. D, Delta, and ACE do not request them. Results retain the statistical
+update it. On reuse, a versioned exact protected snapshot covers the cached
+tree's tip labels, edge matrix, branch lengths, and \code{Nnode}. Changes to
+those fields inside the context are rejected before cache or numerical work,
+while \code{node.label} and other non-computational attributes are outside the
+integrity contract; \code{node.label} may be reordered when internal nodes are
+renumbered. V2 contexts can be saved with \code{saveRDS()} and reused
+after \code{readRDS()}; missing, legacy, or unknown context schemas must be
+rebuilt with \code{prepare_tree()}. Initial preparation stores only topology,
+tip mappings, and traversal data. Public production K and lambda use the
+tree-pruning engines and do not request dense covariance, Cholesky, or spectral
+payloads; D, Delta, and ACE do not request them either. The bounded numerical
+cache remains available to internal validation paths. Results retain the statistical
 formulas of the corresponding reference functions. See \code{\link{cache_info}}
 for cache diagnostics.
 }

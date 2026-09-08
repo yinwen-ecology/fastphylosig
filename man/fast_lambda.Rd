@@ -25,7 +25,7 @@ default stores it for vector input and skips it for batch input.}
 5). The fitted lambda, and lambda 1 when allowed by the tree, are inserted in
 addition to the regular grid.}
 \item{prepared}{Optional object returned by \code{prepare_tree()}; when
-supplied it is used in place of \code{tree}.}
+supplied it is used in place of \code{tree} after V2 integrity validation.}
 \item{trait_chunk}{Positive integer number of traits processed per C++ block.}
 \item{progress}{Whether to report method-level progress and elapsed runtime.}
 }

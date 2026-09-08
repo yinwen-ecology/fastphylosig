@@ -1,0 +1,5 @@
+"version","shape","n","observations","inner_iterations","median_ms","IQR_ms"
+"candidate1","pectinate",20000,20,5,172.000000000003,6.49999999999977
+"v2","pectinate",20000,20,5,209,24.499999999999
+"candidate1","random",20000,20,5,168,4.00000000000063
+"v2","random",20000,20,5,208,15.0000000000005

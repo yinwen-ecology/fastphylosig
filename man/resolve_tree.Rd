@@ -20,7 +20,11 @@ and a logical \code{ready} flag.
 }
 \description{
 Checks a tree with \code{check_tree()} and makes only safe representation
-normalizations (edge ordering and internal node numbering). An unrooted tree
+normalizations (edge ordering and internal node numbering) under
+Canonicalization Contract V2. Tip IDs and labels remain unchanged; the root is
+\code{n_tip + 1}, and remaining ordering is derived from exact UTF-8 tip-label
+bytes rather than locale collation, source internal-node IDs, or source
+edge-row order. An unrooted tree
 is rooted only when the selected signal requires it and an explicit valid
 outgroup is supplied. The function does not midpoint-root, infer an outgroup,
 resolve polytomies, collapse unary nodes, modify branch lengths, jitter zero
