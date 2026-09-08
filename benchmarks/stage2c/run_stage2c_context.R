@@ -337,23 +337,32 @@ run_fresh_validation <- function(rds_path, n) {
   result_path <- tempfile(
     sprintf("fastphylosig-stage2c-child-n%s-", n), fileext = ".rds"
   )
-  # On Windows, system2(env=) can replace rather than extend the inherited
-  # environment. Preserve it explicitly so R_HOME, PATH, and DLL lookup stay
-  # available to the child, then override only the child protocol variables.
-  child_env <- Sys.getenv()
-  child_env["FASTPHYLOSIG_STAGE2C_CHILD_LIBRARY"] <- package_library
-  child_env["FASTPHYLOSIG_STAGE2C_CHILD_RDS"] <- rds_path
-  child_env["FASTPHYLOSIG_STAGE2C_CHILD_RESULT"] <- result_path
-  child_env["FASTPHYLOSIG_STAGE2C_CHILD_TIMEOUT_SECONDS"] <-
-    as.character(child_timeout_seconds)
-  env <- paste(names(child_env), child_env, sep = "=")
+  # system2(env=) quotes poorly on Windows when inherited values contain
+  # spaces. Set only the protocol variables in the parent environment, let
+  # the child inherit the complete environment normally, and restore every
+  # variable when this function exits.
+  child_env <- c(
+    FASTPHYLOSIG_STAGE2C_CHILD_LIBRARY = package_library,
+    FASTPHYLOSIG_STAGE2C_CHILD_RDS = rds_path,
+    FASTPHYLOSIG_STAGE2C_CHILD_RESULT = result_path,
+    FASTPHYLOSIG_STAGE2C_CHILD_TIMEOUT_SECONDS =
+      as.character(child_timeout_seconds)
+  )
+  old_env <- Sys.getenv(names(child_env), unset = NA_character_)
+  do.call(Sys.setenv, as.list(child_env))
+  on.exit({
+    missing_before <- is.na(old_env)
+    if (any(missing_before)) Sys.unsetenv(names(old_env)[missing_before])
+    if (any(!missing_before)) {
+      do.call(Sys.setenv, as.list(old_env[!missing_before]))
+    }
+  }, add = TRUE)
   output <- tryCatch(
     system2(
       rscript_path,
       args = c("--vanilla", script_path, "--child"),
       stdout = TRUE,
-      stderr = TRUE,
-      env = env
+      stderr = TRUE
     ),
     error = function(e) structure(
       paste0("system2 error: ", conditionMessage(e)), status = 1L
