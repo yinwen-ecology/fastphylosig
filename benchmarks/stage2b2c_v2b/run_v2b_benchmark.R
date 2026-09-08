@@ -251,7 +251,13 @@ commit_for <- function(version) {
     "FASTPHYLOSIG_V2B_COMMIT"
   }
   value <- Sys.getenv(env_name, unset = "")
-  if (nzchar(value)) value else "<unspecified>"
+  if (nzchar(value)) return(value)
+  switch(
+    version,
+    candidate1 = "7d0d6e38756f271e48a74a4ac890f64b186674f3",
+    v2 = "7888f38",
+    "<unspecified>"
+  )
 }
 
 libraries <- if (single_mode) {
@@ -262,8 +268,16 @@ libraries <- if (single_mode) {
 versions <- names(libraries)
 
 time_route <- function(session, route, tree, trait, timeout_seconds = Inf) {
+  n <- length(tree$tip.label)
+  inner_iterations <- if (n <= 1000L) {
+    if (route %in% c("fingerprint", "context_validation", "prepared_fast_k")) 10L else 3L
+  } else if (n <= 5000L) {
+    if (route %in% c("fingerprint", "context_validation", "prepared_fast_k")) 3L else 1L
+  } else {
+    1L
+  }
   session$run(
-    function(route, tree, trait, timeout_seconds) {
+    function(route, tree, trait, timeout_seconds, inner_iterations) {
       ns <- asNamespace("fastphylosig")
       elapsed_seconds <- function() unname(proc.time()[["elapsed"]])
       error_result <- function(status, message, class = "") {
@@ -342,7 +356,11 @@ time_route <- function(session, route, tree, trait, timeout_seconds = Inf) {
       error_class <- ""
       start <- elapsed_seconds()
       value <- tryCatch(
-        run(),
+        {
+          result <- NULL
+          for (i in seq_len(inner_iterations)) result <- run()
+          result
+        },
         error = function(e) {
           status <<- if (inherits(e, "elapsedTimeLimit")) "censored" else "error"
           error_message <<- conditionMessage(e)
@@ -353,7 +371,8 @@ time_route <- function(session, route, tree, trait, timeout_seconds = Inf) {
       elapsed <- max(0, elapsed_seconds() - start)
       if (limited) setTimeLimit(cpu = Inf, elapsed = Inf, transient = FALSE)
       list(
-        elapsed_ms = 1000 * elapsed,
+        elapsed_ms = 1000 * elapsed / inner_iterations,
+        inner_iterations = inner_iterations,
         statistic = safe_statistic(value),
         status = status,
         error_message = error_message,
@@ -362,7 +381,8 @@ time_route <- function(session, route, tree, trait, timeout_seconds = Inf) {
     },
     args = list(
       route = route, tree = tree, trait = trait,
-      timeout_seconds = timeout_seconds
+      timeout_seconds = timeout_seconds,
+      inner_iterations = inner_iterations
     )
   )
 }
@@ -436,6 +456,9 @@ for (shape in shape_names) {
             position = as.integer(position),
             repeats_for_n = as.integer(repeats),
             elapsed_ms = as.numeric(measured$elapsed_ms),
+            inner_iterations = if (!is.null(measured$inner_iterations)) {
+              as.integer(measured$inner_iterations)
+            } else NA_integer_,
             statistic = as.numeric(measured$statistic),
             status = as.character(measured$status),
             error_message = as.character(measured$error_message),

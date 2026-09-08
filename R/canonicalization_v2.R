@@ -129,9 +129,12 @@
   if (any(!vapply(bytes, length, integer(1L)))) {
     .v2_abort("tip.label contains an empty UTF-8 byte sequence")
   }
-  # duplicated() compares raw-vector list elements exactly; no delimiter,
-  # collation rule, or probabilistic digest participates in this gate.
-  if (anyDuplicated(bytes)) {
+  # A bytes-marked copy makes duplicated() compare the already-normalized
+  # UTF-8 payload without locale translation.  This retains exact byte truth
+  # while avoiding quadratic pairwise comparisons of raw list elements.
+  byte_keys <- utf8
+  Encoding(byte_keys) <- "bytes"
+  if (anyDuplicated(byte_keys)) {
     .v2_abort("tip.label UTF-8 byte sequences must be unique")
   }
   list(stored = stored, utf8 = utf8, bytes = bytes)
