@@ -169,7 +169,7 @@ test_that("iterative canonical signatures exactly match the recursive definition
       .legacy_canonical_tree_signature(tree),
       info = name
     )
-    normalized <- fastphylosig:::.safe_canonicalize_core(tree)
+    normalized <- fastphylosig:::.safe_canonicalize_core_v1_oracle(tree)
     mapping <- attr(normalized, "fastphylosig_canonicalization")$mapping
     expect_identical(
       unname(as.integer(mapping$old_internal_order)),

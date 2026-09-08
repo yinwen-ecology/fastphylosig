@@ -23,9 +23,9 @@ test_that("one prepared public call performs one complete fingerprint", {
   calls <- new.env(parent = emptyenv())
   calls$n <- 0L
   testthat::local_mocked_bindings(
-    .tree_fingerprint = function(tree) {
+    .tree_fingerprint = function(tree, ...) {
       calls$n <- calls$n + 1L
-      original(tree)
+      original(tree, ...)
     },
     .package = "fastphylosig"
   )
@@ -58,9 +58,9 @@ test_that("raw continuous analysis uses one preparation boundary", {
   calls$signature <- 0L
 
   testthat::local_mocked_bindings(
-    .tree_fingerprint = function(tree) {
+    .tree_fingerprint = function(tree, ...) {
       calls$fingerprint <- calls$fingerprint + 1L
-      originals$.tree_fingerprint(tree)
+      originals$.tree_fingerprint(tree, ...)
     },
     .inspect_tree_core = function(...) {
       calls$inspect <- calls$inspect + 1L
@@ -82,7 +82,9 @@ test_that("raw continuous analysis uses one preparation boundary", {
   expect_identical(calls$fingerprint, 1L)
   expect_identical(calls$inspect, 1L)
   expect_identical(calls$canonicalize, 1L)
-  expect_identical(calls$signature, 2L)
+  # Contract V2 derives canonical order from exact byte ranks and never calls
+  # the retained V1 delimiter-based signature oracle in production.
+  expect_identical(calls$signature, 0L)
 })
 
 test_that("each protected structural mutation is rejected on the next call", {

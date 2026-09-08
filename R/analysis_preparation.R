@@ -299,7 +299,7 @@
   )
 }
 
-.safe_canonicalize_core <- function(tree) {
+.safe_canonicalize_core_v1_oracle <- function(tree) {
   if (!inherits(tree, "phylo")) {
     stop("tree should be an object of class \"phylo\".", call. = FALSE)
   }
@@ -422,6 +422,14 @@
     !identical(unname(as.matrix(original$edge)), unname(as.matrix(out$edge)))
   attr(out, "fastphylosig_canonicalization") <- info
   out
+}
+
+# Production representation normalisation is defined by Contract V2.  The V1
+# implementation above remains private so equality fixtures can demonstrate
+# the contract change without allowing delimiter or locale dependent ordering
+# to re-enter a production path.
+.safe_canonicalize_core <- function(tree) {
+  .canonicalize_tree_v2_core(tree)
 }
 
 .canonicalization_info <- function(tree) {

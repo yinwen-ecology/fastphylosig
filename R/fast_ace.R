@@ -11,13 +11,20 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
   if (is.null(phy)) {
     stop("phy or prepared must be supplied.", call. = FALSE)
   }
+  canonical_mapping <- NULL
   if (inherits(phy, "fastphylosig_tree")) {
     .validate_prepared_context(phy)
+    canonical_mapping <- phy$canonical_mapping
     phy <- phy$tree
   } else if (!inherits(phy, "phylo")) {
     stop("phy should be an object of class \"phylo\".", call. = FALSE)
   } else {
     .validate_prepare_tree(phy)
+    # Use the same representation-only normalization as prepared contexts so
+    # raw and prepared ACE calls enter the numerical workspace with identical
+    # node numbering, edge order, and branch association.
+    phy <- .safe_canonicalize_core(phy)
+    canonical_mapping <- .canonicalization_info(phy)$mapping
   }
   if (is.null(phy$edge.length)) {
     stop("tree has no branch lengths.", call. = FALSE)
@@ -107,12 +114,33 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
     tip_state = tip_state, lvls = lvls, workspace = workspace, ip = ip,
     CI = CI, marginal = marginal, estimate_se = isTRUE(CI)
   )
+  obj <- .fast_ace_restore_internal_order(
+    obj, canonical_mapping, nb_tip = nb_tip
+  )
 
   obj$call <- match.call()
   obj$engine <- "fastphylosig::fast_ace"
   class(obj) <- "ace"
   timing <- .runtime_close(runtime, success = TRUE)
   .runtime_attach(obj, timing)
+}
+
+.fast_ace_restore_internal_order <- function(obj, mapping, nb_tip) {
+  if (is.null(obj$lik.anc) || !is.list(mapping) ||
+      is.null(mapping$new_to_old)) {
+    return(obj)
+  }
+  canonical_ids <- nb_tip + seq_len(nrow(obj$lik.anc))
+  source_ids <- unname(mapping$new_to_old[as.character(canonical_ids)])
+  if (length(source_ids) != nrow(obj$lik.anc) || anyNA(source_ids) ||
+      anyDuplicated(source_ids)) {
+    stop("invalid canonical internal-node mapping in ACE result.",
+         call. = FALSE)
+  }
+  source_order <- order(source_ids, method = "radix")
+  obj$lik.anc <- obj$lik.anc[source_order, , drop = FALSE]
+  rownames(obj$lik.anc) <- as.character(source_ids[source_order])
+  obj
 }
 
 .fast_ace_tree_workspace <- function(phy, nb_node = NULL,

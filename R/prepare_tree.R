@@ -45,6 +45,15 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
   max_cached_subsets <- .validate_cache_limit(max_cached_subsets)
   cache_budget <- .validate_cache_budget(cache_budget)
 
+  # Contract V2 is an atomic preparation boundary: the tree stored in a
+  # context is canonical, and its fingerprint and protected snapshot use the
+  # matching V2 encodings.  A raw analysis may pass this evidence after doing
+  # the same normalization once at its public boundary.
+  if (is.null(canonical_info)) {
+    tree <- .safe_canonicalize_core(tree)
+    canonical_info <- .canonicalization_info(tree)
+  }
+
   # Cache representation diagnostics and method capabilities alongside the
   # structural context.  This pass is read-only and intentionally does not
   # allocate a VCV matrix, Cholesky factor, or eigendecomposition.
@@ -68,12 +77,6 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
     ), call. = FALSE)
   }
   .validate_prepare_tree(tree)
-  if (is.null(canonical_info)) {
-    canonical_probe <- tryCatch(.safe_canonicalize_core(tree),
-                                error = function(e) tree)
-    canonical_info <- tryCatch(.canonicalization_info(canonical_probe),
-                               error = function(e) list(changed = FALSE, safe = FALSE))
-  }
   structural_entry_validation <- list(
     valid = if (is.list(generic_summary)) isTRUE(generic_summary$tree_summary$valid) else FALSE,
     n_tip = ape::Ntip(tree),
@@ -83,7 +86,9 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
     canonicalizable = isTRUE(canonical_info$safe),
     issue = if (!is.null(canonical_info$reason)) canonical_info$reason else NULL
   )
-  fingerprint <- .tree_fingerprint(tree)
+  v2_evidence <- .v2_context_evidence(tree)
+  fingerprint <- v2_evidence$fingerprint
+  protected_snapshot <- v2_evidence$protected_snapshot
 
   structural_cache <- new.env(parent = emptyenv())
   numerical_cache <- new.env(parent = emptyenv())
@@ -109,6 +114,9 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
   assign(full_key, full, structural_cache)
 
   out <- list(
+    context_schema_version = .context_schema_v2,
+    canonical_contract_version = .canonical_contract_v2,
+    protected_snapshot_version = .protected_snapshot_v2,
     tree = tree,
     tip.label = tree$tip.label,
     n_tip = ape::Ntip(tree),
@@ -119,6 +127,7 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
     cache_budget = cache_budget,
     max_cached_subsets = max_cached_subsets,
     fingerprint = fingerprint,
+    protected_snapshot = protected_snapshot,
     # These fields are metadata only; dense numerical resources remain lazy.
     inspection = generic_summary,
     canonical_mapping = canonical_info$mapping,
@@ -128,6 +137,14 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
     structural_entry_validation = structural_entry_validation
   )
   class(out) <- c("fastphylosig_tree", "list")
+  attr(out, .v2_context_record_attribute) <- .v2_new_context_record(
+    fingerprint = fingerprint,
+    protected_snapshot = protected_snapshot,
+    fixed_state = .v2_context_fixed_state(out),
+    structural_cache = structural_cache,
+    numerical_cache = numerical_cache,
+    cache_meta = cache_meta
+  )
   out
 }
 
@@ -152,14 +169,16 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
   invisible(tree)
 }
 
-.tree_fingerprint <- function(tree) {
-  paste(
-    paste(tree$tip.label, collapse = "\r"),
-    paste(as.integer(tree$edge), collapse = ","),
-    paste(formatC(as.numeric(tree$edge.length), digits = 17,
-                  format = "fg"), collapse = ","),
-    paste(as.integer(tree$Nnode), collapse = ","),
-    sep = "|"
+.tree_fingerprint <- function(tree, .canonical = FALSE, .fields = NULL) {
+  if (!is.null(.fields)) {
+    if (!isTRUE(.canonical) || !.v2_is_canonical_fields(.fields)) {
+      .v2_abort("fingerprint fields are not a valid V2 canonical tree")
+    }
+    return(.v2_canonical_fingerprint_fields(.fields))
+  }
+  .tree_fingerprint_v2(
+    tree,
+    canonical = if (isTRUE(.canonical)) tree else NULL
   )
 }
 
@@ -545,7 +564,8 @@ cache_info <- function(ctx) {
   if (isTRUE(verify)) {
     .validate_prepared_context(ctx)
   } else if (!is.list(ctx) || !inherits(ctx, "fastphylosig_tree") ||
-             is.null(ctx$tree) || is.null(ctx$fingerprint)) {
+             is.null(ctx$tree) || is.null(ctx$fingerprint) ||
+             is.null(ctx$protected_snapshot)) {
     stop("invalid fastphylosig_tree context; call prepare_tree(tree) again.",
          call. = FALSE)
   }
@@ -556,6 +576,21 @@ cache_info <- function(ctx) {
   out
 }
 
+.v2_context_fixed_state <- function(ctx) {
+  list(
+    tip.label = ctx$tip.label,
+    n_tip = ctx$n_tip,
+    canonical_mapping = ctx$canonical_mapping,
+    inspection = ctx$inspection,
+    canonical_summary = ctx$canonical_summary,
+    generic_summary = ctx$generic_summary,
+    method_capability = ctx$method_capability,
+    structural_entry_validation = ctx$structural_entry_validation,
+    cache_budget = ctx$cache_budget,
+    max_cached_subsets = ctx$max_cached_subsets
+  )
+}
+
 .validate_prepared_context <- function(ctx) {
   if (.is_validated_context(ctx)) return(invisible(ctx))
   if (!is.list(ctx) || !inherits(ctx, "fastphylosig_tree") ||
@@ -563,8 +598,39 @@ cache_info <- function(ctx) {
     stop("invalid fastphylosig_tree context; call prepare_tree(tree) again.",
          call. = FALSE)
   }
-  current <- .tree_fingerprint(ctx$tree)
-  if (!identical(current, ctx$fingerprint)) {
+  record <- .v2_context_record(ctx)
+  .v2_validate_context_schema(ctx)
+  if (!is.raw(ctx$protected_snapshot) || !is.raw(ctx$fingerprint)) {
+    stop(
+      "invalid V2 prepared-tree evidence; call prepare_tree(tree) again.",
+      call. = FALSE
+    )
+  }
+  if (!identical(ctx$protected_snapshot, record$protected_snapshot) ||
+      !identical(ctx$fingerprint, record$fingerprint) ||
+      !identical(.v2_context_fixed_state(ctx), record$fixed_state) ||
+      !identical(ctx$cache, record$structural_cache) ||
+      !identical(ctx$structural_cache, record$structural_cache) ||
+      !identical(ctx$numerical_cache, record$numerical_cache) ||
+      !identical(ctx$cache_meta, record$cache_meta)) {
+    stop(
+      "the prepared context integrity record does not match; call prepare_tree(tree) again.",
+      call. = FALSE
+    )
+  }
+  current_evidence <- tryCatch(
+    .v2_context_evidence(ctx$tree),
+    error = function(e) NULL
+  )
+  if (is.null(current_evidence) ||
+      !identical(current_evidence$protected_snapshot,
+                 record$protected_snapshot)) {
+    stop(
+      "the prepared tree was modified after caching; call prepare_tree(tree) again.",
+      call. = FALSE
+    )
+  }
+  if (!identical(current_evidence$fingerprint, record$fingerprint)) {
     stop(
       "the prepared tree was modified after caching; call prepare_tree(tree) again.",
       call. = FALSE

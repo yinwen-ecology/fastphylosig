@@ -1,0 +1,7 @@
+"locale_case","requested","actual","status","identical_to_C","message"
+"current","C","C","RUN",TRUE,""
+"C","C","C","RUN",TRUE,""
+"English_US_CP1252","English_United States.1252","English_United States.1252","RUN",TRUE,""
+"German_CP1252","German_Germany.1252","German_Germany.1252","RUN",TRUE,""
+"Chinese_Simplified_CP936","Chinese (Simplified)_China.936","Chinese (Simplified)_China.936","RUN",TRUE,""
+"en_US_UTF8","en_US.UTF-8","en_US.UTF-8","RUN",TRUE,""
