@@ -1,0 +1,2 @@
+"status","core_gates","controlled_permutation_exact","ordered_nulls_exact","failure_accounting","NA_masks","batch_trait_guard","production_code_changed","formal_benchmark_authorized","detail"
+"PASS","PASS",TRUE,TRUE,TRUE,TRUE,TRUE,"NO",TRUE,"Correctness/RNG gates passed; benchmark may be run explicitly."

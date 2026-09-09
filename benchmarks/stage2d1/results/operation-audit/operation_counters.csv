@@ -1,0 +1,4 @@
+"mode","nsim","null_replicates","index_buffer_allocations","index_initialization_elements","fisher_yates_swaps","generation_to_chunk_elements","chunk_to_worker_elements","controlled_to_worker_elements","index_reads","trait_reads","trait_gather_allocations","compute_workspace_allocations","compute_workspace_bytes","compute_workspace_peak_bytes","permutation_chunk_bytes","reusable_generation_bytes","worker_index_bytes","peak_workspace_proxy_bytes"
+"oracle",999,999,1007,4995000,4989002,4995000,4995000,0,25001000,25001000,0,4000,1.6e+08,160000,2560000,20000,20000,2760000
+"A",999,999,9,4995000,4989002,4995000,4995000,0,25001000,25001000,0,4000,1.6e+08,160000,2560000,20000,20000,2760000
+"B",999,999,1,4995000,4989002,4995000,0,0,25001000,25001000,0,4000,1.6e+08,160000,2560000,20000,0,2740000

@@ -1,0 +1,2 @@
+"shape","failure","pass","old_status","new_status","old_error","new_error"
+"balanced","duplicate permutation index",TRUE,"error","error","each permutation row must contain 1:n exactly once.","each permutation row must contain 1:n exactly once."

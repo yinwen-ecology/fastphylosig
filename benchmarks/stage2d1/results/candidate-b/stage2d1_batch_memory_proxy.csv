@@ -1,0 +1,13 @@
+"candidate","n","nsim","traits","per_replicate_index_bytes","active_index_chunk_bytes","trait_kernel_workspace_bytes","requested_sim_output_bytes","controlled_input_matrix_bytes","reported_workspace_bytes","stage","baseline","implementation","shape","ncores"
+FALSE,500,199,1,2000,256000,16000,0,398000,276000,"Stage 2D1 batch test=TRUE guard","private_oracle","oracle","balanced",1
+TRUE,500,199,1,2000,2000,16000,0,NA,276000,"Stage 2D1 batch test=TRUE guard","private_oracle","A","balanced",1
+TRUE,500,199,1,2000,2000,16000,0,NA,274000,"Stage 2D1 batch test=TRUE guard","private_oracle","B","balanced",1
+FALSE,500,199,8,2000,256000,128000,0,398000,388000,"Stage 2D1 batch test=TRUE guard","private_oracle","oracle","balanced",1
+TRUE,500,199,8,2000,2000,128000,0,NA,388000,"Stage 2D1 batch test=TRUE guard","private_oracle","A","balanced",1
+TRUE,500,199,8,2000,2000,128000,0,NA,386000,"Stage 2D1 batch test=TRUE guard","private_oracle","B","balanced",1
+FALSE,500,199,32,2000,256000,512000,0,398000,772000,"Stage 2D1 batch test=TRUE guard","private_oracle","oracle","balanced",1
+TRUE,500,199,32,2000,2000,512000,0,NA,772000,"Stage 2D1 batch test=TRUE guard","private_oracle","A","balanced",1
+TRUE,500,199,32,2000,2000,512000,0,NA,770000,"Stage 2D1 batch test=TRUE guard","private_oracle","B","balanced",1
+FALSE,500,199,100,2000,256000,1024000,0,398000,1284000,"Stage 2D1 batch test=TRUE guard","private_oracle","oracle","balanced",1
+TRUE,500,199,100,2000,2000,1024000,0,NA,1284000,"Stage 2D1 batch test=TRUE guard","private_oracle","A","balanced",1
+TRUE,500,199,100,2000,2000,1024000,0,NA,1282000,"Stage 2D1 batch test=TRUE guard","private_oracle","B","balanced",1

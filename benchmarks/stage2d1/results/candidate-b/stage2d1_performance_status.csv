@@ -1,0 +1,2 @@
+"candidate","benchmark_baseline","controlled_exact","same_seed_replay","heavy_performance_gate","light_slowdown_gate","test_false_batch_guard","memory_bounded_proxy","K_PERMUTATION_PROTOTYPE","production_integration","production_code_changed"
+"prototype_hook","private_oracle","PASS (prerequisite status file)","PASS (prerequisite status file)","FAIL","FAIL","PASS","RECORDED","FAIL","NOT_RUN","NO"

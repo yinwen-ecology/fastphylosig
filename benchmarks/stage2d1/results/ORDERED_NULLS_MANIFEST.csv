@@ -1,0 +1,2 @@
+candidate,source_commit,rows,null_exact_false,exceedance_mismatch,max_abs_null_K,raw_csv_sha256,raw_csv_retention
+B,baea4cf3306b2e9c314d446782dfbe0b98263db6,321700,0,0,0,972f5e1bf7ee245aa3a20ce49da12fca3366de1ae06918a332944f076b8a7442,local_ASCII_staging_not_committed

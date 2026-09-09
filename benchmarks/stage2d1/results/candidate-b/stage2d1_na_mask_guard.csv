@@ -1,0 +1,5 @@
+"mask","n","public_status","warning_text","input_immutable","retained_values_only","pass","detail"
+"none",50,"ok","",TRUE,TRUE,TRUE,"public K handled mask without input mutation"
+"shared",50,"ok","",TRUE,TRUE,TRUE,"public K handled mask without input mutation"
+"repeated",50,"ok","",TRUE,TRUE,TRUE,"public K handled mask without input mutation"
+"near_unique",50,"ok","",TRUE,TRUE,TRUE,"public K handled mask without input mutation"

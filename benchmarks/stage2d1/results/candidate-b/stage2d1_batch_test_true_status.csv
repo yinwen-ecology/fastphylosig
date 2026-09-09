@@ -1,0 +1,2 @@
+"stage","run_mode","baseline","shape","n","nsim","traits","ncores","repeats_per_candidate","warmup","alternating_order","same_seed_per_pair","exact_private_oracle_parity","timing_completeness","warning_free","slowdown_gt_5pct_observed","status","production_integration","production_code_changed"
+"Stage 2D1 batch test=TRUE guard","formal","private_oracle","balanced",500,199,"1,8,32,100",1,10,"one per oracle/A/B and trait","PASS","PASS","PASS","PASS","PASS","YES","PASS","NOT_RUN","NO"

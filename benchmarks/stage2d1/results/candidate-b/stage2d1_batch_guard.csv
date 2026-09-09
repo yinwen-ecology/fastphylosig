@@ -1,0 +1,5 @@
+"traits","n","public_status","candidate_status","warning_text","pass","comparison"
+1,500,"ok","NOT_RUN","",TRUE,"production_guard_only"
+8,500,"ok","NOT_RUN","",TRUE,"production_guard_only"
+32,500,"ok","NOT_RUN","",TRUE,"production_guard_only"
+100,500,"ok","NOT_RUN","",TRUE,"production_guard_only"

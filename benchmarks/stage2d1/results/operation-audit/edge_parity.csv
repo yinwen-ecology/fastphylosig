@@ -1,0 +1,9 @@
+"audit","mode","K","P","exceedance_count","MCSE_P","ordered_null_K","max_abs_sim_K"
+"two_tip","A",1,1,1,1,1,0
+"two_tip","B",1,1,1,1,1,0
+"constant","A",1,1,1,1,1,0
+"constant","B",1,1,1,1,1,0
+"near_constant","A",1,1,1,1,1,0
+"near_constant","B",1,1,1,1,1,0
+"large_offset","A",1,1,1,1,1,0
+"large_offset","B",1,1,1,1,1,0

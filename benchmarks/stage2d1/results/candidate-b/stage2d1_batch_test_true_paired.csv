@@ -1,0 +1,9 @@
+"shape","n","nsim","traits","baseline","candidate","pairs","paired_median_speedup","paired_IQR_speedup","paired_median_difference_s"
+"balanced",500,199,1,"private_oracle","A",10,0,0,0
+"balanced",500,199,1,"private_oracle","B",10,0,0,0
+"balanced",500,199,8,"private_oracle","A",10,1.50000000000004,1.24999999999996,0.00500000000000078
+"balanced",500,199,8,"private_oracle","B",10,0.583333333333314,1.37500000000002,-0.00999999999999979
+"balanced",500,199,32,"private_oracle","A",10,1.00000000000001,0.214285714285707,8.88178419700125e-16
+"balanced",500,199,32,"private_oracle","B",10,1.16666666666666,0.29166666666668,0.00999999999999979
+"balanced",500,199,100,"private_oracle","A",10,0.975000000000005,0.170487008193706,-0.00499999999999901
+"balanced",500,199,100,"private_oracle","B",10,0.976190476190473,0.101973684210511,-0.00499999999999901

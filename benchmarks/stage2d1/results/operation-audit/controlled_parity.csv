@@ -1,0 +1,7 @@
+"audit","mode","n","nsim","n_threads","K","P","exceedance_count","MCSE_P","ordered_null_K","max_abs_sim_K"
+"controlled","oracle",50,31,1,1,1,1,1,1,0
+"controlled","A",50,31,1,1,1,1,1,1,0
+"controlled","B",50,31,1,1,1,1,1,1,0
+"controlled","oracle",50,31,2,1,1,1,1,1,0
+"controlled","A",50,31,2,1,1,1,1,1,0
+"controlled","B",50,31,2,1,1,1,1,1,0
