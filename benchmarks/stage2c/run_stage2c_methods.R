@@ -893,10 +893,15 @@ utils::write.csv(timings, file.path(output_dir, "stage2c_methods_timings.csv"),
 
 make_summary <- function(timings) {
   if (!nrow(timings)) return(data.frame())
-  key <- interaction(
-    timings$method, timings$shape, timings$n, timings$workload,
-    timings$path, timings$nsim, timings$ncores, drop = TRUE, sep = "\r"
-  )
+  key_fields <- timings[c(
+    "method", "shape", "n", "workload", "path", "nsim", "ncores"
+  )]
+  key_fields[] <- lapply(key_fields, function(value) {
+    value <- as.character(value)
+    value[is.na(value)] <- "<NA>"
+    value
+  })
+  key <- do.call(paste, c(key_fields, sep = "\r"))
   rows <- lapply(split(seq_len(nrow(timings)), key), function(ii) {
     z <- timings[ii, , drop = FALSE]
     finite <- z$elapsed_ms[is.finite(z$elapsed_ms)]
