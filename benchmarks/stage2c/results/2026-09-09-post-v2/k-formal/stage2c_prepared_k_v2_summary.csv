@@ -1,0 +1,10 @@
+"method","workload","shape","n","route","phase","elapsed_s","direct_elapsed_s","probe_elapsed_s"
+"K","prepared_v2_validation","random",20000,"prepared",".as_trait_matrix",0,0.279999999999973,0.230000000000018
+"K","prepared_v2_validation","random",20000,"prepared",".prepare_analysis",0.220000000000027,0.279999999999973,0.230000000000018
+"K","prepared_v2_validation","random",20000,"prepared",".prepared_tree_subset",0,0.279999999999973,0.230000000000018
+"K","prepared_v2_validation","random",20000,"prepared",".tree_fingerprint",0.0599999999999454,0.279999999999973,0.230000000000018
+"K","prepared_v2_validation","random",20000,"prepared",".v2_context_evidence",0.200000000000045,0.279999999999973,0.230000000000018
+"K","prepared_v2_validation","random",20000,"prepared",".v2_protected_snapshot",0,0.279999999999973,0.230000000000018
+"K","prepared_v2_validation","random",20000,"prepared",".validate_prepared_context",0.200000000000045,0.279999999999973,0.230000000000018
+"K","prepared_v2_validation","random",20000,"prepared",".validated_context",0.200000000000045,0.279999999999973,0.230000000000018
+"K","prepared_v2_validation","random",20000,"prepared","fast_k_tree_batch_cpp",0.00999999999999091,0.279999999999973,0.230000000000018

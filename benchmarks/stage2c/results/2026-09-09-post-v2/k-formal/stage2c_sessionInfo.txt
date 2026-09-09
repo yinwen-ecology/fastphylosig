@@ -1,0 +1,34 @@
+R version 4.6.1 (2026-06-24 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 26200)
+
+Matrix products: default
+  LAPACK version 3.12.1
+
+locale:
+[1] C
+system code page: 65001
+
+time zone: Asia/Shanghai
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] fastphylosig_0.2.0.9000
+
+loaded via a namespace (and not attached):
+ [1] doParallel_1.0.17       cli_3.6.6               nlme_3.1-169           
+ [4] rlang_1.3.0             processx_3.9.0          generics_0.1.4         
+ [7] clusterGeneration_1.3.8 scatterplot3d_0.3-45    quadprog_1.5-8         
+[10] grid_4.6.1              expm_1.0-0              MASS_7.3-65            
+[13] lifecycle_1.0.5         ape_5.8-1               foreach_1.5.2          
+[16] numDeriv_2016.8-1.1     compiler_4.6.1          igraph_2.3.3           
+[19] codetools_0.2-20        coda_0.19-4.1           pkgconfig_2.0.3        
+[22] Rcpp_1.1.2              DEoptim_2.2-8           fastmatch_1.1-8        
+[25] optimParallel_1.0-3     maps_3.4.3              phangorn_2.12.1        
+[28] lattice_0.22-9          digest_0.6.39           mnormt_2.1.2           
+[31] parallel_4.6.1          callr_3.8.0             magrittr_2.0.5         
+[34] Matrix_1.7-5            tools_4.6.1             iterators_1.0.14       
+[37] combinat_0.0-8          phytools_2.5-2         

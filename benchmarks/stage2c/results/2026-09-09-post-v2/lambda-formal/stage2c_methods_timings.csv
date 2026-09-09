@@ -1,0 +1,376 @@
+"method","shape","n","workload","path","pair","position","repeats","nsim","ncores","elapsed_ms","status","error_message","error_class","warning_count","warning_text","estimate"
+"lambda","balanced",100,"test_false","prepare_tree",0,NA,10,NA,1,20,"ok","","",0,"",NA
+"lambda","balanced",100,"test_false","raw",1,1,10,NA,1,19.9999999999998,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","prepared",1,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",1,NA,10,NA,1,120,"ok","","",0,"",0.999926686256414
+"lambda","balanced",100,"test_false","prepared",2,1,10,NA,1,20,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","raw",2,2,10,NA,1,9.99999999999979,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",2,NA,10,NA,1,110,"ok","","",0,"",0.999926686256414
+"lambda","balanced",100,"test_false","raw",3,1,10,NA,1,10.0000000000002,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","prepared",3,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",3,NA,10,NA,1,100,"ok","","",0,"",0.999926686256414
+"lambda","balanced",100,"test_false","prepared",4,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","raw",4,2,10,NA,1,20,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",4,NA,10,NA,1,110,"ok","","",0,"",0.999926686256414
+"lambda","balanced",100,"test_false","raw",5,1,10,NA,1,10.0000000000002,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","prepared",5,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",5,NA,10,NA,1,110,"ok","","",0,"",0.999926686256414
+"lambda","balanced",100,"test_false","prepared",6,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","raw",6,2,10,NA,1,9.99999999999979,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",6,NA,10,NA,1,130,"ok","","",0,"",0.999926686256414
+"lambda","balanced",100,"test_false","raw",7,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","prepared",7,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",7,NA,10,NA,1,109.999999999999,"ok","","",0,"",0.999926686256414
+"lambda","balanced",100,"test_false","prepared",8,1,10,NA,1,9.99999999999979,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","raw",8,2,10,NA,1,20.0000000000005,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",8,NA,10,NA,1,189.999999999999,"ok","","",0,"",0.999926686256414
+"lambda","balanced",100,"test_false","raw",9,1,10,NA,1,9.99999999999979,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","prepared",9,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",9,NA,10,NA,1,109.999999999999,"ok","","",0,"",0.999926686256414
+"lambda","balanced",100,"test_false","prepared",10,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","raw",10,2,10,NA,1,9.99999999999979,"ok","","",0,"",0.999933893038648
+"lambda","balanced",100,"test_false","reference",10,NA,10,NA,1,120,"ok","","",0,"",0.999926686256414
+"lambda","balanced",500,"test_false","prepare_tree",0,NA,10,NA,1,29.9999999999994,"ok","","",0,"",NA
+"lambda","balanced",500,"test_false","raw",1,1,10,NA,1,40,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","prepared",1,2,10,NA,1,19.9999999999996,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",1,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",500,"test_false","prepared",2,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","raw",2,2,10,NA,1,40,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",2,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",500,"test_false","raw",3,1,10,NA,1,49.9999999999998,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","prepared",3,2,10,NA,1,20.0000000000005,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",3,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",500,"test_false","prepared",4,1,10,NA,1,9.99999999999979,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","raw",4,2,10,NA,1,39.9999999999991,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",4,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",500,"test_false","raw",5,1,10,NA,1,49.9999999999989,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","prepared",5,2,10,NA,1,9.99999999999979,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",5,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",500,"test_false","prepared",6,1,10,NA,1,10.0000000000016,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","raw",6,2,10,NA,1,29.9999999999994,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",6,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",500,"test_false","raw",7,1,10,NA,1,29.9999999999994,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","prepared",7,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",7,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",500,"test_false","prepared",8,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","raw",8,2,10,NA,1,39.9999999999991,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",8,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",500,"test_false","raw",9,1,10,NA,1,49.9999999999989,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","prepared",9,2,10,NA,1,19.9999999999996,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",9,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",500,"test_false","prepared",10,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","raw",10,2,10,NA,1,50.0000000000007,"ok","","",0,"",0.999933893038648
+"lambda","balanced",500,"test_false","reference",10,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","prepare_tree",0,NA,10,NA,1,140.000000000001,"ok","","",0,"",NA
+"lambda","balanced",2000,"test_false","raw",1,1,10,NA,1,160,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","prepared",1,2,10,NA,1,29.9999999999994,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",1,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","prepared",2,1,10,NA,1,39.9999999999991,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","raw",2,2,10,NA,1,170,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",2,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","raw",3,1,10,NA,1,150,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","prepared",3,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",3,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","prepared",4,1,10,NA,1,29.9999999999994,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","raw",4,2,10,NA,1,150,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",4,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","raw",5,1,10,NA,1,170,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","prepared",5,2,10,NA,1,49.9999999999989,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",5,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","prepared",6,1,10,NA,1,29.9999999999994,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","raw",6,2,10,NA,1,170,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",6,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","raw",7,1,10,NA,1,160,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","prepared",7,2,10,NA,1,39.9999999999991,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",7,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","prepared",8,1,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","raw",8,2,10,NA,1,160,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",8,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","raw",9,1,10,NA,1,170.000000000002,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","prepared",9,2,10,NA,1,50.0000000000007,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",9,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",2000,"test_false","prepared",10,1,10,NA,1,29.9999999999994,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","raw",10,2,10,NA,1,150,"ok","","",0,"",0.999933893038648
+"lambda","balanced",2000,"test_false","reference",10,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",5000,"test_false","prepare_tree",0,NA,10,NA,1,379.999999999999,"ok","","",0,"",NA
+"lambda","balanced",5000,"test_false","raw",1,1,5,NA,1,420.000000000002,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","prepared",1,2,5,NA,1,70.0000000000003,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","reference",1,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",5000,"test_false","prepared",2,1,5,NA,1,80.0000000000018,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","raw",2,2,5,NA,1,430,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","reference",2,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",5000,"test_false","raw",3,1,5,NA,1,440.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","prepared",3,2,5,NA,1,80.0000000000018,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","reference",3,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",5000,"test_false","prepared",4,1,5,NA,1,70.0000000000003,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","raw",4,2,5,NA,1,420.000000000002,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","reference",4,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",5000,"test_false","raw",5,1,5,NA,1,420.000000000002,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","prepared",5,2,5,NA,1,59.9999999999987,"ok","","",0,"",0.999933893038648
+"lambda","balanced",5000,"test_false","reference",5,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","balanced",10000,"test_false","prepare_tree",0,NA,10,NA,1,830.000000000002,"ok","","",0,"",NA
+"lambda","balanced",10000,"test_false","raw",1,1,5,NA,1,870.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","prepared",1,2,5,NA,1,140.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","reference",1,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","balanced",10000,"test_false","prepared",2,1,5,NA,1,149.999999999999,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","raw",2,2,5,NA,1,899.999999999999,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","reference",2,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","balanced",10000,"test_false","raw",3,1,5,NA,1,890.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","prepared",3,2,5,NA,1,140.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","reference",3,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","balanced",10000,"test_false","prepared",4,1,5,NA,1,140.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","raw",4,2,5,NA,1,879.999999999999,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","reference",4,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","balanced",10000,"test_false","raw",5,1,5,NA,1,860.000000000003,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","prepared",5,2,5,NA,1,140.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","balanced",10000,"test_false","reference",5,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","random",100,"test_false","prepare_tree",0,NA,10,NA,1,0,"ok","","",0,"",NA
+"lambda","random",100,"test_false","raw",1,1,10,NA,1,19.9999999999996,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","prepared",1,2,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",1,NA,10,NA,1,130.000000000003,"ok","","",0,"",0.963860008235685
+"lambda","random",100,"test_false","prepared",2,1,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","raw",2,2,10,NA,1,20.0000000000031,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",2,NA,10,NA,1,119.999999999997,"ok","","",0,"",0.963860008235685
+"lambda","random",100,"test_false","raw",3,1,10,NA,1,20.0000000000031,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","prepared",3,2,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",3,NA,10,NA,1,119.999999999997,"ok","","",0,"",0.963860008235685
+"lambda","random",100,"test_false","prepared",4,1,10,NA,1,20.0000000000031,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","raw",4,2,10,NA,1,9.99999999999801,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",4,NA,10,NA,1,130.000000000003,"ok","","",0,"",0.963860008235685
+"lambda","random",100,"test_false","raw",5,1,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","prepared",5,2,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",5,NA,10,NA,1,119.999999999997,"ok","","",0,"",0.963860008235685
+"lambda","random",100,"test_false","prepared",6,1,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","raw",6,2,10,NA,1,20.0000000000031,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",6,NA,10,NA,1,140.000000000001,"ok","","",0,"",0.963860008235685
+"lambda","random",100,"test_false","raw",7,1,10,NA,1,9.99999999999801,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","prepared",7,2,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",7,NA,10,NA,1,130.000000000003,"ok","","",0,"",0.963860008235685
+"lambda","random",100,"test_false","prepared",8,1,10,NA,1,9.99999999999801,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","raw",8,2,10,NA,1,20.0000000000031,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",8,NA,10,NA,1,140.000000000001,"ok","","",0,"",0.963860008235685
+"lambda","random",100,"test_false","raw",9,1,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","prepared",9,2,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",9,NA,10,NA,1,130.000000000003,"ok","","",0,"",0.963860008235685
+"lambda","random",100,"test_false","prepared",10,1,10,NA,1,0,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","raw",10,2,10,NA,1,19.999999999996,"ok","","",0,"",0.963821795076434
+"lambda","random",100,"test_false","reference",10,NA,10,NA,1,139.999999999993,"ok","","",0,"",0.963860008235685
+"lambda","random",500,"test_false","prepare_tree",0,NA,10,NA,1,50.0000000000043,"ok","","",0,"",NA
+"lambda","random",500,"test_false","raw",1,1,10,NA,1,50.0000000000043,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","prepared",1,2,10,NA,1,9.99999999999801,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",1,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",500,"test_false","prepared",2,1,10,NA,1,20.0000000000031,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","raw",2,2,10,NA,1,29.999999999994,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",2,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",500,"test_false","raw",3,1,10,NA,1,49.9999999999972,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","prepared",3,2,10,NA,1,9.99999999999801,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",3,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",500,"test_false","prepared",4,1,10,NA,1,20.0000000000031,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","raw",4,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",4,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",500,"test_false","raw",5,1,10,NA,1,39.9999999999991,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","prepared",5,2,10,NA,1,0,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",5,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",500,"test_false","prepared",6,1,10,NA,1,0,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","raw",6,2,10,NA,1,39.9999999999991,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",6,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",500,"test_false","raw",7,1,10,NA,1,49.9999999999972,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","prepared",7,2,10,NA,1,0,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",7,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",500,"test_false","prepared",8,1,10,NA,1,9.99999999999801,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","raw",8,2,10,NA,1,49.9999999999972,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",8,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",500,"test_false","raw",9,1,10,NA,1,30.0000000000011,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","prepared",9,2,10,NA,1,20.0000000000031,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",9,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",500,"test_false","prepared",10,1,10,NA,1,9.99999999999801,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","raw",10,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.972823818084451
+"lambda","random",500,"test_false","reference",10,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","prepare_tree",0,NA,10,NA,1,140.000000000001,"ok","","",0,"",NA
+"lambda","random",2000,"test_false","raw",1,1,10,NA,1,170.000000000002,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","prepared",1,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",1,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","prepared",2,1,10,NA,1,39.9999999999991,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","raw",2,2,10,NA,1,140.000000000001,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",2,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","raw",3,1,10,NA,1,149.999999999999,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","prepared",3,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",3,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","prepared",4,1,10,NA,1,30.0000000000011,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","raw",4,2,10,NA,1,149.999999999999,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",4,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","raw",5,1,10,NA,1,159.999999999997,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","prepared",5,2,10,NA,1,20.0000000000031,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",5,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","prepared",6,1,10,NA,1,30.0000000000011,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","raw",6,2,10,NA,1,160.000000000004,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",6,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","raw",7,1,10,NA,1,140.000000000001,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","prepared",7,2,10,NA,1,29.999999999994,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",7,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","prepared",8,1,10,NA,1,9.99999999999801,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","raw",8,2,10,NA,1,149.999999999999,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",8,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","raw",9,1,10,NA,1,149.999999999999,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","prepared",9,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",9,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",2000,"test_false","prepared",10,1,10,NA,1,29.999999999994,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","raw",10,2,10,NA,1,159.999999999997,"ok","","",0,"",0.992512982971196
+"lambda","random",2000,"test_false","reference",10,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",5000,"test_false","prepare_tree",0,NA,10,NA,1,380.000000000003,"ok","","",0,"",NA
+"lambda","random",5000,"test_false","raw",1,1,5,NA,1,409.999999999997,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","prepared",1,2,5,NA,1,60.0000000000023,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","reference",1,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",5000,"test_false","prepared",2,1,5,NA,1,59.9999999999952,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","raw",2,2,5,NA,1,539.999999999999,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","reference",2,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",5000,"test_false","raw",3,1,5,NA,1,399.999999999999,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","prepared",3,2,5,NA,1,59.9999999999952,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","reference",3,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",5000,"test_false","prepared",4,1,5,NA,1,79.9999999999983,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","raw",4,2,5,NA,1,410.000000000004,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","reference",4,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",5000,"test_false","raw",5,1,5,NA,1,399.999999999999,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","prepared",5,2,5,NA,1,79.9999999999983,"ok","","",0,"",0.986766107151569
+"lambda","random",5000,"test_false","reference",5,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","random",10000,"test_false","prepare_tree",0,NA,10,NA,1,809.999999999995,"ok","","",0,"",NA
+"lambda","random",10000,"test_false","raw",1,1,5,NA,1,1120,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","prepared",1,2,5,NA,1,140.000000000001,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","reference",1,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","random",10000,"test_false","prepared",2,1,5,NA,1,140.000000000001,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","raw",2,2,5,NA,1,1000,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","reference",2,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","random",10000,"test_false","raw",3,1,5,NA,1,850.000000000001,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","prepared",3,2,5,NA,1,119.999999999997,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","reference",3,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","random",10000,"test_false","prepared",4,1,5,NA,1,130.000000000003,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","raw",4,2,5,NA,1,880.000000000003,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","reference",4,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","random",10000,"test_false","raw",5,1,5,NA,1,859.999999999999,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","prepared",5,2,5,NA,1,130.000000000003,"ok","","",0,"",0.969524110299661
+"lambda","random",10000,"test_false","reference",5,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","pectinate",100,"test_false","prepare_tree",0,NA,10,NA,1,20.0000000000031,"ok","","",0,"",NA
+"lambda","pectinate",100,"test_false","raw",1,1,10,NA,1,20.0000000000031,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","prepared",1,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",1,NA,10,NA,1,149.999999999999,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",100,"test_false","prepared",2,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","raw",2,2,10,NA,1,9.99999999999801,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",2,NA,10,NA,1,140.000000000001,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",100,"test_false","raw",3,1,10,NA,1,20.0000000000031,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","prepared",3,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",3,NA,10,NA,1,140.000000000001,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",100,"test_false","prepared",4,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","raw",4,2,10,NA,1,9.99999999999801,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",4,NA,10,NA,1,140.000000000001,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",100,"test_false","raw",5,1,10,NA,1,19.999999999996,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","prepared",5,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",5,NA,10,NA,1,160.000000000004,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",100,"test_false","prepared",6,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","raw",6,2,10,NA,1,9.99999999999801,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",6,NA,10,NA,1,190.000000000005,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",100,"test_false","raw",7,1,10,NA,1,9.99999999999801,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","prepared",7,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",7,NA,10,NA,1,170.000000000002,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",100,"test_false","prepared",8,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","raw",8,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",8,NA,10,NA,1,140.000000000001,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",100,"test_false","raw",9,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","prepared",9,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",9,NA,10,NA,1,150.000000000006,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",100,"test_false","prepared",10,1,10,NA,1,19.999999999996,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","raw",10,2,10,NA,1,10.0000000000051,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",100,"test_false","reference",10,NA,10,NA,1,140.000000000001,"ok","","",0,"",0.999926686256414
+"lambda","pectinate",500,"test_false","prepare_tree",0,NA,10,NA,1,29.9999999999869,"ok","","",0,"",NA
+"lambda","pectinate",500,"test_false","raw",1,1,10,NA,1,40.0000000000063,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","prepared",1,2,10,NA,1,19.999999999996,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",1,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",500,"test_false","prepared",2,1,10,NA,1,10.0000000000051,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","raw",2,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",2,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",500,"test_false","raw",3,1,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","prepared",3,2,10,NA,1,9.99999999999091,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",3,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",500,"test_false","prepared",4,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","raw",4,2,10,NA,1,40.0000000000063,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",4,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",500,"test_false","raw",5,1,10,NA,1,50.0000000000114,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","prepared",5,2,10,NA,1,19.999999999996,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",5,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",500,"test_false","prepared",6,1,10,NA,1,10.0000000000051,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","raw",6,2,10,NA,1,49.9999999999972,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",6,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",500,"test_false","raw",7,1,10,NA,1,39.999999999992,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","prepared",7,2,10,NA,1,19.999999999996,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",7,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",500,"test_false","prepared",8,1,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","raw",8,2,10,NA,1,39.999999999992,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",8,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",500,"test_false","raw",9,1,10,NA,1,50.0000000000114,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","prepared",9,2,10,NA,1,0,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",9,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",500,"test_false","prepared",10,1,10,NA,1,19.999999999996,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","raw",10,2,10,NA,1,50.0000000000114,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",500,"test_false","reference",10,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","prepare_tree",0,NA,10,NA,1,160.000000000011,"ok","","",0,"",NA
+"lambda","pectinate",2000,"test_false","raw",1,1,10,NA,1,180.000000000007,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","prepared",1,2,10,NA,1,60.0000000000023,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",1,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","prepared",2,1,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","raw",2,2,10,NA,1,170.000000000002,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",2,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","raw",3,1,10,NA,1,190.000000000012,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","prepared",3,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",3,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","prepared",4,1,10,NA,1,29.9999999999869,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","raw",4,2,10,NA,1,179.999999999993,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",4,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","raw",5,1,10,NA,1,199.999999999989,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","prepared",5,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",5,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","prepared",6,1,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","raw",6,2,10,NA,1,170.000000000002,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",6,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","raw",7,1,10,NA,1,170.000000000002,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","prepared",7,2,10,NA,1,40.0000000000063,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",7,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","prepared",8,1,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","raw",8,2,10,NA,1,170.000000000002,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",8,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","raw",9,1,10,NA,1,170.000000000002,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","prepared",9,2,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",9,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",2000,"test_false","prepared",10,1,10,NA,1,30.0000000000011,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","raw",10,2,10,NA,1,169.999999999987,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",2000,"test_false","reference",10,NA,10,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 160000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",5000,"test_false","prepare_tree",0,NA,10,NA,1,409.999999999997,"ok","","",0,"",NA
+"lambda","pectinate",5000,"test_false","raw",1,1,5,NA,1,439.999999999998,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","prepared",1,2,5,NA,1,79.9999999999983,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","reference",1,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",5000,"test_false","prepared",2,1,5,NA,1,69.9999999999932,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","raw",2,2,5,NA,1,469.999999999999,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","reference",2,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",5000,"test_false","raw",3,1,5,NA,1,440.000000000012,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","prepared",3,2,5,NA,1,79.9999999999983,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","reference",3,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",5000,"test_false","prepared",4,1,5,NA,1,60.0000000000023,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","raw",4,2,5,NA,1,439.999999999998,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","reference",4,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",5000,"test_false","raw",5,1,5,NA,1,450.000000000003,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","prepared",5,2,5,NA,1,79.9999999999983,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",5000,"test_false","reference",5,NA,5,NA,1,NA,"RESOURCE_LIMIT","estimated repeated dense cubic work 2500000000000 exceeds lambda reference cap 1000000000","resource_limit",0,"",NA
+"lambda","pectinate",10000,"test_false","prepare_tree",0,NA,10,NA,1,1030,"ok","","",0,"",NA
+"lambda","pectinate",10000,"test_false","raw",1,1,5,NA,1,1110,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","prepared",1,2,5,NA,1,140.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","reference",1,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","pectinate",10000,"test_false","prepared",2,1,5,NA,1,140.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","raw",2,2,5,NA,1,1110,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","reference",2,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","pectinate",10000,"test_false","raw",3,1,5,NA,1,1230,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","prepared",3,2,5,NA,1,139.999999999986,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","reference",3,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","pectinate",10000,"test_false","prepared",4,1,5,NA,1,150.000000000006,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","raw",4,2,5,NA,1,1110,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","reference",4,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA
+"lambda","pectinate",10000,"test_false","raw",5,1,5,NA,1,1110,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","prepared",5,2,5,NA,1,140.000000000001,"ok","","",0,"",0.999933893038648
+"lambda","pectinate",10000,"test_false","reference",5,NA,5,NA,1,NA,"RESOURCE_LIMIT","single phytools lambda reference is not run at n >= 10000; estimated dense covariance 800000000 bytes","resource_limit",0,"",NA

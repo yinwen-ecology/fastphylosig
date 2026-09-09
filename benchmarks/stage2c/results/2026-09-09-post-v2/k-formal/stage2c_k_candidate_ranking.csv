@@ -1,0 +1,3 @@
+"candidate","hotspot_share","ideal_end_to_end_saving","measured_practical_saving","correctness_risk","engineering_risk","authorization","scope"
+"K_permutation_null_engine",0.407773386034308,40.7773386034308,NA,"medium","medium","NO-GO","profile/rank only; no candidate implemented"
+"prepared_exact_validation_efficiency",0.869565217391433,86.9565217391433,NA,"high","high","NO-GO; exact-equivalent design not established","profile/rank only; no candidate implemented"

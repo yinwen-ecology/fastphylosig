@@ -1,0 +1,2 @@
+"method","shape","n","workload","controlled_inputs","raw_status","prepared_status","status_equal","raw_result_status","prepared_result_status","result_status_equal","raw_warning_text","prepared_warning_text","warning_equal","max_abs_difference","numerical_equal_1e_10","guard_pass"
+"lambda","random",50,"test_true",FALSE,"ok","ok",TRUE,"ok","ok",TRUE,"","",TRUE,0,TRUE,TRUE

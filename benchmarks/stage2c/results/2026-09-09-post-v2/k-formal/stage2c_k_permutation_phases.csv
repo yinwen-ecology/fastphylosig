@@ -1,0 +1,529 @@
+"method","workload","shape","n","route","nsim","ncores","mode","phase","elapsed_s","share_total","calls","measurement_scope","note","probe_status","probe_warning","probe_error","instrumented_bindings"
+"K","permutation","random",500,"raw",199,1,"internal_rng",".prepare_analysis",0.0299999999999727,1,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng","fast_k_tree_permutation_cpp",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",199,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".prepare_analysis",0.0299999999999727,0.75,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".permutation_matrix",0.00999999999999091,0.25,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations","fast_k_tree_permutation_cpp",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",199,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".prepare_analysis",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".validate_prepared_context",0,0,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng","fast_k_tree_permutation_cpp",0.0199999999999818,1,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".prepare_analysis",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".validate_prepared_context",0,0,3,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".permutation_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations","fast_k_tree_permutation_cpp",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",199,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".prepare_analysis",0.0299999999999727,0.428571428570036,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng","fast_k_tree_permutation_cpp",0.040000000000191,0.571428571429964,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".prepare_analysis",0.0299999999999727,0.375,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".permutation_matrix",0.0299999999999727,0.375,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.0199999999999818,0.25,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",999,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".prepare_analysis",0.00999999999999091,0.333333333333333,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".validate_prepared_context",0,0,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng","fast_k_tree_permutation_cpp",0.0199999999999818,0.666666666666667,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".prepare_analysis",0.00999999999999091,0.166666666666667,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".validate_prepared_context",0,0,3,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".permutation_matrix",0.0199999999999818,0.333333333333333,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.0299999999999727,0.5,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",999,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".prepare_analysis",0.0299999999999727,0.10714285714277,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng","fast_k_tree_permutation_cpp",0.25,0.89285714285723,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".prepare_analysis",0.0499999999999545,0.0781249999999445,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".validated_context",0.0199999999999818,0.0312499999999778,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".v2_context_evidence",0.0199999999999818,0.0312499999999778,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".tree_fingerprint",0.0199999999999818,0.0312499999999778,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".permutation_matrix",0.369999999999891,0.578124999999944,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.200000000000045,0.312500000000133,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"raw",9999,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".prepare_analysis",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".validate_prepared_context",0,0,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng","fast_k_tree_permutation_cpp",0.25,1,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".prepare_analysis",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".validated_context",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".validate_prepared_context",0,0,3,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".v2_context_evidence",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".permutation_matrix",0.409999999999854,0.630769230769139,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.230000000000018,0.353846153846256,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",500,"prepared",9999,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".prepare_analysis",0.159999999999854,0.941176470588235,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".validated_context",0.0299999999999727,0.176470588235294,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".v2_context_evidence",0.0299999999999727,0.176470588235294,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng","fast_k_tree_permutation_cpp",0.00999999999999091,0.0588235294117647,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".prepare_analysis",0.160000000000082,0.842105263158084,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".validated_context",0.0299999999999727,0.157894736841916,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".v2_context_evidence",0.0199999999999818,0.105263157894611,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".permutation_matrix",0.0199999999999818,0.105263157894611,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.00999999999999091,0.0526315789473054,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",199,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".prepare_analysis",0.0199999999999818,0.666666666666667,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".validated_context",0.0199999999999818,0.666666666666667,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".validate_prepared_context",0.0199999999999818,0.666666666666667,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".v2_context_evidence",0.0199999999999818,0.666666666666667,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".tree_fingerprint",0.0199999999999818,0.666666666666667,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng","fast_k_tree_permutation_cpp",0.00999999999999091,0.333333333333333,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".prepare_analysis",0.040000000000191,0.571428571429964,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".validated_context",0.0199999999999818,0.285714285713358,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".validate_prepared_context",0.0199999999999818,0.285714285713358,3,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".v2_context_evidence",0.0199999999999818,0.285714285713358,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".permutation_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.0299999999999727,0.428571428570036,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",199,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".prepare_analysis",0.139999999999873,0.559999999999491,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".validated_context",0.00999999999999091,0.0399999999999636,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".v2_context_evidence",0.00999999999999091,0.0399999999999636,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".tree_fingerprint",0.00999999999999091,0.0399999999999636,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng","fast_k_tree_permutation_cpp",0.0900000000001455,0.360000000000582,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".prepare_analysis",0.150000000000091,0.483870967742314,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".validated_context",0.00999999999999091,0.0322580645161054,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".v2_context_evidence",0.00999999999999091,0.0322580645161054,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".permutation_matrix",0.0799999999999272,0.258064516128843,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.0799999999999272,0.258064516128843,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",999,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".prepare_analysis",0.0199999999999818,0.133333333333131,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".validated_context",0.0199999999999818,0.133333333333131,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".validate_prepared_context",0.0199999999999818,0.133333333333131,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".v2_context_evidence",0.0199999999999818,0.133333333333131,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng","fast_k_tree_permutation_cpp",0.130000000000109,0.866666666666869,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".prepare_analysis",0.0299999999999727,0.130434782608696,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".validated_context",0.0299999999999727,0.130434782608696,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".validate_prepared_context",0.0299999999999727,0.130434782608696,3,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".v2_context_evidence",0.0299999999999727,0.130434782608696,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".permutation_matrix",0.1099999999999,0.478260869565217,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.0899999999999181,0.391304347826087,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"prepared",999,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".prepare_analysis",0.1400000000001,0.114754098360735,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".validated_context",0.00999999999999091,0.00819672131146777,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".v2_context_evidence",0.00999999999999091,0.00819672131146777,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".tree_fingerprint",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng","fast_k_tree_permutation_cpp",1.07999999999993,0.885245901639265,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"raw",9999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".prepare_analysis",0.0299999999999727,0.0275229357797935,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".validated_context",0.0299999999999727,0.0275229357797935,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".validate_prepared_context",0.0299999999999727,0.0275229357797935,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".v2_context_evidence",0.0299999999999727,0.0275229357797935,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".tree_fingerprint",0.00999999999999091,0.00917431192659785,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng","fast_k_tree_permutation_cpp",1.05999999999995,0.972477064220206,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",2000,"prepared",9999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".prepare_analysis",0.470000000000027,0.886792452830286,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".validated_context",0.0699999999999363,0.132075471698,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".v2_context_evidence",0.0499999999999545,0.0943396226414285,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".tree_fingerprint",0.0299999999999727,0.0566037735848571,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng","fast_k_tree_permutation_cpp",0.0499999999999545,0.0943396226414285,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".prepare_analysis",0.419999999999845,0.599999999999935,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".validated_context",0.0799999999999272,0.11428571428564,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".v2_context_evidence",0.0499999999999545,0.071428571428525,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".tree_fingerprint",0.00999999999999091,0.014285714285705,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".permutation_matrix",0.220000000000027,0.314285714285835,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.0399999999999636,0.05714285714282,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",199,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".prepare_analysis",0.0299999999999727,0.272727272726709,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".validated_context",0.0299999999999727,0.272727272726709,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".validate_prepared_context",0.0299999999999727,0.272727272726709,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".v2_context_evidence",0.0299999999999727,0.272727272726709,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".tree_fingerprint",0.00999999999999091,0.090909090908903,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng","fast_k_tree_permutation_cpp",0.0800000000001546,0.727272727273291,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".prepare_analysis",0.0499999999999545,0.357142857142277,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".validated_context",0.0499999999999545,0.357142857142277,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".validate_prepared_context",0.0499999999999545,0.357142857142277,3,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".v2_context_evidence",0.0499999999999545,0.357142857142277,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".tree_fingerprint",0.00999999999999091,0.0714285714284554,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".permutation_matrix",0.0299999999999727,0.214285714285366,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.0500000000001819,0.357142857143901,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",199,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".prepare_analysis",0.399999999999864,0.571428571428339,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".validated_context",0.0599999999999454,0.0857142857142022,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".v2_context_evidence",0.0499999999999545,0.0714285714285018,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".tree_fingerprint",0.00999999999999091,0.0142857142857004,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng","fast_k_tree_permutation_cpp",0.300000000000182,0.428571428571661,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".prepare_analysis",0.410000000000082,0.401960784313813,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".validated_context",0.0600000000001728,0.0588235294119352,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".v2_context_evidence",0.0299999999999727,0.0294117647058561,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".tree_fingerprint",0.00999999999999091,0.00980392156861871,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".permutation_matrix",0.3599999999999,0.352941176470496,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.25,0.245098039215691,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",999,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".prepare_analysis",0.0399999999999636,0.117647058823372,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".validated_context",0.0399999999999636,0.117647058823372,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".validate_prepared_context",0.0399999999999636,0.117647058823372,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".v2_context_evidence",0.0299999999999727,0.088235294117529,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".tree_fingerprint",0.0199999999999818,0.058823529411686,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng","fast_k_tree_permutation_cpp",0.290000000000191,0.852941176470785,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".prepare_analysis",0.0599999999999454,0.0799999999999272,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".validated_context",0.0599999999999454,0.0799999999999272,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".validate_prepared_context",0.0599999999999454,0.0799999999999272,3,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".v2_context_evidence",0.0599999999999454,0.0799999999999272,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".tree_fingerprint",0.0299999999999727,0.0399999999999636,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".permutation_matrix",0.360000000000127,0.48000000000017,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.329999999999927,0.439999999999903,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"prepared",999,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".prepare_analysis",0.3900000000001,0.118541033434682,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".validated_context",0.0700000000001637,0.0212765957447308,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".v2_context_evidence",0.040000000000191,0.0121580547113044,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".tree_fingerprint",0.040000000000191,0.0121580547113044,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng","fast_k_tree_permutation_cpp",2.89999999999986,0.881458966565318,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"raw",9999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".prepare_analysis",0.0700000000001637,0.0217391304348333,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".validated_context",0.0700000000001637,0.0217391304348333,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".validate_prepared_context",0.0700000000001637,0.0217391304348333,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".v2_context_evidence",0.0700000000001637,0.0217391304348333,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".tree_fingerprint",0.00999999999999091,0.00310559006210895,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng","fast_k_tree_permutation_cpp",3.13999999999987,0.975155279503058,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",5000,"prepared",9999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".prepare_analysis",0.990000000000009,0.876106194690365,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".validated_context",0.210000000000036,0.185840707964653,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".v2_context_evidence",0.129999999999882,0.115044247787518,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".tree_fingerprint",0.0499999999999545,0.0442477876105839,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng","fast_k_tree_permutation_cpp",0.129999999999882,0.115044247787518,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".prepare_analysis",1.12999999999988,0.801418439716311,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".validated_context",0.25,0.177304964539025,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".v2_context_evidence",0.100000000000136,0.0709219858157069,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".tree_fingerprint",0.0299999999999727,0.0212765957446637,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".permutation_matrix",0.120000000000118,0.085106382978816,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.159999999999854,0.113475177304873,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",199,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".prepare_analysis",0.170000000000073,0.515151515151494,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".validated_context",0.160000000000082,0.484848484848506,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".validate_prepared_context",0.160000000000082,0.484848484848506,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".v2_context_evidence",0.150000000000091,0.454545454545517,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".tree_fingerprint",0.0399999999999636,0.121212121211954,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng","fast_k_tree_permutation_cpp",0.1400000000001,0.424242424242529,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".prepare_analysis",0.130000000000109,0.393939393939812,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".validated_context",0.110000000000127,0.333333333333793,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".validate_prepared_context",0.110000000000127,0.333333333333793,3,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".v2_context_evidence",0.0900000000001455,0.272727272727774,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".tree_fingerprint",0.0299999999999727,0.0909090909090283,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".permutation_matrix",0.0899999999999181,0.272727272727085,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations","fast_k_tree_permutation_cpp",0.1099999999999,0.333333333333104,1,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"prepared",199,1,"controlled_permutations",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","controlled matrix generated outside public timed call","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".prepare_analysis",1,0.609756097560938,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".validated_context",0.200000000000045,0.121951219512215,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".v2_context_evidence",0.110000000000127,0.0670731707317809,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".tree_fingerprint",0.0500000000001819,0.0304878048781578,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng","fast_k_tree_permutation_cpp",0.630000000000109,0.384146341463458,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".prepare_analysis",0.0999999999999091,0.133333333333212,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".validated_context",0.0999999999999091,0.133333333333212,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".validate_prepared_context",0.0999999999999091,0.133333333333212,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".v2_context_evidence",0.0999999999999091,0.133333333333212,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".tree_fingerprint",0.0299999999999727,0.0399999999999636,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng","fast_k_tree_permutation_cpp",0.6400000000001,0.853333333333467,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".prepare_analysis",1.00999999999999,0.133069828722003,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".validated_context",0.190000000000055,0.0250329380764238,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".validate_prepared_context",0,0,2,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".v2_context_evidence",0.0900000000001455,0.0118577075099007,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".tree_fingerprint",0.0299999999999727,0.00395256916995692,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng","fast_k_tree_permutation_cpp",6.57999999999993,0.866930171277997,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"raw",9999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".prepare_analysis",0.110000000000127,0.0164424514200488,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".validated_context",0.110000000000127,0.0164424514200488,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".validate_prepared_context",0.110000000000127,0.0164424514200488,3,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".v2_context_evidence",0.110000000000127,0.0164424514200488,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".tree_fingerprint",0.0500000000001819,0.00747384155458617,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".v2_protected_snapshot",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".prepared_tree_subset",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".analysis_na_groups",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".as_trait_matrix",0,0,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".permutation_matrix",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng","fast_k_tree_batch_cpp",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng","fast_k_tree_permutation_cpp",6.56999999999994,0.982062780269041,1,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng",".k_permutation_mcse",0,0,0,"diagnostic; inclusive helpers may overlap","","ok","","",0
+"K","permutation","random",10000,"prepared",9999,1,"internal_rng","result_construction_and_unattributed_remainder",0,NA,NA,"derived residual; phase helpers are inclusive","C++ permutation call includes internal RNG, trait gather, null K and exceedance reduction","ok","","",0

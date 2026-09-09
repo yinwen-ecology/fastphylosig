@@ -1,0 +1,94 @@
+"method","shape","n","workload","path","pair","position","repeats","nsim","ncores","elapsed_ms","status","error_message","error_class","warning_count","warning_text","estimate"
+"Delta","random",50,"test_false","prepare_tree",0,NA,10,NA,1,9.9999999999999,"ok","","",0,"",NA
+"Delta","random",50,"test_false","raw",1,1,3,NA,1,30,"ok","","",0,"",0.00207731796192532
+"Delta","random",50,"test_false","prepared",1,2,3,NA,1,40,"ok","","",0,"",0.00207731796192532
+"Delta","random",50,"test_false","prepared",2,1,3,NA,1,29.9999999999999,"ok","","",0,"",0.0020310711982122
+"Delta","random",50,"test_false","raw",2,2,3,NA,1,30,"ok","","",0,"",0.0020310711982122
+"Delta","random",50,"test_false","raw",3,1,3,NA,1,30,"ok","","",0,"",0.00205215383953914
+"Delta","random",50,"test_false","prepared",3,2,3,NA,1,10,"ok","","",0,"",0.00205215383953914
+"Delta","random",50,"test_true_nsim_19","raw",1,1,3,19,1,330,"ok","","",0,"",0.00204398110222881
+"Delta","random",50,"test_true_nsim_19","prepared",1,2,3,19,1,330,"ok","","",0,"",0.00204398110222881
+"Delta","random",50,"test_true_nsim_19","prepared",2,1,3,19,1,330,"ok","","",0,"",0.00206334262789951
+"Delta","random",50,"test_true_nsim_19","raw",2,2,3,19,1,330,"ok","","",0,"",0.00206334262789951
+"Delta","random",50,"test_true_nsim_19","raw",3,1,3,19,1,330,"ok","","",0,"",0.00202827058542749
+"Delta","random",50,"test_true_nsim_19","prepared",3,2,3,19,1,330,"ok","","",0,"",0.00202827058542749
+"Delta","random",50,"test_true_nsim_199","raw",1,1,3,199,1,3270,"ok","","",0,"",0.00202976662686868
+"Delta","random",50,"test_true_nsim_199","prepared",1,2,3,199,1,3250,"ok","","",0,"",0.00202976662686868
+"Delta","random",50,"test_true_nsim_199","prepared",2,1,3,199,1,3270,"ok","","",1,"transition-rate optimization did not converge: singular convergence (7)",0.00203646958946294
+"Delta","random",50,"test_true_nsim_199","raw",2,2,3,199,1,3280,"ok","","",1,"transition-rate optimization did not converge: singular convergence (7)",0.00203646958946294
+"Delta","random",50,"test_true_nsim_199","raw",3,1,3,199,1,3250,"ok","","",1,"transition-rate optimization did not converge: singular convergence (7)",0.00203646278253671
+"Delta","random",50,"test_true_nsim_199","prepared",3,2,3,199,1,3250,"ok","","",1,"transition-rate optimization did not converge: singular convergence (7)",0.00203646278253671
+"Delta","random",50,"test_true_nsim_19","raw",1,1,3,19,2,529.999999999998,"ok","","",0,"",0.00206334262789951
+"Delta","random",50,"test_true_nsim_19","prepared",1,2,3,19,2,500,"ok","","",0,"",0.00206334262789951
+"Delta","random",50,"test_true_nsim_19","prepared",2,1,3,19,2,500,"ok","","",0,"",0.00202827058542749
+"Delta","random",50,"test_true_nsim_19","raw",2,2,3,19,2,520.000000000003,"ok","","",0,"",0.00202827058542749
+"Delta","random",50,"test_true_nsim_19","raw",3,1,3,19,2,530.000000000001,"ok","","",0,"",0.00204050873359838
+"Delta","random",50,"test_true_nsim_19","prepared",3,2,3,19,2,500,"ok","","",0,"",0.00204050873359838
+"Delta","random",50,"test_true_nsim_199","raw",1,1,3,199,2,2050,"ok","","",0,"",0.00203646958946294
+"Delta","random",50,"test_true_nsim_199","prepared",1,2,3,199,2,2059.99999999999,"ok","","",0,"",0.00203646958946294
+"Delta","random",50,"test_true_nsim_199","prepared",2,1,3,199,2,2060,"ok","","",0,"",0.00203646278253671
+"Delta","random",50,"test_true_nsim_199","raw",2,2,3,199,2,2040,"ok","","",0,"",0.00203646278253671
+"Delta","random",50,"test_true_nsim_199","raw",3,1,3,199,2,2070,"ok","","",0,"",0.00204325811639565
+"Delta","random",50,"test_true_nsim_199","prepared",3,2,3,199,2,2080,"ok","","",0,"",0.00204325811639565
+"Delta","random",100,"test_false","prepare_tree",0,NA,10,NA,1,0,"ok","","",0,"",NA
+"Delta","random",100,"test_false","raw",1,1,3,NA,1,50.0000000000043,"ok","","",0,"",0.0010210191539918
+"Delta","random",100,"test_false","prepared",1,2,3,NA,1,30.0000000000011,"ok","","",0,"",0.0010210191539918
+"Delta","random",100,"test_false","prepared",2,1,3,NA,1,30.0000000000011,"ok","","",0,"",0.00100376200029206
+"Delta","random",100,"test_false","raw",2,2,3,NA,1,30.0000000000011,"ok","","",0,"",0.00100376200029206
+"Delta","random",100,"test_false","raw",3,1,3,NA,1,29.999999999994,"ok","","",0,"",0.00101941308221315
+"Delta","random",100,"test_false","prepared",3,2,3,NA,1,30.0000000000011,"ok","","",0,"",0.00101941308221315
+"Delta","random",100,"test_true_nsim_19","raw",1,1,3,19,1,369.999999999997,"ok","","",0,"",0.00101845014998992
+"Delta","random",100,"test_true_nsim_19","prepared",1,2,3,19,1,359.999999999999,"ok","","",0,"",0.00101845014998992
+"Delta","random",100,"test_true_nsim_19","prepared",2,1,3,19,1,350.000000000001,"ok","","",1,"transition-rate optimization did not converge: singular convergence (7)",0.00101505534014111
+"Delta","random",100,"test_true_nsim_19","raw",2,2,3,19,1,369.999999999997,"ok","","",1,"transition-rate optimization did not converge: singular convergence (7)",0.00101505534014111
+"Delta","random",100,"test_true_nsim_19","raw",3,1,3,19,1,390.000000000001,"ok","","",0,"",0.00101974418336347
+"Delta","random",100,"test_true_nsim_19","prepared",3,2,3,19,1,390.000000000001,"ok","","",0,"",0.00101974418336347
+"Delta","random",100,"test_true_nsim_199","raw",1,1,3,199,1,3640,"ok","","",1,"transition-rate optimization did not converge: singular convergence (7)",0.00101679057617197
+"Delta","random",100,"test_true_nsim_199","prepared",1,2,3,199,1,3720,"ok","","",1,"transition-rate optimization did not converge: singular convergence (7)",0.00101679057617197
+"Delta","random",100,"test_true_nsim_199","prepared",2,1,3,199,1,3750,"ok","","",0,"",0.00101226051330189
+"Delta","random",100,"test_true_nsim_199","raw",2,2,3,199,1,3810,"ok","","",0,"",0.00101226051330189
+"Delta","random",100,"test_true_nsim_199","raw",3,1,3,199,1,3770.00000000001,"ok","","",0,"",0.00101415596657206
+"Delta","random",100,"test_true_nsim_199","prepared",3,2,3,199,1,3690,"ok","","",0,"",0.00101415596657206
+"Delta","random",100,"test_true_nsim_19","raw",1,1,3,19,2,530.000000000001,"ok","","",0,"",0.00101505534014111
+"Delta","random",100,"test_true_nsim_19","prepared",1,2,3,19,2,549.999999999997,"ok","","",0,"",0.00101505534014111
+"Delta","random",100,"test_true_nsim_19","prepared",2,1,3,19,2,529.999999999987,"ok","","",0,"",0.00101974418336347
+"Delta","random",100,"test_true_nsim_19","raw",2,2,3,19,2,530.000000000001,"ok","","",0,"",0.00101974418336347
+"Delta","random",100,"test_true_nsim_19","raw",3,1,3,19,2,549.999999999997,"ok","","",0,"",0.00101516185895916
+"Delta","random",100,"test_true_nsim_19","prepared",3,2,3,19,2,500,"ok","","",0,"",0.00101516185895916
+"Delta","random",100,"test_true_nsim_199","raw",1,1,3,199,2,2289.99999999999,"ok","","",0,"",0.00101226051330189
+"Delta","random",100,"test_true_nsim_199","prepared",1,2,3,199,2,2300,"ok","","",0,"",0.00101226051330189
+"Delta","random",100,"test_true_nsim_199","prepared",2,1,3,199,2,2240.00000000001,"ok","","",0,"",0.00101415596657206
+"Delta","random",100,"test_true_nsim_199","raw",2,2,3,199,2,2250,"ok","","",0,"",0.00101415596657206
+"Delta","random",100,"test_true_nsim_199","raw",3,1,3,199,2,2279.99999999999,"ok","","",0,"",0.00100236248050076
+"Delta","random",100,"test_true_nsim_199","prepared",3,2,3,199,2,2319.99999999999,"ok","","",0,"",0.00100236248050076
+"Delta","random",500,"test_false","prepare_tree",0,NA,10,NA,1,30.0000000000011,"ok","","",0,"",NA
+"Delta","random",500,"test_false","raw",1,1,3,NA,1,90.0000000000034,"ok","","",0,"",0.000210798310959128
+"Delta","random",500,"test_false","prepared",1,2,3,NA,1,60.0000000000023,"ok","","",0,"",0.000210798310959128
+"Delta","random",500,"test_false","prepared",2,1,3,NA,1,60.0000000000023,"ok","","",0,"",0.000209773547214439
+"Delta","random",500,"test_false","raw",2,2,3,NA,1,90.0000000000034,"ok","","",0,"",0.000209773547214439
+"Delta","random",500,"test_false","raw",3,1,3,NA,1,90.0000000000034,"ok","","",0,"",0.000210060285754164
+"Delta","random",500,"test_false","prepared",3,2,3,NA,1,60.0000000000023,"ok","","",0,"",0.000210060285754164
+"Delta","random",500,"test_true_nsim_19","raw",1,1,3,19,1,769.999999999996,"ok","","",0,"",0.000211085005025464
+"Delta","random",500,"test_true_nsim_19","prepared",1,2,3,19,1,720.000000000013,"ok","","",0,"",0.000211085005025464
+"Delta","random",500,"test_true_nsim_19","prepared",2,1,3,19,1,729.99999999999,"ok","","",0,"",0.000209975538741238
+"Delta","random",500,"test_true_nsim_19","raw",2,2,3,19,1,780.000000000001,"ok","","",0,"",0.000209975538741238
+"Delta","random",500,"test_true_nsim_19","raw",3,1,3,19,1,740.000000000009,"ok","","",0,"",0.000209905665645226
+"Delta","random",500,"test_true_nsim_19","prepared",3,2,3,19,1,719.999999999999,"ok","","",0,"",0.000209905665645226
+"Delta","random",500,"test_true_nsim_199","raw",1,1,3,199,1,6709.99999999998,"ok","","",0,"",0.000209940034900171
+"Delta","random",500,"test_true_nsim_199","prepared",1,2,3,199,1,6690,"ok","","",0,"",0.000209940034900171
+"Delta","random",500,"test_true_nsim_199","prepared",2,1,3,199,1,6620,"ok","","",3,"transition-rate optimization did not converge: singular convergence (7)",0.000210487412984424
+"Delta","random",500,"test_true_nsim_199","raw",2,2,3,199,1,6669.99999999999,"ok","","",3,"transition-rate optimization did not converge: singular convergence (7)",0.000210487412984424
+"Delta","random",500,"test_true_nsim_199","raw",3,1,3,199,1,6840,"ok","","",2,"transition-rate optimization did not converge: singular convergence (7)",0.000209803400726871
+"Delta","random",500,"test_true_nsim_199","prepared",3,2,3,199,1,6830.00000000001,"ok","","",2,"transition-rate optimization did not converge: singular convergence (7)",0.000209803400726871
+"Delta","random",500,"test_true_nsim_19","raw",1,1,3,19,2,780.000000000001,"ok","","",0,"",0.000209975538741238
+"Delta","random",500,"test_true_nsim_19","prepared",1,2,3,19,2,729.99999999999,"ok","","",0,"",0.000209975538741238
+"Delta","random",500,"test_true_nsim_19","prepared",2,1,3,19,2,759.999999999991,"ok","","",0,"",0.000209905665645226
+"Delta","random",500,"test_true_nsim_19","raw",2,2,3,19,2,770.00000000001,"ok","","",0,"",0.000209905665645226
+"Delta","random",500,"test_true_nsim_19","raw",3,1,3,19,2,730.000000000018,"ok","","",0,"",0.000209680037333875
+"Delta","random",500,"test_true_nsim_19","prepared",3,2,3,19,2,700.000000000017,"ok","","",0,"",0.000209680037333875
+"Delta","random",500,"test_true_nsim_199","raw",1,1,3,199,2,3849.99999999999,"ok","","",0,"",0.000210487412984424
+"Delta","random",500,"test_true_nsim_199","prepared",1,2,3,199,2,3819.99999999999,"ok","","",0,"",0.000210487412984424
+"Delta","random",500,"test_true_nsim_199","prepared",2,1,3,199,2,3910,"ok","","",0,"",0.000209803400726871
+"Delta","random",500,"test_true_nsim_199","raw",2,2,3,199,2,4259.99999999999,"ok","","",0,"",0.000209803400726871
+"Delta","random",500,"test_true_nsim_199","raw",3,1,3,199,2,3889.99999999999,"ok","","",0,"",0.000209924770626156
+"Delta","random",500,"test_true_nsim_199","prepared",3,2,3,199,2,3849.99999999999,"ok","","",0,"",0.000209924770626156

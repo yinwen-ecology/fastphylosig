@@ -1,0 +1,8 @@
+"check","pass","detail"
+"raw_prepared_K_parity",TRUE,"raw=0.411402397991805 prepared=0.411402397991805"
+"raw_prepared_status_parity",TRUE,"ok / ok"
+"controlled_permutation_raw_prepared_parity",TRUE,"same supplied permutation matrix"
+"controlled_permutation_status_parity",TRUE,"ok / ok"
+"edge_order_representation_parity",TRUE,"cladewise versus fixed random fixture"
+"tree_input_immutability",TRUE,"tree serialization unchanged"
+"trait_input_immutability",TRUE,"trait serialization unchanged"

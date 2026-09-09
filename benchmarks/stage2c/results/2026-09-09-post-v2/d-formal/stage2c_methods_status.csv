@@ -1,0 +1,2 @@
+"stage","quick_mode","formal_rows","formal_ok_rows","resource_limit_rows","correctness_guard_rows","correctness_guard_pass","correctness_all_pass","production_code_changed","benchmark_processes_concurrent","note"
+"Stage 2C methods",FALSE,483,483,0,1,1,TRUE,FALSE,FALSE,"Phase trace rows are inclusive and non-authoritative when overhead exceeds 5 percent."

@@ -1,0 +1,3 @@
+"method","workers","startup_ms","status","note"
+"D",1,0,"NOT_APPLICABLE","Serial route has no worker startup."
+"D",2,NA,"NOT_APPLICABLE","D ncores is an OpenMP/kernel control; no PSOCK worker startup is used."

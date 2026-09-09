@@ -1,0 +1,2 @@
+"stage","status","correctness_guard","production_code_changed","candidate_implemented","formal_run","next_stage"
+"Stage 2C K-only","PASS","PASS","NO","NO",TRUE,"STOP; do not implement candidate automatically"

@@ -2,11 +2,12 @@
 
 ## Scope
 
-This directory contains an audit harness only. It does not change production
-code, tests, estimators, numerical formulas, RNG behavior, thread policy, or
-the common preparation engine. The harness is for the Stage 2C post-V2
-performance reprofile and is intentionally limited here to prepared-context
-memory, serialization, and provenance.
+This protocol defines the prepared-context memory, serialization,
+fresh-process revalidation, and provenance portion of Stage 2C. Estimator
+timings are collected by the separate K and method harnesses in this directory;
+their evidence is stored beside the context evidence. None of these harnesses
+changes production code, tests, estimators, numerical formulas, RNG behavior,
+thread policy, or the common preparation engine.
 
 The V2-B frozen state is an input to this audit:
 
@@ -159,6 +160,19 @@ separate estimator benchmark reaches a resource or time limit, report
 
 ## Current execution status
 
-Adding this harness is not evidence that the formal grid has run. Until an
-output directory containing the CSV files and session/provenance records is
-attached, the context profile is `INCOMPLETE`.
+The serialized formal grid completed on 2026-09-09. Its CSV files,
+session/provenance records, rebuilt NA-safe method summaries, route budget,
+and hotspot gates are stored under
+`results/2026-09-09-post-v2/`. The corresponding expert decision is recorded
+in the repository-root `review.md`.
+
+The original lambda `stage2c_methods_summary.csv` is superseded because an
+`NA` grouping key produced an empty file. Use
+`stage2c_methods_summary_rebuilt.csv`. The final candidate authorization is
+`stage2c_final_candidate_decisions.csv`; the older K all-grid candidate table
+remains diagnostic and does not override the specified heavy-workload gate.
+
+```text
+STAGE2C = PASS
+PRODUCTION_CODE_CHANGED = NO
+```

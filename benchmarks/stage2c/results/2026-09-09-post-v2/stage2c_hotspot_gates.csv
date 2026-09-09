@@ -1,0 +1,4 @@
+"method","representative_workload","hotspot","hotspot_share_pct","share_interpretation","ideal_end_to_end_ceiling_pct"
+"K","prepared n=10000, nsim=9999, internal RNG","permutation C++ engine",98.2062780269041,"single low-overhead phase probe; inclusive share",98.2062780269041
+"D","prepared n=2000, nsim=9999, ncores=1","random/Brownian null simulation",96.0167714884696,"lower bound from added 9800 simulations",96.0167714884696
+"Delta","prepared n=500, nsim=199, ncores=1","MCMC plus permutation ACE",89.2376681614348,"lower bound from added 180 test simulations",89.2376681614348
