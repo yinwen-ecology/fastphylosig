@@ -1024,6 +1024,7 @@ startup_probe <- function(method, workers, seed) {
   if (identical(method, "D") && workers > 1L) {
     return(data.frame(
       method = method, workers = workers, startup_ms = NA_real_, status = "NOT_APPLICABLE",
+      error_message = "",
       note = "D ncores is an OpenMP/kernel control; no PSOCK worker startup is used.",
       stringsAsFactors = FALSE
     ))
@@ -1050,6 +1051,7 @@ startup_probe <- function(method, workers, seed) {
     return(data.frame(
       method = method, workers = workers, startup_ms = 0,
       status = "NOT_APPLICABLE",
+      error_message = "",
       note = "Serial route has no worker startup.", stringsAsFactors = FALSE
     ))
   }
