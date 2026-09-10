@@ -1,0 +1,6 @@
+"check","case","oracle_status","candidate_status","oracle_error_class","candidate_error_class","oracle_error","candidate_error","pass"
+"malformed_permutation","duplicate","error","error","Rcpp::exception/C++Error/error/condition","Rcpp::exception/C++Error/error/condition","each permutation row must contain 1:n exactly once.","each permutation row must contain 1:n exactly once.",TRUE
+"malformed_permutation","out_of_range","error","error","Rcpp::exception/C++Error/error/condition","Rcpp::exception/C++Error/error/condition","each permutation row must contain 1:n exactly once.","each permutation row must contain 1:n exactly once.",TRUE
+"malformed_permutation","wrong_dimension","error","error","Rcpp::exception/C++Error/error/condition","Rcpp::exception/C++Error/error/condition","permutations must have nsim rows and one column per tip.","permutations must have nsim rows and one column per tip.",TRUE
+"nonfinite_trait","NA","error","error","Rcpp::exception/C++Error/error/condition","Rcpp::exception/C++Error/error/condition","X must contain only finite values.","X must contain only finite values.",TRUE
+"invalid_block_size","3",NA,"error",NA,"Rcpp::exception/C++Error/error/condition",NA,"block_size must be one of 2, 4, 8, or 16.",TRUE

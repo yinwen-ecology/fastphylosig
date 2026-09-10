@@ -1,0 +1,2 @@
+"status","mode","reason","production_code_changed","public_api_changed","rng_policy_changed","controlled_rows","controlled_failures","replicate_rows","rng_rows","failure_rows","immutability_rows","batch_rows","counter_rows","candidate_old_compute_one_calls_zero","candidate_oracle_call_count_zero","candidate_compute_count_positive","controlled_bitwise_exact","rng_replay_exact"
+"PASS","formal","all Stage 2D2B correctness/provenance gates passed","NO","NO","NO",288,0,8283,96,5,1,4,388,TRUE,TRUE,TRUE,TRUE,TRUE

@@ -1,0 +1,2 @@
+"status","stage","mode","candidate","production_code_changed","reason"
+"NOT_RUN","Stage 2D2B benchmark","full","B","NO","evaluation gate is not PASS (status=FAIL)."

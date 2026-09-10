@@ -1,0 +1,2 @@
+"status","stage","mode","candidate","production_code_changed","reason"
+"NOT_RUN","Stage 2D2B benchmark","guards","B","NO","full-pipeline gate is not PASS (status=NOT_RUN)."
