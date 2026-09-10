@@ -86,11 +86,18 @@ read_csv_gate <- function(path, label) {
   value
 }
 
-exactness_path <- env_or(
-  "FASTPHYLOSIG_STAGE2D2B_EXACTNESS_STATUS",
-  file.path(args$repo, "benchmarks", "stage2d2b", "results", "exactness",
-            "stage2d2b_exactness_status.csv")
+default_exactness_path <- file.path(
+  args$repo, "benchmarks", "stage2d2b", "results", "exactness",
+  "stage2d2b_exactness_status.csv"
 )
+compat_exactness_path <- file.path(
+  args$repo, "benchmarks", "stage2d2b", "results", "correctness",
+  "stage2d2b_correctness_status.csv"
+)
+configured_exactness <- env_or("FASTPHYLOSIG_STAGE2D2B_EXACTNESS_STATUS")
+exactness_path <- if (nzchar(configured_exactness)) configured_exactness else
+  if (file.exists(default_exactness_path)) default_exactness_path else
+    compat_exactness_path
 exactness_path <- normalizePath(exactness_path, winslash = "/", mustWork = FALSE)
 # This is the first gate.  No candidate or oracle is compiled before it.
 exactness_status <- read_csv_gate(exactness_path, "Stage 2D2B exactness")
@@ -259,11 +266,13 @@ load_hooks <- function() {
     "stage2d2b_true_blocked_k_null"
   ))
   oracle_raw <- find_export(hook_env, c(
-    "stage2d2b_k_null_oracle", "stage2d2b_k_permutation_oracle", "oracle"
+    "stage2d2b_k_null_oracle", "stage2d2b_k_permutation_oracle",
+    "stage2d2_k_null_oracle", "stage2d2_k_permutation_oracle", "oracle"
   ))
   candidate_raw <- find_export(hook_env, c(
     "stage2d2b_k_null_candidate_b", "stage2d2b_k_permutation_candidate_b",
-    "stage2d2b_candidate_b", "candidate_b"
+    "stage2d2b_candidate_b", "stage2d2_k_null_candidate_b",
+    "stage2d2_k_permutation_candidate_b", "run_candidate_b", "candidate_b"
   ))
   if (!is.null(generic)) {
     if (!bound(generic)) not_run("Generic Stage 2D2B export is not sourceCpp-bound.")
@@ -484,7 +493,10 @@ call_engine <- function(fun, compiled_tree, X, nsim, permutations, include_obser
     permutations = permutations, trait_chunk = as.integer(trait_chunk),
     return_sim = FALSE, include_observed = isTRUE(include_observed),
     n_threads = as.integer(n_threads), simulation_chunk = as.integer(simulation_chunk),
-    return_ordered = TRUE, block_size = as.integer(block_size),
+    # Ordered null payloads are required by the independent exactness gate.
+    # Timing isolates the evaluator and therefore does not request that large
+    # result matrix again; candidate counters and P/MCSE are still returned.
+    return_ordered = FALSE, block_size = as.integer(block_size),
     collect_counters = TRUE
   )
   if (!is.na(block_size) && length(fml) && !"block_size" %in% fml &&

@@ -34,8 +34,11 @@ candidate provenance gate, not evidence of correctness.
 ## Exactness prerequisite
 
 Run the independent bounded exactness harness first and set
-`FASTPHYLOSIG_STAGE2D2B_EXACTNESS_STATUS` to its status CSV. The default is
-`benchmarks/stage2d2b/results/exactness/stage2d2b_exactness_status.csv`.
+`FASTPHYLOSIG_STAGE2D2B_EXACTNESS_STATUS` to its status CSV. The preferred
+default is `benchmarks/stage2d2b/results/exactness/stage2d2b_exactness_status.csv`;
+the runner also accepts the existing correctness output
+`benchmarks/stage2d2b/results/correctness/stage2d2b_correctness_status.csv`
+when the preferred file is absent.
 The status must be `PASS`; a missing file, a non-PASS status, a non-zero old
 `compute_one` counter, or a source hash mismatch produces `NOT_RUN` and no
 timings. The exactness harness is responsible for controlled permutation,
