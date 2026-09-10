@@ -17,7 +17,10 @@ candidate. The translation unit must expose either:
 * two sourceCpp exports, one named `stage2d2b_k_null_oracle` (or
   `stage2d2b_k_permutation_oracle`) and one named
   `stage2d2b_k_null_candidate_b` (or
-  `stage2d2b_k_permutation_candidate_b`).
+  `stage2d2b_k_permutation_candidate_b`). The historical audit names
+  `stage2d2_k_permutation_oracle`, `stage2d2_k_permutation_candidate_b`, and
+  `run_candidate_b` are accepted as aliases, but they must still be exports
+  from the same translation unit.
 
 The runner rejects pairs that are not sourceCpp-bound from the same
 translation unit. Candidate results must report the audit counters in the
