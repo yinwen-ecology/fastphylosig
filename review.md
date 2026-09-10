@@ -1,185 +1,241 @@
-# fastphylosig 0.2.0 Stage 2D1 Expert Review
+# fastphylosig 0.2.0 Stage 2D2 Expert Review
 
-## 1. Decision
+## 1. Final Decision
 
 ```text
-K_PERMUTATION_PROTOTYPE = FAIL
+STAGE2D2_PHASE_DECOMPOSITION = PASS
 CANDIDATE_A = REJECT
 CANDIDATE_B = REJECT
-CANDIDATE_C = ALREADY_PRESENT / NOT_WORTH_COMPLEXITY
+CANDIDATE_C = REJECT
 PRODUCTION_CANDIDATE_SET = NONE
-PRODUCTION_INTEGRATION = NOT_RUN
 PRODUCTION_CODE_CHANGED = NO
+
+K_NUMERICAL_NULL_PROTOTYPE = FAIL
+K_OPTIMIZATION_0_2_0 = CLOSED_FINAL
+NEXT_STAGE = D_NULL_ENGINE
 ```
 
-Candidates A and B are scientifically exact private prototypes, but neither
-produced the required end-to-end saving. They must not be integrated merely
-because they reduce allocation or copy counts. Candidate C has no remaining
-target: production already reads trait values through permutation indices and
-does not construct a complete permuted-trait vector.
+The evaluation phase is a genuine heavy-workload bottleneck, but none of the
+three exact bounded candidates satisfies the predefined performance and
+scientific gates. No prototype is suitable for production integration.
 
-## 2. Frozen Scope And Provenance
+## 2. Scope And Provenance
 
 | Item | Evidence |
 |---|---|
-| Production source | `baea4cf3306b2e9c314d446782dfbe0b98263db6` |
+| Audited production snapshot | `57d7cccb3889fed603b8454c6b8963d28bc33705` |
+| Branch | `codex/fastphylosig-0.2.0-dev` |
 | Package | fastphylosig `0.2.0.9000` |
-| Runtime | R 4.6.1 UCRT, Windows x86-64, 16 logical cores |
+| Runtime | R 4.6.1 UCRT, Windows x86-64 |
 | Compiler | GCC 14.3.0 through the installed Rtools toolchain |
-| Formal timing | fixed fixtures, warmup, serialized cells, alternating order, 10 paired repeats |
-| Prepared grid | `n=500/2000/5000/10000`; `nsim=199/999/9999`; 1 and 2 threads |
-| Production files changed | none in `R/`, `src/`, `tests/`, `DESCRIPTION`, `NAMESPACE`, or public API |
+| Formal timing | warmup, serialized cells, alternating order, 10 paired repeats |
+| Production files changed | none in `R/`, `src/`, `tests/`, `DESCRIPTION`, or `NAMESPACE` |
 
-The prototype lives only under `benchmarks/stage2d1/prototype/` and is loaded
-with `Rcpp::sourceCpp()`. It is not registered in package bindings. The local
-R startup emitted host `C.UTF-8` locale warnings; the package calls and audit
-captures were warning-free.
+All candidates are private `Rcpp::sourceCpp()` prototypes under
+`benchmarks/stage2d2/prototype/`. Each oracle and candidate was compiled in
+the same translation unit. The ASCII staging directory was intentionally not
+a Git checkout, so raw runner provenance records `source_commit=UNAVAILABLE`;
+the production source was copied from the Git snapshot above. Prototype
+SHA-256 values are recorded by the machine-readable provenance files.
 
-## 3. Frozen RNG Contract
+## 3. Phase Decomposition
 
-The default internal K permutation path uses R's RNG through `R::runif()` and
-a custom Fisher-Yates shuffle. The identity first replicate consumes no random
-draws. Every later replicate consumes exactly `n - 1` uniform draws in the
-same order. Permutations are generated serially before OpenMP evaluation.
+Generation-only performs identity initialization and the frozen descending
+Fisher-Yates stream. Evaluation-only consumes pre-generated controlled
+permutations and calls the production-equivalent K evaluator. Full-pipeline
+timing includes both. These are independent timings and are not assumed to be
+strictly additive.
 
-Stage 2D1 preserves the existing promise: identical seed, retained-species
-order, arguments, chunk setting, and worker configuration replay exactly.
-Existing tests additionally demonstrate current chunk and thread invariance;
-this audit preserves that behavior but does not create a broader public RNG
-promise across platforms, RNG kinds, or arbitrary future schedulers.
+Heavy-cell medians are seconds; parentheses contain IQR.
 
-## 4. Production Hot Loop
+| n | nsim | Threads | Generation | Evaluation | Full | Generation | Evaluation | Integration residual |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 5,000 | 9,999 | 1 | 0.596 (0.010) | 2.119 (0.024) | 2.782 (0.033) | 21.4% | 76.1% | 2.4% |
+| 5,000 | 9,999 | 2 | 0.584 (0.021) | 1.100 (0.014) | 1.882 (0.021) | 31.1% | 58.4% | 10.5% |
+| 10,000 | 9,999 | 1 | 1.169 (0.017) | 4.655 (0.019) | 5.941 (0.022) | 19.7% | 78.4% | 2.0% |
+| 10,000 | 9,999 | 2 | 1.186 (0.023) | 2.387 (0.037) | 3.753 (0.018) | 31.6% | 63.6% | 4.8% |
 
-For each internally generated replicate, production performs:
+The evaluation fraction exceeds the 50% authorization threshold in every
+representative heavy cell. OpenMP one- and two-thread execution and RNG replay
+both passed. P/MCSE locals in the phase harness are not part of the returned
+checksum and may be compiler-elided, so the small integration residual is not
+treated as separately authoritative. This limitation cannot overturn the
+evaluation gate because evaluation alone remains 58.4-78.4% of full time.
 
-1. one `n`-integer permutation allocation;
-2. one identity reset and `n - 1` Fisher-Yates steps;
-3. one `n`-integer generation-to-chunk copy;
-4. one `n`-integer chunk-to-worker copy;
-5. direct trait access through permutation indices, with no full trait gather;
-6. four numeric K work-vector allocations per `compute_one()` call;
-7. one exceedance update per trait and optional null-result storage.
+## 4. `compute_one()` Numerical Audit
 
-At `n=5000`, `nsim=999`, one trait, the measured audit counts were:
+Each replicate creates four local numeric workspaces:
 
-| Mode | Index allocations | Generation to chunk | Chunk to worker | Trait gather allocations | Peak workspace proxy |
-|---|---:|---:|---:|---:|---:|
-| Exact private oracle | 1007 | 4,995,000 | 4,995,000 | 0 | 2.76 MB |
-| A | 9 | 4,995,000 | 4,995,000 | 0 | 2.76 MB |
-| B | 1 | 4,995,000 | 0 | 0 | 2.74 MB |
+| Workspace | Length per active trait chunk | Purpose |
+|---|---:|---|
+| `message` | `N * c` doubles | upward Gaussian messages |
+| `state` | `N * c` doubles | downward conditional states |
+| `baseline` | `c` doubles | baseline-relative precision control |
+| `delta` | `c` doubles | phylogenetic GLS mean offset |
 
-All modes retained 4,995,000 identity-initialization elements, 4,989,002
-shuffle swaps, 25,001,000 indexed trait reads, and 4,000 numeric workspace
-allocations. Candidate A therefore removes repeated index allocation but not
-the dominant K work. Candidate B also removes the second index copy, reducing
-the peak proxy by only 20 KB (`0.72%`). Memory remains bounded by the chunk;
-no `n_tip x nsim` permutation matrix is created.
+For each trait and replicate, the kernel performs `5*n + 1` indexed trait
+reads and `2*N + 3*e` structural node-loop visits. Its source-level arithmetic
+proxy is `12*n + 14*e + 2*i + 3`, excluding addressing, finite checks, casts,
+and hardware fusion.
 
-## 5. Exact Scientific Gates
+The tree cache already hoists `parent`, CSR children, traversal orders,
+branches, `aggregate`, `outgoing`, `sum_inv`, and K normalization. The GLS
+mean, messages, states, numerator, and residual phylogenetic energy are
+permutation-dependent and cannot be replaced with set-level trait moments.
+The only clear residual tree-only arithmetic is:
 
-Final Candidate B validation produced 1,169 gate records and 321,700
-replicate-level ordered-null comparisons. Results were:
+- `alpha = branch[node] * outgoing[node]`, twice per internal non-root node
+  and trait chunk;
+- repeated branch divisions whose replacement with reciprocal multiplication
+  would alter floating operation form and therefore was not attempted.
+
+## 5. Candidate A: Reusable Numeric Workspaces
+
+Candidate A allocates worker-local `message`, `state`, `baseline`, and `delta`
+buffers once, then resets the fields required by the next replicate. Debug
+fill and canary checks were used to detect stale state and bounds errors.
+
+Exactness result:
 
 | Gate | Result |
 |---|---|
-| Controlled-permutation null K, replicate by replicate | exact PASS |
-| Ordered internal-RNG null K | 321,700/321,700 exact |
-| Maximum absolute null-K difference | 0 |
-| Inclusive-tail exceedance mismatches | 0 |
-| Observed K, P, MCSE_P | exact PASS |
+| Bounded exactness checks | 1,410/1,410 PASS |
+| Ordered replicate rows | 103,275 exact |
+| Null K, observed K, P, MCSE, exceedance | maximum absolute difference 0 |
 | Requested/successful/failed accounting | exact PASS |
-| Same-seed, same-ncores replay | exact PASS |
-| Chunk boundaries and current chunk policy | exact PASS |
-| 1- and 2-thread configurations | exact PASS |
-| NA masks and retained analysis sets | PASS |
-| Large offset, constant, near-constant, two-tip | PASS |
-| Malformed controlled permutations and failure capture | PASS |
-| Trait/tree input immutability | PASS |
+| RNG replay, thread/chunk settings | exact PASS |
+| Input immutability | PASS |
+| Malformed controlled permutations | 3/3 PASS |
+| Workspace safety cells | 54/54 PASS |
+| Stale-state/canary failures | 0/0 |
 
-The full ordered-null CSV had SHA-256
-`972f5e1bf7ee245aa3a20ce49da12fca3366de1ae06918a332944f076b8a7442`.
-Its compact manifest is retained in the repository rather than committing a
-35 MB replicate dump.
+Formal one-thread heavy medians are seconds:
 
-## 6. Timing Calibration
+| Shape | n | Oracle | Candidate A | Speedup | Reduction |
+|---|---:|---:|---:|---:|---:|
+| balanced | 5,000 | 2.375 | 2.350 | 1.011x | 1.1% |
+| balanced | 10,000 | 4.970 | 4.880 | 1.018x | 1.8% |
+| random | 5,000 | 2.895 | 2.850 | 1.016x | 1.6% |
+| random | 10,000 | 6.185 | 6.165 | 1.003x | 0.3% |
+| pectinate | 5,000 | 3.160 | 2.990 | 1.057x | 5.4% |
+| pectinate | 10,000 | 5.960 | 5.835 | 1.021x | 2.1% |
 
-The generic prototype entry point adds a `PermView` dispatch that production
-does not need. A production-versus-private-oracle calibration on four heavy
-cells showed the private oracle was 7.1-9.7% slower. Counting and ordered-null
-storage were disabled for timing, but this structural prototype overhead
-remained.
+No cell approaches the required 20% median reduction; the maximum is 5.4%.
+Candidate A is exact but fails the performance gate and is rejected.
 
-Candidate percentages therefore use the exact private oracle compiled in the
-same translation unit. This symmetric comparison isolates the allocation and
-copy changes. The production calibration is retained separately and no
-prototype timing is presented as an installed-package speedup.
+## 6. Candidate B: Blocked Evaluation
 
-## 7. Heavy Prepared Timing
+The phase gate authorized a bounded blocked prototype, but the implementation
+failed before performance testing. Its attempted block passes are not a valid
+replacement for production `compute_one()`: they use different traversal and
+arithmetic, discard their own numerical result, and call the original
+`compute_one()` separately for every replicate. Its P/MCSE/accounting logic
+also does not reproduce the frozen identity-first contract.
 
-Representative formal medians are seconds:
+The bounded smoke gate recorded 450 checks and 201 failures. Ordered null K
+appeared unchanged only because the prototype fell back to production
+`compute_one()` for the returned K values; P differed by as much as 0.1667,
+MCSE differed by as much as 0.0314 in the displayed failing cells, and failure
+semantics did not match. Per the exact-first rule, no performance benchmark
+was run. Candidate B is rejected for scientific-contract failure, not merely
+for insufficient speed.
 
-| Candidate | n | nsim | Threads | Oracle | Candidate | Speedup | Reduction |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| A | 2,000 | 9,999 | 1 | 1.050 | 1.050 | 1.000x | 0.0% |
-| A | 5,000 | 9,999 | 1 | 2.600 | 2.575 | 1.010x | 1.0% |
-| A | 10,000 | 9,999 | 1 | 5.220 | 5.230 | 0.998x | -0.2% |
-| A | 10,000 | 9,999 | 2 | 3.220 | 3.190 | 1.009x | 0.9% |
-| B | 2,000 | 9,999 | 1 | 1.030 | 1.030 | 1.000x | 0.0% |
-| B | 5,000 | 9,999 | 1 | 2.595 | 2.555 | 1.016x | 1.5% |
-| B | 10,000 | 9,999 | 1 | 5.180 | 5.165 | 1.003x | 0.3% |
-| B | 10,000 | 9,999 | 2 | 4.250 | 4.220 | 1.007x | 0.7% |
+## 7. Candidate C: Exact Invariant Hoisting
 
-After excluding timer-resolution zero/NA cells, the largest finite B speedup
-among heavy cells was 1.075x in a short `n=500`, `nsim=9999`, two-thread cell.
-No heavy cell reached 1.20x and no two heavy cells reached 15% reduction. Both
-A and B therefore fail the predefined performance gate by a wide margin.
+Candidate C narrowly precomputes the existing double-precision expression
+`branch[node] * outgoing[node]` once per engine call and reuses it in the two
+downward passes. It does not replace division with multiplication, rearrange
+reductions, alter traversal order, or hoist permutation-dependent quantities.
 
-## 8. Light, Raw, And Batch Guards
+Its exactness gate passed all 1,410 checks and all 103,275 ordered replicate
+rows with zero difference in K, null K, P, MCSE, exceedance, or accounting.
+Formal one-thread heavy medians were:
 
-The unchanged raw public route completed every grid cell without captured
-package warnings or errors. At `n=10000`, one-thread raw medians were 1.00,
-1.42, and 5.75 seconds for `nsim=199`, `999`, and `9999` respectively. These
-are guard timings, not prototype speedups.
+| Shape | n | Oracle | Candidate C | Speedup | Reduction |
+|---|---:|---:|---:|---:|---:|
+| balanced | 5,000 | 2.325 | 2.315 | 1.004x | 0.4% |
+| balanced | 10,000 | 4.780 | 4.770 | 1.002x | 0.2% |
+| random | 5,000 | 2.795 | 2.470 | 1.132x | 11.6% |
+| random | 10,000 | 5.980 | 5.280 | 1.133x | 11.7% |
+| pectinate | 5,000 | 2.875 | 2.890 | 0.995x | -0.5% |
+| pectinate | 10,000 | 5.890 | 5.805 | 1.015x | 1.4% |
 
-The unchanged public `test=FALSE` matrix route passed for 1/8/32/100 traits;
-medians were 0.03/0.05/0.04/0.05 seconds. The private `test=TRUE` batch guard
-also had exact oracle parity for every trait count. At 32 and 100 traits,
-Candidate B measured 1.17x and 1.00x. The 1- and 8-trait cells were 0-20 ms
-and produced direction-changing timer-resolution noise, so they do not
-support a confirmed regression or a performance claim.
+Across both one- and two-thread runs, the best reduction was 11.7% and the
+best speedup was 1.133x. No cell reached 20% or 1.25x, and the effect is not
+topology-general. Candidate C is therefore rejected despite exactness.
 
-Several short prepared `nsim=199` cells also crossed the nominal 5% slowdown
-line at 10 ms timer resolution. The machine-readable light gate therefore
-remains conservatively `FAIL`; it is not waived. This has no effect on the
-decision because the independent heavy-workload gate already failed.
+## 8. Scientific And API Guards
 
-## 9. Candidate Decisions
+Candidates A and C preserved the ordered null sequence, inclusive
+`sim_K >= observed K` tail, P, MCSE, identity-first replicate, requested and
+successful counts, return ordering, RNG replay, thread/chunk behavior, trait
+masks, retained sets, large-offset traits, near-constant traits, constant
+failure, two-tip cases, and batch traits. The `test=FALSE` public matrix guard
+covered 1/8/32/100 traits. The formal runner reported:
 
-| Candidate | Exactness | Engineering effect | Performance | Decision |
-|---|---|---|---|---|
-| A: reusable generation buffer | PASS | 1007 to 9 index allocations | no material heavy saving | REJECT |
-| B: A plus direct chunk-row evaluation | PASS | removes 4,995,000 index copies in audit cell | about 0-1.6% on representative heavy cells | REJECT |
-| C: fused trait gather/evaluation | not applicable | production already has direct indexed reads | no remaining gather hotspot | ALREADY_PRESENT / NOT_WORTH_COMPLEXITY |
+```text
+light_nsim199_guard = PASS
+test_false_batch_guard = PASS
+parity_gate = PASS
+warnings_or_errors = NONE
+```
 
-## 10. Final Recommendation
+No tolerance, estimator, RNG stream, thread policy, public result, or API was
+changed. Candidate B failed these gates and is excluded.
 
-The smallest evidence-supported production candidate set is **none**. The
-index allocation and copy work is real, but it is not a meaningful fraction
-of the present heavy K permutation wall time. Integrating A or B would add
-maintenance surface without meeting the agreed benefit threshold.
+## 9. Memory And Parallel Scaling
 
-Stop Stage 2D1 here. Do not modify production bindings, redesign RNG, loosen
-scientific tolerances, or start D optimization as part of this stage.
+Candidate A uses workspace bounded by worker count, total nodes, and active
+trait chunk. Reported one-trait workspace payload was about 320 KB at
+`n=5,000` and 640 KB at `n=10,000`, with eight workspace allocations and
+10,000 replicate reuses per heavy call. It does not allocate an
+`n_tip * nsim` state matrix.
+
+Candidate A was the best fully safe reusable-workspace prototype, so it was
+used for the required parallel diagnostic. Candidate-versus-oracle speedups
+remained negligible:
+
+| n | Threads | Oracle | Candidate A | Speedup |
+|---:|---:|---:|---:|---:|
+| 5,000 | 2 | 1.910 | 1.890 | 1.011x |
+| 5,000 | 4 | 1.370 | 1.375 | 0.996x |
+| 5,000 | 8 | 1.055 | 1.025 | 1.029x |
+| 10,000 | 2 | 3.985 | 3.980 | 1.001x |
+| 10,000 | 4 | 2.765 | 2.770 | 0.998x |
+| 10,000 | 8 | 2.215 | 2.110 | 1.050x |
+
+The unchanged oracle itself scales with supported OpenMP threads, but
+workspace reuse does not improve that scaling enough to justify production
+complexity. No scheduler, thread policy, or RNG partition was changed.
+
+## 10. Candidate Matrix
+
+| Candidate | Exact gate | Performance gate | Decision |
+|---|---|---|---|
+| A: thread-local reusable workspaces | PASS | FAIL, maximum reduction 5.4% | REJECT |
+| B: blocked/batched evaluator | FAIL | NOT RUN by rule | REJECT |
+| C: exact tree-invariant `alpha` hoist | PASS | FAIL, maximum reduction 11.7% | REJECT |
+
+There is no exact candidate meeting the formal performance threshold. The
+smallest production proposal is therefore the empty set.
+
+This is the required hard stop for K optimization in 0.2.0. Do not continue
+with GPU, SIMD rewrites, approximate K, alternative RNG, unsafe validation
+paths, or another K candidate. The next bounded investigation is the D null
+engine.
 
 ## Evidence Index
 
-- [RNG contract](benchmarks/stage2d1/K_RNG_CONTRACT_STAGE2D1.md)
-- [source hot-loop audit](benchmarks/stage2d1/SOURCE_HOT_LOOP_AUDIT.md)
-- [protocol](benchmarks/stage2d1/PROTOCOL.md)
-- [machine-readable final decision](benchmarks/stage2d1/results/FINAL_DECISION.csv)
-- [Candidate A summary](benchmarks/stage2d1/results/candidate-a/stage2d1_prepared_summary.csv)
-- [Candidate B summary](benchmarks/stage2d1/results/candidate-b/stage2d1_prepared_summary.csv)
-- [final correctness status](benchmarks/stage2d1/results/candidate-b/stage2d1_correctness_status.csv)
-- [batch exactness and timing](benchmarks/stage2d1/results/candidate-b/stage2d1_batch_test_true_summary.csv)
-- [operation counters](benchmarks/stage2d1/results/operation-audit/operation_counters.csv)
-- [ordered-null manifest](benchmarks/stage2d1/results/ORDERED_NULLS_MANIFEST.csv)
+- [phase protocol](benchmarks/stage2d2/PHASE_DECOMPOSITION_PROTOCOL.md)
+- [`compute_one()` audit](benchmarks/stage2d2/COMPUTE_ONE_AUDIT.md)
+- [phase budget](benchmarks/stage2d2/results/phase-audit/stage2d2_phase_budget.csv)
+- [phase status](benchmarks/stage2d2/results/phase-audit/stage2d2_phase_status.csv)
+- [Candidate A exactness](benchmarks/stage2d2/results/correctness-a/stage2d2_correctness_status.csv)
+- [Candidate A performance](benchmarks/stage2d2/results/candidate-a-benchmark/stage2d2_candidate_benchmark_summary.csv)
+- [workspace safety](benchmarks/stage2d2/results/workspace-safety/stage2d2_workspace_safety_status.csv)
+- [Candidate A parallel scaling](benchmarks/stage2d2/results/candidate-a-parallel/stage2d2_candidate_benchmark_summary.csv)
+- [Candidate B failed gate](benchmarks/stage2d2/results/correctness-b-smoke/stage2d2_correctness_status.csv)
+- [Candidate C exactness](benchmarks/stage2d2/results/correctness-c/stage2d2_correctness_status.csv)
+- [Candidate C performance](benchmarks/stage2d2/results/candidate-c-benchmark/stage2d2_candidate_benchmark_summary.csv)
+- [ordered-null evidence manifest](benchmarks/stage2d2/results/ORDERED_NULLS_MANIFEST.csv)
+- [machine-readable final decision](benchmarks/stage2d2/results/FINAL_DECISION.csv)

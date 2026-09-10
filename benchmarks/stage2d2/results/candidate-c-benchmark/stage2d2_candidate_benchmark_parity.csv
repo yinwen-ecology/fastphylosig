@@ -1,0 +1,2 @@
+"stage","candidate","shape","n","nsim","traits","n_threads","block_size","oracle_status","candidate_status","status_pass","warning_pass","result_pass","pass","max_abs_K","max_abs_P","max_abs_MCSE_P","max_abs_exceedance","max_abs_sim_K","oracle_warning","candidate_warning","oracle_error","candidate_error"
+"Stage 2D2 candidate benchmark parity","C","balanced",17,7,1,1,NA,"ok","ok",TRUE,TRUE,TRUE,TRUE,0,0,0,0,0,"","","",""

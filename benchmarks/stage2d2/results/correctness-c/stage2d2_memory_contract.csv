@@ -1,0 +1,2 @@
+"ordered_null_policy","comparison_block_elements","replicate_log_max_rows","formal_grid_in_this_runner","public_test_false_batch_guard"
+"one returned payload per side; no retained copy",65536,100000,"NOT_RUN","INDEPENDENT_NOT_RUN_HERE"

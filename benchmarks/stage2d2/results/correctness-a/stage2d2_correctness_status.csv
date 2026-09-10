@@ -1,0 +1,2 @@
+"status","checks","failures","replicate_rows","immutability_rows","malformed_rows","same_translation_unit_oracle","reason","candidate_a_status","candidate_b_gate","candidate_b_status","public_test_false_batch_guard","formal_performance_grid","production_code_changed"
+"PASS",1410,0,103275,1,3,TRUE,"all bounded exactness gates passed","RUN","NOT_AUTHORIZED","NOT_AUTHORIZED","INDEPENDENT_NOT_RUN_HERE","NOT_RUN","NO"

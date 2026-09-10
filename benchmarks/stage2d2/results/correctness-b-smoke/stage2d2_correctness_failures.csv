@@ -1,0 +1,4 @@
+"check","failure","candidate","old_status","new_status","old_error_class","new_error_class","old_error","new_error","pass"
+"malformed_permutation","duplicate","B","error","error","Rcpp::exception/C++Error/error/condition","Rcpp::exception/C++Error/error/condition","each permutation row must contain 1:n exactly once.","each permutation row must be a permutation of 1:n_tip",FALSE
+"malformed_permutation","out_of_range","B","error","error","Rcpp::exception/C++Error/error/condition","Rcpp::exception/C++Error/error/condition","each permutation row must contain 1:n exactly once.","each permutation row must be a permutation of 1:n_tip",FALSE
+"malformed_permutation","wrong_dimension","B","error","error","Rcpp::exception/C++Error/error/condition","Rcpp::exception/C++Error/error/condition","permutations must have nsim rows and one column per tip.","permutations must have nsim rows and n_tip columns",FALSE

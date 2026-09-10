@@ -1,0 +1,4 @@
+candidate,status,rows,sha256,local_path,repository_policy
+A,PASS,103275,63f3c272ddefff5668a323459a7f06af6935bfc44b4d924201e00bbc887c9a5f,correctness-a/stage2d2_correctness_replicates.csv,"full local evidence ignored; compact status and summary tracked"
+B,FAIL,26085,6753a13df30845abf56845d5d8a932b4422d4de245011eca5d73a4797d613895,correctness-b-smoke/stage2d2_correctness_replicates.csv,"full local evidence ignored; compact status and summary tracked"
+C,PASS,103275,792a4b5829fb9a719ca980995d09a53935df1d483dbf43d1ece7280662167603,correctness-c/stage2d2_correctness_replicates.csv,"full local evidence ignored; compact status and summary tracked"

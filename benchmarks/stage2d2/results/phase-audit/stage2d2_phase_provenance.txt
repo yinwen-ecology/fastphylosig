@@ -1,0 +1,18 @@
+repo=C:/Users/wenyi/.codex/visualizations/2026/05/26/019e6293-544a-7c11-9cb6-8324d897ca01/stage2d2-ascii
+git_head=UNAVAILABLE
+git_status=UNAVAILABLE
+harness=C:/Users/wenyi/.codex/visualizations/2026/05/26/019e6293-544a-7c11-9cb6-8324d897ca01/stage2d2-ascii/benchmarks/stage2d2/stage2d2_phase_harness.cpp
+harness_sha256=0b9d8a5c7cfc33e0792497f3f878b9059f204c804b8ac6f2a3c4d138d8fb0f7d
+production_evaluator=src/k_permutation.cpp::kperm::compute_one
+production_rng=src/k_permutation.cpp::R::runif + descending Fisher-Yates
+identity_convention=include_observed=TRUE makes replicate 1 identity; all following rows draw n-1 uniforms
+controlled_fixture=bounded eight-pattern deterministic cyclic/reversed permutations; prepared outside evaluator timer
+fixture_tree=ape::rtree with fixed seed per n, postorder, fixed positive edge lengths
+n_grid=500,2000,5000,10000
+nsim_grid=999,9999
+threads_grid=1,2
+openmp_gate=PASS
+repeats=10
+simulation_chunk=128
+measurement=warmup; serialized alternating phase order; median/IQR
+generated_at=2026-09-09 14:51:14
