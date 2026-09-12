@@ -1,0 +1,2 @@
+"status","stage","checks","failed","production_code_changed","reason"
+"PASS","Stage 2E1A correctness gate",21,0,"NO","controlled production-equivalence gate passed"

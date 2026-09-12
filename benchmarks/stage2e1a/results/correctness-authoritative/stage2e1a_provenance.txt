@@ -1,0 +1,12 @@
+repo=C:/Users/wenyi/Documents/ChatGPT/系统发育信号R包
+git_head=03d72813f9da08b27f924aa37437ab2715cf8dfe
+git_status= M review.md
+?? benchmarks/stage2a/
+?? benchmarks/stage2e1a/
+?? paper/
+harness=C:/Users/wenyi/.codex/visualizations/2026/05/26/019e6293-544a-7c11-9cb6-8324d897ca01/stage2d2-ascii/benchmarks/stage2e1a/prototype/d_phase_harness.cpp
+stage=Stage 2E1A Final D Candidate Qualification
+production_translation_unit=src/d_stream.cpp
+production_contract=fast_d binary streaming path; R sample path retained for polytomy
+formal=YES
+generated_at=2026-09-12 21:00:52

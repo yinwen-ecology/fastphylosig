@@ -1,0 +1,2 @@
+"status","stage","mode","correctness_gate","production_code_changed","timing_rows","timing_failures","decision","optimization","next_stage","reason"
+"PASS","Stage 2E1A benchmark","formal","PASS","NO",540,0,"NO_GO","CLOSED","FINAL_0_2_0_VALIDATION","all requested timing cells completed without warning or error"

@@ -1,228 +1,186 @@
-# fastphylosig 0.2.0 Stage 2D2B Expert Review
+# fastphylosig 0.2.0 Stage 2E1A Expert Review
 
-## 1. Final Decision
+## 1. Final decision
 
 ```text
-TRUE_BLOCKED_IMPLEMENTATION = VALID
-CONTROLLED_PERMUTATION_EXACTNESS = PASS
-IDENTITY_FIRST_ACCOUNTING = PASS
-RNG_REPLAY = PASS
-EVALUATION_ONLY_GATE = FAIL
-FULL_PIPELINE = NOT_RUN_BY_GATE
-LIGHT_BATCH_PARALLEL_PERFORMANCE_GUARDS = NOT_RUN_BY_GATE
-
-K_BLOCKED_EVALUATOR_PROTOTYPE = FAIL
-BLOCKED_EVALUATION = REJECTED_NOT_ENOUGH_EVALUATOR_GAIN
+COMMON_PREPARATION_ENGINE_0_2_0 = FROZEN
+CANONICALIZATION_CONTRACT_V2 = ACCEPTED_FROZEN
 K_OPTIMIZATION_0_2_0 = CLOSED_FINAL
-NEXT_STAGE = D_NULL_ENGINE
+lambda optimization = CLOSED_FOR_0_2_0
+Delta new optimization = CLOSED_FOR_0_2_0
+
+D_EXACT_ORDER_STATISTIC = NO_GO
+D_OPTIMIZATION_0_2_0 = CLOSED
+NEXT_STAGE = FINAL_0_2_0_VALIDATION
+PRODUCTION_CODE_CHANGED = NO
 ```
 
-The remediated Candidate B is a genuine blocked evaluator and is scientifically
-exact over the bounded audit. It nevertheless fails the predefined performance
-authorization gate: only one representative heavy cell reached 1.35x, while
-at least two were required. It must not enter production.
+The exact order-statistic candidate is not authorized. In all 18 representative
+heavy cells, sort plus type-7 thresholding consumed less than 20% of complete
+prepared D wall time. The observed range was 15.88-18.73%; no cell reached the
+20% borderline band and none reached the 30% GO gate. This closes the last
+statistic-specific performance direction for 0.2.0.
 
-## 2. Why The Previous Candidate Was Invalid
+## 2. Evidence and provenance
 
-The Stage 2D2 Candidate B did not test blocked K evaluation. Its attempted
-block passes used different arithmetic, discarded their result, and then
-called frozen `compute_one()` for every returned null K. Its identity-first
-P/MCSE accounting also differed from production. That result proved only
-`IMPLEMENTATION_INVALID`; it could not establish a numerical no-go.
-
-Stage 2D2B removes those defects. The candidate's observed and null K values
-come directly from its own `compute_block()`. No candidate result is copied
-from the oracle, production entry point, or frozen `compute_one()`.
-
-## 3. True Block Architecture
-
-The prototype uses node-major, replicate-minor bounded storage:
-
-```text
-message[N x B]
-state[N x B]
-baseline[B]
-delta[B]
-permutations[n x B]
-```
-
-For each traversal node, the evaluator advances the independent replicates in
-the block. Within each replicate, it preserves the frozen postorder/preorder,
-child order, long-double accumulation order, division form, and final K
-operation order. Supported block sizes are 2, 4, 8, and 16. The candidate does
-not allocate `N x nsim` numerical state.
-
-Permutation generation remains serial descending Fisher-Yates. The identity
-first replicate consumes no RNG draws. Batching changes only evaluator layout,
-not draw order or RNG partition.
-
-## 4. Provenance And Hard Counters
-
-| Item | Evidence |
+| Item | Result |
 |---|---|
-| Frozen production source | `57d7cccb3889fed603b8454c6b8963d28bc33705` |
-| Package | fastphylosig `0.2.0.9000` |
-| Prototype SHA-256 | `9e6d6f1a507bd4c03b0fe15058e749fede5cd555910fa5a07041e633e364a114` |
+| Audited Git source | `03d72813f9da08b27f924aa37437ab2715cf8dfe` |
+| Package | `fastphylosig 0.2.0.9000` |
 | Runtime | R 4.6.1 UCRT, Windows x86-64 |
-| Compiler | GCC 14.3.0 through the installed Rtools toolchain |
-| Oracle/candidate build | same `Rcpp::sourceCpp()` translation unit |
-| Production files changed | none in `R/`, `src/`, tests, DESCRIPTION, NAMESPACE, or public API |
+| Formal design | fixed fixtures, warmup, serialized, alternating order |
+| Formal grid | 3 shapes x 3 n x 3 prevalence x 2 nsim = 54 cells |
+| Repeats | 10 per cell |
+| Timing rows | 540/540 PASS, 0 warnings/errors |
+| Representative heavy cells | 18 (`n >= 2000`, `nsim = 9999`) |
+| Correctness harness | 1299/1299 PASS |
+| Authoritative route | prepared D, `ncores = 1` |
+| Additional observation | prepared D, `ncores = 2` |
+| Production files changed | none |
 
-Every successful candidate call was required to report:
+The private C++ harness includes the frozen production `src/d_stream.cpp` in
+the same translation unit. Static source evidence was read from an ASCII copy
+of the same source snapshot because the local Windows R locale could not read
+the Chinese repository path reliably. SHA-256 values for `d_stream.cpp`,
+`fast_signal.cpp`, and `numeric_utils.h` are recorded in the source audit CSV;
+the Git provenance is recorded separately from the real repository.
 
-```text
-candidate_old_compute_one_calls = 0
-oracle_call_count = 0
-candidate_compute_count > 0
-```
+## 3. Frozen D contract
 
-All 388 formal counter records passed. The timing runner independently rejected
-missing or non-zero counters before accepting a pair.
+The following contract was extracted from current production source, tests,
+and documentation and was not changed.
 
-## 5. Controlled Exactness
+- Observed D uses the frozen inverse-branch-length contrast traversal. Final
+  D is `(observed - mean_brownian) / (mean_random - mean_brownian)`.
+- The random null permutes the retained, already recoded binary state vector.
+  Its strict tail is `random_null < observed`.
+- The Brownian null draws continuous tip values with R's RNG, obtains the
+  current type-7 threshold, and maps `value < threshold` to state 1. Its strict
+  tail is `brownian_null > observed`.
+- Binary recoding retains the current factor-level order and prevalence
+  definition. NA handling, species matching, retained-tip masks, and
+  fewer-than-two-species failure semantics are unchanged.
+- `P_random`, `P_Brownian`, their aliases, MCSE, and requested/successful/failed
+  accounting retain their current formulas and result fields.
+- RNG draws remain serial. Contrast columns may use the frozen static OpenMP
+  schedule; no RNG, scheduler, or thread-policy change was made.
+- Rooted polytomies retain the compatibility path; unary and invalid trees
+  retain their existing rejection behavior.
+- Literal strict tails remain sensitive to a one-ULP observed/null boundary.
+  Equality is not counted, and no epsilon was introduced.
+- Tree and trait inputs remain immutable, and prepared-context mutation checks
+  remain owned by the frozen common preparation engine.
 
-Formal coverage included balanced, random, and pectinate trees; `n=50`, 500,
-2,000, and 5,000; blocks 2/4/8/16; and identity, single-swap, reverse, cyclic,
-fixed-random, and adversarial permutation layouts.
+The formal harness directly checked Brownian states, type-7 thresholds, binary
+states, null D values, strict exceedance directions, P, MCSE, accounting,
+same-seed replay, one-/two-thread replay, public prepared `fast_d()` parity,
+rooted-polytomy compatibility, and one-ULP strict-tail behavior.
 
-| Gate | Result |
-|---|---|
-| Controlled cases | 288/288 PASS |
-| Controlled failures | 0 |
-| Ordered replicate comparisons | 8,283 |
-| Ordered null K | bitwise exact |
-| Maximum absolute null-K difference | 0 |
-| Exceedance, P, MCSE | exact PASS |
-| Candidate result provenance counters | PASS |
-| Input immutability | PASS |
-| Failure-semantics cases | 5/5 PASS |
-| Batch correctness guards | 1/8/32/100 traits PASS |
+## 4. Type-7 requirement
 
-The detailed ordered-result file has SHA-256
-`0e705dc8eefbe026cf8b0fe52d10a77dc299878da958dda5d04888b464c40b6e`.
-The compact correctness status has SHA-256
-`5105ebe383da0c8b73b7f7a658ab104ebf11526a1bc1949e61a8c7918f6f880c`.
-
-## 6. Identity-First And RNG Integration
-
-The candidate reproduces the frozen accounting contract:
-
-- replicate 1 is identity when `include_observed=TRUE` and permutations are
-  internally generated;
-- replicate 1 consumes zero RNG draws;
-- later replicates use the same descending Fisher-Yates draws and order;
-- requested, successful, failed, returned order, inclusive exceedance, P, and
-  MCSE match the oracle;
-- constant/non-finite observed K produces `successful=0` and `failed=nsim`;
-- 96 same-seed RNG replay cases across current one- and two-thread test
-  configurations passed exactly.
-
-No tolerance was widened, and no tail or Monte Carlo definition changed.
-
-## 7. Evaluation-Only Performance
-
-Evaluation timing used pre-generated controlled permutations, excluding RNG
-generation. Oracle and candidate were compiled together. Every cell used a
-fixed fixture, warmup, serialized execution, alternating call order, and 10
-paired repeats. The formal grid contained 72 cells across three tree shapes,
-`n=2000/5000/10000`, `nsim=999/9999`, and four block sizes.
-
-Across the representative heavy cells (`n>=5000`, `nsim=9999`), median
-performance aggregated by block was:
-
-| Block | Oracle median | Candidate median | Median speedup | Median reduction |
-|---:|---:|---:|---:|---:|
-| 2 | 3.648 s | 3.815 s | 1.003x | 0.3% |
-| 4 | 3.718 s | 3.435 s | 1.179x | 15.2% |
-| 8 | 3.680 s | 3.148 s | 1.280x | 21.9% |
-| 16 | 3.630 s | 3.208 s | 1.272x | 21.3% |
-
-Blocks 8 and 16 were within 3%, so the smaller `B=8` was selected. It was also
-slightly faster in the aggregate and uses half the bounded workspace.
-
-Selected-block heavy results were:
-
-| Shape | n | Oracle | Candidate B=8 | Speedup | Reduction |
-|---|---:|---:|---:|---:|---:|
-| balanced | 5,000 | 2.260 s | 2.050 s | 1.102x | 9.3% |
-| balanced | 10,000 | 4.470 s | 4.310 s | 1.037x | 3.6% |
-| random | 5,000 | 2.890 s | 2.265 s | 1.276x | 21.6% |
-| random | 10,000 | 6.080 s | 4.735 s | 1.284x | 22.1% |
-| pectinate | 5,000 | 2.660 s | 1.965 s | 1.354x | 26.1% |
-| pectinate | 10,000 | 5.295 s | 4.030 s | 1.314x | 23.9% |
-
-Only pectinate `n=5000` reached the required evaluator speedup of 1.35x.
-The required count was at least two representative heavy cells. Therefore:
+For ascending values of length `n`, production computes:
 
 ```text
-evaluation_heavy_pass_cells = 1
-EVALUATION_ONLY_GATE = FAIL
+h     = 1 + (n - 1) * prevalence
+lo    = floor(h)
+gamma = h - lo
 ```
 
-## 8. Full Pipeline And Regression Gates
+It uses the minimum at the lower endpoint, the maximum at the upper endpoint,
+and otherwise only `values[lo - 1]` and `values[lo]`. Thus type-7 needs at most
+two adjacent order statistics. The complete sorted vector has no later use in
+observed D, null D, P, MCSE, accounting, RNG, or result packaging.
 
-The protocol authorizes full-pipeline timing only after the evaluation gate
-passes. It did not pass, so the full runner stopped before candidate
-compilation or timing and recorded:
+An exact non-probabilistic selection design is technically feasible, but this
+fact is only operation evidence. It does not override the wall-time gate and
+does not authorize Stage 2E1B.
 
-```text
-FULL_PIPELINE = NOT_RUN_BY_GATE
-reason = evaluation gate is not PASS (status=FAIL)
-```
+## 5. Representative heavy cells
 
-The light, `test=FALSE`, performance batch, and 1/2/4/8-thread scaling guards
-depend on a passing full-pipeline result. Their runner likewise stopped before
-timing and recorded:
+Times are median complete prepared D seconds with IQR in parentheses. Fractions
+are independent phase medians divided by the authoritative `ncores=1` median.
+They are descriptive and are not forced to sum to 100%. `Sort/Brownian` is the
+full-sort share of the complete Brownian path; `Sort+Q/total` is the qualifying
+sort-plus-type-7 share of the complete D pipeline.
 
-```text
-LIGHT_BATCH_PARALLEL_PERFORMANCE_GUARDS = NOT_RUN_BY_GATE
-reason = full-pipeline gate is not PASS (status=NOT_RUN)
-```
+| Shape | n | Prev. | Total s (IQR) | Random | Brownian gen. | Sort/Brownian | Sort+Q/total | Binary+D |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| balanced | 2000 | 0.10 | 5.760 (0.020) | 35.3% | 36.9% | 33.8% | 18.1% | 20.4% |
+| random | 2000 | 0.10 | 5.915 (0.227) | 29.3% | 36.9% | 33.3% | 18.3% | 19.9% |
+| pectinate | 2000 | 0.10 | 5.485 (0.018) | 29.4% | 38.8% | 30.3% | 16.0% | 20.2% |
+| balanced | 5000 | 0.10 | 16.010 (0.260) | 25.6% | 34.1% | 34.9% | 18.4% | 21.5% |
+| random | 5000 | 0.10 | 16.095 (0.345) | 25.6% | 34.2% | 35.0% | 18.0% | 20.8% |
+| pectinate | 5000 | 0.10 | 15.080 (0.225) | 27.2% | 36.5% | 32.4% | 15.9% | 22.1% |
+| balanced | 2000 | 0.50 | 5.860 (0.025) | 35.5% | 37.1% | 34.2% | 18.1% | 18.9% |
+| random | 2000 | 0.50 | 5.965 (0.107) | 33.9% | 36.8% | 33.6% | 18.1% | 19.4% |
+| pectinate | 2000 | 0.50 | 5.510 (0.055) | 35.6% | 38.9% | 31.7% | 17.6% | 21.2% |
+| balanced | 5000 | 0.50 | 16.395 (0.200) | 24.3% | 33.9% | 35.8% | 18.0% | 21.0% |
+| random | 5000 | 0.50 | 16.645 (0.122) | 24.7% | 33.6% | 35.3% | 17.7% | 20.5% |
+| pectinate | 5000 | 0.50 | 14.995 (0.205) | 27.4% | 36.6% | 32.7% | 16.8% | 21.6% |
+| balanced | 2000 | 0.90 | 5.830 (0.040) | 34.7% | 37.4% | 34.1% | 18.4% | 20.7% |
+| random | 2000 | 0.90 | 5.845 (0.073) | 34.8% | 37.7% | 33.0% | 18.0% | 20.0% |
+| pectinate | 2000 | 0.90 | 5.525 (0.018) | 35.3% | 39.3% | 31.8% | 18.7% | 21.7% |
+| balanced | 5000 | 0.90 | 16.310 (0.282) | 25.0% | 33.9% | 36.3% | 17.9% | 21.2% |
+| random | 5000 | 0.90 | 16.590 (0.180) | 24.6% | 33.0% | 35.1% | 17.5% | 20.8% |
+| pectinate | 5000 | 0.90 | 14.965 (0.193) | 27.5% | 36.3% | 32.7% | 16.2% | 21.9% |
 
-This is not a PASS claim for unrun work. Exact batch correctness and one-/two-
-thread RNG replay were covered by the scientific gate; performance guards and
-four-/eight-thread interaction were not run because the candidate had already
-failed authorization.
+Across these cells, the median sort-plus-threshold fraction was 17.99%. The
+paired repeat-level estimate was nearly identical: 15.95-18.73%, median
+17.93%. This agreement, together with one full sort per Brownian replicate and
+no downstream use of the sorted vector, provides independent timing, paired,
+and operation-count support for the conclusion.
 
-## 9. Memory
+## 6. Speedup ceilings
 
-At `n=10000`, the candidate reported the following upper working payloads:
+| Assumption | Heavy-cell speedup range | Median | Best-case wall-time saving |
+|---|---:|---:|---:|
+| Full sort is free | 1.204-1.240x | 1.229x | 19.4% |
+| Selection costs 20% of old sort | 1.157-1.183x | 1.175x | 15.5% |
+| Selection costs 30% of old sort | 1.135-1.157x | 1.150x | 13.5% |
+| Selection costs 50% of old sort | 1.093-1.107x | 1.103x | 9.7% |
 
-| Block | Permutation workspace | Numeric workspace | Total candidate workspace |
-|---:|---:|---:|---:|
-| 2 | 0.08 MB | 0.64 MB | 0.72 MB |
-| 4 | 0.16 MB | 1.28 MB | 1.44 MB |
-| 8 | 0.32 MB | 2.56 MB | 2.88 MB |
-| 16 | 0.64 MB | 5.12 MB | 5.76 MB |
+These are Amdahl ceilings, not predicted production gains. They assume zero
+new allocation, validation, copying, compiler, and platform cost. The 50%
+residual-cost scenario remains below the required 15% practical saving, and
+the qualification share already fails the independent `<20%` stop rule.
 
-The memory gate passed. Workspace grows linearly with `N * B`, remains bounded
-independently of `nsim`, and completed the `n=10000`, `nsim=9999` workload.
-The externally supplied controlled-permutation matrix is benchmark input and
-is excluded from candidate working-memory claims.
+## 7. Parallel observation
 
-## 10. Expert Conclusion
+`ncores=2` was observation-only. In the 18 heavy cells it took
+`1.665-2.105x` the `ncores=1` wall time (median `1.779x`), so two threads were
+slower in this current workload. This does not authorize a scheduler or
+OpenMP redesign, and the authoritative candidate decision remains based on
+`ncores=1`.
 
-Stage 2D2B corrects the scientific and provenance defects of the first blocked
-attempt. It demonstrates that block-interleaved traversal can reduce evaluator
-time for some large random and pectinate trees. The gain is not sufficiently
-general: balanced trees improve only 3.6-9.3%, and only one heavy cell meets
-the explicit 1.35x authorization threshold.
+## 8. Expert conclusion
 
-The candidate is therefore rejected for insufficient evaluator gain, not for
-incorrectness. No Stage 2D3 integration is authorized. This is the final K
-optimization stop for 0.2.0; the next permitted investigation is the D null
-engine.
+Brownian full sorting is visible within the Brownian subpath, accounting for
+30.34-36.28% of that subpath. It is not large enough in complete prepared D:
+sort plus type-7 thresholding is only 15.88-18.73% of total D time across all
+representative heavy cells. Brownian generation, random-null work, and
+binary-state D traversal each remain substantial independent costs.
 
-## Evidence Index
+The exact order-statistic replacement therefore fails the predeclared wall-
+time gate. Random-null cost is also not a candidate: this audit identified no
+exact algorithmic redundancy and did not establish a realistic total saving
+of at least 15%. No D prototype, buffer reuse candidate, or parallel redesign
+is authorized.
 
-- [exactness protocol](benchmarks/stage2d2b/EXACTNESS_PROTOCOL.md)
-- [performance protocol](benchmarks/stage2d2b/PERFORMANCE_PROTOCOL.md)
-- [correctness status](benchmarks/stage2d2b/results/correctness-formal/stage2d2b_correctness_status.csv)
-- [correctness summary](benchmarks/stage2d2b/results/correctness-formal/stage2d2b_correctness_summary.csv)
-- [counter evidence](benchmarks/stage2d2b/results/correctness-formal/stage2d2b_correctness_counters.csv)
-- [evaluation status](benchmarks/stage2d2b/results/evaluation-formal/stage2d2b_benchmark_status.csv)
-- [evaluation summary](benchmarks/stage2d2b/results/evaluation-formal/stage2d2b_benchmark_summary.csv)
-- [memory evidence](benchmarks/stage2d2b/results/evaluation-formal/stage2d2b_benchmark_memory.csv)
-- [full-pipeline gate](benchmarks/stage2d2b/results/full-gated/stage2d2b_benchmark_status.csv)
-- [guard gate](benchmarks/stage2d2b/results/guards-gated/stage2d2b_benchmark_status.csv)
-- [machine-readable final decision](benchmarks/stage2d2b/results/FINAL_DECISION.csv)
+Stage 2E1A ends with `NO_GO`. All statistic-specific performance optimization
+for fastphylosig 0.2.0 is closed. The only permitted next step is final 0.2.0
+release validation.
+
+## Evidence index
+
+- [frozen D contract](benchmarks/stage2e1a/D_CONTRACT_AUDIT.md)
+- [type-7 requirement](benchmarks/stage2e1a/TYPE7_REQUIREMENT_AUDIT.md)
+- [harness protocol](benchmarks/stage2e1a/HARNESS_PROTOCOL.md)
+- [performance protocol](benchmarks/stage2e1a/PERFORMANCE_PROTOCOL.md)
+- [authoritative correctness status](benchmarks/stage2e1a/results/correctness-authoritative/stage2e1a_correctness_status.csv)
+- [authoritative correctness checks](benchmarks/stage2e1a/results/correctness-authoritative/stage2e1a_correctness.csv)
+- [formal benchmark status](benchmarks/stage2e1a/results/formal-authoritative/stage2e1a_benchmark_status.csv)
+- [formal timing summary](benchmarks/stage2e1a/results/formal-authoritative/stage2e1a_phase_summary.csv)
+- [heavy qualification](benchmarks/stage2e1a/results/formal-authoritative/stage2e1a_heavy_qualification.csv)
+- [heavy aggregate](benchmarks/stage2e1a/results/formal-authoritative/stage2e1a_heavy_aggregate.csv)
+- [source type-7 audit](benchmarks/stage2e1a/results/formal-authoritative/stage2e1a_source_type7_audit.csv)
+- [machine-readable final decision](benchmarks/stage2e1a/results/formal-authoritative/FINAL_DECISION.csv)

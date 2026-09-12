@@ -1,0 +1,2 @@
+"stage","source_commit","correctness_checks","correctness_failures","formal_cells","formal_repeats_per_cell","formal_timing_rows","formal_timing_failures","representative_heavy_cells","heavy_sort_threshold_ge_30pct","heavy_sort_threshold_ge_20pct","D_EXACT_ORDER_STATISTIC","D_OPTIMIZATION_0_2_0","NEXT_STAGE","production_code_changed"
+"Stage 2E1A Final D Candidate Qualification","03d72813f9da08b27f924aa37437ab2715cf8dfe",1299,0,54,10,540,0,18,0,0,"NO_GO","CLOSED","FINAL_0_2_0_VALIDATION","NO"
