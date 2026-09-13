@@ -1,0 +1,19 @@
+audit_id,area,result,severity,release_blocker,source_commit,evidence,notes
+API_SURFACE,exported functions,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,NAMESPACE:3-15,Exactly 13 intended exports
+API_SURFACE,deprecated alias,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,run_all_exports_smoke.R,Expected match_phylo_data warning only
+API_SURFACE,forbidden public selectors,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,NAMESPACE and public formals,No forbidden selector exported
+DOCUMENTATION,release version wording,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,README NEWS docs/index USAGE_zh,Stale 0.2.0.9000 release wording removed
+DOCUMENTATION,API defaults and Rd usage,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,R and man files,Current function signatures agree
+DOCUMENTATION,platform boundary,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,public guides,Cross-platform and CRAN not overstated
+DEPENDENCY,R minimum,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,DESCRIPTION,R >= 4.1.0
+DEPENDENCY,mvtnorm test dependency,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,DESCRIPTION and no-manual check,Declared in Suggests
+PACKAGE_HYGIENE,authoritative artifact,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,d0178b870c6ab77158a434a9fd03c871814c49e360a3d288b4dda218385aeb67,106 entries and no evidence leakage
+DYNAMIC,scientific suite,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,scientific summary,22 pass zero fail skip unexpected warning
+DYNAMIC,full testthat,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,testthat_status.csv,8336 pass zero fail warning skip
+DYNAMIC,no-manual check,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,00check.log,Status OK
+DYNAMIC,all exports smoke,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,all_exports_smoke.log,13 of 13 pass
+DYNAMIC,caper observed D,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,caper_parity.log,Observed D 2 vs 2 difference zero
+ENVIRONMENT,as-cran manual PDF,ENVIRONMENT_ONLY,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,as_cran logs,pdflatex unavailable plus CRAN environment notes
+ENVIRONMENT,ordinary manual PDF,ENVIRONMENT_ONLY,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,manual logs,pdflatex unavailable
+PLATFORM,cross-platform qualification,NOT_RUN,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,explicit scope boundary,Deferred by request
+SUMMARY,local release blocker scan,PASS,none,NO,3f84775bc96e00820aa39522245cb63175f79a5d,final evidence audit,No blocker in completed local scope

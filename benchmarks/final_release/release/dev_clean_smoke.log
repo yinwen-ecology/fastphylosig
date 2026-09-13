@@ -1,0 +1,4 @@
+CLEAN_INSTALL_SMOKE=PASS
+PACKAGE_VERSION=0.2.0.9000
+PATHS=raw,prepared
+ENTRY_POINTS=check_tree,prepare_tree,fast_k,fast_lambda,fast_d,fast_delta,fast_ace,fast_signal

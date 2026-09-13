@@ -1,0 +1,19 @@
+[PASS] fast_signal
+[PASS] fast_k
+[PASS] fast_lambda
+[PASS] fast_d
+[PASS] fast_delta
+[PASS] fast_ace
+[PASS] prepare_tree
+[PASS] cache_info
+[PASS] match_tree_data
+[PASS] match_phylo_data -- warning: 'match_phylo_data' is dep ecated.
+Use 'match_t ee_data' i stead.
+See help("Dep ecated")
+[PASS] plot_signal
+[PASS] check_tree
+[PASS] resolve_tree
+EXPORT_SMOKE=PASS
+PACKAGE_VERSION=0.2.0
+LIBRARY=C:/Users/wenyi/.codex/visualizations/2026/05/26/019e6293-544a-7c11-9cb6-8324d897ca01/closure-3f84775/FINAL_AUDIT_LIB/fastphylosig
+EXPORTS=fast_signal,fast_k,fast_lambda,fast_d,fast_delta,fast_ace,prepare_tree,cache_info,match_tree_data,match_phylo_data,plot_signal,check_tree,resolve_tree

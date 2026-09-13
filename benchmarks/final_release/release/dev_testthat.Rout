@@ -1,0 +1,622 @@
+i Testing fastphylosig
+v | F W  S  OK | Context
+
+/ |          0 | ace-topology-guard                                             
+- |          1 | ace-topology-guard                                             
+\ |          2 | ace-topology-guard                                             
+v |          8 | ace-topology-guard
+
+/ |          0 | canonicalization-v2-estimator-parity                           
+\ |          2 | canonicalization-v2-estimator-parity                           
+- |         17 | canonicalization-v2-estimator-parity                           
+\ |         30 | canonicalization-v2-estimator-parity                           
+/ |         48 | canonicalization-v2-estimator-parity                           
+/ |         64 | canonicalization-v2-estimator-parity                           
+/ |         84 | canonicalization-v2-estimator-parity                           
+/ |        100 | canonicalization-v2-estimator-parity                           
+/ |        116 | canonicalization-v2-estimator-parity                           
+\ |        134 | canonicalization-v2-estimator-parity                           
+- |        149 | canonicalization-v2-estimator-parity                           
+- |        169 | canonicalization-v2-estimator-parity                           
+\ |        186 | canonicalization-v2-estimator-parity                           
+| |        203 | canonicalization-v2-estimator-parity                           
+| |        223 | canonicalization-v2-estimator-parity                           
+- |        229 | canonicalization-v2-estimator-parity                           
+\ |        246 | canonicalization-v2-estimator-parity                           
+/ |        264 | canonicalization-v2-estimator-parity                           
+/ |        280 | canonicalization-v2-estimator-parity                           
+/ |        300 | canonicalization-v2-estimator-parity                           
+- |        313 | canonicalization-v2-estimator-parity                           
+/ |        332 | canonicalization-v2-estimator-parity                           
+/ |        348 | canonicalization-v2-estimator-parity                           
+| |        363 | canonicalization-v2-estimator-parity                           
+| |        383 | canonicalization-v2-estimator-parity                           
+- |        397 | canonicalization-v2-estimator-parity                           
+| |        411 | canonicalization-v2-estimator-parity                           
+/ |        428 | canonicalization-v2-estimator-parity                           
+\ |        446 | canonicalization-v2-estimator-parity                           
+\ |        462 | canonicalization-v2-estimator-parity                           
+| |        479 | canonicalization-v2-estimator-parity                           
+| |        483 | canonicalization-v2-estimator-parity                           
+/ |        500 | canonicalization-v2-estimator-parity                           
+\ |        522 | canonicalization-v2-estimator-parity                           
+| |        543 | canonicalization-v2-estimator-parity                           
+- |        557 | canonicalization-v2-estimator-parity                           
+- |        569 | canonicalization-v2-estimator-parity                           
+| |        587 | canonicalization-v2-estimator-parity                           
+\ |        606 | canonicalization-v2-estimator-parity                           
+/ |        624 | canonicalization-v2-estimator-parity                           
+| |        643 | canonicalization-v2-estimator-parity                           
+| |        655 | canonicalization-v2-estimator-parity                           
+| |        675 | canonicalization-v2-estimator-parity                           
+- |        693 | canonicalization-v2-estimator-parity                           
+/ |        712 | canonicalization-v2-estimator-parity                           
+/ |        732 | canonicalization-v2-estimator-parity                           
+| |        747 | canonicalization-v2-estimator-parity                           
+/ |        764 | canonicalization-v2-estimator-parity                           
+| |        779 | canonicalization-v2-estimator-parity                           
+| |        795 | canonicalization-v2-estimator-parity                           
+\ |        814 | canonicalization-v2-estimator-parity                           
+\ |        830 | canonicalization-v2-estimator-parity                           
+v |        840 | canonicalization-v2-estimator-parity [7.6s]
+
+/ |          0 | canonicalization-v2-persistence                                
+- |          1 | canonicalization-v2-persistence                                
+| |          3 | canonicalization-v2-persistence                                
+- |          5 | canonicalization-v2-persistence                                
+v |          6 | canonicalization-v2-persistence [6.4s]
+
+/ |          0 | canonicalization-v2-production                                 
+- |         13 | canonicalization-v2-production                                 
+\ |         26 | canonicalization-v2-production                                 
+/ |         40 | canonicalization-v2-production                                 
+- |         53 | canonicalization-v2-production                                 
+\ |         66 | canonicalization-v2-production                                 
+v |         78 | canonicalization-v2-production
+
+/ |          0 | check-tree                                                     
+- |         13 | check-tree                                                     
+- |         29 | check-tree                                                     
+\ |         42 | check-tree                                                     
+/ |         60 | check-tree                                                     
+- |         73 | check-tree                                                     
+/ |         88 | check-tree                                                     
+v |         99 | check-tree
+
+/ |          0 | d-mcse-output                                                  
+/ |         12 | d-mcse-output                                                  
+| |         27 | d-mcse-output                                                  
+v |         35 | d-mcse-output
+
+/ |          0 | d-polytomy-tail-boundary                                       
+| |         15 | d-polytomy-tail-boundary                                       
+v |         30 | d-polytomy-tail-boundary
+
+/ |          0 | d-preparation                                                  
+\ |         10 | d-preparation                                                  
+v |         17 | d-preparation
+
+/ |          0 | d-streaming                                                    
+| |         11 | d-streaming                                                    
+v |         15 | d-streaming
+
+/ |          0 | d-topology-guard                                               
+| |          3 | d-topology-guard                                               
+v |          5 | d-topology-guard
+
+/ |          0 | delta-ace-candidate2-production                                
+| |          7 | delta-ace-candidate2-production                                
+v |          8 | delta-ace-candidate2-production
+
+/ |          0 | delta-ace-candidate3a                                          
+| |         11 | delta-ace-candidate3a                                          
+v |         14 | delta-ace-candidate3a
+
+/ |          0 | delta-ace-workspace                                            
+| |          3 | delta-ace-workspace                                            
+v |          4 | delta-ace-workspace
+
+/ |          0 | delta-diagnostics                                              
+- |          9 | delta-diagnostics                                              
+\ |         22 | delta-diagnostics                                              
+| |         27 | delta-diagnostics                                              
+\ |         34 | delta-diagnostics                                              
+| |         43 | delta-diagnostics                                              
+- |         49 | delta-diagnostics                                              
+| |         63 | delta-diagnostics                                              
+| |         71 | delta-diagnostics                                              
+v |         84 | delta-diagnostics [1.1s]
+
+/ |          0 | delta-worker-failure-audit                                     
+- |          1 | delta-worker-failure-audit                                     
+| |          3 | delta-worker-failure-audit                                     
+- |          5 | delta-worker-failure-audit                                     
+\ |          6 | delta-worker-failure-audit                                     
+| |          7 | delta-worker-failure-audit                                     
+- |          9 | delta-worker-failure-audit                                     
+v |         13 | delta-worker-failure-audit [3.3s]
+
+/ |          0 | fast-ace-transition-optimization                               
+\ |          6 | fast-ace-transition-optimization                               
+- |         21 | fast-ace-transition-optimization                               
+| |         35 | fast-ace-transition-optimization                               
+\ |         50 | fast-ace-transition-optimization                               
+/ |         64 | fast-ace-transition-optimization                               
+| |         79 | fast-ace-transition-optimization                               
+- |         93 | fast-ace-transition-optimization                               
+| |        107 | fast-ace-transition-optimization                               
+| |        123 | fast-ace-transition-optimization                               
+v |        132 | fast-ace-transition-optimization [1.1s]
+
+/ |          0 | fast-signal-api-split                                          
+\ |          6 | fast-signal-api-split                                          
+- |         17 | fast-signal-api-split                                          
+v |         18 | fast-signal-api-split
+
+/ |          0 | fast-signal                                                    
+- |          1 | fast-signal                                                    [1] "some species in x are missing from tree, dropping missing taxa from x"
+[1] "some species in tree are missing from x , dropping missing taxa from the tree"
+[1] "some species in x are missing from tree, dropping missing taxa from x"
+[1] "some species in tree are missing from x , dropping missing taxa from the tree"
+[1] "some data in x given as 'NA', dropping corresponding species from tree"
+[1] "some species in x are missing from tree, dropping missing taxa from x"
+[1] "some species in tree are missing from x , dropping missing taxa from the tree"
+
+- |          5 | fast-signal                                                    
+\ |         18 | fast-signal                                                    
+| |         27 | fast-signal                                                    
+- |         33 | fast-signal                                                    
+\ |         42 | fast-signal                                                    
+| |         47 | fast-signal                                                    
+\ |         54 | fast-signal                                                    
+- |         61 | fast-signal                                                    
+\ |         66 | fast-signal                                                    
+- |         69 | fast-signal                                                    
+/ |         76 | fast-signal                                                    
+- |         85 | fast-signal                                                    
+- |         97 | fast-signal                                                    
+/ |        100 | fast-signal                                                    
+/ |        104 | fast-signal                                                    
+v |        109 | fast-signal [3.6s]
+
+/ |          0 | golden-contracts                                               
+/ |         12 | golden-contracts                                               
+/ |         24 | golden-contracts                                               
+- |         37 | golden-contracts                                               
+- |         49 | golden-contracts                                               
+/ |         60 | golden-contracts                                               
+- |         81 | golden-contracts                                               
+v |         89 | golden-contracts
+
+/ |          0 | input-contracts                                                
+- |          9 | input-contracts                                                
+v |         12 | input-contracts
+
+/ |          0 | iterative-canonical-signature                                  
+\ |          2 | iterative-canonical-signature                                  
+/ |          4 | iterative-canonical-signature                                  
+| |         15 | iterative-canonical-signature                                  
+\ |         18 | iterative-canonical-signature                                  
+- |         21 | iterative-canonical-signature                                  
+/ |         24 | iterative-canonical-signature                                  
+v |         25 | iterative-canonical-signature [5.4s]
+
+/ |          0 | k-permutation-kernel                                           
+/ |         12 | k-permutation-kernel                                           
+- |         29 | k-permutation-kernel                                           
+\ |         42 | k-permutation-kernel                                           
+| |         55 | k-permutation-kernel                                           
+v |         57 | k-permutation-kernel
+
+/ |          0 | k-production-validation                                        
+\ |          6 | k-production-validation                                        
+- |         17 | k-production-validation                                        
+| |         31 | k-production-validation                                        
+- |         41 | k-production-validation                                        
+| |         47 | k-production-validation                                        
+| |         55 | k-production-validation                                        
+\ |         62 | k-production-validation                                        
+v |         62 | k-production-validation
+
+/ |          0 | k-tree-engine                                                  
+/ |         12 | k-tree-engine                                                  
+/ |         28 | k-tree-engine                                                  
+| |         39 | k-tree-engine                                                  
+| |         47 | k-tree-engine                                                  
+- |         61 | k-tree-engine                                                  
+v |         74 | k-tree-engine
+
+/ |          0 | lambda-fixed-validation                                        
+- |          9 | lambda-fixed-validation                                        
+\ |         34 | lambda-fixed-validation                                        
+- |         61 | lambda-fixed-validation                                        
+- |         89 | lambda-fixed-validation                                        
+- |        117 | lambda-fixed-validation                                        
+- |        141 | lambda-fixed-validation                                        
+\ |        170 | lambda-fixed-validation                                        
+- |        197 | lambda-fixed-validation                                        
+- |        225 | lambda-fixed-validation                                        
+- |        253 | lambda-fixed-validation                                        
+\ |        278 | lambda-fixed-validation                                        
+- |        305 | lambda-fixed-validation                                        
+- |        333 | lambda-fixed-validation                                        
+| |        359 | lambda-fixed-validation                                        
+/ |        380 | lambda-fixed-validation                                        
+/ |        404 | lambda-fixed-validation                                        
+- |        417 | lambda-fixed-validation                                        
+| |        443 | lambda-fixed-validation                                        
+- |        469 | lambda-fixed-validation                                        
+\ |        498 | lambda-fixed-validation                                        
+- |        521 | lambda-fixed-validation                                        
+/ |        548 | lambda-fixed-validation                                        
+- |        577 | lambda-fixed-validation                                        
+/ |        608 | lambda-fixed-validation                                        
+/ |        636 | lambda-fixed-validation                                        
+\ |        662 | lambda-fixed-validation                                        
+/ |        688 | lambda-fixed-validation                                        
+/ |        716 | lambda-fixed-validation                                        
+| |        743 | lambda-fixed-validation                                        
+\ |        770 | lambda-fixed-validation                                        
+/ |        796 | lambda-fixed-validation                                        
+| |        823 | lambda-fixed-validation                                        
+| |        855 | lambda-fixed-validation                                        
+\ |        882 | lambda-fixed-validation                                        
+\ |        910 | lambda-fixed-validation                                        
+| |        935 | lambda-fixed-validation                                        
+- |        961 | lambda-fixed-validation                                        
+- |        989 | lambda-fixed-validation                                        
+/ |        1016 | lambda-fixed-validation                                       
+\ |        1042 | lambda-fixed-validation                                       
+/ |        1068 | lambda-fixed-validation                                       
+\ |        1098 | lambda-fixed-validation                                       
+\ |        1126 | lambda-fixed-validation                                       
+/ |        1152 | lambda-fixed-validation                                       
+| |        1179 | lambda-fixed-validation                                       
+- |        1205 | lambda-fixed-validation                                       
+\ |        1230 | lambda-fixed-validation                                       
+/ |        1256 | lambda-fixed-validation                                       
+/ |        1280 | lambda-fixed-validation                                       
+- |        1305 | lambda-fixed-validation                                       
+/ |        1324 | lambda-fixed-validation                                       
+| |        1347 | lambda-fixed-validation                                       
+- |        1373 | lambda-fixed-validation                                       
+- |        1397 | lambda-fixed-validation                                       
+- |        1421 | lambda-fixed-validation                                       
+- |        1445 | lambda-fixed-validation                                       
+\ |        1462 | lambda-fixed-validation                                       
+\ |        1486 | lambda-fixed-validation                                       
+/ |        1512 | lambda-fixed-validation                                       
+\ |        1542 | lambda-fixed-validation                                       
+\ |        1570 | lambda-fixed-validation                                       
+\ |        1594 | lambda-fixed-validation                                       
+/ |        1620 | lambda-fixed-validation                                       
+\ |        1646 | lambda-fixed-validation                                       
+/ |        1672 | lambda-fixed-validation                                       
+/ |        1700 | lambda-fixed-validation                                       
+/ |        1724 | lambda-fixed-validation                                       
+\ |        1750 | lambda-fixed-validation                                       
+- |        1781 | lambda-fixed-validation                                       
+| |        1807 | lambda-fixed-validation                                       
+\ |        1834 | lambda-fixed-validation                                       
+/ |        1856 | lambda-fixed-validation                                       
+- |        1877 | lambda-fixed-validation                                       
+| |        1903 | lambda-fixed-validation                                       
+\ |        1930 | lambda-fixed-validation                                       
+- |        1957 | lambda-fixed-validation                                       
+| |        1983 | lambda-fixed-validation                                       
+| |        2011 | lambda-fixed-validation                                       
+- |        2037 | lambda-fixed-validation                                       
+| |        2063 | lambda-fixed-validation                                       
+- |        2089 | lambda-fixed-validation                                       
+| |        2115 | lambda-fixed-validation                                       
+- |        2141 | lambda-fixed-validation                                       
+| |        2167 | lambda-fixed-validation                                       
+- |        2193 | lambda-fixed-validation                                       
+| |        2219 | lambda-fixed-validation                                       
+/ |        2244 | lambda-fixed-validation                                       
+- |        2269 | lambda-fixed-validation                                       
+- |        2293 | lambda-fixed-validation                                       
+| |        2319 | lambda-fixed-validation                                       
+/ |        2344 | lambda-fixed-validation                                       
+\ |        2370 | lambda-fixed-validation                                       
+/ |        2396 | lambda-fixed-validation                                       
+- |        2421 | lambda-fixed-validation                                       
+- |        2445 | lambda-fixed-validation                                       
+\ |        2474 | lambda-fixed-validation                                       
+/ |        2500 | lambda-fixed-validation                                       
+\ |        2526 | lambda-fixed-validation                                       
+\ |        2554 | lambda-fixed-validation                                       
+/ |        2576 | lambda-fixed-validation                                       
+| |        2603 | lambda-fixed-validation                                       
+\ |        2630 | lambda-fixed-validation                                       
+/ |        2656 | lambda-fixed-validation                                       
+\ |        2682 | lambda-fixed-validation                                       
+\ |        2710 | lambda-fixed-validation                                       
+/ |        2736 | lambda-fixed-validation                                       
+\ |        2762 | lambda-fixed-validation                                       
+- |        2789 | lambda-fixed-validation                                       
+| |        2815 | lambda-fixed-validation                                       
+/ |        2840 | lambda-fixed-validation                                       
+| |        2863 | lambda-fixed-validation                                       
+| |        2891 | lambda-fixed-validation                                       
+- |        2917 | lambda-fixed-validation                                       
+\ |        2946 | lambda-fixed-validation                                       
+\ |        2974 | lambda-fixed-validation                                       
+/ |        2996 | lambda-fixed-validation                                       
+- |        3021 | lambda-fixed-validation                                       
+/ |        3048 | lambda-fixed-validation                                       
+| |        3075 | lambda-fixed-validation                                       
+| |        3099 | lambda-fixed-validation                                       
+/ |        3124 | lambda-fixed-validation                                       
+\ |        3150 | lambda-fixed-validation                                       
+/ |        3176 | lambda-fixed-validation                                       
+\ |        3198 | lambda-fixed-validation                                       
+/ |        3224 | lambda-fixed-validation                                       
+- |        3249 | lambda-fixed-validation                                       
+- |        3273 | lambda-fixed-validation                                       
+- |        3297 | lambda-fixed-validation                                       
+| |        3323 | lambda-fixed-validation                                       
+/ |        3348 | lambda-fixed-validation                                       
+/ |        3376 | lambda-fixed-validation                                       
+\ |        3402 | lambda-fixed-validation                                       
+/ |        3428 | lambda-fixed-validation                                       
+| |        3451 | lambda-fixed-validation                                       
+- |        3473 | lambda-fixed-validation                                       
+- |        3501 | lambda-fixed-validation                                       
+\ |        3530 | lambda-fixed-validation                                       
+\ |        3558 | lambda-fixed-validation                                       
+| |        3587 | lambda-fixed-validation                                       
+\ |        3614 | lambda-fixed-validation                                       
+| |        3643 | lambda-fixed-validation                                       
+/ |        3672 | lambda-fixed-validation                                       
+| |        3699 | lambda-fixed-validation                                       
+/ |        3728 | lambda-fixed-validation                                       
+- |        3757 | lambda-fixed-validation                                       
+\ |        3782 | lambda-fixed-validation                                       
+\ |        3810 | lambda-fixed-validation                                       
+/ |        3836 | lambda-fixed-validation                                       
+/ |        3864 | lambda-fixed-validation                                       
+\ |        3898 | lambda-fixed-validation                                       
+- |        3925 | lambda-fixed-validation                                       
+- |        3957 | lambda-fixed-validation                                       
+- |        3985 | lambda-fixed-validation                                       
+/ |        4016 | lambda-fixed-validation                                       
+\ |        4046 | lambda-fixed-validation                                       
+/ |        4076 | lambda-fixed-validation                                       
+/ |        4104 | lambda-fixed-validation                                       
+/ |        4132 | lambda-fixed-validation                                       
+\ |        4166 | lambda-fixed-validation                                       
+- |        4193 | lambda-fixed-validation                                       
+\ |        4222 | lambda-fixed-validation                                       
+/ |        4252 | lambda-fixed-validation                                       
+| |        4279 | lambda-fixed-validation                                       
+- |        4309 | lambda-fixed-validation                                       
+| |        4339 | lambda-fixed-validation                                       
+\ |        4366 | lambda-fixed-validation                                       
+\ |        4398 | lambda-fixed-validation                                       
+\ |        4430 | lambda-fixed-validation                                       
+/ |        4460 | lambda-fixed-validation                                       
+- |        4489 | lambda-fixed-validation                                       
+| |        4519 | lambda-fixed-validation                                       
+\ |        4550 | lambda-fixed-validation                                       
+- |        4577 | lambda-fixed-validation                                       
+- |        4609 | lambda-fixed-validation                                       
+\ |        4634 | lambda-fixed-validation                                       
+v |        4640 | lambda-fixed-validation [19.5s]
+
+/ |          0 | lambda-optimizer-validation                                    
+- |          1 | lambda-optimizer-validation                                    
+- |         29 | lambda-optimizer-validation                                    
+- |         57 | lambda-optimizer-validation                                    
+- |         85 | lambda-optimizer-validation                                    
+/ |         92 | lambda-optimizer-validation                                    
+/ |        116 | lambda-optimizer-validation                                    
+| |        143 | lambda-optimizer-validation                                    
+- |        173 | lambda-optimizer-validation                                    
+| |        203 | lambda-optimizer-validation                                    
+- |        229 | lambda-optimizer-validation                                    
+\ |        258 | lambda-optimizer-validation                                    
+/ |        284 | lambda-optimizer-validation                                    
+/ |        300 | lambda-optimizer-validation                                    
+v |        306 | lambda-optimizer-validation [1.7s]
+
+/ |          0 | lambda-tree-kernel                                             
+/ |          8 | lambda-tree-kernel                                             
+| |         23 | lambda-tree-kernel                                             
+| |         39 | lambda-tree-kernel                                             
+v |         50 | lambda-tree-kernel
+
+/ |          0 | lambda-tree-optimizer                                          
+\ |         18 | lambda-tree-optimizer                                          
+- |         33 | lambda-tree-optimizer                                          
+/ |         48 | lambda-tree-optimizer                                          
+v |         54 | lambda-tree-optimizer
+
+/ |          0 | na-mask                                                        
+- |         13 | na-mask                                                        
+\ |         34 | na-mask                                                        
+\ |         54 | na-mask                                                        
+\ |         70 | na-mask                                                        
+/ |         88 | na-mask                                                        
+\ |        106 | na-mask                                                        
+v |        116 | na-mask
+
+/ |          0 | prepare-tree                                                   
+| |         11 | prepare-tree                                                   
+\ |         22 | prepare-tree                                                   
+\ |         30 | prepare-tree                                                   
+\ |         42 | prepare-tree                                                   
+/ |         48 | prepare-tree                                                   
+/ |         56 | prepare-tree                                                   
+- |         61 | prepare-tree                                                   
+| |         63 | prepare-tree                                                   
+v |         64 | prepare-tree [1.8s]
+
+/ |          0 | progress-contract                                              
+\ |         10 | progress-contract                                              
+/ |         20 | progress-contract                                              
+| |         27 | progress-contract                                              
+| |         35 | progress-contract                                              
+v |         36 | progress-contract
+
+/ |          0 | resolve-tree                                                   
+/ |         12 | resolve-tree                                                   
+\ |         26 | resolve-tree                                                   
+v |         29 | resolve-tree
+
+/ |          0 | result-methods                                                 
+\ |         10 | result-methods                                                 
+/ |         24 | result-methods                                                 
+/ |         40 | result-methods                                                 
+v |         42 | result-methods
+
+/ |          0 | retained-subtree-inspection-cache                              
+- |          9 | retained-subtree-inspection-cache                              
+| |         19 | retained-subtree-inspection-cache                              
+v |         25 | retained-subtree-inspection-cache
+
+/ |          0 | root-sensitivity-contract                                      
+- |          5 | root-sensitivity-contract                                      
+/ |         12 | root-sensitivity-contract                                      
+/ |         20 | root-sensitivity-contract                                      
+| |         27 | root-sensitivity-contract                                      
+\ |         34 | root-sensitivity-contract                                      
+\ |         42 | root-sensitivity-contract                                      
+- |         49 | root-sensitivity-contract                                      
+\ |         54 | root-sensitivity-contract                                      
+/ |         60 | root-sensitivity-contract                                      
+- |         65 | root-sensitivity-contract                                      
+| |         71 | root-sensitivity-contract                                      
+/ |         76 | root-sensitivity-contract                                      
+\ |         82 | root-sensitivity-contract                                      
+| |         87 | root-sensitivity-contract                                      
+\ |         90 | root-sensitivity-contract                                      
+\ |        102 | root-sensitivity-contract                                      
+| |        115 | root-sensitivity-contract                                      
+/ |        128 | root-sensitivity-contract                                      
+- |        141 | root-sensitivity-contract                                      
+| |        151 | root-sensitivity-contract                                      
+| |        163 | root-sensitivity-contract                                      
+| |        179 | root-sensitivity-contract                                      
+\ |        190 | root-sensitivity-contract                                      
+| |        199 | root-sensitivity-contract                                      
+v |        206 | root-sensitivity-contract [4.3s]
+
+/ |          0 | runtime-progress                                               [fastphylosig: K] Checking tree...
+[fastphylosig: K] Calculating K...
+[fastphylosig: K] Done | 0.02 s
+[fastphylosig: D] Checking tree...
+[fastphylosig: D] Preparing data...
+[fastphylosig: D] Calculating observed D...
+[fastphylosig: D] Simulating random and Brownian nulls...
+[fastphylosig: Delta] Checking tree...
+[fastphylosig: Delta] Preparing data...
+[fastphylosig: Delta] Estimating ancestral states...
+[fastphylosig: Delta] Running MCMC...
+[fastphylosig: Delta] Finalizing diagnostics...
+[fastphylosig: ACE] Checking tree...
+[fastphylosig: ACE] Preparing data...
+[fastphylosig: ACE] Estimating ancestral states...
+
+\ |          6 | runtime-progress                                               
+\ |         18 | runtime-progress                                               
+v |         20 | runtime-progress
+
+/ |          0 | single-boundary-context-validation                             
+- |          9 | single-boundary-context-validation                             
+- |         13 | single-boundary-context-validation                             
+v |         13 | single-boundary-context-validation
+
+/ |          0 | stage2b1-raw-boundary                                          
+\ |          6 | stage2b1-raw-boundary                                          
+/ |         12 | stage2b1-raw-boundary                                          
+\ |         22 | stage2b1-raw-boundary                                          
+/ |         36 | stage2b1-raw-boundary                                          
+v |         39 | stage2b1-raw-boundary
+
+/ |          0 | stage2b2b-inspection-equivalence                               
+- |          9 | stage2b2b-inspection-equivalence                               
+\ |         10 | stage2b2b-inspection-equivalence                               
+/ |         28 | stage2b2b-inspection-equivalence                               
+\ |         46 | stage2b2b-inspection-equivalence                               
+/ |         64 | stage2b2b-inspection-equivalence                               
+- |         73 | stage2b2b-inspection-equivalence                               
+\ |         90 | stage2b2b-inspection-equivalence                               
+\ |        106 | stage2b2b-inspection-equivalence                               
+/ |        124 | stage2b2b-inspection-equivalence                               
+\ |        142 | stage2b2b-inspection-equivalence                               
+\ |        154 | stage2b2b-inspection-equivalence                               
+\ |        170 | stage2b2b-inspection-equivalence                               
+| |        187 | stage2b2b-inspection-equivalence                               
+| |        207 | stage2b2b-inspection-equivalence                               
+/ |        224 | stage2b2b-inspection-equivalence                               
+| |        243 | stage2b2b-inspection-equivalence                               
+| |        259 | stage2b2b-inspection-equivalence                               
+/ |        276 | stage2b2b-inspection-equivalence                               
+- |        293 | stage2b2b-inspection-equivalence                               
+- |        309 | stage2b2b-inspection-equivalence                               
+\ |        322 | stage2b2b-inspection-equivalence                               
+- |        329 | stage2b2b-inspection-equivalence                               
+/ |        336 | stage2b2b-inspection-equivalence                               
+\ |        354 | stage2b2b-inspection-equivalence                               
+/ |        372 | stage2b2b-inspection-equivalence                               
+| |        387 | stage2b2b-inspection-equivalence                               
+\ |        406 | stage2b2b-inspection-equivalence                               
+/ |        420 | stage2b2b-inspection-equivalence                               
+- |        437 | stage2b2b-inspection-equivalence                               
+| |        455 | stage2b2b-inspection-equivalence                               
+| |        475 | stage2b2b-inspection-equivalence                               
+| |        491 | stage2b2b-inspection-equivalence                               
+- |        505 | stage2b2b-inspection-equivalence                               
+v |        510 | stage2b2b-inspection-equivalence [4.0s]
+
+/ |          0 | trait-failure-semantics                                        
+- |         13 | trait-failure-semantics                                        
+\ |         26 | trait-failure-semantics                                        
+- |         37 | trait-failure-semantics                                        
+- |         49 | trait-failure-semantics                                        
+| |         63 | trait-failure-semantics                                        
+v |         65 | trait-failure-semantics
+
+/ |          0 | tree-core                                                      
+\ |         14 | tree-core                                                      
+v |         29 | tree-core
+
+/ |          0 | tree-requirements-registry                                     
+v |         11 | tree-requirements-registry
+
+/ |          0 | unified-fast-signal-equivalence                                
+- |         13 | unified-fast-signal-equivalence                                
+- |         25 | unified-fast-signal-equivalence                                
+/ |         44 | unified-fast-signal-equivalence                                
+\ |         54 | unified-fast-signal-equivalence                                
+- |         73 | unified-fast-signal-equivalence                                
+\ |         86 | unified-fast-signal-equivalence                                
+| |        103 | unified-fast-signal-equivalence                                
+| |        123 | unified-fast-signal-equivalence                                
+\ |        134 | unified-fast-signal-equivalence                                
+\ |        154 | unified-fast-signal-equivalence                                
+- |        157 | unified-fast-signal-equivalence                                
+| |        175 | unified-fast-signal-equivalence                                
+/ |        192 | unified-fast-signal-equivalence                                
+| |        211 | unified-fast-signal-equivalence                                
+\ |        226 | unified-fast-signal-equivalence                                
+- |        233 | unified-fast-signal-equivalence                                
+v |        243 | unified-fast-signal-equivalence [2.0s]
+
+/ |          0 | warning-status-stability                                       
+v |          4 | warning-status-stability
+
+== Results =====================================================================
+Duration: 73.5 s
+
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 8336 ]
+
+FINAL_TEST_TOTALS
+FAIL=0
+WARN=0
+SKIP=0
+PASS=8336
+
+ELAPSED_SECONDS=127.020164013
+COMMIT=be4e710862992f1242a9d5053abfba70feee0fdd

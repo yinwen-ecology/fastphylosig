@@ -1,0 +1,5 @@
+"path","warnings","error","convergence","message","loglik","rate"
+"stable_fast_ace_CI_TRUE","","",0,"both X-convergence and relative convergence (5)",-42.4173076049793,3.82310196497805
+"stable_fast_ace_CI_FALSE","","",0,"both X-convergence and relative convergence (5)",-42.4173076049793,3.82310196497805
+"stable_ape_ace","","",,"",-42.4173076049793,3.82310193161385
+"pathological_fast_ace_CI_FALSE","transition-rate optimization did not converge: singular convergence (7)","",1,"singular convergence (7)",-42.8458792736776,218.629509083683

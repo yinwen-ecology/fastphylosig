@@ -1,0 +1,36 @@
+commit=3f84775bc96e00820aa39522245cb63175f79a5d
+package_version=0.2.0
+package_library=C:\Users\wenyi\.codex\visualizations\2026\05\26\019e6293-544a-7c11-9cb6-8324d897ca01\closure-3f84775\FINAL_AUDIT_LIB
+loaded_package_path=C:/Users/wenyi/.codex/visualizations/2026/05/26/019e6293-544a-7c11-9cb6-8324d897ca01/closure-3f84775/FINAL_AUDIT_LIB/fastphylosig
+R=R version 4.6.1 (2026-06-24 ucrt)
+platform=x86_64-w64-mingw32
+os_type=windows
+ape=5.8.1
+locale_collate=C
+locale_ctype=C
+openmp_capability=reported-by-R
+working_directory=C:/Users/wenyi/.codex/visualizations/2026/05/26/019e6293-544a-7c11-9cb6-8324d897ca01/closure-3f84775
+production_change_scope=none; cross_platform=not_run
+R version 4.6.1 (2026-06-24 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 26200)
+
+Matrix products: default
+  LAPACK version 3.12.1
+
+locale:
+[1] C
+system code page: 65001
+
+time zone: Asia/Shanghai
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] ape_5.8-1          fastphylosig_0.2.0
+
+loaded via a namespace (and not attached):
+ [1] compiler_4.6.1 Matrix_1.7-5   parallel_4.6.1 tools_4.6.1    expm_1.0-0    
+ [6] Rcpp_1.1.2     nlme_3.1-169   grid_4.6.1     digest_0.6.39  lattice_0.22-9

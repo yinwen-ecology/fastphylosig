@@ -1,0 +1,20 @@
+fastphylosig 0.2.0 final release caper observed-D parity
+LIBRARY_PATH=C:/Users/wenyi/.codex/visualizations/2026/05/26/019e6293-544a-7c11-9cb6-8324d897ca01/closure-3f84775/FINAL_AUDIT_LIB
+PACKAGE_PATH=C:/Users/wenyi/.codex/visualizations/2026/05/26/019e6293-544a-7c11-9cb6-8324d897ca01/closure-3f84775/FINAL_AUDIT_LIB/fastphylosig
+FASTPHYLOSIG_VERSION=0.2.0
+R_VERSION=R version 4.6.1 (2026-06-24 ucrt)
+TOLERANCE_ABS=1e-10
+TOLERANCE_REL=1e-10
+TOLERANCE_REASON=1e-10 follows the repository observed-contrast checks and allows harmless floating-point traversal differences
+COMPARISON=observed D only; P values, null means, permutations, and timing are not compared
+FIXTURE=inline fixed 4-tip ultrametric tree with named binary states
+CAPER_PERMUT=1
+CAPER_PERMUT_REASON=the tested caper interface rejects permut=0; one required draw is not used in the observed-D comparison
+CAPER_SEED=20260913
+FAST_NSIM=1
+FAST_NULL_INPUT=fixed one-column matrices supplied only to satisfy fast_d call contract
+CAPER_VERSION=1.0.4
+CAPER_WARNINGS=
+FAST_WARNINGS=
+CAPER_REFERENCE_PARITY=PASS
+CAPER_REFERENCE_DETAIL=observed D contrast sums agree within the declared tolerance; caper_observed=2; fast_observed=2; difference_fast_minus_caper=0
