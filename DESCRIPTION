@@ -29,6 +29,7 @@ LinkingTo:
     RcppArmadillo
 Suggests:
     caper,
+    mvtnorm,
     phytools,
     testthat
 URL: https://github.com/yinwen-ecology/fastphylosig,
