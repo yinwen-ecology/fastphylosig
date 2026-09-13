@@ -1,7 +1,7 @@
 Package: fastphylosig
 Type: Package
 Title: Fast Phylogenetic Signal Statistics
-Version: 0.2.0.9000
+Version: 0.2.0
 Authors@R:
     person("Yin", "Wen", role = c("aut", "cre"),
            email = "yinwen-ecology@users.noreply.github.com")
