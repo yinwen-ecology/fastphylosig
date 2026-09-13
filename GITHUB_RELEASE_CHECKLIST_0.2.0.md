@@ -13,9 +13,9 @@ Release target: `v0.2.0`
 
 ## Release Assets
 
-- [ ] Attach `RELEASE_NOTES_0.2.0.md` as the release notes.
-- [ ] Attach the authoritative `fastphylosig_0.2.0.tar.gz` artifact.
-- [ ] Verify that no historical `fastphylosig_0.1.0.tar.gz` artifact is
+- [x] Publish the contents of `RELEASE_NOTES_0.2.0.md` as the release notes.
+- [x] Attach the authoritative `fastphylosig_0.2.0.tar.gz` artifact.
+- [x] Verify that no historical `fastphylosig_0.1.0.tar.gz` artifact is
   attached to this release.
 - [x] Retain `benchmarks/final_release/release/FINAL_RELEASE_MANIFEST.md`.
 - [x] Retain `benchmarks/final_release/release/FINAL_RELEASE_PROVENANCE.md`.
@@ -27,9 +27,13 @@ artifact SHA-256 above against the local files. Mark the GitHub release
 non-draft only after all three checks pass and the authoritative artifact is
 the asset being attached.
 
-- [ ] Final tag, artifact, and SHA-256 recheck completed immediately before
+- [x] Final tag, artifact, and SHA-256 recheck completed immediately before
   publication.
-- [ ] Release is marked non-draft only after the recheck passes.
+- [x] Release is marked non-draft only after the recheck passes.
+
+Post-publication verification downloaded the GitHub Release asset and
+confirmed SHA-256
+`d0178b870c6ab77158a434a9fd03c871814c49e360a3d288b4dda218385aeb67`.
 
 The package source and frozen release evidence must remain unchanged during
 publication. This checklist does not claim cross-platform qualification or
