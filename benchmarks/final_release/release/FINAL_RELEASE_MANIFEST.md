@@ -6,6 +6,7 @@ Decision date: 2026-09-13
 
 - Release source commit: `3f84775bc96e00820aa39522245cb63175f79a5d`
 - Branch: `codex/fastphylosig-0.2.0-dev`
+- Annotated tag: `v0.2.0` -> `3f84775bc96e00820aa39522245cb63175f79a5d`
 - Package version: `0.2.0`
 - Artifact: `fastphylosig_0.2.0.tar.gz`
 - Artifact SHA-256:
@@ -66,6 +67,7 @@ being qualified for CRAN in this task.
 AUTHORITATIVE_RELEASE_ARTIFACT = fastphylosig_0.2.0.tar.gz
 FASTPHYLOSIG_0_2_0 = PUBLIC_RELEASE_READY_LOCAL_VALIDATION
 GITHUB_RELEASE_READY = TRUE
+GIT_PROVENANCE = PASS (v0.2.0 verified)
 CROSS_PLATFORM_QUALIFICATION = NOT_RUN / DEFERRED
 CRAN_READINESS = NOT_CLAIMED
 ```

@@ -60,8 +60,9 @@ benchmark rows at commit `084e979` and package metadata 0.2.0.9000 remain valid
 pre-version performance provenance because executable production code is
 unchanged; they are not relabeled as final artifact runs.
 
-The `v0.2.0` annotated tag is authorized only for the authoritative source
-commit above. Evidence commits may follow without changing the tagged package
+The annotated tag `v0.2.0` was created and verified against the authoritative
+source commit above. Its tag object is `a9d8f54eab07b1275ef1af620544b08a22e0cda7`.
+Repository-only evidence commits follow without changing the tagged package
 source or the artifact identity.
 
 ## Deferred qualification

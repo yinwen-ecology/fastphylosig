@@ -8,6 +8,7 @@ Review date: 2026-09-13
 FASTPHYLOSIG_0_2_0 = PUBLIC_RELEASE_READY_LOCAL_VALIDATION
 AUTHORITATIVE_RELEASE_SOURCE = 3f84775bc96e00820aa39522245cb63175f79a5d
 AUTHORITATIVE_RELEASE_ARTIFACT_SHA256 = d0178b870c6ab77158a434a9fd03c871814c49e360a3d288b4dda218385aeb67
+RELEASE_TAG = v0.2.0 -> 3f84775bc96e00820aa39522245cb63175f79a5d
 CROSS_PLATFORM_QUALIFICATION = NOT_RUN / DEFERRED
 CRAN_READINESS = NOT_CLAIMED
 ```
@@ -78,6 +79,10 @@ distributions, or performance.
 The older `c084ced` / `c3f05d...` package and the intermediate `146c03c` /
 `366b57...` package are `SUPERSEDED/HISTORICAL`. They remain preserved under
 the final-release closure evidence and are not presented as final artifacts.
+
+The annotated `v0.2.0` tag was verified to reference the authoritative source
+commit above. Repository-only evidence is recorded in a later commit and does
+not alter the tagged package source.
 
 ## Expert conclusion
 
