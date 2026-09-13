@@ -16,7 +16,9 @@
 #' to retain in the structural cache. Retained for compatibility; dense memory
 #' is controlled independently by `cache_budget`.
 #' @param cache_budget Maximum bytes retained in the numerical LRU cache.
-#' @return An object of class `fastphylosig_tree`.
+#' @return An object of class `fastphylosig_tree`. Pass it as the tree argument
+#'   to `fast_signal()`, `fast_k()`, `fast_lambda()`, `fast_d()`, and
+#'   `fast_delta()`; use `fast_ace(x, prepared = ctx)` for ACE.
 #' @export
 prepare_tree <- function(tree, max_cached_subsets = 16L,
                          cache_budget = 512 * 1024^2) {

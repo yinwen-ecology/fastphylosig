@@ -24,11 +24,11 @@ cache. A value of zero permits transient numerical calculations without
 retaining their dense payloads.}
 }
 \value{
-An object of class \code{c("fastphylosig_tree", "list")}. It can be passed
-as the first argument to \code{fast_signal()}, \code{fast_k()},
-\code{fast_lambda()}, \code{fast_d()}, \code{fast_delta()}, or
-\code{fast_ace()} wherever a phylogenetic tree is accepted. The unified
-\code{fast_signal()} entry point still requires an explicit \code{method}.
+An object of class \code{c("fastphylosig_tree", "list")}. Pass it as the tree
+argument to \code{fast_signal()}, \code{fast_k()}, \code{fast_lambda()},
+\code{fast_d()}, and \code{fast_delta()}. For ACE, use
+\code{fast_ace(x, prepared = ctx)}. The unified \code{fast_signal()} entry
+point still requires an explicit \code{method}.
 }
 \details{
 The tree context does not alter the tree or raw trait data. Initial preparation
