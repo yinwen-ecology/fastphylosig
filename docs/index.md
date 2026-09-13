@@ -132,10 +132,10 @@ with the saved result. Changing the worker count can repartition parallel
 random-number streams, and small jobs may be faster in serial. These are
 reproducibility rules; the public estimators and defaults are unchanged.
 
-## 0.2.0 development status
+## 0.2.0 release status
 
-The development version retains declared compatibility with R 4.1.0 and
-above. Canonicalization Contract V2 has local representation, locale,
+The 0.2.0 release retains declared compatibility with R 4.1.0 and above.
+Canonicalization Contract V2 has local representation, locale,
 mutation, persistence, estimator-parity, and performance evidence on Windows
 with R 4.6.1/Rtools 4.5. Cross-platform, R-devel, and second-BLAS
 qualification remain outside this local validation scope.

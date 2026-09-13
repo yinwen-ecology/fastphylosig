@@ -1,4 +1,4 @@
-# fastphylosig 0.2.0.9000
+# fastphylosig 0.2.0
 
 - Integrated Canonicalization Contract V2 for deterministic,
   representation-safe tree preparation. Tip IDs and labels are preserved;

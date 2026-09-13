@@ -236,12 +236,12 @@ Null-distribution plots require retained simulations. Use
 `return_sim = TRUE` for K and Delta; D requires both `return_sim = TRUE` and
 `keep_null = TRUE`.
 
-## Compatibility and development status
+## Compatibility and release status
 
-The development version is 0.2.0.9000 and retains declared compatibility with
-R 4.1.0 and above. Production estimators, defaults, numerical tolerances, RNG,
-thread policy, and the public API are unchanged. Canonicalization Contract V2
-has local representation, locale, mutation, persistence, estimator-parity,
-and performance evidence on Windows with R 4.6.1/Rtools 4.5. Cross-platform,
+The 0.2.0 release retains declared compatibility with R 4.1.0 and above.
+Production estimators, defaults, numerical tolerances, RNG, thread policy, and
+the public API are unchanged. Canonicalization Contract V2 has local
+representation, locale, mutation, persistence, estimator-parity, and
+performance evidence on Windows with R 4.6.1/Rtools 4.5. Cross-platform,
 R-devel, and second-BLAS qualification remain outside this local validation
 scope.
