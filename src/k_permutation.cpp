@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "numeric_utils.h"
+#include "k_strategy.h"
 
 #ifdef _OPENMP
 # include <omp.h>
@@ -505,6 +506,513 @@ int effective_threads(const int requested) {
 
 } // namespace kperm
 
+// ===========================================================================
+// Production hybrid/fused evaluator.
+// ===========================================================================
+//
+// Two previously validated transformations, in ONE kernel so that the
+// combination is a single-variable experiment:
+//
+//   STAGE 1 (hybrid)  replaces production pass 1 -- the postorder upward
+//     messages, the preorder downward states, and the qlinear tip reduction --
+//     with a dot product against the tree-only vector q = Q1:
+//         delta = (sum_tip q[tip] * (x_tip - baseline)) / sum_inv
+//     That removes one full postorder+preorder traversal pair.  It changes the
+//     rounding of `delta` (not its algebra), so it is tolerance-exact rather
+//     than bitwise-exact against production.
+//
+//   STAGE 3B (fusion)  makes one tree traversal serve `block` permutations, so
+//     the tree arrays are read once per block instead of once per permutation.
+//     It is bitwise exact against production at any block depth.
+//
+//   STAGE 3C (combined) = both, behind one `hybrid` flag.
+//
+// NUMERICAL CONTRACT (all four claims are tested, not assumed):
+//   hybrid = false, block = 1  ->  bitwise identical to kperm::compute_one()
+//   hybrid = true,  block = 1  ->  bitwise identical to the Stage 2D3 hybrid
+//   hybrid = false, block > 1  ->  bitwise identical to production (Stage 3B)
+//   hybrid = true,  block > 1  ->  bitwise identical to the Stage 1 hybrid
+//
+// The block is a STORAGE unit, not a DRAWING unit: generation stays serial, in
+// global permutation order, before the block it fills is evaluated, and
+// evaluation consumes no RNG.  So the permutation stream depends only on
+// (seed, n_tip, nsim) and never on the block size.  This is the property that
+// keeps the RNG contract intact across the integration.
+//
+// Production owns the block shape checks, storage layout, and traversal
+// helpers below.  A block is represented as node-major scratch with contiguous
+// permutation/trait slots; traversal helpers operate on that layout while the
+// evaluator retains the reference kernel's per-sample arithmetic order.
+// ===========================================================================
+namespace kfused {
+
+using kperm::Cache;
+using kperm::Tree;
+using kperm::fisher_yates;
+
+// ---------------------------------------------------------------------------
+// Block storage layout.
+//
+// A node owns `capacity * traits` cells.  Within each node, all traits for one
+// permutation are contiguous.  Keeping this arithmetic in one checked layout
+// object makes workspace sizing and traversal indexing share the same shape.
+// ---------------------------------------------------------------------------
+inline bool checked_product(const std::size_t lhs, const std::size_t rhs,
+                            std::size_t& result) {
+  if (lhs != 0 && rhs > std::numeric_limits<std::size_t>::max() / lhs) {
+    return false;
+  }
+  result = lhs * rhs;
+  return true;
+}
+
+struct BlockLayout {
+  std::size_t trait_stride;
+  std::size_t node_stride;
+  std::size_t node_cells;
+  std::size_t output_cells;
+
+  inline std::size_t permutation_offset(const int permutation) const {
+    return static_cast<std::size_t>(permutation) * trait_stride;
+  }
+
+  inline std::size_t slot(const int permutation, const int trait) const {
+    return permutation_offset(permutation) + static_cast<std::size_t>(trait);
+  }
+
+  inline std::size_t node_offset(const int node) const {
+    return static_cast<std::size_t>(node) * node_stride;
+  }
+
+  inline std::size_t node_slot(const int node, const int permutation,
+                               const int trait) const {
+    return node_offset(node) + slot(permutation, trait);
+  }
+};
+
+struct BlockWorkspace {
+  const BlockLayout& layout;
+  std::vector<double>& message;
+  std::vector<double>& state;
+  std::vector<double>& baseline;
+  std::vector<double>& delta;
+  std::vector<double>& out;
+
+  BlockWorkspace(const BlockLayout& layout_, std::vector<double>& message_,
+                 std::vector<double>& state_, std::vector<double>& baseline_,
+                 std::vector<double>& delta_, std::vector<double>& out_)
+    : layout(layout_), message(message_), state(state_), baseline(baseline_),
+      delta(delta_), out(out_) {}
+
+  inline void allocate() {
+    message.assign(layout.node_cells, 0.0);
+    state.assign(layout.node_cells, 0.0);
+    baseline.assign(layout.node_stride, 0.0);
+    delta.assign(layout.node_stride, 0.0);
+    out.assign(layout.output_cells,
+               std::numeric_limits<double>::quiet_NaN());
+  }
+};
+
+inline BlockLayout make_block_layout(const int capacity, const int chunk,
+                                     const int nperm,
+                                     const int n_total) {
+  const std::size_t capacity_count = static_cast<std::size_t>(capacity);
+  const std::size_t trait_count = static_cast<std::size_t>(chunk);
+  const std::size_t node_count = static_cast<std::size_t>(n_total);
+  std::size_t node_stride = 0;
+  std::size_t node_cells = 0;
+  std::size_t output_cells = 0;
+  if (!checked_product(capacity_count, trait_count, node_stride) ||
+      !checked_product(node_count, node_stride, node_cells) ||
+      !checked_product(static_cast<std::size_t>(nperm), trait_count,
+                       output_cells)) {
+    Rcpp::stop("Permutation block workspace dimensions overflow.");
+  }
+  BlockLayout layout = {trait_count, node_stride, node_cells, output_cells};
+  return layout;
+}
+
+inline void load_block_baselines(const int n, const int col0, const int chunk,
+                                 const int* perms, const int nperm,
+                                 const double* x,
+                                 BlockWorkspace& workspace) {
+  for (int i = 0; i < nperm; ++i) {
+    const int src0 = perms[static_cast<std::size_t>(i) * n];
+    for (int j = 0; j < chunk; ++j) {
+      workspace.baseline[workspace.layout.slot(i, j)] =
+        x[static_cast<std::size_t>(src0) +
+          static_cast<std::size_t>(n) * static_cast<std::size_t>(col0 + j)];
+    }
+  }
+}
+
+// Shared postorder pass.  `subtract_delta` selects pass A (x - baseline) or
+// pass D ((x - baseline) - delta); both preserve the reference's double
+// subtraction before any later widening.
+inline void run_upward_pass(const Tree& tree, const Cache& cache,
+                            const double* x, const int n, const int col0,
+                            const int chunk, const int* perms,
+                            const int nperm, const bool subtract_delta,
+                            BlockWorkspace& workspace) {
+  for (std::size_t ii = 0; ii < tree.postorder.size(); ++ii) {
+    const int node = tree.postorder[ii];
+    const std::size_t base = workspace.layout.node_offset(node);
+    if (node < n) {
+      for (int i = 0; i < nperm; ++i) {
+        const int src = perms[static_cast<std::size_t>(i) * n + node];
+        const std::size_t off = workspace.layout.permutation_offset(i);
+        for (int j = 0; j < chunk; ++j) {
+          const std::size_t slot = off + static_cast<std::size_t>(j);
+          const double raw =
+            x[static_cast<std::size_t>(src) +
+              static_cast<std::size_t>(n) *
+              static_cast<std::size_t>(col0 + j)] - workspace.baseline[slot];
+          workspace.message[base + slot] = subtract_delta
+            ? raw - workspace.delta[slot]
+            : raw;
+        }
+      }
+    } else {
+      const int begin = tree.child_ptr[static_cast<std::size_t>(node)];
+      const int end = tree.child_ptr[static_cast<std::size_t>(node + 1)];
+      const double s = cache.aggregate[static_cast<std::size_t>(node)];
+      for (int i = 0; i < nperm; ++i) {
+        const std::size_t off = workspace.layout.permutation_offset(i);
+        for (int j = 0; j < chunk; ++j) {
+          long double weighted = 0.0L;
+          for (int k = begin; k < end; ++k) {
+            const int child = tree.children[static_cast<std::size_t>(k)];
+            weighted += static_cast<long double>(
+              cache.outgoing[static_cast<std::size_t>(child)]) *
+              static_cast<long double>(
+                workspace.message[workspace.layout.node_offset(child) +
+                                  off + static_cast<std::size_t>(j)]);
+          }
+          workspace.message[base + off + static_cast<std::size_t>(j)] =
+            static_cast<double>(weighted / static_cast<long double>(s));
+        }
+      }
+    }
+  }
+}
+
+inline void run_downward_pass(const Tree& tree, const Cache& cache,
+                              const int n, const int chunk, const int nperm,
+                              BlockWorkspace& workspace) {
+  for (int i = 0; i < nperm; ++i) {
+    for (int j = 0; j < chunk; ++j) {
+      workspace.state[workspace.layout.node_slot(tree.root, i, j)] = 0.0;
+    }
+  }
+  for (std::size_t ii = 1; ii < tree.preorder.size(); ++ii) {
+    const int node = tree.preorder[ii];
+    const int par = tree.parent[static_cast<std::size_t>(node)];
+    const double alpha = node < n ? 1.0 :
+      tree.branch[static_cast<std::size_t>(node)] *
+      cache.outgoing[static_cast<std::size_t>(node)];
+    const std::size_t base = workspace.layout.node_offset(node);
+    const std::size_t pbase = workspace.layout.node_offset(par);
+    for (int i = 0; i < nperm; ++i) {
+      const std::size_t off = workspace.layout.permutation_offset(i);
+      for (int j = 0; j < chunk; ++j) {
+        const std::size_t slot = off + static_cast<std::size_t>(j);
+        const double ps = workspace.state[pbase + slot];
+        workspace.state[base + slot] = ps + alpha *
+          (workspace.message[base + slot] - ps);
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// q := Q1, the tree-only row-sum vector of the tip precision matrix.
+// Computed once per tree, independent of the data and of the permutation, so it
+// is amortised over the whole run.
+// ---------------------------------------------------------------------------
+inline std::vector<double> build_q(const Tree& tree, const Cache& cache) {
+  const int n = tree.n_tip;
+  std::vector<double> state(static_cast<std::size_t>(tree.n_total), 0.0);
+  for (std::size_t ii = 1; ii < tree.preorder.size(); ++ii) {
+    const int node = tree.preorder[ii];
+    const int par = tree.parent[static_cast<std::size_t>(node)];
+    const double alpha = node < n ? 1.0 :
+      tree.branch[static_cast<std::size_t>(node)] *
+      cache.outgoing[static_cast<std::size_t>(node)];
+    state[static_cast<std::size_t>(node)] =
+      state[static_cast<std::size_t>(par)] +
+      alpha * (1.0 - state[static_cast<std::size_t>(par)]);
+  }
+  std::vector<double> q(static_cast<std::size_t>(n), 0.0);
+  for (int tip = 0; tip < n; ++tip) {
+    const int par = tree.parent[static_cast<std::size_t>(tip)];
+    q[static_cast<std::size_t>(tip)] =
+      (1.0 - state[static_cast<std::size_t>(par)]) /
+      tree.branch[static_cast<std::size_t>(tip)];
+  }
+  return q;
+}
+
+// ---------------------------------------------------------------------------
+// THE EVALUATOR.
+//
+// Processes `nperm` permutations (nperm <= block_cap) of one trait chunk in a
+// single traversal of the tree.
+//
+// hybrid == false : passes A (upward on x-baseline), B (downward), C (GLS delta
+//                   from qlinear), D (upward on x-baseline-delta), E
+//                   (downward), F (numerator/denominator).
+// hybrid == true  : passes A and B are SKIPPED and pass C becomes the Stage 1
+//                   dot product.  Passes D, E, F are unchanged.
+//
+// Accumulation order per (permutation, trait) pair is exactly production's --
+// children in CSR order, tips in 0..n_tip-1 order, preorder in index order --
+// and nothing is shared between traits or between permutations.
+// ---------------------------------------------------------------------------
+inline void compute_block(const Tree& tree, const Cache& cache,
+                          const std::vector<double>& q,
+                          const double* x, const int ncol, const int col0,
+                          const int chunk, const int* perms, const int nperm,
+                          const int block_cap, const bool hybrid,
+                          std::vector<double>& message, std::vector<double>& state,
+                          std::vector<double>& baseline, std::vector<double>& delta,
+                          std::vector<double>& out) {
+  const int n = tree.n_tip;
+  if (n < 1 || tree.n_total < n || tree.root < 0 ||
+      tree.root >= tree.n_total || ncol < 1 || col0 < 0 || chunk < 1 ||
+      chunk > ncol || col0 > ncol - chunk || nperm < 1 || block_cap < nperm ||
+      x == nullptr || perms == nullptr) {
+    Rcpp::stop("Invalid dimensions or pointers for permutation block evaluation.");
+  }
+  const std::size_t node_count = static_cast<std::size_t>(tree.n_total);
+  if (tree.parent.size() < node_count || tree.branch.size() < node_count ||
+      tree.child_ptr.size() < node_count + 1 ||
+      tree.preorder.size() != node_count || tree.postorder.size() != node_count ||
+      cache.outgoing.size() < node_count || cache.aggregate.size() < node_count ||
+      (hybrid && q.size() < static_cast<std::size_t>(n))) {
+    Rcpp::stop("Tree, cache, or hybrid-vector storage is incomplete.");
+  }
+  std::size_t permutation_cells = 0;
+  if (!checked_product(static_cast<std::size_t>(nperm),
+                       static_cast<std::size_t>(n), permutation_cells)) {
+    Rcpp::stop("Permutation block dimensions overflow.");
+  }
+  (void)permutation_cells;
+
+  const BlockLayout layout =
+    make_block_layout(block_cap, chunk, nperm, tree.n_total);
+  BlockWorkspace workspace(layout, message, state, baseline, delta, out);
+  workspace.allocate();
+
+  // Baseline is tip 0 of each permutation, as in the reference evaluator.
+  load_block_baselines(n, col0, chunk, perms, nperm, x, workspace);
+
+  if (!hybrid) {
+    // ---- pass A: upward Gaussian messages for x - baseline -----------------
+    run_upward_pass(tree, cache, x, n, col0, chunk, perms, nperm,
+                    false, workspace);
+    // ---- pass B: downward states -------------------------------------------
+    run_downward_pass(tree, cache, n, chunk, nperm, workspace);
+  }
+
+  // ---- pass C: GLS offset delta -------------------------------------------
+  if (hybrid) {
+    // ==================== STAGE 1 REPLACEMENT ==============================
+    // Production's pass 1 (postorder upward messages, preorder downward
+    // states, qlinear tip reduction) is removed.  S2 = 1'Q x_tilde is obtained
+    // as a dot product against the tree-only vector q = Q1.
+    //
+    // Term order and widening match the Stage 2D3 hybrid exactly: the tip
+    // subtraction is done in double, then widened to long double for the
+    // multiply and the accumulation.
+    for (int i = 0; i < nperm; ++i) {
+      for (int j = 0; j < chunk; ++j) {
+        long double s2 = 0.0L;
+        for (int tip = 0; tip < n; ++tip) {
+          const int src = perms[static_cast<std::size_t>(i) * n + tip];
+          s2 += static_cast<long double>(q[static_cast<std::size_t>(tip)]) *
+            static_cast<long double>(
+              x[static_cast<std::size_t>(src) +
+                static_cast<std::size_t>(n) *
+                static_cast<std::size_t>(col0 + j)] -
+              workspace.baseline[layout.slot(i, j)]);
+        }
+        workspace.delta[layout.slot(i, j)] = static_cast<double>(
+          s2 / static_cast<long double>(cache.sum_inv));
+      }
+    }
+    // =================== STAGE 1 REPLACEMENT END ===========================
+  } else {
+    for (int i = 0; i < nperm; ++i) {
+      for (int j = 0; j < chunk; ++j) {
+        long double qlinear = 0.0L;
+        for (int tip = 0; tip < n; ++tip) {
+          const int par = tree.parent[static_cast<std::size_t>(tip)];
+          const double pstate =
+            workspace.state[layout.node_slot(par, i, j)];
+          const int src = perms[static_cast<std::size_t>(i) * n + tip];
+          const double raw =
+            x[static_cast<std::size_t>(src) +
+              static_cast<std::size_t>(n) *
+              static_cast<std::size_t>(col0 + j)] -
+            workspace.baseline[layout.slot(i, j)];
+          // NOTE: production evaluates `x - baseline - parent_state` entirely
+          // in double and only then widens.  Widening the operands first
+          // changes the rounding and was caught by the fidelity gate
+          // (1-ulp K drift).
+          const double diff_d = raw - pstate;
+          qlinear += static_cast<long double>(diff_d) /
+            static_cast<long double>(
+              tree.branch[static_cast<std::size_t>(tip)]);
+        }
+        workspace.delta[layout.slot(i, j)] = static_cast<double>(
+          qlinear / static_cast<long double>(cache.sum_inv));
+      }
+    }
+  }
+
+  // ---- pass D: upward messages on (x - baseline) - delta -------------------
+  run_upward_pass(tree, cache, x, n, col0, chunk, perms, nperm,
+                  true, workspace);
+
+  // ---- pass E: downward states again --------------------------------------
+  run_downward_pass(tree, cache, n, chunk, nperm, workspace);
+
+  // ---- pass F: numerator and denominator ---------------------------------
+  for (int i = 0; i < nperm; ++i) {
+    for (int j = 0; j < chunk; ++j) {
+      long double numerator = 0.0L;
+      long double denominator = 0.0L;
+      for (int tip = 0; tip < n; ++tip) {
+        const int src = perms[static_cast<std::size_t>(i) * n + tip];
+        const double raw =
+          x[static_cast<std::size_t>(src) +
+            static_cast<std::size_t>(n) *
+            static_cast<std::size_t>(col0 + j)] -
+          workspace.baseline[layout.slot(i, j)];
+        const long double y =
+          static_cast<long double>(raw - workspace.delta[layout.slot(i, j)]);
+        numerator += y * y;
+      }
+      for (std::size_t ii = 1; ii < tree.preorder.size(); ++ii) {
+        const int node = tree.preorder[ii];
+        const int par = tree.parent[static_cast<std::size_t>(node)];
+        const long double ps = static_cast<long double>(
+          workspace.state[layout.node_slot(par, i, j)]);
+        long double cs;
+        if (node < n) {
+          const int src = perms[static_cast<std::size_t>(i) * n + node];
+          const double raw =
+            x[static_cast<std::size_t>(src) +
+              static_cast<std::size_t>(n) *
+              static_cast<std::size_t>(col0 + j)] -
+            workspace.baseline[layout.slot(i, j)];
+          cs = static_cast<long double>(
+            raw - workspace.delta[layout.slot(i, j)]);
+        } else {
+          cs = static_cast<long double>(
+            workspace.state[layout.node_slot(node, i, j)]);
+        }
+        const long double diff = cs - ps;
+        denominator += diff * diff / static_cast<long double>(
+          tree.branch[static_cast<std::size_t>(node)]);
+      }
+      const double den = static_cast<double>(denominator);
+      const double num = static_cast<double>(numerator);
+      workspace.out[layout.slot(i, j)] =
+        den > 0.0 && std::isfinite(den) && std::isfinite(num)
+        ? (num / den) / cache.normalization
+        : std::numeric_limits<double>::quiet_NaN();
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Single-permutation hybrid evaluator: a drop-in replacement for
+// kperm::compute_one() with the identical chunk loop and the identical output
+// layout, so it can be substituted directly inside production's OpenMP loops.
+// `hybrid = true, block = 1` is the numerically contracted configuration.
+// ---------------------------------------------------------------------------
+inline void compute_one_hybrid(const Tree& tree, const Cache& cache,
+                               const std::vector<double>& q,
+                               const double* x, const int ncol,
+                               const std::vector<int>& perm,
+                               const int trait_chunk,
+                               std::vector<double>& out) {
+  const int p = ncol;
+  out.assign(static_cast<std::size_t>(p),
+             std::numeric_limits<double>::quiet_NaN());
+  const int chunk_limit = std::max(1, std::min(trait_chunk, p));
+  std::vector<double> message, state, baseline, delta, block_out;
+  for (int col0 = 0; col0 < p; col0 += chunk_limit) {
+    const int chunk = std::min(chunk_limit, p - col0);
+    compute_block(tree, cache, q, x, ncol, col0, chunk, perm.data(), 1, 1,
+                  true, message, state, baseline, delta, block_out);
+    for (int j = 0; j < chunk; ++j) {
+      out[static_cast<std::size_t>(col0 + j)] =
+        block_out[static_cast<std::size_t>(j)];
+    }
+  }
+}
+
+// Transitional internal alias for the Stage 4 candidate's earlier helper
+// spelling.  New production dispatch uses compute_one_hybrid().
+inline void compute_hybrid_one(const Tree& tree, const Cache& cache,
+                               const std::vector<double>& q,
+                               const double* x, const int ncol,
+                               const std::vector<int>& perm,
+                               const int trait_chunk,
+                               std::vector<double>& out) {
+  compute_one_hybrid(tree, cache, q, x, ncol, perm, trait_chunk, out);
+}
+
+// ---------------------------------------------------------------------------
+// Permutation generation.
+//
+// Mirrors production's internal-RNG stream exactly: identity first when
+// include_observed, then Fisher-Yates, drawn strictly serially in global
+// permutation order.  Nothing here depends on the block size, which is the
+// property that keeps the RNG sequence invariant under the strategy selector.
+// ---------------------------------------------------------------------------
+inline void generate_block(int* dst, const int count, const int n,
+                           const int first, const bool include_observed) {
+  std::vector<int> row(static_cast<std::size_t>(n));
+  for (int i = 0; i < count; ++i) {
+    for (int r = 0; r < n; ++r) row[static_cast<std::size_t>(r)] = r;
+    if (!(include_observed && first + i == 0)) fisher_yates(row);
+    for (int r = 0; r < n; ++r) {
+      dst[static_cast<std::size_t>(i) * static_cast<std::size_t>(n) +
+          static_cast<std::size_t>(r)] = row[static_cast<std::size_t>(r)];
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Block-workspace budget.
+//
+// The Stage 4 brief requires "memory budget" as an input to the selector, so it
+// has to come from somewhere.  It is read from the option
+// `fastphylosig.k_block_memory_mb`, defaulting to the 64 MiB that the Stage 3C
+// adaptive rule used.  This is not a public API change: no exported function's
+// signature or return value depends on it, and with the option unset the
+// behaviour is exactly the Stage 3C rule.  A non-positive or non-finite value
+// is ignored rather than propagated; kstrategy::select() flags that case in its
+// audit fields.
+// ---------------------------------------------------------------------------
+inline double block_memory_budget_bytes() {
+  double mb = 64.0;
+  SEXP opt = Rf_GetOption1(Rf_install("fastphylosig.k_block_memory_mb"));
+  if (opt != R_NilValue && Rf_xlength(opt) == 1 &&
+      (TYPEOF(opt) == REALSXP || TYPEOF(opt) == INTSXP)) {
+    const double v = TYPEOF(opt) == REALSXP
+      ? REAL(opt)[0] : static_cast<double>(INTEGER(opt)[0]);
+    if (std::isfinite(v) && v > 0.0) mb = v;
+  }
+  return mb * 1048576.0;
+}
+
+}  // namespace kfused
+
 // [[Rcpp::export]]
 Rcpp::List fast_k_tree_permutation_cpp(
     const Rcpp::List& compiled_tree,
@@ -534,6 +1042,23 @@ Rcpp::List fast_k_tree_permutation_cpp(
   }
   const Cache cache = build_cache(tree);
 
+  // ---------------------------------------------------------------------
+  // Strategy selection (Stage 4).
+  //
+  // The selector is a pure function of the workload; it replaces the Stage 3C
+  // prototype's `mode` / `block` test knobs.  `threads_eff` is resolved first
+  // because the thread policy is part of the decision.
+  // ---------------------------------------------------------------------
+  const int threads_eff = effective_threads(n_threads);
+  const kstrategy::Strategy strategy = kstrategy::apply_thread_policy(
+    kstrategy::select(n, p, nsim, kfused::block_memory_budget_bytes(),
+                      tree.n_total, trait_chunk),
+    threads_eff
+  );
+  const bool use_fused_path = strategy.hybrid || strategy.fuse;
+  std::vector<double> q;
+  if (strategy.hybrid) q = kfused::build_q(tree, cache);
+
   const bool supplied = permutations != R_NilValue;
   Rcpp::IntegerMatrix perm_matrix;
   if (supplied) {
@@ -557,7 +1082,15 @@ Rcpp::List fast_k_tree_permutation_cpp(
   std::vector<int> identity(static_cast<std::size_t>(n));
   for (int i = 0; i < n; ++i) identity[static_cast<std::size_t>(i)] = i;
   std::vector<double> observed_vec;
-  compute_one(tree, cache, x, p, identity, trait_chunk, observed_vec);
+  // The observed K goes through the same evaluator as the arm under test, so
+  // that K and the null distribution are always produced by one code path.
+  if (strategy.hybrid) {
+    kfused::compute_one_hybrid(
+      tree, cache, q, x, p, identity, trait_chunk, observed_vec
+    );
+  } else {
+    compute_one(tree, cache, x, p, identity, trait_chunk, observed_vec);
+  }
   std::vector<char> valid_observed(static_cast<std::size_t>(p), 1);
   for (int j = 0; j < p; ++j) {
     observed[j] = observed_vec[static_cast<std::size_t>(j)];
@@ -574,9 +1107,222 @@ Rcpp::List fast_k_tree_permutation_cpp(
   // Use the raw column-major payload inside optional OpenMP loops; this keeps
   // the threaded path free of Rcpp proxy operations.
   double* sim_ptr = return_sim ? REAL(sim) : NULL;
-  const int threads_eff = effective_threads(n_threads);
+  // `threads_eff` and the strategy were resolved together above.
 
-  if (supplied && threads_eff > 1) {
+  if (use_fused_path) {
+    // =======================================================================
+    // STAGE 4 PATH.  Taken only when the strategy selector asks for the hybrid
+    // or the fused evaluator.  The `else` branch below is the v0.2.0 production
+    // path, unchanged, and is what runs whenever the selector declines -- so a
+    // declined cell is not "equivalent to production", it IS production.
+    // =======================================================================
+    if (!strategy.fuse) {
+      // -------------------------------------------------------------------
+      // Hybrid only.  A per-permutation substitution, so production's own loop
+      // structure and OpenMP usage are preserved exactly; only the evaluator
+      // call changes.  No RNG is consumed inside the parallel region.
+      // -------------------------------------------------------------------
+      if (supplied && threads_eff > 1) {
+#ifdef _OPENMP
+        std::vector<std::vector<double> > local(
+          static_cast<std::size_t>(threads_eff),
+          std::vector<double>(static_cast<std::size_t>(p), 0.0)
+        );
+#pragma omp parallel num_threads(threads_eff)
+        {
+          const int tid = omp_get_thread_num();
+          std::vector<int> perm(static_cast<std::size_t>(n));
+          std::vector<double> kval;
+#pragma omp for schedule(static)
+          for (int i = 0; i < nsim; ++i) {
+            for (int r = 0; r < n; ++r) perm[static_cast<std::size_t>(r)] =
+              perm_matrix(i, r) - 1;
+            kfused::compute_one_hybrid(
+              tree, cache, q, x, p, perm, trait_chunk, kval
+            );
+            for (int j = 0; j < p; ++j) {
+              const double value = kval[static_cast<std::size_t>(j)];
+              if (return_sim) sim_ptr[static_cast<std::size_t>(i) +
+                                      static_cast<std::size_t>(nsim) *
+                                      static_cast<std::size_t>(j)] = value;
+              if (valid_observed[static_cast<std::size_t>(j)] &&
+                  fastphylosig::inclusive_upper_tail(value, observed[j])) {
+                local[static_cast<std::size_t>(tid)]
+                     [static_cast<std::size_t>(j)] += 1.0;
+              }
+            }
+          }
+        }
+        for (int t = 0; t < threads_eff; ++t) {
+          for (int j = 0; j < p; ++j) exceedance[j] +=
+            local[static_cast<std::size_t>(t)][static_cast<std::size_t>(j)];
+        }
+#else
+        (void)threads_eff;
+#endif
+      } else if (supplied) {
+        std::vector<int> perm(static_cast<std::size_t>(n));
+        std::vector<double> kval;
+        for (int i = 0; i < nsim; ++i) {
+          for (int r = 0; r < n; ++r) perm[static_cast<std::size_t>(r)] =
+            perm_matrix(i, r) - 1;
+          kfused::compute_one_hybrid(
+            tree, cache, q, x, p, perm, trait_chunk, kval
+          );
+          for (int j = 0; j < p; ++j) {
+            const double value = kval[static_cast<std::size_t>(j)];
+            if (return_sim) sim_ptr[static_cast<std::size_t>(i) +
+                                    static_cast<std::size_t>(nsim) *
+                                    static_cast<std::size_t>(j)] = value;
+            if (valid_observed[static_cast<std::size_t>(j)] &&
+                fastphylosig::inclusive_upper_tail(value, observed[j])) {
+              exceedance[j] += 1.0;
+            }
+          }
+        }
+      } else {
+        // Internal RNG, chunked exactly as production does it.  Fisher-Yates
+        // draws stay serial and in global permutation order, so the stream is
+        // independent of both the thread count and the chunk size.
+        const int chunk_limit = std::min(simulation_chunk, nsim);
+        std::vector<int> chunk_perms(
+          static_cast<std::size_t>(chunk_limit) * static_cast<std::size_t>(n)
+        );
+        for (int first = 0; first < nsim; first += chunk_limit) {
+          const int count = std::min(chunk_limit, nsim - first);
+          kfused::generate_block(chunk_perms.data(), count, n, first,
+                                 include_observed);
+          if (threads_eff > 1) {
+#ifdef _OPENMP
+            std::vector<std::vector<double> > local_counts(
+              static_cast<std::size_t>(threads_eff),
+              std::vector<double>(static_cast<std::size_t>(p), 0.0)
+            );
+#pragma omp parallel num_threads(threads_eff)
+            {
+              const int tid = omp_get_thread_num();
+              std::vector<int> perm(static_cast<std::size_t>(n));
+              std::vector<double> kval;
+#pragma omp for schedule(static)
+              for (int local_i = 0; local_i < count; ++local_i) {
+                std::copy(
+                  chunk_perms.begin() + static_cast<std::size_t>(local_i) *
+                    static_cast<std::size_t>(n),
+                  chunk_perms.begin() + static_cast<std::size_t>(local_i + 1) *
+                    static_cast<std::size_t>(n), perm.begin()
+                );
+                kfused::compute_one_hybrid(
+                  tree, cache, q, x, p, perm, trait_chunk, kval
+                );
+                const int global_i = first + local_i;
+                for (int j = 0; j < p; ++j) {
+                  const double value = kval[static_cast<std::size_t>(j)];
+                  if (return_sim) sim_ptr[
+                    static_cast<std::size_t>(global_i) +
+                    static_cast<std::size_t>(nsim) *
+                    static_cast<std::size_t>(j)] = value;
+                  if (valid_observed[static_cast<std::size_t>(j)] &&
+                      fastphylosig::inclusive_upper_tail(value, observed[j])) {
+                    local_counts[static_cast<std::size_t>(tid)]
+                                [static_cast<std::size_t>(j)] += 1.0;
+                  }
+                }
+              }
+            }
+            for (int t = 0; t < threads_eff; ++t) {
+              for (int j = 0; j < p; ++j) exceedance[j] += local_counts[
+                static_cast<std::size_t>(t)][static_cast<std::size_t>(j)];
+            }
+#else
+            (void)threads_eff;
+#endif
+          } else {
+            std::vector<int> perm(static_cast<std::size_t>(n));
+            std::vector<double> kval;
+            for (int local_i = 0; local_i < count; ++local_i) {
+              std::copy(
+                chunk_perms.begin() + static_cast<std::size_t>(local_i) *
+                  static_cast<std::size_t>(n),
+                chunk_perms.begin() + static_cast<std::size_t>(local_i + 1) *
+                  static_cast<std::size_t>(n), perm.begin()
+              );
+              kfused::compute_one_hybrid(
+                tree, cache, q, x, p, perm, trait_chunk, kval
+              );
+              const int global_i = first + local_i;
+              for (int j = 0; j < p; ++j) {
+                const double value = kval[static_cast<std::size_t>(j)];
+                if (return_sim) sim_ptr[
+                  static_cast<std::size_t>(global_i) +
+                  static_cast<std::size_t>(nsim) *
+                  static_cast<std::size_t>(j)] = value;
+                if (valid_observed[static_cast<std::size_t>(j)] &&
+                    fastphylosig::inclusive_upper_tail(value, observed[j])) {
+                  exceedance[j] += 1.0;
+                }
+              }
+            }
+          }
+        }
+      }
+    } else {
+      // -------------------------------------------------------------------
+      // Fused.  Serial by construction: kstrategy::apply_thread_policy()
+      // disables fusion whenever more than one thread is in use, because the
+      // fused kernel was measured single-threaded only and a block of
+      // permutations is not a scheduling unit.
+      //
+      // The block is filled serially, in global permutation order, before it is
+      // evaluated, and evaluation consumes no RNG -- so the stream is a
+      // function of (seed, n_tip, nsim) alone and never of the block size.
+      // -------------------------------------------------------------------
+      const int block = strategy.block;
+      const int chunk_limit = std::max(1, std::min(trait_chunk, p));
+      std::vector<int> perm_buf(
+        static_cast<std::size_t>(block) * static_cast<std::size_t>(n), 0
+      );
+      std::vector<double> message, state, baseline, delta, out;
+      for (int first = 0; first < nsim; first += block) {
+        const int count = std::min(block, nsim - first);
+        if (supplied) {
+          for (int i = 0; i < count; ++i) {
+            for (int r = 0; r < n; ++r) {
+              perm_buf[static_cast<std::size_t>(i) * n +
+                       static_cast<std::size_t>(r)] =
+                perm_matrix(first + i, r) - 1;
+            }
+          }
+        } else {
+          kfused::generate_block(perm_buf.data(), count, n, first,
+                                 include_observed);
+        }
+        for (int col0 = 0; col0 < p; col0 += chunk_limit) {
+          const int chunk = std::min(chunk_limit, p - col0);
+          kfused::compute_block(
+            tree, cache, q, x, p, col0, chunk, perm_buf.data(), count, block,
+            strategy.hybrid, message, state, baseline, delta, out
+          );
+          for (int i = 0; i < count; ++i) {
+            const int global_i = first + i;
+            for (int j = 0; j < chunk; ++j) {
+              const double value = out[static_cast<std::size_t>(i) *
+                                       static_cast<std::size_t>(chunk) +
+                                       static_cast<std::size_t>(j)];
+              if (return_sim) sim_ptr[
+                static_cast<std::size_t>(global_i) +
+                static_cast<std::size_t>(nsim) *
+                static_cast<std::size_t>(col0 + j)] = value;
+              if (valid_observed[static_cast<std::size_t>(col0 + j)] &&
+                  fastphylosig::inclusive_upper_tail(
+                    value, observed[col0 + j])) {
+                exceedance[col0 + j] += 1.0;
+              }
+            }
+          }
+        }
+      }
+    }
+  } else if (supplied && threads_eff > 1) {
 #ifdef _OPENMP
     std::vector<std::vector<double> > local(
       static_cast<std::size_t>(threads_eff),
@@ -761,4 +1507,58 @@ Rcpp::List fast_k_tree_permutation_cpp(
   );
   if (return_sim) out["sim_K"] = sim;
   return out;
+}
+
+// ===========================================================================
+// Strategy audit entry point.
+//
+// Internal only: it is not exported from the package namespace (NAMESPACE
+// exports a fixed list of 13 functions), so it is reachable as
+// fastphylosig:::k_strategy_cpp() and exists so the selector's decisions can be
+// asserted from the test suite instead of inferred from timings.
+//
+// It calls exactly the same two functions the kernel calls, in the same order:
+// kstrategy::select() then kstrategy::apply_thread_policy().
+// ===========================================================================
+// [[Rcpp::export]]
+Rcpp::List k_strategy_cpp(const int n_tip, const int n_trait, const int nsim,
+                          const double memory_budget_mb = 64.0,
+                          const int trait_chunk = 0, const int n_total = 0,
+                          const int n_threads = 1) {
+  const double budget_bytes = (std::isfinite(memory_budget_mb) &&
+                               memory_budget_mb > 0.0)
+    ? memory_budget_mb * 1048576.0
+    : memory_budget_mb;
+  const kstrategy::Strategy raw = kstrategy::select(
+    n_tip, n_trait, nsim, budget_bytes, n_total, trait_chunk
+  );
+  const kstrategy::Strategy eff = kstrategy::apply_thread_policy(
+    raw, n_threads
+  );
+  return Rcpp::List::create(
+    // the contract
+    Rcpp::Named("hybrid") = eff.hybrid,
+    Rcpp::Named("fuse") = eff.fuse,
+    Rcpp::Named("block") = eff.block,
+    // audit trail
+    Rcpp::Named("chunk") = eff.chunk,
+    Rcpp::Named("n_total") = eff.n_total,
+    Rcpp::Named("n_total_estimated") = eff.n_total_estimated,
+    Rcpp::Named("rule_block") = eff.rule_block,
+    Rcpp::Named("block_capped_to_nsim") = eff.block_capped_to_nsim,
+    Rcpp::Named("budget_invalid") = eff.budget_invalid,
+    Rcpp::Named("gate_chunk") = eff.gate_chunk,
+    Rcpp::Named("gate_nsim") = eff.gate_nsim,
+    Rcpp::Named("hybrid_gate_nsim") = eff.hybrid_gate_nsim,
+    Rcpp::Named("budget_mb") = eff.budget_bytes / 1048576.0,
+    Rcpp::Named("workspace_mb") = eff.workspace_bytes / 1048576.0,
+    Rcpp::Named("n_threads") = n_threads,
+    // the policy constants, so a test can assert the rule rather than a literal
+    Rcpp::Named("fuse_max_chunk") = kstrategy::fuse_max_chunk(),
+    Rcpp::Named("hybrid_min_nsim") = kstrategy::hybrid_min_nsim(),
+    Rcpp::Named("ladder") = Rcpp::wrap(std::vector<int>(
+      kstrategy::block_ladder(),
+      kstrategy::block_ladder() + kstrategy::block_ladder_size()
+    ))
+  );
 }

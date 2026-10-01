@@ -269,6 +269,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// k_strategy_cpp
+Rcpp::List k_strategy_cpp(const int n_tip, const int n_trait, const int nsim, const double memory_budget_mb, const int trait_chunk, const int n_total, const int n_threads);
+RcppExport SEXP _fastphylosig_k_strategy_cpp(SEXP n_tipSEXP, SEXP n_traitSEXP, SEXP nsimSEXP, SEXP memory_budget_mbSEXP, SEXP trait_chunkSEXP, SEXP n_totalSEXP, SEXP n_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n_tip(n_tipSEXP);
+    Rcpp::traits::input_parameter< const int >::type n_trait(n_traitSEXP);
+    Rcpp::traits::input_parameter< const int >::type nsim(nsimSEXP);
+    Rcpp::traits::input_parameter< const double >::type memory_budget_mb(memory_budget_mbSEXP);
+    Rcpp::traits::input_parameter< const int >::type trait_chunk(trait_chunkSEXP);
+    Rcpp::traits::input_parameter< const int >::type n_total(n_totalSEXP);
+    Rcpp::traits::input_parameter< const int >::type n_threads(n_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(k_strategy_cpp(n_tip, n_trait, nsim, memory_budget_mb, trait_chunk, n_total, n_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fast_k_tree_batch_cpp
 Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree, const Rcpp::NumericMatrix& X, const int trait_chunk);
 RcppExport SEXP _fastphylosig_fast_k_tree_batch_cpp(SEXP compiled_treeSEXP, SEXP XSEXP, SEXP trait_chunkSEXP) {
@@ -372,6 +389,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fastphylosig_delta_entropy_cpp", (DL_FUNC) &_fastphylosig_delta_entropy_cpp, 2},
     {"_fastphylosig_delta_mcmc_cpp", (DL_FUNC) &_fastphylosig_delta_mcmc_cpp, 8},
     {"_fastphylosig_fast_k_tree_permutation_cpp", (DL_FUNC) &_fastphylosig_fast_k_tree_permutation_cpp, 9},
+    {"_fastphylosig_k_strategy_cpp", (DL_FUNC) &_fastphylosig_k_strategy_cpp, 7},
     {"_fastphylosig_fast_k_tree_batch_cpp", (DL_FUNC) &_fastphylosig_fast_k_tree_batch_cpp, 3},
     {"_fastphylosig_fast_lambda_tree_fixed_cpp", (DL_FUNC) &_fastphylosig_fast_lambda_tree_fixed_cpp, 5},
     {"_fastphylosig_fast_lambda_tree_optimize_cpp", (DL_FUNC) &_fastphylosig_fast_lambda_tree_optimize_cpp, 9},

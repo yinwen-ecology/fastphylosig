@@ -238,10 +238,11 @@ Null-distribution plots require retained simulations. Use
 
 ## Compatibility and release status
 
-The 0.2.0 release retains declared compatibility with R 4.1.0 and above.
-Production estimators, defaults, numerical tolerances, RNG, thread policy, and
-the public API are unchanged. Canonicalization Contract V2 has local
-representation, locale, mutation, persistence, estimator-parity, and
-performance evidence on Windows with R 4.6.1/Rtools 4.5. Cross-platform,
-R-devel, and second-BLAS qualification remain outside this local validation
-scope.
+The 0.3.0 candidate retains declared compatibility with R 4.1.0 and above.
+Its public API, estimator definitions, RNG stream, and thread policy are
+unchanged from 0.2.0. K values may differ at floating-point rounding scale;
+the Stage 5 numerical and release checks document the qualification boundary.
+Current performance evidence is from the production 0.3.0 candidate on
+Windows with R 4.6.1/Rtools 4.5, not from the Stage 3C prototype.
+Cross-platform, R-devel, and second-BLAS qualification remain outside this
+local validation scope.

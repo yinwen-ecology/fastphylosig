@@ -16,5 +16,12 @@
 ^docs$
 ^paper$
 ^review[.]md$
+^STAGE[0-9].*[.]md$
+^50K_PREPARATION_LIMIT_AUDIT[.]md$
+^GITHUB_RELEASE_CHECKLIST_.*[.]md$
+^POST_.*[.]md$
+^RELEASE_NOTES_.*[.]md$
+^USAGE_zh[.]md$
+^test$
 ^\.github$
 ^inst/(EXPERT_REVIEW|POST_0.1.0_TECH_DEBT|RC_READINESS)[.]md$

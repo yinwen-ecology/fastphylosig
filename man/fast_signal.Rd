@@ -13,7 +13,7 @@ fast_signal(tree, data = NULL, method = NULL, ..., x = NULL, X = NULL,
 \code{X} are retained as compatibility aliases. Matrix and data.frame row
 names must be species names. Supply only one spelling.}
 \item{method}{Exactly one method selector. Supported aliases are \code{K}/\code{k},
-\code{lambda}/\code{Lambda}/\code{λ}, \code{D}/\code{d}, and
+\code{lambda}/\code{Lambda}, the Unicode \code{U+03BB} alias, \code{D}/\code{d}, and
 \code{Delta}/\code{delta}. The method is explicit and is never inferred from
 the trait type; omitting it or supplying an unknown selector is an error.}
 \item{prepared, trait_chunk}{Compatibility formals for prepared tree contexts

@@ -69,6 +69,10 @@ fast_k_tree_permutation_cpp <- function(compiled_tree, X, nsim = 1000L, permutat
     .Call(`_fastphylosig_fast_k_tree_permutation_cpp`, compiled_tree, X, nsim, permutations, trait_chunk, return_sim, include_observed, n_threads, simulation_chunk)
 }
 
+k_strategy_cpp <- function(n_tip, n_trait, nsim, memory_budget_mb = 64, trait_chunk = 0L, n_total = 0L, n_threads = 1L) {
+    .Call(`_fastphylosig_k_strategy_cpp`, n_tip, n_trait, nsim, memory_budget_mb, trait_chunk, n_total, n_threads)
+}
+
 fast_k_tree_batch_cpp <- function(compiled_tree, X, trait_chunk = 64L) {
     .Call(`_fastphylosig_fast_k_tree_batch_cpp`, compiled_tree, X, trait_chunk)
 }

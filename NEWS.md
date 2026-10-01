@@ -1,3 +1,22 @@
+# fastphylosig 0.3.0
+
+- Replaced the Blomberg's K permutation evaluator's per-permutation tree
+  traversals with an adaptive hybrid fused kernel. Where fusion is selected,
+  one traversal serves a block of permutations; hybrid evaluation obtains the
+  GLS offset from a tree-only dot product instead of a full upward/downward
+  pass pair.
+- Added an internal strategy selector. It maps the workload (number of tips,
+  number of traits, number of permutations, memory budget) onto the evaluator
+  variant and the block size. The selector is not part of the public API and
+  adds no arguments to any exported function.
+- The permutation stream is unchanged. Blocks are a storage unit, not a drawing
+  unit: permutations are still generated serially in global order under R's
+  RNG. Fixed-seed validation found identical p-values and exceedance counts;
+  K values may differ from 0.2.0 at floating-point rounding scale.
+- Public API, estimator definitions, the pointwise p-value rule, and the
+  threading policy are unchanged. The 0.2.0 evaluator remains in the source
+  as an internal reference; the production selector uses hybrid evaluation.
+
 # fastphylosig 0.2.0
 
 - Integrated Canonicalization Contract V2 for deterministic,
