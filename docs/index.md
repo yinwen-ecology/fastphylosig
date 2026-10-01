@@ -47,6 +47,16 @@ categorical <- setNames(rep(c("a", "b", "c"), length.out = 30),
 by trait, and runs the selected method. Use `print(fit)`, `summary(fit)`,
 `as.data.frame(fit)`, or `plot_signal(fit)` to inspect the result.
 
+## Native plotting styles
+
+![Native plot_signal examples](release-0.3.0/plot_signal_gallery_overview.png)
+
+`plot_signal()` displays K permutation distributions, lambda profile
+likelihood, D random/Brownian calibrations and categorical Delta output.
+See the [six-style gallery and reproducible R code](release-0.3.0/plot_signal_gallery.md).
+These are native 0.3.0 outputs on simulated demonstration data. Some native
+annotations overlap curves; the short Delta example is not for inference.
+
 ## Advanced use: prepare, then calculate
 
 Use the explicit path when tree readiness and species removals need to be

@@ -236,13 +236,28 @@ Null-distribution plots require retained simulations. Use
 `return_sim = TRUE` for K and Delta; D requires both `return_sim = TRUE` and
 `keep_null = TRUE`.
 
+### What `plot_signal()` displays
+
+![Native plot_signal examples](docs/release-0.3.0/plot_signal_gallery_overview.png)
+
+The examples show multi-trait K permutation ridges, a lambda likelihood
+profile, D calibration against random and Brownian nulls, and a categorical
+Delta permutation distribution. They are actual `plot_signal()` outputs from
+version 0.3.0 on simulated demonstration data, not empirical findings.
+See the [gallery and reproducible R code](docs/release-0.3.0/plot_signal_gallery.md) for
+single-trait K and separate D null displays, seeds, simulation settings,
+and diagnostic caveats. The short Delta example is for illustration, not
+scientific inference. These native web previews retain some annotation/curve
+overlaps; they are not collision-free manuscript figures.
+
 ## Compatibility and release status
 
-The 0.3.0 candidate retains declared compatibility with R 4.1.0 and above.
+The [0.3.0 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.0)
+retains declared compatibility with R 4.1.0 and above.
 Its public API, estimator definitions, RNG stream, and thread policy are
 unchanged from 0.2.0. K values may differ at floating-point rounding scale;
 the Stage 5 numerical and release checks document the qualification boundary.
-Current performance evidence is from the production 0.3.0 candidate on
+Current performance evidence is from the production 0.3.0 implementation on
 Windows with R 4.6.1/Rtools 4.5, not from the Stage 3C prototype.
 Cross-platform, R-devel, and second-BLAS qualification remain outside this
 local validation scope.
