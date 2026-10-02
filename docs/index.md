@@ -48,7 +48,7 @@ description: fastphylosig 0.3.0 measures phylogenetic signal in continuous, bina
 
 ## Matched runtime comparison {#speed}
 
-The figure shows all four statistics at 50, 100, 500, and 2,000 tips across three signal scenarios. Trees, traits, and analysis contexts were prepared before timing. Each cell contains 10 paired calls on the same inputs, and every observed ratio is retained, including cases where the reference is faster.
+Four statistics, 50–2,000 tips, three signal scenarios, and 10 paired calls per setting. Tree and data preparation are excluded.
 
 <figure class="benchmark-figure">
   <a class="figure-open" href="{{ '/release-0.3.0/benchmark_reference_four_methods_speedup.png' | relative_url }}" aria-label="Open the full-size four-statistic benchmark figure">
@@ -57,33 +57,9 @@ The figure shows all four statistics at 50, 100, 500, and 2,000 tips across thre
   <figcaption><strong>Measured runtime by statistic and tree size.</strong> The dashed line marks equal median runtime. Click the figure to open the full-size PNG. Results are from Windows 11 x64 with R 4.6.1; setup and tree/data preparation were excluded.</figcaption>
 </figure>
 
-<div class="benchmark-notes">
-  <article class="note-card note-card--plain">
-    <h3>Small-tree K is slower</h3>
-    <p>At 50 and 100 tips, the reference K call was faster. Those observations remain visible below the equal-time line; the package is not faster for every statistic and tree size.</p>
-  </article>
-  <article class="note-card note-card--caution" id="delta-caveat">
-    <h3>Delta timings need a diagnostic caveat</h3>
-    <p>The reference emitted numerical warnings in 112 of 120 calls and did not expose final convergence diagnostics. One fast Delta call reached its optimizer iteration limit. These call-time ratios do not establish equal accuracy, effective sampling, or valid convergence.</p>
-  </article>
-</div>
-
-<details class="benchmark-details">
-  <summary>What was timed for each statistic?</summary>
-  <div markdown="1">
-
-- **K and lambda:** estimate calls with testing disabled (`test = FALSE`); no permutation-test time is included.
-- **D:** each call included 199 randomizations.
-- **Delta:** each call included two 10,000-iteration MCMC chains (`thin = 10`, `burn = 100`), without a permutation test.
-- Ratios are median reference time divided by median fastphylosig time. The methods have statistic-specific workloads; their ratios are not an equal-work or equal-accuracy comparison.
-
-See the [full benchmark data, references, settings, and limitations]({{ '/release-0.3.0/README.html' | relative_url }}).
-  </div>
-</details>
-
 ## Install and get started {#install}
 
-<div class="two-column" markdown="1">
+<div class="install-stack" markdown="1">
 <article class="content-card" markdown="1">
 ### Install v0.3.0
 
@@ -180,6 +156,30 @@ These examples use the package's own plotting function on simulated demonstratio
 <p class="caution-line"><strong>Delta gallery note:</strong> the short-chain Delta panel is for display only. Its diagnostic warning and three-draw permutation P value make it unsuitable for inference.</p>
 
 ## Release and validation boundaries
+
+<div class="benchmark-notes">
+  <article class="note-card note-card--plain">
+    <h3>Small-tree K is slower</h3>
+    <p>At 50 and 100 tips, reference K was faster; all observations remain in the figure.</p>
+  </article>
+  <article class="note-card note-card--caution" id="delta-caveat">
+    <h3>Delta diagnostic caveat</h3>
+    <p>Reference warnings occurred in 112/120 calls, without final convergence diagnostics; one fast call reached its optimizer limit. Timing ratios do not establish equal accuracy or valid convergence.</p>
+  </article>
+</div>
+
+<details class="benchmark-details">
+  <summary>Benchmark settings and limitations</summary>
+  <div markdown="1">
+
+- **K and lambda:** estimates only (`test = FALSE`), without permutation testing.
+- **D:** 199 randomizations per call.
+- **Delta:** two 10,000-iteration MCMC chains (`thin = 10`, `burn = 100`), without permutation testing.
+- Ratios compare median call times; workloads differ across statistics.
+
+See the [full benchmark data, references, settings, and limitations]({{ '/release-0.3.0/README.html' | relative_url }}).
+  </div>
+</details>
 
 The current release is [fastphylosig v0.3.0](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.0). The 50,000-tip preparation mask-key limitation is deferred to v0.3.x. Benchmark ratios describe the recorded Windows/R environment and these specific workloads; they are not universal speed guarantees or evidence that the four statistics have equal computational work.
 

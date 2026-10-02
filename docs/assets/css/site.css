@@ -170,6 +170,7 @@ summary { color: var(--navy); cursor: pointer; font-weight: 750; }
 .benchmark-details li { margin: .3rem 0; }
 
 .two-column { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; }
+.install-stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 1rem 0; }
 .content-card, .method-card { min-width: 0; padding: 1.15rem; background: #fff; border: 1px solid var(--line); border-radius: .7rem; }
 .content-card h3 { margin-top: 0; }
 .content-card p:last-child { margin-bottom: 0; }
