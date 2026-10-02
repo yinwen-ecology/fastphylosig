@@ -1,3 +1,8 @@
+---
+layout: default
+title: plot_signal gallery
+---
+
 # plot_signal() gallery — fastphylosig 0.3.0
 
 These are actual native `plot_signal()` outputs on simulated demonstration

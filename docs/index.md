@@ -13,6 +13,24 @@ preparation step.
 [Issues](https://github.com/yinwen-ecology/fastphylosig/issues) |
 [Chinese guide](https://github.com/yinwen-ecology/fastphylosig/blob/main/USAGE_zh.md)
 
+## Speed on larger trees
+
+![Four-statistic runtime comparison](release-0.3.0/benchmark_reference_four_methods_speedup.png)
+
+At 2,000 species, reference/fastphylosig median runtime ratios were
+**135–151 for K**, **20,697–23,591 for lambda**, and **218–224 for D**
+in this Windows/R 4.6.1 benchmark. Delta call-time ratios were 23.9–33.6,
+with numerical-diagnostic caveats. All combinations use matching tree/trait
+inputs; preparation is excluded and each cell contains 10 paired replicates.
+Small-tree K favours reference and remains visible below the equal-time line.
+
+K/lambda measure estimates without testing; D includes 199 randomizations;
+Delta includes two 10,000-iteration MCMC chains without a permutation test.
+Delta reference emitted numerical warnings in 112/120 calls and did not
+expose final convergence information; fast Delta had one optimization-limit
+warning. The figure does not establish equal accuracy or valid convergence.
+See [data, references and full settings](release-0.3.0/README.html).
+
 ## Install
 
 ```r
@@ -53,7 +71,7 @@ by trait, and runs the selected method. Use `print(fit)`, `summary(fit)`,
 
 `plot_signal()` displays K permutation distributions, lambda profile
 likelihood, D random/Brownian calibrations and categorical Delta output.
-See the [six-style gallery and reproducible R code](release-0.3.0/plot_signal_gallery.md).
+See the [six-style gallery and reproducible R code](release-0.3.0/plot_signal_gallery.html).
 These are native 0.3.0 outputs on simulated demonstration data. Some native
 annotations overlap curves; the short Delta example is not for inference.
 

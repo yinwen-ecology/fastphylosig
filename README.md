@@ -10,6 +10,27 @@ categorical traits. Most analyses need one function: `fast_signal()`. The
 method-specific functions remain available when you want to inspect and
 control each step.
 
+## Speed on larger trees
+
+![Matched runtime ratios for four signal statistics](docs/release-0.3.0/benchmark_reference_four_methods_speedup.png)
+
+On 2,000-species trees, observed reference/fastphylosig median runtime ratios
+were **135–151 for K**, **20,697–23,591 for lambda**, and **218–224 for D**
+across three simulated signal scenarios. Delta call-time ratios were 23.9–33.6,
+subject to the diagnostic caveat below. Each cell has 10 matched pairs;
+tree/data preparation is excluded. The dashed line is equal runtime; small-tree
+K is slower than phytools at 50 and 100 species, and those results remain visible.
+
+References are phytools 2.5.2 (K/lambda), caper (D) and a pinned Borges Delta
+implementation. K/lambda use `test = FALSE`; D includes 199 randomizations;
+Delta uses two 10,000-iteration MCMC chains without permutation testing.
+**Delta caveat:** 112/120 reference calls produced numerical warnings and
+did not expose final convergence information; one fast call reached an
+optimization iteration limit. Delta ratios describe observed returned-call
+times, not demonstrated equal-accuracy or converged-fit speedups.
+These Windows/R 4.6.1 timings are workload-specific, not universal guarantees.
+See [all data, settings and diagnostic details](docs/release-0.3.0/README.md).
+
 ## Install
 
 ```r
