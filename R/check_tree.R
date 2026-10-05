@@ -163,8 +163,7 @@
   }
   n_tip <- as.integer(n_tip)
   labels_present <- !is.null(tip_label) && length(tip_label) > 0L
-  labels_character <- labels_present &&
-    (is.character(tip_label) || is.factor(tip_label))
+  labels_character <- labels_present && is.character(tip_label)
   labels <- if (labels_present) {
     tryCatch(as.character(tip_label), error = function(e) rep(NA_character_,
                                                                 n_tip))
@@ -234,8 +233,8 @@
   declared_nnode <- if (is.list(phy)) phy$Nnode else NULL
   declared_nnode_ok <- is.numeric(declared_nnode) &&
     length(declared_nnode) == 1L && is.finite(declared_nnode) &&
-    declared_nnode == floor(declared_nnode) && declared_nnode >= 0
-  if (!is.null(declared_nnode) && !declared_nnode_ok) {
+    declared_nnode == floor(declared_nnode) && declared_nnode >= 1
+  if (!declared_nnode_ok) {
     add_global(
       "invalid_nnode", "ERROR",
       "Nnode must be one finite non-negative integer consistent with edge."

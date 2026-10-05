@@ -13,7 +13,11 @@ plot_signal(result, p_col = NULL, alpha = 0.05, main = NULL,
 \code{\link{fast_k}}, \code{\link{fast_lambda}}, \code{\link{fast_d}},
 or \code{\link{fast_delta}}.}
 \item{p_col}{Optional P-value column for data.frame results. For D results
-the default is \code{"Pval1_fast"}.}
+the default selects the fitted random-null probability. Recognized canonical
+and legacy aliases select their corresponding null under \code{null = "auto"}.
+An explicitly present alias is honored even if another alias differs.
+A custom table column is retained under \code{null = "auto"}; an explicit
+\code{null} takes precedence over a P-value column for the other null.}
 \item{alpha}{Significance level used for coloring observed signal lines.}
 \item{null}{For D calibration plots, which null simulation to plot. \code{"auto"}
 draws both the random and Brownian D null distributions for a single-trait

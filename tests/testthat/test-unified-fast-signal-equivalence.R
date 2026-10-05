@@ -59,6 +59,10 @@
 
 .expect_named_numeric_fields <- function(a, b, fields, tolerance = 1e-10) {
   for (field in fields) {
+    testthat::expect_true(field %in% names(a), info = field)
+    testthat::expect_true(field %in% names(b), info = field)
+    testthat::expect_false(is.null(a[[field]]), info = field)
+    testthat::expect_false(is.null(b[[field]]), info = field)
     testthat::expect_equal(a[[field]], b[[field]], tolerance = tolerance,
                            info = field)
   }
@@ -80,11 +84,13 @@ test_that("K dispatcher equals fast_k for controlled permutations and NA masks",
 
   .expect_named_numeric_fields(
     unified, specialist,
-    c("K_fast", "n_species", "n_removed_na", "P_fast",
+    c("K", "P",
       "nsim_requested", "nsim_successful", "exceedance_count"),
     tolerance = 1e-12
   )
-  testthat::expect_equal(unified$sim.K_fast, specialist$sim.K_fast,
+  testthat::expect_length(unified$sim.K, nrow(f$permutations))
+  testthat::expect_length(specialist$sim.K, nrow(f$permutations))
+  testthat::expect_equal(unified$sim.K, specialist$sim.K,
                          tolerance = 1e-12)
   metadata <- attr(unified, "analysis_metadata")
   if (length(metadata$matched_species) == 1L &&

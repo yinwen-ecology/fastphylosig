@@ -61,7 +61,12 @@ Four statistics, 50–2,000 tips, three signal scenarios, and 10 paired calls pe
 
 <div class="install-stack" markdown="1">
 <article class="content-card" markdown="1">
-### Install v0.3.0
+### Install the published v0.3.0
+
+The [v0.3.1 correctness patch](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1) is available as a GitHub release.
+For a supplied local source archive, use
+`install.packages("fastphylosig_0.3.1.tar.gz", repos = NULL, type = "source")`.
+The performance evidence and gallery on this page remain from 0.3.0.
 
 ```r
 install.packages("remotes")

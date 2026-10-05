@@ -19,7 +19,7 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
 
   if (identical(base_dat$method[[1L]], "D") &&
       nrow(base_dat) == 1L && null == "auto") {
-    d_overlay <- .signal_d_overlay_data(result)
+    d_overlay <- .signal_d_overlay_data(result, p_col = p_col)
     return(.plot_d_overlay(
       d_overlay, alpha = alpha, main = main, xlab = xlab, ylab = ylab,
       col = col, ...
@@ -215,12 +215,12 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
   den_random <- stats::density(random, from = xlim[1], to = xlim[2], n = 256)
   den_brownian <- stats::density(brownian, from = xlim[1], to = xlim[2], n = 256)
   ymax <- max(den_random$y, den_brownian$y) * 1.2
-  extreme_random <- sum(random < dat$estimate[[1L]], na.rm = TRUE)
-  extreme_brownian <- sum(brownian > dat$estimate[[1L]], na.rm = TRUE)
+  extreme_random <- dat$extreme_random[[1L]]
+  extreme_brownian <- dat$extreme_brownian[[1L]]
   n_random <- length(random)
   n_brownian <- length(brownian)
-  p_random_label <- .format_sim_p_value(extreme_random, n_random)
-  p_brownian_label <- .format_sim_p_value(extreme_brownian, n_brownian)
+  p_random_label <- .format_d_plot_p(dat$Pval1[[1L]], extreme_random, n_random)
+  p_brownian_label <- .format_d_plot_p(dat$Pval0[[1L]], extreme_brownian, n_brownian)
 
   graphics::plot(
     den_brownian$x, den_brownian$y, type = "n",
@@ -515,6 +515,16 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
                                                "brownian")) {
   null <- match.arg(null)
   dat <- .signal_plot_data(result, p_col = p_col)
+  if (all(dat$method == "D")) {
+    # Preserve an explicitly selected column. An explicit null overrides a
+    # column belonging to the other null, as documented.
+    d_null <- .resolve_d_null(null, p_col)
+    custom_p <- !is.null(p_col) && !p_col %in% c("P_random", "P_Brownian",
+      "Pval1", "Pval0", "Pval1_fast", "Pval0_fast")
+    if (!(null == "auto" && custom_p && is.data.frame(result))) {
+      dat$p_value <- .d_plot_p(result, d_null, p_col)
+    }
+  }
   sim <- vector("list", nrow(dat))
   null_model <- rep(NA_character_, nrow(dat))
 
@@ -579,16 +589,15 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
   dat
 }
 
-.signal_d_overlay_data <- function(result) {
-  dat <- .signal_plot_data(result, p_col = NULL)
+.signal_d_overlay_data <- function(result, p_col = NULL) {
+  dat <- .signal_plot_data(result, p_col = p_col)
   if (!identical(dat$method[[1L]], "D") || nrow(dat) != 1L) {
     stop("D overlay plots require a single D result.", call. = FALSE)
   }
 
   if (is.data.frame(result)) {
     required <- c(
-      "random_fast", "brownian_fast", "mean_random", "mean_brownian",
-      "Pval1_fast", "Pval0_fast"
+      "random_fast", "brownian_fast", "mean_random", "mean_brownian"
     )
     missing <- setdiff(required, names(result))
     if (length(missing)) {
@@ -598,8 +607,7 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
     mean_brownian <- result$mean_brownian[[1L]]
     random_sums <- result$random_fast[[1L]]
     brownian_sums <- result$brownian_fast[[1L]]
-    p_random <- result$Pval1_fast[[1L]]
-    p_brownian <- result$Pval0_fast[[1L]]
+    observed <- result$observed[[1L]]
   } else if (inherits(result, "phylo.d")) {
     if (is.null(result$Permutations)) {
       stop("D overlay plots require return_sim = TRUE.", call. = FALSE)
@@ -608,8 +616,7 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
     mean_brownian <- result$Parameters$MeanBrownian
     random_sums <- result$Permutations$random
     brownian_sums <- result$Permutations$brownian
-    p_random <- result$Pval1
-    p_brownian <- result$Pval0
+    observed <- result$Parameters$Observed
   } else {
     stop("D overlay plots require a fast_d() result.", call. = FALSE)
   }
@@ -621,6 +628,16 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
   }
   random_d <- (as.numeric(random_sums) - mean_brownian) / denom
   brownian_d <- (as.numeric(brownian_sums) - mean_brownian) / denom
+  p_random <- .d_plot_p(result, "random", p_col)[[1L]]
+  p_brownian <- .d_plot_p(result, "brownian", p_col)[[1L]]
+  # Count on the original contrast scale. Scaling can reverse the tails or
+  # round distinct contrasts to the same plotted D value.
+  extreme_random <- if (length(observed) == 1L && is.finite(observed)) {
+    sum(is.finite(random_sums) & random_sums < observed)
+  } else NA_integer_
+  extreme_brownian <- if (length(observed) == 1L && is.finite(observed)) {
+    sum(is.finite(brownian_sums) & brownian_sums > observed)
+  } else NA_integer_
 
   out <- data.frame(
     trait = dat$trait[[1L]],
@@ -629,6 +646,8 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
     p_value = dat$p_value[[1L]],
     Pval1 = p_random,
     Pval0 = p_brownian,
+    extreme_random = extreme_random,
+    extreme_brownian = extreme_brownian,
     n_sim = length(random_d),
     stringsAsFactors = FALSE
   )
@@ -639,10 +658,33 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
 
 .resolve_d_null <- function(null, p_col) {
   if (null != "auto") return(null)
-  if (!is.null(p_col) && grepl("Pval0", p_col, fixed = TRUE)) {
+  if (!is.null(p_col) && p_col %in% c("P_Brownian", "Pval0", "Pval0_fast")) {
     return("brownian")
   }
   "random"
+}
+
+.d_plot_p <- function(result, null, p_col = NULL) {
+  candidates <- if (null == "brownian") {
+    c("P_Brownian", "Pval0_fast", "Pval0")
+  } else c("P_random", "Pval1_fast", "Pval1")
+  if (!is.null(p_col) && p_col %in% candidates && p_col %in% names(result)) {
+    return(as.numeric(result[[p_col]]))
+  }
+  hit <- candidates[candidates %in% names(result)]
+  if (length(hit)) as.numeric(result[[hit[[1L]]]]) else {
+    rep(NA_real_, if (is.data.frame(result)) nrow(result) else 1L)
+  }
+}
+
+.format_d_plot_p <- function(p, extreme, nsim) {
+  # Preserve the fitted probability, including when simulations were omitted
+  # or incompletely retained. Zero retains the existing Monte Carlo label.
+  if (is.finite(p)) {
+    if (p == 0) return(.format_sim_p_value(0, nsim))
+    return(.format_p_value(p))
+  }
+  if (is.finite(extreme)) .format_sim_p_value(extreme, nsim) else "NA"
 }
 
 .signal_plot_data <- function(result, p_col = NULL) {
@@ -673,7 +715,11 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
            call. = FALSE)
     }
     p_name <- if (is.null(p_col)) default_p else p_col
-    p_value <- if (p_name %in% names(result)) result[[p_name]] else NA_real_
+    p_value <- if (identical(method, "D") &&
+                   (is.null(p_col) || p_col %in% c("P_random", "P_Brownian",
+                    "Pval1", "Pval0", "Pval1_fast", "Pval0_fast"))) {
+      .d_plot_p(result, .resolve_d_null("auto", p_col), p_col)
+    } else if (p_name %in% names(result)) result[[p_name]] else NA_real_
     out <- data.frame(
       trait = trait,
       method = method,
@@ -724,7 +770,7 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
       trait = result$binvar %||% "x",
       method = "D",
       estimate = as.numeric(result$DEstimate),
-      p_value = as.numeric(result$Pval1),
+      p_value = .d_plot_p(result, .resolve_d_null("auto", p_col), p_col),
       stringsAsFactors = FALSE
     ))
   }

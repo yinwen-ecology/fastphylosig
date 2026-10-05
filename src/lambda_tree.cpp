@@ -324,30 +324,26 @@ TreeArrays parse_tree(const Rcpp::List& compiled) {
 }
 
 double phytools_max_lambda(const TreeArrays& tree) {
-  const double h = tree.root_distance[0];
-  if (!std::isfinite(h) || h <= 0.0) return 1.0;
-  bool ultrametric = true;
-  const double tol = 256.0 * std::numeric_limits<double>::epsilon() *
-    std::max(1.0, std::abs(h));
+  double h = tree.root_distance[0];
+  double min_height = h;
   for (int tip = 1; tip < tree.n_tip; ++tip) {
-    if (std::abs(tree.root_distance[static_cast<std::size_t>(tip)] - h) > tol) {
-      ultrametric = false;
-      break;
+    h = std::max(h, tree.root_distance[static_cast<std::size_t>(tip)]);
+    min_height = std::min(min_height,
+                          tree.root_distance[static_cast<std::size_t>(tip)]);
+  }
+  if (!std::isfinite(h) || h <= 0.0) return 1.0;
+  // Same scaled-range tolerance as ape and the R optimizer boundary.
+  if ((h - min_height) / h >
+      std::sqrt(std::numeric_limits<double>::epsilon())) return 1.0;
+  double out = std::numeric_limits<double>::infinity();
+  for (int tip = 0; tip < tree.n_tip; ++tip) {
+    const int par = tree.parent[static_cast<std::size_t>(tip)];
+    const double parent_height = tree.root_distance[static_cast<std::size_t>(par)];
+    if (parent_height > 0.0) {
+      out = std::min(out, tree.root_distance[static_cast<std::size_t>(tip)] /
+                           parent_height);
     }
   }
-  if (!ultrametric) return 1.0;
-  double max_parent_height = 0.0;
-  for (int node = 0; node < tree.n_total; ++node) {
-    if (node == tree.root) continue;
-    const int par = tree.parent[static_cast<std::size_t>(node)];
-    max_parent_height = std::max(
-      max_parent_height, tree.root_distance[static_cast<std::size_t>(par)]
-    );
-  }
-  if (!std::isfinite(max_parent_height) || max_parent_height <= 0.0) {
-    return 1.0;
-  }
-  const double out = h / max_parent_height;
   return std::isfinite(out) && out > 0.0 ? out : 1.0;
 }
 

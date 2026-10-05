@@ -108,6 +108,7 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
     tree, need_lambda = FALSE, need_matrix = FALSE
   )
   full_key <- .tree_mask_key(seq_len(ape::Ntip(tree)), ape::Ntip(tree))
+  full_key <- .mask_cache_key(full_key, structural_cache)
   full <- .attach_structural_evidence(
     full,
     key = full_key,
@@ -198,10 +199,24 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
   }
   present <- matrix(FALSE, nrow = n_tip, ncol = 1L)
   present[keep, 1L] <- TRUE
-  # Reuse the exact packed-mask encoder used to group trait NA patterns. This
-  # keeps cache keys far below R's 10,000-byte environment-name limit for the
-  # large trees supported by the package and is independent of keep order.
+  # Exact, dimension-aware identity. Long encodings are indexed before use
+  # as environment names by .mask_cache_key().
   group_na_masks_cpp(present)$key[[1L]]
+}
+
+.mask_cache_key <- function(key, cache) {
+  if (nchar(key, type = "bytes") <= 10000L) return(key)
+  # Intern long identities by exact string equality, never hash equality.
+  # Attributes persist with the cache through saveRDS/readRDS and do not
+  # appear among cache entries. Existing short keys remain unchanged.
+  identities <- attr(cache, "mask_key_index", exact = TRUE)
+  index <- match(key, identities)
+  if (is.na(index)) {
+    identities <- c(identities, key)
+    index <- length(identities)
+    attr(cache, "mask_key_index") <- identities
+  }
+  paste0("<mask-index:", index, ">")
 }
 
 .prepare_tree_subset <- function(tree, need_lambda = FALSE,
@@ -311,6 +326,7 @@ prepare_tree <- function(tree, max_cached_subsets = 16L,
   key <- .tree_mask_key(keep, ctx$n_tip)
   need_matrix <- isTRUE(need_matrix) || isTRUE(need_lambda)
   structural_cache <- .structural_cache(ctx)
+  key <- .mask_cache_key(key, structural_cache)
   cache_hit <- exists(key, structural_cache, inherits = FALSE)
   if (cache_hit) {
     out <- get(key, structural_cache, inherits = FALSE)

@@ -33,9 +33,18 @@ See [all data, settings and diagnostic details](docs/release-0.3.0/README.md).
 
 ## Install
 
+The [0.3.1 GitHub patch release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1) contains five correctness fixes. Download its source archive and install with an existing C++ toolchain:
+
+```r
+install.packages("fastphylosig_0.3.1.tar.gz", repos = NULL, type = "source")
+library(fastphylosig)
+```
+
+For the previously published GitHub release:
+
 ```r
 install.packages("remotes")
-remotes::install_github("yinwen-ecology/fastphylosig")
+remotes::install_github("yinwen-ecology/fastphylosig@v0.3.0")
 library(fastphylosig)
 ```
 
@@ -272,6 +281,14 @@ scientific inference. These native web previews retain some annotation/curve
 overlaps; they are not collision-free manuscript figures.
 
 ## Compatibility and release status
+
+The 0.3.1 patch fixes D type-7 thresholds, numeric species identities,
+D plot null probabilities and tails, approximately ultrametric lambda
+boundaries, and long mask-cache identities. See [patch notes](RELEASE_NOTES_0.3.1.md).
+Its 50K regression covers preparation, subset caches, persistence, fallback
+grouping and K without permutations. It does not qualify all methods or
+simulation workloads at 50K. The historical figures and runtime evidence
+below remain evidence for 0.3.0; no new performance benchmark was run for 0.3.1.
 
 The [0.3.0 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.0)
 retains declared compatibility with R 4.1.0 and above.

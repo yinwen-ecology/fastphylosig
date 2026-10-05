@@ -6,10 +6,16 @@
 ## 安装
 
 ```r
-install.packages("remotes")
-remotes::install_github("yinwen-ecology/fastphylosig")
+# 从 GitHub v0.3.1 Release 下载源码包；安装需要现有 C++ 工具链。
+install.packages("fastphylosig_0.3.1.tar.gz", repos = NULL, type = "source")
 library(fastphylosig)
 ```
+
+已发布的旧版本仍可通过
+`remotes::install_github("yinwen-ecology/fastphylosig@v0.3.0")` 安装。
+原有性能证据和图表属于 0.3.0，不能作为 0.3.1 的新性能结论。
+本轮 50K 验证仅覆盖树准备、子集缓存、持久化、fallback 分组及无置换 K，
+不代表所有方法与模拟场景均已在 50K 完成验证。
 
 从源码安装需要 C++ 编译工具，OpenMP 为可选加速项。
 

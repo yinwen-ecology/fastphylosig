@@ -18,7 +18,9 @@ The \code{data} spelling is an alias for \code{x}; supply only one spelling.}
 \item{test}{Whether to compute the likelihood-ratio test against lambda zero.}
 \item{se}{Currently only \code{NULL} is supported.}
 \item{verbose}{Whether to report species matching.}
-\item{ncores}{Number of OpenMP threads used by lambda kernels.}
+\item{ncores}{Accepted for API compatibility. The current fixed-lambda and
+optimization kernels run serially; increasing this value does not enable
+parallel lambda evaluation.}
 \item{lambda_profile}{Whether to store a lambda likelihood profile. The
 default stores it for vector input and skips it for batch input.}
 \item{lambda_profile_points}{Number of regular profile grid points (at least

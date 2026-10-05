@@ -1015,15 +1015,20 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
 }
 
 .max_lambda <- function(tree) {
-  if (!ape::is.ultrametric(tree)) {
-    return(1)
-  }
   depth <- ape::node.depth.edgelength(tree)
+  tips <- depth[seq_along(tree$tip.label)]
+  h <- max(tips)
+  # Match ape's default scaled-range ultrametric criterion in both engines.
+  if (!is.finite(h) || h <= 0 ||
+      (h - min(tips)) / h > sqrt(.Machine$double.eps)) return(1)
   parent_height <- depth[tree$edge[, 1]]
-  child_height <- depth[tree$edge[, 2]]
-  denom <- max(parent_height)
-  if (!is.finite(denom) || denom <= 0) return(1)
-  out <- max(child_height) / denom
+  terminal <- tree$edge[, 2] <= length(tips) & parent_height > 0
+  if (!any(terminal)) return(1)
+  # On approximately ultrametric trees, max(tip height)/max(parent height)
+  # can imply a negative terminal variance. Use the exact edge constraint
+  # h_tip - lambda * h_parent >= 0; on exact ultrametric trees this is the
+  # usual phytools bound.
+  out <- min(depth[tree$edge[terminal, 2]] / parent_height[terminal])
   if (!is.finite(out) || out <= 0) 1 else out
 }
 
@@ -1151,6 +1156,7 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
 # Small utilities --------------------------------------------------------------
 
 .as_trait_matrix <- function(X, tree, verbose = TRUE) {
+  named_input <- .has_species_names(X)
   if (is.data.frame(X)) {
     if (!all(vapply(X, is.numeric, logical(1)))) {
       stop("All columns of x must be numeric.", call. = FALSE)
@@ -1171,7 +1177,7 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
     storage.mode(X) <- "double"
   }
 
-  default_rownames <- identical(rownames(X), as.character(seq_len(nrow(X))))
+  default_rownames <- !named_input
   if ((is.null(rownames(X)) || default_rownames) &&
       nrow(X) == ape::Ntip(tree)) {
     if (isTRUE(verbose)) {
@@ -1180,7 +1186,8 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
     rownames(X) <- tree$tip.label
     default_rownames <- FALSE
   }
-  if (is.null(rownames(X)) || default_rownames) {
+  if (is.null(rownames(X)) || default_rownames ||
+      anyNA(rownames(X)) || any(!nzchar(rownames(X)))) {
     stop("x must have species names as names/rownames.", call. = FALSE)
   }
   if (anyDuplicated(rownames(X))) {

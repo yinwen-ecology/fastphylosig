@@ -1,3 +1,32 @@
+# fastphylosig 0.3.1
+
+- Aligned read-only tree readiness with V2 requirements for character tip
+  labels and a declared positive Nnode. Invalid representations no longer
+  appear ready immediately before preparation rejects them.
+- Preserved explicit D plot P-value column selection, including differing
+  aliases and custom table columns under the automatic null selection.
+- Strengthened scalar K dispatcher tests to compare actual fields and
+  simulation values, and corrected lambda's serial-execution documentation.
+- Preserved explicit numeric species names through both preparation layers;
+  positional matching now applies only to missing names or automatic
+  data-frame rownames.
+- Bound D plot probabilities to the selected null model and preserved fitted
+  probabilities and strict contrast-scale tail counts in calibration plots.
+- Aligned R and C++ lambda boundaries with ape's scaled-range ultrametric
+  tolerance. Approximately ultrametric trees use the exact terminal-edge
+  feasibility limit, which can be slightly below phytools' max-height ratio;
+  exactly ultrametric and non-ultrametric domains are unchanged.
+- Indexed long packed-mask identities by exact equality before using them as
+  environment names. Existing short keys and V2 context persistence remain
+  supported. The 50K regression covers preparation, subsets, persistence,
+  fallback grouping and K without permutations; it does not qualify every
+  method or simulation workload at that size.
+- Corrected D's type-7 Brownian threshold interpolation between the first
+  two order statistics. A first factor level represented by one tip now
+  produces one Brownian state per replicate for distinct simulated values,
+  instead of an all-zero state vector. Strict threshold and tail rules,
+  RNG draw order, and estimator definitions are unchanged.
+
 # fastphylosig 0.3.0
 
 - Replaced the Blomberg's K permutation evaluator's per-permutation tree
