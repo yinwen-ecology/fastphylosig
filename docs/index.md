@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Fast phylogenetic signal analysis in R
-description: fastphylosig 0.3.0 measures phylogenetic signal in continuous, binary, and categorical traits.
+description: fastphylosig 0.3.1 measures phylogenetic signal in continuous, binary, and categorical traits.
 ---
 
 <nav class="page-jumps" aria-label="Page sections">
@@ -12,11 +12,11 @@ description: fastphylosig 0.3.0 measures phylogenetic signal in continuous, bina
 </nav>
 
 <section class="hero" id="top" markdown="1">
-<p class="eyebrow">fastphylosig · R package · v0.3.0</p>
+<p class="eyebrow">fastphylosig · R package · v0.3.1</p>
 
 # Fast phylogenetic signal analysis in R
 
-<p class="hero-proof"><strong>At 2,000 tips, observed reference/fastphylosig median-time ratios reached 151× for K, 23,591× for lambda, 224× for D, and 33.6× for Delta.</strong> Delta is a call-time comparison only; <a href="#delta-caveat">diagnostic warnings apply</a>.</p>
+<p class="hero-proof"><strong>At 2,000 tips, observed reference/fastphylosig median-time ratios reached 151× for K, 23,591× for lambda, 224× for D, and 33.6× for Delta.</strong> Delta timings are summarized with <a href="#delta-caveat">MCMC diagnostics</a>.</p>
 
 <p class="hero-lead">Estimate phylogenetic signal in continuous, binary, and categorical traits. Start with one high-level function, or prepare a tree once and call a method directly.</p>
 
@@ -43,12 +43,12 @@ description: fastphylosig 0.3.0 measures phylogenetic signal in continuous, bina
   </article>
 </div>
 
-<p class="hero-footnote">Ratios are reference median time ÷ fastphylosig median time. The 2,000-tip ranges span three designed signal scenarios; they are descriptive ranges, not confidence intervals.</p>
+<p class="hero-footnote">Ratios are reference median time ÷ fastphylosig median time. The 2,000-tip ranges span three designed signal scenarios; each range summarizes those scenarios.</p>
 </section>
 
 ## Matched runtime comparison {#speed}
 
-Four statistics, 50–2,000 tips, three signal scenarios, and 10 paired calls per setting. Tree and data preparation are excluded.
+Benchmark version: v0.3.0. Four statistics, 50–2,000 tips, three signal scenarios, and 10 paired calls per setting. Timings cover method calls after tree and data preparation.
 
 <figure class="benchmark-figure">
   <a class="figure-open" href="{{ '/release-0.3.0/benchmark_reference_four_methods_speedup.png' | relative_url }}" aria-label="Open the full-size four-statistic benchmark figure">
@@ -61,16 +61,13 @@ Four statistics, 50–2,000 tips, three signal scenarios, and 10 paired calls pe
 
 <div class="install-stack" markdown="1">
 <article class="content-card" markdown="1">
-### Install the published v0.3.0
+### Install v0.3.1
 
-The [v0.3.1 correctness patch](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1) is available as a GitHub release.
-For a supplied local source archive, use
-`install.packages("fastphylosig_0.3.1.tar.gz", repos = NULL, type = "source")`.
-The performance evidence and gallery on this page remain from 0.3.0.
+The [v0.3.1 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1) improves rare-state D calibration, species matching, D plots, lambda bounds and large-tree caches.
 
 ```r
 install.packages("remotes")
-remotes::install_github("yinwen-ecology/fastphylosig@v0.3.0")
+remotes::install_github("yinwen-ecology/fastphylosig@v0.3.1")
 library(fastphylosig)
 ```
 
@@ -134,7 +131,7 @@ Methods are selected explicitly; the package does not infer them from trait valu
 
 ## See the native `plot_signal()` output {#plots}
 
-These examples use the package's own plotting function on simulated demonstration data. Click an image to inspect the original-size PNG; the linked gallery documents all six styles and their diagnostic limits.
+These v0.3.0 examples use the package's own plotting function on simulated demonstration data. Click an image to inspect the original-size PNG; the linked gallery documents all six styles and their diagnostics.
 
 <div class="plot-grid">
   <figure class="plot-card">
@@ -158,23 +155,23 @@ These examples use the package's own plotting function on simulated demonstratio
 </div>
 
 <p class="gallery-link"><a class="button-link" href="{{ '/release-0.3.0/plot_signal_gallery.html' | relative_url }}">View all six plot styles and the Delta demo</a></p>
-<p class="caution-line"><strong>Delta gallery note:</strong> the short-chain Delta panel is for display only. Its diagnostic warning and three-draw permutation P value make it unsuitable for inference.</p>
+<p class="caution-line"><strong>Delta gallery:</strong> a short-chain illustration with diagnostic warnings and a three-draw permutation P value; the gallery documents the simulation settings.</p>
 
-## Release and validation boundaries
+## Validation and benchmark details
 
 <div class="benchmark-notes">
   <article class="note-card note-card--plain">
-    <h3>Small-tree K is slower</h3>
-    <p>At 50 and 100 tips, reference K was faster; all observations remain in the figure.</p>
+    <h3>Small-tree K timings</h3>
+    <p>At 50 and 100 tips, reference K was faster; the figure includes these observations.</p>
   </article>
   <article class="note-card note-card--caution" id="delta-caveat">
-    <h3>Delta diagnostic caveat</h3>
-    <p>Reference warnings occurred in 112/120 calls, without final convergence diagnostics; one fast call reached its optimizer limit. Timing ratios do not establish equal accuracy or valid convergence.</p>
+    <h3>Delta diagnostics</h3>
+    <p>Delta ratios compare call times: reference warnings occurred in 112/120 calls without final convergence diagnostics, and one fast call reached its optimizer limit; see the linked results for diagnostic details.</p>
   </article>
 </div>
 
 <details class="benchmark-details">
-  <summary>Benchmark settings and limitations</summary>
+  <summary>Benchmark settings</summary>
   <div markdown="1">
 
 - **K and lambda:** estimates only (`test = FALSE`), without permutation testing.
@@ -182,10 +179,10 @@ These examples use the package's own plotting function on simulated demonstratio
 - **Delta:** two 10,000-iteration MCMC chains (`thin = 10`, `burn = 100`), without permutation testing.
 - Ratios compare median call times; workloads differ across statistics.
 
-See the [full benchmark data, references, settings, and limitations]({{ '/release-0.3.0/README.html' | relative_url }}).
+See the [full benchmark data, references and settings]({{ '/release-0.3.0/README.html' | relative_url }}).
   </div>
 </details>
 
-The current release is [fastphylosig v0.3.0](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.0). The 50,000-tip preparation mask-key limitation is deferred to v0.3.x. Benchmark ratios describe the recorded Windows/R environment and these specific workloads; they are not universal speed guarantees or evidence that the four statistics have equal computational work.
+The current release is [fastphylosig v0.3.1](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1). Local Windows checks passed 9,052 assertions and examples; Windows, Linux, macOS and OpenMP-disabled CI passed for the release. PDF-manual validation is awaiting the Win-builder report. The 50,000-tip regression verifies tree preparation, subset caches, serialization, fallback grouping and K estimation without permutations. See the [release notes](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1) for the fixes and checks.
 
 <p class="closing-links"><a href="https://github.com/yinwen-ecology/fastphylosig">Source code</a><a href="https://github.com/yinwen-ecology/fastphylosig/issues">Report an issue</a><a href="{{ '/release-0.3.0/README.html' | relative_url }}">Benchmark and usage details</a></p>
