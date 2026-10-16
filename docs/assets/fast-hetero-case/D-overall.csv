@@ -1,0 +1,2 @@
+"trait","method","n_species","estimate","P","test","test_method","P_random","P_Brownian","LR","MCSE_P","nsim_requested","nsim_successful","status","message"
+"x","D",512,0.125584510578265,0,TRUE,"D random association and Brownian threshold references",0,0.196,NA,0,1000,1000,"ok",NA

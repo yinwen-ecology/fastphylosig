@@ -1,0 +1,2 @@
+"trait","method","n_species","estimate","P","test","test_method","P_random","P_Brownian","LR","MCSE_P","nsim_requested","nsim_successful","status","message"
+"x","K",509,0.302934663182291,0.001001001001001,TRUE,"tip randomization",NA,NA,NA,0,999,999,"ok",NA

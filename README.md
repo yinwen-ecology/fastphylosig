@@ -1,11 +1,15 @@
 # fastphylosig 0.3.4
 
-This local source version provides phylogenetic signal statistics and
+This version provides phylogenetic signal statistics and
 `fast_hetero()` for comparing signal across clades. The
 [heterogeneity guide](inst/HETERO_GUIDE_zh.md) covers selection, interpretation,
 diagnostics and runnable examples. Earlier Delta posterior/MCMC corrections
 are recorded in NEWS; no new estimator or RNG change is introduced by the
 0.3.4 documentation and cleanup revision.
+
+The [fast_hetero case study](https://yinwen-ecology.github.io/fastphylosig/fast-hetero-case.html)
+walks through a 512-species example with local/overall results, native tree
+plots, downloadable data and full R code.
 
 [Package website](https://yinwen-ecology.github.io/fastphylosig/) |
 [GitHub](https://github.com/yinwen-ecology/fastphylosig) |
@@ -67,21 +71,20 @@ See [all data, settings and diagnostic details](docs/release-0.3.0/README.md).
 
 ## Install
 
-To install a locally built 0.3.4 source archive with an existing C++ toolchain:
+Download the [frozen 0.3.4 source package](https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.4/fastphylosig_0.3.4.tar.gz)
+and install it with an existing C++ toolchain:
 
 ```r
 install.packages("fastphylosig_0.3.4.tar.gz", repos = NULL, type = "source")
 library(fastphylosig)
 ```
 
-0.3.4 has not been published by this workflow. The
-[0.3.1 GitHub patch release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1)
-and the earlier 0.3.0 release remain separate historical downloads. To install
-the latter:
+The current GitHub release is [0.3.4](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4).
+Installation from the corresponding source tag is also available:
 
 ```r
 install.packages("remotes")
-remotes::install_github("yinwen-ecology/fastphylosig@v0.3.0")
+remotes::install_github("yinwen-ecology/fastphylosig@v0.3.4")
 library(fastphylosig)
 ```
 

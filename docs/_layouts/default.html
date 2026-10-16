@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ page.lang | default: 'en' }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,12 +15,13 @@
         <nav class="site-nav" aria-label="Project links">
           <a href="https://github.com/yinwen-ecology/fastphylosig">GitHub</a>
           <a href="https://github.com/yinwen-ecology/fastphylosig/issues">Issues</a>
-          <a href="https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1">v0.3.1 release</a>
+          <a href="{{ '/fast-hetero-case.html' | relative_url }}">fast_hetero case</a>
+          <a href="https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4">v0.3.4 release</a>
         </nav>
       </div>
     </header>
 
-    <main id="main-content" class="{% if page.url == '/' or page.url == '/index.html' %}home-page{% else %}document-page{% endif %}">
+    <main id="main-content" class="{% if page.url == '/' or page.url == '/index.html' %}home-page{% else %}document-page{% endif %} {{ page.page_class }}">
       {{ content }}
     </main>
 

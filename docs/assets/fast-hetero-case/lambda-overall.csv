@@ -1,0 +1,2 @@
+"trait","method","n_species","estimate","P","test","test_method","P_random","P_Brownian","LR","MCSE_P","nsim_requested","nsim_successful","status","message"
+"x","lambda",509,0.563419238091277,3.74473833389555e-17,TRUE,"likelihood ratio against lambda = 0 (chi-square, df = 1)",NA,NA,70.9069638206856,NA,0,0,"ok",NA

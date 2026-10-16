@@ -1,0 +1,6 @@
+{
+  "K": ["Overall K = 0.3029 (n = 509)", "Randomization P = 0.001", "SD(log(K)) = 0.5861 (8 crowns)", "BM dispersion P = 0.001 (999 simulations)", "RMS(log(local / overall)) = 0.8188"],
+  "lambda": ["Overall lambda = 0.5634 (n = 509)", "LRT P (lambda = 0) = <1e-04", "SD(lambda) = 0.483 (8 crowns)", "Shared-lambda heterogeneity P = 0.001 (999 simulations)", "Reference: common local crown lambda; approximate P", "RMS(local - overall) = 0.4591"],
+  "D": ["Overall D = 0.1256 (n = 512)", "Signal P: random = 0/1000; Brownian = 0.196", "SD(D) = 0.9703 (7 crowns)", "Conditional ER heterogeneity test: not performed", "RMS(local - overall) = 0.9034"],
+  "Delta": ["Overall Delta = 5.323 (n = 512)", "Randomization P = 0.0201", "SD(log(Delta)) = 4.785 (7 crowns)", "Common-Mk signal-deviation test: not performed", "Descriptive Delta comparison (recommended)", "RMS(log(local / overall)) = 4.454"]
+}

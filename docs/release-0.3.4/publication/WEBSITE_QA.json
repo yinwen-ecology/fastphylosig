@@ -1,0 +1,18 @@
+{
+  "version": "0.3.4",
+  "case": "fast-hetero-case.html",
+  "data": "fixed synthetic 512-tip tree, eight prespecified crowns",
+  "case_calculation": "executed using the checked 0.3.4 installation",
+  "result_tables": "generated directly from saved native output CSV files",
+  "native_tree_plots": 4,
+  "all_case_images_loaded": true,
+  "case_tables": 3,
+  "desktop_viewport_width": 1272,
+  "desktop_document_width": 1257,
+  "narrow_viewport_width": 390,
+  "narrow_document_width": 375,
+  "temporary_viewport_reset": true,
+  "preview_renderer": "Pandoc preview with the repository layout and CSS; actual Jekyll deployment verified separately after push",
+  "authoring": "question, operations and result interpretation foregrounded; scope notes consolidated",
+  "frozen_package_changed": false
+}

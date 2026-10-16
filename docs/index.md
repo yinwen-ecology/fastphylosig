@@ -1,24 +1,25 @@
 ---
 layout: default
 title: Fast phylogenetic signal analysis in R
-description: fastphylosig 0.3.1 measures phylogenetic signal in continuous, binary, and categorical traits.
+description: fastphylosig 0.3.4 measures phylogenetic signal and compares local and whole-tree patterns with fast_hetero().
 ---
 
 <nav class="page-jumps" aria-label="Page sections">
   <a href="#speed">Measured speed</a>
   <a href="#install">Install</a>
+  <a href="#clade-signal">Clade-scale signal</a>
   <a href="#workflow">Workflow</a>
   <a href="#plots">Plot examples</a>
 </nav>
 
 <section class="hero" id="top" markdown="1">
-<p class="eyebrow">fastphylosig · R package · v0.3.1</p>
+<p class="eyebrow">fastphylosig · R package · v0.3.4</p>
 
 # Fast phylogenetic signal analysis in R
 
 <p class="hero-proof"><strong>At 2,000 tips, observed reference/fastphylosig median-time ratios reached 151× for K, 23,591× for lambda, 224× for D, and 33.6× for Delta.</strong> Delta timings are summarized with <a href="#delta-caveat">MCMC diagnostics</a>.</p>
 
-<p class="hero-lead">Estimate phylogenetic signal in continuous, binary, and categorical traits. Start with one high-level function, or prepare a tree once and call a method directly.</p>
+<p class="hero-lead">Estimate phylogenetic signal in continuous, binary, and categorical traits. Use <code>fast_signal()</code> for a whole-tree analysis and <code>fast_hetero()</code> to compare clade-scale patterns, with explicit coverage, diagnostics and native tree plots.</p>
 
 <div class="speed-cards" aria-label="Observed reference-to-fast runtime ratios">
   <article class="speed-card">
@@ -46,6 +47,30 @@ description: fastphylosig 0.3.1 measures phylogenetic signal in continuous, bina
 <p class="hero-footnote">Ratios are reference median time ÷ fastphylosig median time. The 2,000-tip ranges span three designed signal scenarios; each range summarizes those scenarios.</p>
 </section>
 
+## Compare signal across clades with `fast_hetero()` {#clade-signal}
+
+Split a tree into prespecified monophyletic crowns or select maximal disjoint crowns within size bounds. Calculate local signal with the existing fast_* kernels, compare it with the whole tree, and colour the selected crowns by their estimates. The results retain actual sample sizes, missing observations, categorical state composition and fit/MCMC diagnostics.
+
+<div class="hetero-feature" markdown="1">
+<div markdown="1">
+
+### A reproducible 512-species walkthrough
+
+Eight crowns, three trait types and four signal measures. Follow the same nodes through K, lambda, binary D and multistate Delta; inspect a deliberately single-state crown instead of discarding it.
+
+K uses a BM dispersion reference. Lambda's common-local-crown reference is approximate. D's heterogeneity extension remains experimental; Delta is recommended for local/overall description and diagnostics. Compare conservatism patterns at the scale of your biological question.
+
+[Read the fast_hetero() case study (中文)]({{ '/fast-hetero-case.html' | relative_url }}){: .button-link}
+
+</div>
+<figure>
+  <a href="{{ '/fast-hetero-case.html' | relative_url }}" aria-label="Read the clade-scale signal case study">
+    <img src="{{ '/assets/fast-hetero-case/K-tree.png' | relative_url }}" alt="Native fast_hetero tree plot for eight selected crowns in a simulated 512-species tree, with whole-tree K, its ordinary signal P and a separate BM dispersion P.">
+  </a>
+  <figcaption>Native <code>plot()</code> output from the case study; all numbers, diagnostics, code and data are available on the case page.</figcaption>
+</figure>
+</div>
+
 ## Matched runtime comparison {#speed}
 
 Benchmark version: v0.3.0. Four statistics, 50–2,000 tips, three signal scenarios, and 10 paired calls per setting. Timings cover method calls after tree and data preparation.
@@ -61,13 +86,15 @@ Benchmark version: v0.3.0. Four statistics, 50–2,000 tips, three signal scenar
 
 <div class="install-stack" markdown="1">
 <article class="content-card" markdown="1">
-### Install v0.3.1
+### Install v0.3.4
 
-The [v0.3.1 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1) improves rare-state D calibration, species matching, D plots, lambda bounds and large-tree caches.
+The [v0.3.4 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4) adds the documented clade-scale workflow, preserves experimental labels, and reduces repeated D/lambda calculations. The command below installs the frozen, checked source attachment.
 
 ```r
-install.packages("remotes")
-remotes::install_github("yinwen-ecology/fastphylosig@v0.3.1")
+install.packages(
+  "https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.4/fastphylosig_0.3.4.tar.gz",
+  repos = NULL, type = "source"
+)
 library(fastphylosig)
 ```
 
@@ -183,6 +210,6 @@ See the [full benchmark data, references and settings]({{ '/release-0.3.0/README
   </div>
 </details>
 
-The current release is [fastphylosig v0.3.1](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1). Local Windows checks passed 9,052 assertions and examples; Windows, Linux, macOS and OpenMP-disabled CI passed for the release. PDF-manual validation is awaiting the Win-builder report. The 50,000-tip regression verifies tree preparation, subset caches, serialization, fallback grouping and K estimation without permutations. See the [release notes](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1) for the fixes and checks.
+The current release is [fastphylosig v0.3.4](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4). Independent Windows checks passed fresh compilation, examples, 13,679 assertions and PDF/HTML manual checks, with no errors or warnings and one incoming “New submission” note. One historical cross-install test was skipped; the development K four-mode bridge was separately exercised. Linux checking was confirmed by the maintainer. Other platforms are not claimed as validated in this round. The runtime figure above remains explicitly v0.3.0 evidence, not a new v0.3.4 benchmark. See the [release notes](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4) and [fast_hetero walkthrough]({{ '/fast-hetero-case.html' | relative_url }}).
 
 <p class="closing-links"><a href="https://github.com/yinwen-ecology/fastphylosig">Source code</a><a href="https://github.com/yinwen-ecology/fastphylosig/issues">Report an issue</a><a href="{{ '/release-0.3.0/README.html' | relative_url }}">Benchmark and usage details</a></p>
