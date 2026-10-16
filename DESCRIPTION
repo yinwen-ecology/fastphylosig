@@ -1,7 +1,7 @@
 Package: fastphylosig
 Type: Package
 Title: Fast Phylogenetic Signal Statistics
-Version: 0.3.1
+Version: 0.3.4
 Authors@R:
     person("Yin", "Wen", role = c("aut", "cre"),
            email = "yinwen-ecology@users.noreply.github.com")
@@ -14,7 +14,9 @@ Description: Provides one-command and method-specific workflows for
     and permutation diagnostics. The package also provides reusable prepared
     trees, explicit tree/data matching, trait-wise missing-value handling,
     conservative tree diagnostics, bounded simulation memory, and structured
-    timing and Monte Carlo uncertainty metadata.
+    timing and Monte Carlo uncertainty metadata. Clade scans describe local
+    and overall signal in continuous, binary and multistate traits, with
+    optional model-reference tests of signal dispersion or deviation.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Depends:
@@ -29,6 +31,7 @@ LinkingTo:
     RcppArmadillo
 Suggests:
     caper,
+    expm,
     mvtnorm,
     phytools,
     testthat
@@ -38,3 +41,4 @@ BugReports: https://github.com/yinwen-ecology/fastphylosig/issues
 SystemRequirements: C++17, OpenMP (optional)
 Config/testthat/edition: 3
 NeedsCompilation: yes
+Config/roxygen2/version: 8.1.0

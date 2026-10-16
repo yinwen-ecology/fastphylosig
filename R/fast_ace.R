@@ -190,29 +190,69 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
   workspace
 }
 
-.fast_ace_workspace <- function(tree_workspace, model, nl) {
+.fast_ace_workspace <- function(tree_workspace, model, nl, native_pool = NULL) {
   rate <- .fast_ace_rate_index(model, nl)
-  c(tree_workspace, list(rate = rate, model = model, nl = as.integer(nl)))
+  key <- NULL
+  if(!is.null(native_pool)) {
+    native_pool$next_id <- native_pool$next_id+1;key <- native_pool$next_id
+  }
+  c(tree_workspace, list(rate = rate, model = model, nl = as.integer(nl),
+    native_pool=native_pool,native_key=key))
 }
 
 .fast_ace_fit_workspace <- function(tip_state, lvls, workspace, ip,
                                     CI = TRUE, marginal = FALSE,
                                     estimate_se = TRUE,
-                                    reuse_buffers = !isTRUE(estimate_se)) {
+                                    reuse_buffers = !isTRUE(estimate_se),
+                                    fit_strategy = "default", recover_ard = FALSE) {
   rate <- workspace$rate
   par0 <- rep(ip, length.out = rate$np)
-  dev <- function(p) {
-    fast_ace_discrete_deviance_cpp(
+  prepared <- NULL
+  recovery_guard <- FALSE
+  er_recoveries <- 0
+  stable_recoveries <- probability_recoveries <- 0
+  # Delta keeps nlminb unchanged. An analysis pool can reuse immutable geometry
+  # across fits; otherwise this closure owns and releases its native scratch.
+  dev <- if (isTRUE(reuse_buffers) && !isTRUE(estimate_se)) {
+    threads <- if(is.null(workspace$fit_threads))getOption("fastphylosig.ace_threads",0L) else workspace$fit_threads
+    pool <- workspace$native_pool
+    if(!is.null(pool) && identical(pool$pid,Sys.getpid()) && pool$budget>0) {
+      acquired <- .fast_ace_pool_acquire(workspace,tip_state,threads)
+      prepared <- acquired$pointer
+      on.exit(.fast_ace_pool_account(pool,acquired$key),add=TRUE)
+    } else {
+      # Foreign-process pools contain serialized null pointers: never use them.
+      prepared <- fast_ace_fit_prepare_cpp(workspace$edge,workspace$edge_length,
+        tip_state,rate$rate_index,threads)
+      on.exit(fast_ace_fit_release_cpp(prepared),add=TRUE)
+    }
+    # Native bytes do not trigger R GC: account/evict or release at fit exit.
+    function(p) fast_ace_fit_deviance_cpp(prepared, p)
+  } else function(p) {
+    value <- fast_ace_discrete_deviance_cpp(
       edge = workspace$edge, edge_length = workspace$edge_length,
       tip_state = tip_state, rate_index = rate$rate_index, par = p,
       reuse_buffers = isTRUE(reuse_buffers)
     )
+    recovered <- attr(value,"er_recoveries",exact=TRUE)
+    if(!is.null(recovered)) er_recoveries <<- er_recoveries+recovered
+    recovered <- attr(value,"stable_recoveries",exact=TRUE)
+    if(!is.null(recovered)) stable_recoveries <<- stable_recoveries+recovered
+    value[[1L]]
   }
 
-  fit <- stats::nlminb(
+  fit <- if (identical(fit_strategy, "multistart"))
+    .fast_ace_multistart(dev, par0, workspace) else stats::nlminb(
     start = par0, objective = dev,
     lower = rep(0, rate$np), upper = rep(1e50, rate$np)
   )
+  if(isTRUE(recover_ard) && identical(fit_strategy,"default") &&
+      identical(workspace$model,"ARD") && fit$convergence != 0L) {
+    recovery_guard <- !is.null(prepared)
+    recovery_dev <- if(recovery_guard)
+      function(p)fast_ace_fit_deviance_cpp(prepared,p,TRUE) else dev
+    fit <- .fast_ace_recover_ard(recovery_dev,fit,recheck=recovery_guard)
+  }
 
   rate_se <- rep(NaN, rate$np)
   if (isTRUE(estimate_se)) {
@@ -243,22 +283,114 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
     convergence = fit$convergence,
     message = fit$message
   )
+  if (!is.null(fit$diagnostics)) obj$diagnostics <- fit$diagnostics
+  if(!is.null(fit$diagnostics$optimizer_retry)) {
+    retry <- fit$diagnostics$optimizer_retry
+    warning(structure(list(message=paste0("ACE attempted bounded ARD optimizer recovery; ",
+      if(retry$recovered) "a converged candidate was selected." else "optimization remains unfinished."),
+      call=NULL,recovered=retry$recovered,diagnostics=fit$diagnostics),
+      class=c("fastphylosig_optimizer_retry_warning","warning","condition")))
+  }
   if (fit$convergence != 0L) {
-    warning("transition-rate optimization did not converge: ", fit$message,
-            call. = FALSE)
+    warning(structure(list(message = paste0("transition-rate optimization did not converge: ",
+      fit$message), call = NULL, convergence = fit$convergence),
+      class = c("fastphylosig_optimizer_warning", "warning", "condition")))
   }
   if (isTRUE(CI)) {
-    lik <- fast_ace_discrete_liks_cpp(
+    lik <- if(!is.null(prepared))fast_ace_fit_liks_cpp(prepared,fit$par,marginal,recovery_guard) else fast_ace_discrete_liks_cpp(
       edge = workspace$edge, edge_length = workspace$edge_length,
       tip_state = tip_state, rate_index = rate$rate_index, par = fit$par,
       marginal = marginal, reuse_buffers = isTRUE(reuse_buffers)
     )
     lik_anc <- lik$lik.anc
+    # A recovery must not silently attach new posterior rows to an obsolete
+    # fitted objective. Ordinary fits return the identical deviance here.
+    if(!identical(as.numeric(lik$deviance),as.numeric(fit$objective))) {
+      if(abs(lik$deviance-fit$objective)>1e-7*(1+abs(fit$objective)))
+        stop("Ancestral and fitted deviances disagree after numerical recovery.",call.=FALSE)
+      obj$loglik <- -0.5*lik$deviance
+    }
     rownames(lik_anc) <- workspace$nb_tip + seq_len(workspace$nb_node)
     colnames(lik_anc) <- lvls
     obj$lik.anc <- lik_anc
+    if(!is.null(lik$er_recoveries)) er_recoveries <- er_recoveries+lik$er_recoveries
+    if(!is.null(lik$stable_recoveries)) stable_recoveries <- stable_recoveries+lik$stable_recoveries
+    if(!is.null(lik$probability_recoveries)) probability_recoveries <- probability_recoveries+lik$probability_recoveries
+  }
+  if(!is.null(prepared)) er_recoveries <- fast_ace_fit_recoveries_cpp(prepared)
+  if(!is.null(prepared)) {
+    stability <- fast_ace_fit_stability_cpp(prepared)
+    stable_recoveries <- stability[1L]; probability_recoveries <- stability[2L]
+  }
+  if(er_recoveries>0) {
+    obj$numerical_recovery <- list(method="analytic ER transitions",evaluations=er_recoveries)
+    warning(structure(list(message = paste0("ACE used analytic ER transitions after eigensystem failure (",
+      er_recoveries," evaluations)."), call = NULL, evaluations = er_recoveries),
+      class = c("fastphylosig_numerical_recovery_warning", "warning", "condition")))
+  }
+  if(stable_recoveries+probability_recoveries>0) {
+    recovery <- list(method="matrix exponential / probability roundoff",
+      evaluations=stable_recoveries,probability_rows=probability_recoveries)
+    if(is.null(obj$numerical_recovery)) obj$numerical_recovery <- recovery else
+      obj$numerical_recovery$stability <- recovery
+    warning(structure(list(message=paste0("ACE numerical recovery: ",stable_recoveries,
+      " stable matrix-exponential evaluations; ",probability_recoveries,
+      " probability rows repaired as roundoff."),call=NULL,
+      evaluations=stable_recoveries,probability_rows=probability_recoveries),
+      class=c("fastphylosig_numerical_recovery_warning","warning","condition")))
   }
   obj
+}
+
+# Optional common-ARD reference search; all attempts reuse one native objective.
+# No random starts or convergence relabelling.
+.fast_ace_multistart <- function(dev, par0, workspace) {
+  attempts <- list()
+  extended <- list(iter.max = 1500L, eval.max = 4000L)
+  run <- function(start, label, control = list()) {
+    z <- tryCatch(stats::nlminb(start = start, objective = dev,
+      lower = rep(0, length(par0)), upper = rep(1e50, length(par0)),
+      control = control), error = identity)
+    failed <- inherits(z, "error")
+    attempts[[length(attempts) + 1L]] <<- list(label = label, start = start,
+      fit = z, valid = !failed && is.finite(z$objective) && z$objective < 1e49 &&
+        all(is.finite(z$par)) && all(z$par >= 0))
+    z
+  }
+  first <- run(par0,"baseline")
+  if (!inherits(first, "error") && first$convergence != 0L &&
+      all(is.finite(first$par)) && all(first$par >= 0))
+    run(first$par, "continuation", extended)
+  branch_scale <- stats::median(workspace$edge_length[workspace$edge_length > 0])
+  for (intensity in c(.05, .5, 5)) {
+    start <- rep(intensity / (workspace$nl * branch_scale), length(par0))
+    run(start, paste0("scaled_", intensity), extended)
+  }
+  valid <- which(vapply(attempts, `[[`, logical(1), "valid"))
+  if (!length(valid)) stop("All deterministic ARD reference attempts failed.", call. = FALSE)
+  choice <- .fast_ace_select_candidate(attempts)
+  selected <- choice$selected;minimum <- choice$minimum
+  fit <- attempts[[selected]]$fit
+  table <- do.call(rbind, lapply(attempts, function(z) {
+    failed <- inherits(z$fit, "error")
+    data.frame(start = z$label, valid = z$valid,
+      objective = if (failed) NA_real_ else z$fit$objective,
+      convergence = if (failed) NA_integer_ else z$fit$convergence,
+      iterations = if (failed) NA_integer_ else z$fit$iterations,
+      evaluations = if (failed) NA_integer_ else unname(z$fit$evaluations[["function"]]),
+      message = if (failed) conditionMessage(z$fit) else z$fit$message,
+      stringsAsFactors = FALSE)
+  }))
+  fit$diagnostics <- list(method = "deterministic multistart nlminb",
+    selected_attempt = selected, attempts = table,
+    starts = lapply(attempts, `[[`, "start"),
+    baseline_deviance = table$objective[1L], best_deviance = fit$objective,
+    deviance_improvement = table$objective[1L] - fit$objective,
+    uniform_root_loglik = -0.5 * fit$objective - log(workspace$nl))
+  if(selected != minimum) fit$diagnostics$selection_recovery <- list(
+    minimum_attempt=minimum,minimum_deviance=table$objective[minimum],
+    tolerance=choice$tolerance,reason="numerically equivalent converged candidate")
+  fit
 }
 
 .fast_ace_lik_anc_workspace <- function(y, workspace, ip = 0.1,
@@ -270,7 +402,7 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
   .fast_ace_fit_workspace(
     tip_state = as.integer(y), lvls = levels(y), workspace = workspace,
     ip = ip, CI = TRUE, marginal = FALSE, estimate_se = FALSE,
-    reuse_buffers = reuse_buffers
+    reuse_buffers = reuse_buffers, recover_ard = TRUE
   )$lik.anc
 }
 
@@ -307,6 +439,13 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
     fail(sprintf("Nnode (%d) must equal n_tip - 1 (%d).", n_node,
                  n_tip - 1L))
   }
+
+  # Share the compiled tree validator on valid inputs. The R fallback below
+  # retains the established detailed diagnostics for malformed topologies.
+  # This avoids split()/growing R stacks at every Delta NA-mask workspace.
+  checked <- tree_core_validate_cpp(phy$edge, phy$edge.length, n_tip)
+  if (isTRUE(checked$valid) && isTRUE(checked$binary) &&
+      checked$root == n_tip + 1L) return(n_node)
 
   edge <- phy$edge
   edge_ok <- is.matrix(edge) && length(dim(edge)) == 2L &&

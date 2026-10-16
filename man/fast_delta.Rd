@@ -49,14 +49,22 @@ integrity is validated before cached evidence is reused.}
 Computes the single-tree Delta statistic for categorical traits. Ancestral
 state probabilities are estimated with \code{fast_ace()}, node uncertainty is
 transformed to entropy, and Delta is the posterior
-\code{mean(beta) / mean(alpha)} from two chains. Ancestral reconstruction,
+\code{mean(beta / alpha)} from two chains. The lognormal proposal includes its
+Hastings density ratio, targeting the Beta likelihood with independent
+exponential priors on raw alpha and beta. Ancestral reconstruction,
 entropy, and MCMC calculations use Rcpp/RcppArmadillo. The ape comparison path
 is retained internally for regression tests, not exposed as a user engine.
+
+Tiny entropy roundoff excursions are repaired only when the corresponding probability
+row is finite, bounded in [0,1] and normalized within a small tolerance. Repaired
+endpoints use the existing jitter, emit a warning and are described in the result
+note. Healthy calculations retain their original numerical and RNG behavior;
+formerly failed calculations can continue with a different subsequent RNG state.
 }
 \value{
 For vector input, a \code{phylo_delta}-compatible object; matrix/data.frame
 input returns one row per trait. Results report Delta, alpha/beta chain means
-and SDs, ESS, split R-hat, covariance-aware \code{MCSE_Delta}, requested and
+and SDs, ESS, split R-hat, batch-means \code{MCSE_Delta} for the ratio trace, requested and
 successful iteration counts, and safe RNG metadata. Tests also report P,
 \code{MCSE_P}, failed fits, and successful permutation counts. Inspect the
 diagnostics before interpreting short runs. Results expose a
@@ -75,7 +83,13 @@ in
 \code{attr(result, "analysis_metadata")$delta_retained_species}.
 
 For a finite Delta estimate, non-finite chain diagnostics, ESS below 20, or
-split R-hat above 1.1 emit one batch warning. This warning never reruns a
+traditional split R-hat above 1.1 emit one batch warning. The alpha, beta and
+beta/alpha sequences also have rank-normalized/folded \code{rank_Rhat_*},
+\code{ESS_bulk_*} and \code{ESS_tail_*}. Screening flags rank R-hat above 1.01,
+bulk/tail ESS below 100 per original chain, unavailable diagnostics, or
+\code{relative_MCSE_Delta = MCSE_Delta / Delta} above 0.05.
+These thresholds are diagnostic heuristics, not a convergence guarantee.
+Constant traces have unavailable modern diagnostics. This warning never reruns a
 chain or alters requested iterations. Per-trait diagnostic warning details
 are retained in
 \code{attr(result, "analysis_metadata")$delta_mcmc_diagnostics}.
@@ -89,6 +103,57 @@ enabled; null values additionally require \code{return_sim = TRUE}.
 computational defaults rather than a guarantee
 of adequate mixing for every data set. Users should increase the chain when
 ESS, split R-hat, or Monte Carlo error is inadequate.
+}
+\details{
+Native ACE scratch can be reused across fits within one analysis. The
+\code{fastphylosig.ace_cache_bytes} option limits retained storage, with a
+default of \code{64 * 1024^2} bytes. Zero disables cross-fit caching. Active fits and allocator overhead
+are outside this limit. The cache is released on return/error and is absent
+from results. PSOCK workers use owned per-fit scratch.
+Version 0.3.2.9000 corrects both posterior aggregation and MH acceptance.
+Results and RNG trajectories intentionally differ from earlier versions.
+\code{ESS_Delta} and \code{split_Rhat_Delta} assess the beta/alpha sequence.
+These are traditional split R-hat and bounded-lag ESS, not rank-normalized
+or tail diagnostics. The separate rank-normalized fields use pooled mid-ranks,
+split chains and Geyer's positive/monotone ESS sequence with FFT autocovariance.
+The sampler still uses two chains; longer runs and independent chain checks
+are appropriate for final inference. The warning thresholds screen for poor runs;
+they do not establish convergence. For final inference, use longer runs,
+check all three sequences, and require MCSE small relative to the differences
+being interpreted.
+
+The output records \code{optimizer_warning}, \code{numerical_recovery},
+\code{numerical_recovery_evaluations}, \code{entropy_recovery},
+\code{entropy_recovery_rows}, \code{other_warning}, \code{calculation_failed}
+and \code{failure_stage} separately. Recoveries are distinct from optimizer
+warnings and calculation errors. Single-state traits remain unavailable and
+are not counted as calculation errors.
+Defective or ill-conditioned eigensystems use stable matrix exponentials.
+Successful default fits retain their optimization path. An unfinished default
+ARD fit in the Delta workspace receives at most one parameter-scaled nlminb
+continuation and, only if needed, one bounded L-BFGS-B attempt, each limited
+to 150 iterations. They reuse the existing C++ objective and do not draw random
+numbers. Original optimizer returns, budgets and candidate selection are
+retained. Optional \code{optimizer_retry}, \code{optimizer_recovered} and
+\code{optimizer_retry_details} fields appear only when a retry occurred;
+remaining optimizer warnings are not hidden or relabelled. Common multistart
+and the public ACE path are unchanged. ACE permits only machine-scale
+probability boundary recovery; Delta validates every probability row before
+entropy or endpoint jitter. These abnormal paths can change estimates and
+subsequent random streams. Successful ordinary paths retain their arithmetic
+and draw order. Numerical recovery is reported, not treated as a convergence
+failure or evidence of model adequacy.
+
+Delta reuses the likelihood-only native ACE fitting workspace. Large uncached
+branch-length workloads may use at most two OpenMP threads by default for
+independent exponent calculations, combining exact repeated-length caching
+with batches of the remaining branches. Set the
+\code{fastphylosig.ace_threads} option to \code{1L} to keep those fits serial; see
+\code{fast_ace()} for the thread option and bounded storage. Pruning, optimizer
+calls on successful fits and MCMC retain their original order. When \code{ncores > 1}, PSOCK
+permutation workers use one inner ACE thread to avoid nested parallelism;
+the observed fit still follows the option. Changing this ACE option does not
+reallocate Delta's random streams. Changing \code{ncores} does.
 }
 \seealso{\code{fast_signal()}, \code{fast_ace()}}
 \examples{

@@ -1,0 +1,253 @@
+{
+  "package": "fastphylosig",
+  "version": "0.3.4",
+  "state": "frozen_ready_for_publication",
+  "created_utc": "2026-10-16T13:54:26.938535+00:00",
+  "source_archive_sha256": "8B1A8940101997492D4F3E2AFE696717BFE63CC9905FE91E225A3534754B997D",
+  "selected_source_files": 200,
+  "package_files": 185,
+  "public_material_files": 38,
+  "publication_performed": false,
+  "files": [
+    {
+      "path": "cran-comments.md",
+      "bytes": 2296,
+      "sha256": "F2EABAC91CE13CD2C5473EDA4E70726C383B6C266B5D64286DDED15E46D73AD1"
+    },
+    {
+      "path": "evidence/audit-at-freeze.json",
+      "bytes": 1783,
+      "sha256": "8D653F7B29D4A26E9EE89B2445DC56E618E99F7604A98E9AC079684FF1BD3045"
+    },
+    {
+      "path": "evidence/contracts/contracts-as-cran.rds",
+      "bytes": 44715,
+      "sha256": "D364E6AD19152A6EA127485696A98E5626ACAEEEFA65AB5811BFFFA9331632BD"
+    },
+    {
+      "path": "evidence/contracts/contracts-verification.csv",
+      "bytes": 502,
+      "sha256": "E8A0D1BE69A364B43BE01469291D62E35DA0CB92843A6E50B345EC4E3D0B3D64"
+    },
+    {
+      "path": "evidence/contracts/interface-verification.csv",
+      "bytes": 320,
+      "sha256": "82AC604BDDFABDA97E23DB38B2B4A0B7A391701D97110A0E1E99EFEAB3FAFBF9"
+    },
+    {
+      "path": "evidence/contracts/previous-candidate.rds",
+      "bytes": 44715,
+      "sha256": "D364E6AD19152A6EA127485696A98E5626ACAEEEFA65AB5811BFFFA9331632BD"
+    },
+    {
+      "path": "evidence/contracts/run-contract.R",
+      "bytes": 2114,
+      "sha256": "0BE5D9A546B63AF829BC58DBBB1DCA3A5A78EC8519757D84937CDAE60CA2BAF6"
+    },
+    {
+      "path": "evidence/documentation-final/00check.log",
+      "bytes": 2694,
+      "sha256": "129DF70B73268D432E9438014C23ED52D307C1245D9FCB0ADCC66F1D217441B8"
+    },
+    {
+      "path": "evidence/documentation-final/page-boundary-overflow.json",
+      "bytes": 2,
+      "sha256": "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+    },
+    {
+      "path": "evidence/documentation-final/source-manual.log",
+      "bytes": 58805,
+      "sha256": "9D927A4E04AD43BAFBDFE45BFD196DDD8FF9CB23CD482D68AE24BD428131E6AF"
+    },
+    {
+      "path": "evidence/linux-maintainer-report.json",
+      "bytes": 407,
+      "sha256": "E73CCB38833B24980DA4335E8CA54E71B1092AC101B21BFCE0DE9B2B95ADF978"
+    },
+    {
+      "path": "evidence/performance/equivalence.csv",
+      "bytes": 12355,
+      "sha256": "8FF324FE9964B2D089C0F6F1880ED58B8B6F326F78D74A51C4AB008B71A4396D"
+    },
+    {
+      "path": "evidence/performance/historical-scale/all-timings.csv",
+      "bytes": 3168,
+      "sha256": "7D69421EAC8C64366BD63ADA53B8D156E6C370483F5DC511F0C63F5CE8AC8A24"
+    },
+    {
+      "path": "evidence/performance/historical-scale/original-report.md",
+      "bytes": 3553,
+      "sha256": "8EE5008AEA211F188D7AE4234BD249BD4D071892339E857D8A37DB3BEDE71ED2"
+    },
+    {
+      "path": "evidence/performance/original-report.md",
+      "bytes": 6550,
+      "sha256": "4BAD526F62A98AA2261A1ADA45FD444837F3ECC6D9F130DDBFBAAFEF3E8325E1"
+    },
+    {
+      "path": "evidence/performance/paired-timings.csv",
+      "bytes": 48682,
+      "sha256": "AC33833207AD58C575F0F8B556089F1C6DE969349E0100F1F1CE09C9D8CB0094"
+    },
+    {
+      "path": "evidence/performance/SUMMARY.csv",
+      "bytes": 3479,
+      "sha256": "0F941FC2506DA32AF3D7D6A8D977FD9EE9F9862B183B0B90808F6B2D82B17FBA"
+    },
+    {
+      "path": "evidence/windows-full/00check.log",
+      "bytes": 3632,
+      "sha256": "1D4EA426C26D46214EC3F9171391D25A761DB5C1626B38E83B3A9C24DB584EFC"
+    },
+    {
+      "path": "evidence/windows-full/00install.out",
+      "bytes": 9212,
+      "sha256": "DE2CFBC1DE8347303C04336E18AE862692C9C54BD5EEC3CB0EDABF72C1F8A2EF"
+    },
+    {
+      "path": "evidence/windows-full/k-bridge.log",
+      "bytes": 5521,
+      "sha256": "93FA96933AEF2352E641C64122FEA43A39FA0618468F462F760DACAE6FBC2E05"
+    },
+    {
+      "path": "evidence/windows-full/session-info.txt",
+      "bytes": 714,
+      "sha256": "9A0B0CFD60DE16F4751DB40E4F5F6C16E6AD975CFFDBB66D654A8F6A6496EAB9"
+    },
+    {
+      "path": "evidence/windows-full/testthat.Rout",
+      "bytes": 2415,
+      "sha256": "20E60D4D9BE1ACED7466E77268A78ED4C18FE6EDF193A3B375CAB14F48BB27AC"
+    },
+    {
+      "path": "fastphylosig-0.3.4-release-materials.zip",
+      "bytes": 860411,
+      "sha256": "46A4DA6056CF2BB1247794145D4E32658BEA100F7438427D4F04D8AE5978B1C3"
+    },
+    {
+      "path": "fastphylosig_0.3.4.tar.gz",
+      "bytes": 686861,
+      "sha256": "8B1A8940101997492D4F3E2AFE696717BFE63CC9905FE91E225A3534754B997D"
+    },
+    {
+      "path": "inst/examples/heterogeneity-workflow.R",
+      "bytes": 2229,
+      "sha256": "1E920A66E8516773E6CC61CE11F2C61FE1961BE1FE44A3DC0F43AC8B189297C7"
+    },
+    {
+      "path": "inst/HETERO_GUIDE_zh.md",
+      "bytes": 9559,
+      "sha256": "59E6558F7FE5784E8304C68C9A9CE8E945BC57FFC5A96EC9FD37E375B4BF1409"
+    },
+    {
+      "path": "inst/HETERO_NUISANCE_zh.md",
+      "bytes": 20649,
+      "sha256": "A8481CAC5B873A954EA76A69B4B0F415261DB51122C4373A688DBD131C9BCD2D"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 37,
+      "sha256": "A78785FF3F76F3815EB12236EA604484178BF311296AC4E942F53A97C6B2D354"
+    },
+    {
+      "path": "manifests/package-files.csv",
+      "bytes": 21794,
+      "sha256": "EEA4A8492ADAED88FF7DCB101534B554ACE8D7CADBB2646E775C786745B09E83"
+    },
+    {
+      "path": "manifests/performance-kernel-correspondence.json",
+      "bytes": 652,
+      "sha256": "F7FDC4AA2EEC39D95444269943F4F7D65B1F39D9B0AAD52A3E47555849382C97"
+    },
+    {
+      "path": "manifests/public-interface.json",
+      "bytes": 11007,
+      "sha256": "D3E15C88127C81D19F49CD5F5BBC4CDD22F1A414B22F209CCC8B4574CF1EA880"
+    },
+    {
+      "path": "manifests/selected-source-files.csv",
+      "bytes": 20884,
+      "sha256": "61BCE4F95C108798FE90F5694DD03D5074967D3C2A1FF8F5828FBE36A56CC6A3"
+    },
+    {
+      "path": "NEWS.md",
+      "bytes": 36658,
+      "sha256": "627883D0C762D1D9E6E4D13CDED9C526275050AC076ED9D1D9FF52A2919E1E21"
+    },
+    {
+      "path": "PERFORMANCE_zh.md",
+      "bytes": 2823,
+      "sha256": "E23D7A37D1C2CDBD37F11E2154DA3A305051DCFC627EC80DC3F632220F8535E6"
+    },
+    {
+      "path": "provenance/repository-paths.txt",
+      "bytes": 6825,
+      "sha256": "A80155942B8D9D29DB8CC00C573FA857AC2E3D48172B79ED701A6DB78EF7931B"
+    },
+    {
+      "path": "provenance/repository-state.json",
+      "bytes": 4254,
+      "sha256": "F2D0672FF76D726B76F842A5EA90BAE84256C4995AB8963180A5A2CB03CF9767"
+    },
+    {
+      "path": "provenance/selected-source-snapshot.tar.gz",
+      "bytes": 729178,
+      "sha256": "D2491E4A1575CE9D1BD874245EEB4458F3BCD329E3E42FAB26567EDD08434273"
+    },
+    {
+      "path": "PUBLISH_zh.md",
+      "bytes": 2213,
+      "sha256": "452D222AA6328A20351B089C5FCB01B7F0CC7BD7C3A4837E1B84C1B060550424"
+    },
+    {
+      "path": "README_MATERIALS_zh.md",
+      "bytes": 1509,
+      "sha256": "79E3530305871F7CA72591A5072214D411382EA85E7FE26B8C11844A94290F44"
+    },
+    {
+      "path": "README_RELEASE_zh.md",
+      "bytes": 2527,
+      "sha256": "8EF95ABA70048B032E115146B82A6D0F3C21B1CF85A07A17C354E4B21F520C89"
+    },
+    {
+      "path": "RELEASE_IDENTITY.json",
+      "bytes": 920,
+      "sha256": "DB4FA644C188AE4FDC570AC2FEE7C9290F6D136B982508A57A60F0F311F9DC7D"
+    },
+    {
+      "path": "RELEASE_NOTES_en.md",
+      "bytes": 3750,
+      "sha256": "E2A3DEF0C4DAF19C32847BC0ACA30A34E742BF70783DE2505F9338C318804CB1"
+    },
+    {
+      "path": "RELEASE_NOTES_zh.md",
+      "bytes": 3205,
+      "sha256": "E3848B68C9388486B5B1841917E25D93C0BEFB9E0A62F037739F5936764B847B"
+    },
+    {
+      "path": "SHA256SUMS.txt",
+      "bytes": 199,
+      "sha256": "BFB2DAD662C991679ECF0BCC5704DE83F86541C25DBFFA3856154F05B2095E9C"
+    },
+    {
+      "path": "STATISTICAL_SCOPE.json",
+      "bytes": 1379,
+      "sha256": "0AAEFD4107C7EC48845AB6740A27DBBF1DA528213845C7D11EE282D89C0E77F7"
+    },
+    {
+      "path": "STATISTICAL_SCOPE_zh.md",
+      "bytes": 3762,
+      "sha256": "5E86495766E9329B9F129D267ED479F09B9D12BD5CBB5D745B94FFFDD55510B6"
+    },
+    {
+      "path": "VALIDATION_zh.md",
+      "bytes": 2341,
+      "sha256": "4E544050B31A157A8A61CD1134CAC39C71CC83AD315AB894E00BD35DFF1FCCB8"
+    },
+    {
+      "path": "verify_release.py",
+      "bytes": 4752,
+      "sha256": "7CC4620F6965A1DB5842369B22509CA80D40B399DEFA61677B1433CC6EF45F7C"
+    }
+  ]
+}

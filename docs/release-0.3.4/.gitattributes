@@ -1,0 +1,2 @@
+# Preserve the frozen hashes of release artifacts and evidence on every OS.
+final/** -text

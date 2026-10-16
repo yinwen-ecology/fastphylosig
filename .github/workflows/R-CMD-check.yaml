@@ -43,6 +43,9 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         # Follow the current release; do not pin an obsolete R 4.1.x.
         r: [release]
+        include:
+          - os: ubuntu-latest
+            r: devel
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -60,5 +63,27 @@ jobs:
       - name: Run R CMD check
         uses: r-lib/actions/check-r-package@v2
         with:
-          args: 'c("--no-manual")'
-          error-on: '"error"'
+          args: 'c("--as-cran", "--no-manual")'
+          error-on: '"warning"'
+
+  manual:
+    name: R-CMD-check with PDF manual (Linux release)
+    needs: static-validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-tinytex@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          needs: check
+          extra-packages: |
+            any::rcmdcheck
+            any::V8
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--as-cran")'
+          error-on: '"warning"'

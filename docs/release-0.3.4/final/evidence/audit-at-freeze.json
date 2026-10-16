@@ -1,0 +1,53 @@
+{
+  "version": "0.3.4",
+  "final_source_files_verified": 197,
+  "final_archive_sha256": "8B1A8940101997492D4F3E2AFE696717BFE63CC9905FE91E225A3534754B997D",
+  "built_archive_changes_after_documentation_fix": [
+    "fastphylosig/DESCRIPTION",
+    "fastphylosig/man/fast_ace.Rd",
+    "fastphylosig/man/fast_delta.Rd"
+  ],
+  "generated_DESCRIPTION_changes": [
+    "Packaged"
+  ],
+  "R_Cpp_and_tests_byte_identical_to_full_check": true,
+  "full_check": {
+    "errors": 0,
+    "warnings": 0,
+    "notes": 1,
+    "note": "CRAN incoming: New submission",
+    "test_assertions_passed": 13679,
+    "testthat_skips": 1
+  },
+  "contracts": {
+    "complete_results_and_RNG": 12,
+    "public_signatures_and_defaults": 14
+  },
+  "K_bridge": {
+    "comparisons": 27,
+    "maximum_difference": 6.0285110237146E-14,
+    "tail_decision_differences": 0
+  },
+  "final_manual": {
+    "pages": 28,
+    "page_boundary_overflow": []
+  },
+  "formal_publication": false,
+  "release_decision": {
+    "assessment_date": "2026-10-16",
+    "ready_for_public_release": true,
+    "basis": [
+      "Windows independent check and regression evidence retained locally",
+      "Linux check passed as confirmed directly by maintainer"
+    ],
+    "linux_evidence_source": "maintainer report in this conversation; no Linux log independently reviewed here",
+    "accepted_platform_scope": [
+      "Windows",
+      "Linux"
+    ],
+    "other_platform_checks_required_for_this_release": false,
+    "other_platform_support_verified": false,
+    "statistical_scope": "Frozen recommended scope; K BM reference, lambda approximate common-local-crown reference, D heterogeneity experimental, Delta local/overall description recommended",
+    "publication_performed": false
+  }
+}

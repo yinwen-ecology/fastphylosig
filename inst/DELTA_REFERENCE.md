@@ -60,9 +60,18 @@ For each valid trait, `fast_delta()` performs the following computation:
    This is not the pinned repository's PastML ancestral-reconstruction path.
 3. It transforms each ancestral probability vector with the selected `LSE`,
    normalized Shannon entropy (`SE`), or normalized Gini impurity (`GINI`).
+   Machine-scale excursions beyond [0,1] can be repaired only when the row
+   contains finite probabilities in [0,1] with sum within the same tolerance
+   of 1. The tolerance is `min(1e-12, 8*k*double_epsilon)` and is a numerical
+   guard, not a general error bound for log implementations. Repaired endpoints
+   reuse the existing jitter and emit one warning per calculation. Healthy
+   arithmetic and RNG are unchanged; recovered calculations can have a
+   different subsequent RNG. Material excursions remain errors.
 4. It runs two Metropolis-Hastings chains for the beta-distribution shape
-   parameters, using exponential initial values and log-normal proposals, and
-   reports `Delta = mean(beta) / mean(alpha)` over the pooled saved draws.
+   parameters, using exponential initial values and log-normal proposals. The
+   acceptance ratio includes log(candidate)-log(current), targeting independent
+   exponential priors on the raw parameters. It reports
+   `Delta = mean(beta / alpha)` over the pooled saved draws.
 5. When `test = TRUE`, it permutes tip states, repeats ancestral reconstruction
    and MCMC, and reports the inclusive upper-tail proportion
    `mean(null Delta >= observed Delta)` among finite successful fits. There is
@@ -76,17 +85,29 @@ and `thin = 10`, yielding 991 saved draws per chain under the inclusive burn
 rule. `mcmc_sim` is the public argument; no separate benchmark-only control is
 part of the package API.
 
-ESS, split R-hat, covariance-aware `MCSE_Delta`, permutation `MCSE_P`, chain
+ESS, split R-hat, ratio-trace batch-means `MCSE_Delta`, permutation `MCSE_P`, chain
 accounting, and successful/failed permutation counts are package diagnostics
 and extensions. They are not outputs of `Delta-Python/delta_functs.py` and
 cannot be required to match fields that the pinned Python core does not
 produce. Defaults do not guarantee adequate mixing or permutation precision;
 warnings never lengthen or rerun a chain automatically.
 
+Modern `rank_Rhat_*` is the maximum of rank-normalized and folded split R-hat.
+`ESS_bulk_*` uses rank-normalized split chains, and `ESS_tail_*` takes the
+minimum ESS of the pooled 5% and 95% quantile indicators. These deterministic
+diagnostics cover alpha, beta, and beta/alpha and do not alter the sampler.
+The existing `ESS_*` and `split_Rhat_*` retain their traditional definitions.
+Warnings screen rank R-hat > 1.01, bulk/tail ESS < 100 per original chain,
+non-finite diagnostics and relative MCSE > 5%. The thresholds are heuristics;
+two production chains and a finite result do not establish convergence.
+See Vehtari et al. (2021), https://doi.org/10.1214/20-BA1221.
+
 ## Equivalence boundary
 
 The pinned Python core and the production C++ sampler use the same entropy
-families, two-chain beta-shape model, and Delta ratio at the method level.
+families and a two-chain beta-shape construction. Version 0.3.2.9000 corrects
+both posterior aggregation and the lognormal proposal density ratio in the
+production sampler; numerical equivalence to historical samplers is not claimed.
 They are not the same executable implementation. They use different RNGs,
 the production sampler evaluates acceptance ratios in log space, and their
 iteration/control flow is not stepwise identical. Consequently, equal numeric
@@ -117,7 +138,10 @@ helper is not end-to-end validation.
 
 ## Release boundary
 
-The current release keeps the production estimator and its documented
-diagnostics stable. Historical optimization experiments and generated audit
-tables were removed from the working tree; the current contract is summarized
-in `EXPERT_REVIEW.md` and `RC_READINESS.md`.
+Version 0.3.2.9000 is a scientific revision. Delta values, test probabilities
+and RNG trajectories intentionally differ from 0.3.1.9000. Performance changes
+within this revised method must preserve its results and random state.
+The posterior target was checked against independent two-dimensional integration
+and a separate R implementation of the full joint posterior. ESS_Delta and
+split_Rhat_Delta assess the ratio trace; these traditional diagnostics are not
+rank-normalized or tail diagnostics, and defaults do not establish convergence.

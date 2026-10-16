@@ -1,0 +1,71 @@
+C:/Users/wenyi/AppData/Local/R/R-4.6.1/bin/x64/R CMD SHLIB --preclean -o "sourceCpp_2.dll" "test_k_four_modes.cpp" 
+specified C++17
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+using C++ compiler: 'G__~1.EXE (GCC) 14.3.0'
+using C++17
+g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG   -I"C:/Users/wenyi/AppData/Local/R/win-library/4.6/Rcpp/include" -I"C:/Users/wenyi/AppData/Local/Temp/Rtmp8EKvPG/fastphylosig-stage4-4278107b689e/benchmarks/stage4"   -I"C:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/include"      -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign    -c test_k_four_modes.cpp -o test_k_four_modes.o
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+g++ -shared -s -static-libgcc -o sourceCpp_2.dll tmp.def test_k_four_modes.o -LC:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/lib/x64 -LC:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/lib -LC:/Users/wenyi/AppData/Local/R/R-46~1.1/bin/x64 -lR
+STAGE4 HYBRID EQUIVALENCE
+      tree       trait          mode bit_difference max_numerical_difference
+  balanced  continuous hybrid_block1              8             1.110223e-16
+  balanced      binary hybrid_block1              6             5.551115e-17
+  balanced categorical hybrid_block1              8             5.551115e-17
+  balanced  continuous legacy_block4              0             0.000000e+00
+  balanced      binary legacy_block4              0             0.000000e+00
+  balanced categorical legacy_block4              0             0.000000e+00
+  balanced  continuous hybrid_block4              8             1.110223e-16
+  balanced      binary hybrid_block4              6             5.551115e-17
+  balanced categorical hybrid_block4              8             5.551115e-17
+ pectinate  continuous hybrid_block1             33             3.330669e-16
+ pectinate      binary hybrid_block1             36             2.220446e-16
+ pectinate categorical hybrid_block1             34             2.220446e-16
+ pectinate  continuous legacy_block4              0             0.000000e+00
+ pectinate      binary legacy_block4              0             0.000000e+00
+ pectinate categorical legacy_block4              0             0.000000e+00
+ pectinate  continuous hybrid_block4             33             3.330669e-16
+ pectinate      binary hybrid_block4             36             2.220446e-16
+ pectinate categorical hybrid_block4             34             2.220446e-16
+    random  continuous hybrid_block1             90             6.028511e-14
+    random      binary hybrid_block1             88             2.009504e-14
+    random categorical hybrid_block1             85             4.540812e-14
+    random  continuous legacy_block4              0             0.000000e+00
+    random      binary legacy_block4              0             0.000000e+00
+    random categorical legacy_block4              0             0.000000e+00
+    random  continuous hybrid_block4             90             6.028511e-14
+    random      binary hybrid_block4             88             2.009504e-14
+    random categorical hybrid_block4             85             4.540812e-14
+ P_difference exceedance_difference tail_decision_difference
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+            0                     0                        0
+summary: 27 topology-trait-mode comparisons; max numerical difference=6.0285110237146e-14; total tail decision difference=0
+Four direct modes: hybrid=false/true x block=1/4 all executed.
+STAGE4 HYBRID EQUIVALENCE PASS

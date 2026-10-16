@@ -36,6 +36,33 @@ ancestral-state reconstruction. The statistical target follows
 \code{"ARD"} models, while the repeated pruning likelihood calculation is
 implemented in Rcpp/RcppArmadillo.
 }
+\details{
+Discrete fits retain the spectral pruning arithmetic for ordinary
+eigensystems. Defective or ill-conditioned eigensystems use deterministic
+matrix-exponential recovery; recovery counts are distinct from final optimizer
+nonconvergence. Returned ancestral probability rows must be finite,
+normalized and inside [0,1]. Only machine-scale boundary excursions may be
+clipped and renormalized; material invalidity triggers a stable recomputation
+or an explicit failure. These abnormal paths can change estimates; no random
+starts or random numerical recovery are used.
+
+Likelihood-only fits (\code{CI = FALSE}, including Delta's internal ACE fits)
+reuse a private native workspace. Sufficiently large uncached branch-length
+workloads evaluate independent complex exponent vectors in OpenMP batches
+bounded by 2 MiB. Matrix products, pruning accumulation and optimizer calls
+retain their sequential order. No random draws occur in the parallel region.
+The \code{fastphylosig.ace_threads} option defaults to \code{0L} and selects at
+most two threads. Set this option to \code{1L} for serial fitting,
+or a positive integer to request more threads, capped by the OpenMP runtime
+limit. Small fits, builds without OpenMP and nested OpenMP calls use the serial
+path. Exactly repeated branch lengths use an exponent-vector cache bounded by
+64 MiB per fitting workspace, with capacity determined by state count and
+actual element size. This bounds exponent storage, not total memory;
+mixed-length fits batch only the remaining uncached branches using a compact
+worklist. The activation threshold counts uncached work, so a large tree with
+very few uncached branches does not incur parallel startup costs.
+The default \code{CI = TRUE} path is unaffected by this thread option.
+}
 \value{
 An \code{ace}-like object containing \code{loglik}, \code{rates}, numerical
 rate standard errors in \code{se}, \code{index.matrix}, optimizer status, and,

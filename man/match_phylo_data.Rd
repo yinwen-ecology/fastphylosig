@@ -23,8 +23,7 @@ See \code{\link{match_tree_data}}.
 set.seed(6)
 tree <- ape::rtree(10)
 X <- data.frame(trait = stats::rnorm(10), row.names = tree$tip.label)
-\dontrun{
-matched <- match_phylo_data(tree, X, verbose = FALSE)
+# This compatibility alias is deprecated; prefer match_tree_data().
+matched <- suppressWarnings(match_phylo_data(tree, X, verbose = FALSE))
 matched$report
-}
 }

@@ -1,0 +1,441 @@
+Hmm ... looks like a package
+Creating pdf output from LaTeX ...
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2026-06-01>
+L3 programming layer <2026-09-09>
+
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/bk10.clo)) (c:/Users/wenyi/AppData/Local/R/R-4.6.1/share/texmf/tex/latex/Rd.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/tools/bm.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/alltt.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/url/url.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty)) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty)) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/eucal.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/psnfss/times.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/inconsolata/zi4.sty `inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.tex (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils.tex (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.tex))))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics/color.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/makeidx.sty)
+Writing index file Rd2.idx
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/psnfss/t1ptm.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/l3kernel/l3backend-pdftex.def)
+No file Rd2.aux.
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi4.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd)
+No file Rd2.toc.
+[1{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}] [2]
+Overfull \hbox (3.26625pt too wide) in paragraph at lines 124--128
+[]\T1/ptm/m/n/10 A list con-tain-ing []\T1/zi4/m/n/10 budget[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 bytes_used[]\T1/ptm/m/n/10 , num-bers of struc-tural and nu-mer-i-cal en-tries, hit/miss/eviction
+
+Overfull \hbox (13.4684pt too wide) in paragraph at lines 161--163
+[]\T1/ptm/m/n/10 Character vec-tor se-lect-ing one or more meth-ods. The de-fault checks []\T1/zi4/m/n/10 "K"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "lambda"[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (16.27863pt too wide) in paragraph at lines 167--180
+[]\T1/ptm/m/n/10 An ob-ject of class []\T1/zi4/m/n/10 fastphylosig_tree_check[]\T1/ptm/m/n/10 . Its []\T1/zi4/m/n/10 ready []\T1/ptm/m/n/10 field is a log-i-cal scalar and []\T1/zi4/m/n/10 ready_by_signal
+[3] [4]
+Overfull \hbox (9.36676pt too wide) in paragraph at lines 245--261
+[]\T1/ptm/m/n/10 Likelihood-only fits ([]\T1/zi4/m/n/10 CI = FALSE[]\T1/ptm/m/n/10 , in-clud-ing Delta's in-ter-nal ACE fits) reuse a pri-vate na-tive workspace.
+[5] [6]
+Overfull \hbox (41.1387pt too wide) in paragraph at lines 353--364
+[]\T1/ptm/m/n/10 For vec-tor in-put, a com-pact []\T1/zi4/m/n/10 phylo.d[]\T1/ptm/m/n/10 -like ob-ject with-out ca-per's []\T1/zi4/m/n/10 NodalVals []\T1/ptm/m/n/10 or em-bed-ded []\T1/zi4/m/n/10 comparative.data[]\T1/ptm/m/n/10 .
+
+Overfull \hbox (8.43782pt too wide) in paragraph at lines 353--364
+\T1/ptm/m/n/10 In ad-di-tion to the legacy []\T1/zi4/m/n/10 Pval1[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 Pval0 []\T1/ptm/m/n/10 fields, it re-ports the null-specific aliases []\T1/zi4/m/n/10 P_random[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 P_Brownian[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (13.95885pt too wide) in paragraph at lines 353--364
+\T1/ptm/m/n/10 their Bernoulli Monte Carlo stan-dard er-rors []\T1/zi4/m/n/10 MCSE_P_random[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 MCSE_P_Brownian[]\T1/ptm/m/n/10 , and []\T1/zi4/m/n/10 nsim_requested[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (57.18091pt too wide) in paragraph at lines 353--364
+[]\T1/zi4/m/n/10 nsim_successful_random[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 nsim_successful_brownian[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 nsim_failed_random[]\T1/ptm/m/n/10 , and []\T1/zi4/m/n/10 nsim_failed_brownian[]\T1/ptm/m/n/10 .
+
+Overfull \hbox (47.2693pt too wide) in paragraph at lines 369--373
+[]\T1/ptm/m/n/10 Every trait also has a machine-readable []\T1/zi4/m/n/10 status []\T1/ptm/m/n/10 ([]\T1/zi4/m/n/10 "ok"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "partial"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "invalid_trait"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "insufficient_data"[]\T1/ptm/m/n/10 ,
+[7] [8]
+Overfull \hbox (19.66768pt too wide) in paragraph at lines 471--487
+[]\T1/ptm/m/n/10 Native ACE scratch can be reused across fits within one anal-y-sis. The []\T1/zi4/m/n/10 fastphylosig.ace_cache_bytes
+
+Overfull \hbox (17.5604pt too wide) in paragraph at lines 488--509
+[]\T1/ptm/m/n/10 The out-put records []\T1/zi4/m/n/10 optimizer_warning[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 numerical_recovery[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 numerical_recovery_evaluations[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (41.58093pt too wide) in paragraph at lines 488--509
+[]\T1/zi4/m/n/10 entropy_recovery[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 entropy_recovery_rows[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 other_warning[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 calculation_failed []\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 failure_stage
+
+Overfull \hbox (11.0767pt too wide) in paragraph at lines 523--533
+\T1/ptm/m/n/10 trait. Re-sults re-port Delta, al-pha/beta chain means and SDs, ESS, split R-hat, batch-means []\T1/zi4/m/n/10 MCSE_Delta
+[9]
+Overfull \hbox (0.11769pt too wide) in paragraph at lines 543--554
+\T1/ptm/m/n/10 1.01, bulk/tail ESS be-low 100 per orig-i-nal chain, un-avail-able di-ag-nos-tics, or []\T1/zi4/m/n/10 relative_MCSE_Delta
+[10]
+Overfull \hbox (11.33598pt too wide) in paragraph at lines 627--632
+\T1/ptm/m/n/10 traits; D ac-cepts two states and Delta two or more states (in-clud-ing fac-tors/character
+[11]
+Overfull \hbox (35.9684pt too wide) in paragraph at lines 682--739
+\T1/zi4/m/n/10 = "multistart" []\T1/ptm/m/n/10 pro-vides de-ter-min-is-tic com-mon ARD fit-ting. []\T1/zi4/m/n/10 reference_unavailable
+
+Overfull \hbox (8.9875pt too wide) in paragraph at lines 682--739
+\T1/ptm/m/n/10 mass con-straints when in-for-ma-tive; their up-per bound may still equal one. Subtree-
+
+Overfull \hbox (14.78967pt too wide) in paragraph at lines 682--739
+[]\T1/ptm/m/n/10 also re-tains raw bounds, fi-nal width, []\T1/zi4/m/n/10 stop_reason[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 P_one_reason[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 gamma_clipped
+
+Overfull \hbox (20.90843pt too wide) in paragraph at lines 682--739
+\T1/ptm/m/n/10 c("A","B","C")). Their va-lid-ity only cov-ers that pre-de-clared do-main. []\T1/zi4/m/n/10 reference_fit
+
+Overfull \hbox (24.96007pt too wide) in paragraph at lines 682--739
+[]\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 reference_unavailable []\T1/ptm/m/n/10 ap-ply only to the de-fault []\T1/zi4/m/n/10 reference_test = "plugin"[]\T1/ptm/m/n/10 . 
+[12]
+Overfull \hbox (12.69604pt too wide) in paragraph at lines 756--766
+\T1/ptm/m/n/10 For lambda it is the sam-ple stan-dard de-vi-a-tion of lambda; D uses SD(D), and Delta uses SD(log(Delta)).
+[13]
+Overfull \hbox (0.72629pt too wide) in paragraph at lines 804--814
+\T1/ptm/m/n/10 Lo-cal state spaces drop un-ob-served states; state counts and fre-quen-cies re-tain orig-i-nal la-bels. Single-
+
+Overfull \hbox (9.87637pt too wide) in paragraph at lines 815--869
+\T1/ptm/m/n/10 re-search con-trols. An ex-plic-itly re-quested plu-gin ref-er-ence uses RMS(log(Delta_local/Delta_overall)),
+
+Overfull \hbox (18.62967pt too wide) in paragraph at lines 815--869
+[]\T1/ptm/m/n/10 counts en-tropy round-off re-cov-ery, sep-a-rately from []\T1/zi4/m/n/10 nsim_other_warning[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 nsim_calculation_failure
+
+Overfull \hbox (2.22668pt too wide) in paragraph at lines 815--869
+[]\T1/ptm/m/n/10 (ac-tual er-rors/invalid es-ti-mates) and []\T1/zi4/m/n/10 nsim_unavailable []\T1/ptm/m/n/10 (all un-avail-able repli-cates, in-clud-ing single-
+[14]
+Overfull \hbox (0.52673pt too wide) in paragraph at lines 870--909
+[]\T1/ptm/m/n/10 Delta's opt-in nui-sance test by de-fault re-tains that dis-crep-ancy and the ex-ist-ing ACE/entropy/MCMC
+[15]
+Overfull \hbox (83.46672pt too wide) in paragraph at lines 928--947
+[]\T1/ptm/m/n/10 Tips out-side se-lected clades, in-clud-ing small rem-nants of im-bal-anced trees, are re-ported in []\T1/zi4/m/n/10 selection$uncovered_tips[]\T1/ptm/m/n/10 .
+
+Overfull \hbox (15.78856pt too wide) in paragraph at lines 971--984
+[]\T1/ptm/m/n/10 A []\T1/zi4/m/n/10 fastphylosig_heterogeneity []\T1/ptm/m/n/10 list con-tain-ing []\T1/zi4/m/n/10 clades []\T1/ptm/m/n/10 (one row per clade and trait), []\T1/zi4/m/n/10 heterogeneity
+[16]
+Overfull \hbox (2.63655pt too wide) in paragraph at lines 1044--1050
+\T1/ptm/m/n/10 trix/data.frame in-put re-turns one row per trait. Re-sults in-clude tim-ing meta-data and a small []\T1/zi4/m/n/10 workflow
+[17]
+Overfull \hbox (2.698pt too wide) in paragraph at lines 1090--1095
+[]\T1/ptm/m/n/10 A con-nected []\T1/zi4/m/n/10 "phylo" []\T1/ptm/m/n/10 ob-ject with a unique struc-tural root and fi-nite, non-negative
+
+Overfull \hbox (6.39885pt too wide) in paragraph at lines 1090--1095
+\T1/ptm/m/n/10 branch lengths, or a con-text re-turned by []\T1/zi4/m/n/10 prepare_tree()[]\T1/ptm/m/n/10 . Zero ter-mi-nal branches
+[18]
+Overfull \hbox (0.65735pt too wide) in paragraph at lines 1116--1121
+\T1/ptm/m/n/10 Re-sults in-clude tim-ing meta-data and a small []\T1/zi4/m/n/10 workflow []\T1/ptm/m/n/10 at-tribute. Per-trait []\T1/zi4/m/n/10 status []\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 message[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 note
+
+Overfull \hbox (10.24957pt too wide) in paragraph at lines 1138--1148
+\T1/ptm/m/n/10 one of the four pub-lic pro-duc-tion func-tions: []\T1/zi4/m/n/10 fast_k()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_lambda()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_d()[]\T1/ptm/m/n/10 , or []\T1/zi4/m/n/10 fast_delta()[]\T1/ptm/m/n/10 .
+[19]
+Overfull \hbox (4.05705pt too wide) in paragraph at lines 1183--1189
+\T1/ptm/m/n/10 need method-specific sim-u-la-tion, pro-file, null-retention, MCMC, or di-ag-nos-tic con-trols. []\T1/zi4/m/n/10 fast_ace()
+
+Overfull \hbox (34.401pt too wide) in paragraph at lines 1205--1208
+[]\T1/zi4/m/n/10 fast_k()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_lambda()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_d()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_delta()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_ace()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 check_tree()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 match_tree_data()[]\T1/ptm/m/n/10 ,
+[20]
+Overfull \hbox (50.99916pt too wide) in paragraph at lines 1289--1293
+[]\T1/ptm/m/n/10 A list with el-e-ments []\T1/zi4/m/n/10 tree[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 X[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 data[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 report[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 matched_species[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 tree_tips_removed[]\T1/ptm/m/n/10 , and []\T1/zi4/m/n/10 data_rows_removed[]\T1/ptm/m/n/10 .
+[21] (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/inconsolata/ts1zi4.fd) [22{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}]
+Overfull \hbox (11.33038pt too wide) in paragraph at lines 1409--1412
+[]\T1/ptm/m/n/10 Result pro-duced by [][][]\T1/zi4/m/n/10 fast_signal[][][][]\T1/ptm/m/n/10 , [][][]\T1/zi4/m/n/10 fast_k[][][][]\T1/ptm/m/n/10 , [][][]\T1/zi4/m/n/10 fast_lambda[][][][]\T1/ptm/m/n/10 , [][][]\T1/zi4/m/n/10 fast_d[][][][]\T1/ptm/m/n/10 , or [][][]\T1/zi4/m/n/10 fast_delta[][][][]\T1/ptm/m/n/10 . 
+[23] [24]
+Overfull \hbox (14.60883pt too wide) in paragraph at lines 1504--1509
+[]\T1/ptm/m/n/10 An ob-ject of class []\T1/zi4/m/n/10 c("fastphylosig_tree", "list")[]\T1/ptm/m/n/10 . Pass it as the tree ar-gu-ment to []\T1/zi4/m/n/10 fast_signal()[]\T1/ptm/m/n/10 ,
+[25]
+Overfull \hbox (78.8286pt too wide) in paragraph at lines 1561--1565
+[]\T1/ptm/m/n/10 A []\T1/zi4/m/n/10 "phylo" []\T1/ptm/m/n/10 ob-ject with class []\T1/zi4/m/n/10 "fastphylosig_resolved_tree" []\T1/ptm/m/n/10 and an at-tribute named []\T1/zi4/m/n/10 "fastphylosig_resolution"[]\T1/ptm/m/n/10 .
+[26]
+No file Rd2.ind.
+[27] (./Rd2.aux)
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)<c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (27 pages, 164712 bytes).
+Transcript written on Rd2.log.
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2026-06-01>
+L3 programming layer <2026-09-09>
+
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/bk10.clo)) (c:/Users/wenyi/AppData/Local/R/R-4.6.1/share/texmf/tex/latex/Rd.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/tools/bm.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/alltt.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/url/url.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty)) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty)) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/eucal.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/psnfss/times.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/inconsolata/zi4.sty `inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.tex (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils.tex (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.tex))))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics/color.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/makeidx.sty)
+Writing index file Rd2.idx
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/psnfss/t1ptm.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/l3kernel/l3backend-pdftex.def) (./Rd2.aux) (./Rd2.out) (./Rd2.out) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi4.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd) (./Rd2.toc [1{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]) [2]
+Overfull \hbox (3.26625pt too wide) in paragraph at lines 124--128
+[]\T1/ptm/m/n/10 A list con-tain-ing []\T1/zi4/m/n/10 budget[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 bytes_used[]\T1/ptm/m/n/10 , num-bers of struc-tural and nu-mer-i-cal en-tries, hit/miss/eviction
+[3]
+Overfull \hbox (13.4684pt too wide) in paragraph at lines 161--163
+[]\T1/ptm/m/n/10 Character vec-tor se-lect-ing one or more meth-ods. The de-fault checks []\T1/zi4/m/n/10 "K"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "lambda"[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (16.27863pt too wide) in paragraph at lines 167--180
+[]\T1/ptm/m/n/10 An ob-ject of class []\T1/zi4/m/n/10 fastphylosig_tree_check[]\T1/ptm/m/n/10 . Its []\T1/zi4/m/n/10 ready []\T1/ptm/m/n/10 field is a log-i-cal scalar and []\T1/zi4/m/n/10 ready_by_signal
+[4]
+Overfull \hbox (9.36676pt too wide) in paragraph at lines 245--261
+[]\T1/ptm/m/n/10 Likelihood-only fits ([]\T1/zi4/m/n/10 CI = FALSE[]\T1/ptm/m/n/10 , in-clud-ing Delta's in-ter-nal ACE fits) reuse a pri-vate na-tive workspace.
+[5] [6]
+Overfull \hbox (41.1387pt too wide) in paragraph at lines 353--364
+[]\T1/ptm/m/n/10 For vec-tor in-put, a com-pact []\T1/zi4/m/n/10 phylo.d[]\T1/ptm/m/n/10 -like ob-ject with-out ca-per's []\T1/zi4/m/n/10 NodalVals []\T1/ptm/m/n/10 or em-bed-ded []\T1/zi4/m/n/10 comparative.data[]\T1/ptm/m/n/10 .
+
+Overfull \hbox (8.43782pt too wide) in paragraph at lines 353--364
+\T1/ptm/m/n/10 In ad-di-tion to the legacy []\T1/zi4/m/n/10 Pval1[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 Pval0 []\T1/ptm/m/n/10 fields, it re-ports the null-specific aliases []\T1/zi4/m/n/10 P_random[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 P_Brownian[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (13.95885pt too wide) in paragraph at lines 353--364
+\T1/ptm/m/n/10 their Bernoulli Monte Carlo stan-dard er-rors []\T1/zi4/m/n/10 MCSE_P_random[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 MCSE_P_Brownian[]\T1/ptm/m/n/10 , and []\T1/zi4/m/n/10 nsim_requested[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (57.18091pt too wide) in paragraph at lines 353--364
+[]\T1/zi4/m/n/10 nsim_successful_random[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 nsim_successful_brownian[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 nsim_failed_random[]\T1/ptm/m/n/10 , and []\T1/zi4/m/n/10 nsim_failed_brownian[]\T1/ptm/m/n/10 .
+
+Overfull \hbox (47.2693pt too wide) in paragraph at lines 369--373
+[]\T1/ptm/m/n/10 Every trait also has a machine-readable []\T1/zi4/m/n/10 status []\T1/ptm/m/n/10 ([]\T1/zi4/m/n/10 "ok"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "partial"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "invalid_trait"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "insufficient_data"[]\T1/ptm/m/n/10 ,
+[7] [8]
+Overfull \hbox (19.66768pt too wide) in paragraph at lines 471--487
+[]\T1/ptm/m/n/10 Native ACE scratch can be reused across fits within one anal-y-sis. The []\T1/zi4/m/n/10 fastphylosig.ace_cache_bytes
+
+Overfull \hbox (17.5604pt too wide) in paragraph at lines 488--509
+[]\T1/ptm/m/n/10 The out-put records []\T1/zi4/m/n/10 optimizer_warning[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 numerical_recovery[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 numerical_recovery_evaluations[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (41.58093pt too wide) in paragraph at lines 488--509
+[]\T1/zi4/m/n/10 entropy_recovery[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 entropy_recovery_rows[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 other_warning[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 calculation_failed []\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 failure_stage
+
+Overfull \hbox (11.0767pt too wide) in paragraph at lines 523--533
+\T1/ptm/m/n/10 trait. Re-sults re-port Delta, al-pha/beta chain means and SDs, ESS, split R-hat, batch-means []\T1/zi4/m/n/10 MCSE_Delta
+[9]
+Overfull \hbox (0.11769pt too wide) in paragraph at lines 543--554
+\T1/ptm/m/n/10 1.01, bulk/tail ESS be-low 100 per orig-i-nal chain, un-avail-able di-ag-nos-tics, or []\T1/zi4/m/n/10 relative_MCSE_Delta
+[10]
+Overfull \hbox (11.33598pt too wide) in paragraph at lines 627--632
+\T1/ptm/m/n/10 traits; D ac-cepts two states and Delta two or more states (in-clud-ing fac-tors/character
+[11]
+Overfull \hbox (35.9684pt too wide) in paragraph at lines 682--739
+\T1/zi4/m/n/10 = "multistart" []\T1/ptm/m/n/10 pro-vides de-ter-min-is-tic com-mon ARD fit-ting. []\T1/zi4/m/n/10 reference_unavailable
+
+Overfull \hbox (8.9875pt too wide) in paragraph at lines 682--739
+\T1/ptm/m/n/10 mass con-straints when in-for-ma-tive; their up-per bound may still equal one. Subtree-
+
+Overfull \hbox (14.78967pt too wide) in paragraph at lines 682--739
+[]\T1/ptm/m/n/10 also re-tains raw bounds, fi-nal width, []\T1/zi4/m/n/10 stop_reason[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 P_one_reason[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 gamma_clipped
+
+Overfull \hbox (20.90843pt too wide) in paragraph at lines 682--739
+\T1/ptm/m/n/10 c("A","B","C")). Their va-lid-ity only cov-ers that pre-de-clared do-main. []\T1/zi4/m/n/10 reference_fit
+
+Overfull \hbox (24.96007pt too wide) in paragraph at lines 682--739
+[]\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 reference_unavailable []\T1/ptm/m/n/10 ap-ply only to the de-fault []\T1/zi4/m/n/10 reference_test = "plugin"[]\T1/ptm/m/n/10 . 
+[12]
+Overfull \hbox (12.69604pt too wide) in paragraph at lines 756--766
+\T1/ptm/m/n/10 For lambda it is the sam-ple stan-dard de-vi-a-tion of lambda; D uses SD(D), and Delta uses SD(log(Delta)).
+[13]
+Overfull \hbox (0.72629pt too wide) in paragraph at lines 804--814
+\T1/ptm/m/n/10 Lo-cal state spaces drop un-ob-served states; state counts and fre-quen-cies re-tain orig-i-nal la-bels. Single-
+
+Overfull \hbox (9.87637pt too wide) in paragraph at lines 815--869
+\T1/ptm/m/n/10 re-search con-trols. An ex-plic-itly re-quested plu-gin ref-er-ence uses RMS(log(Delta_local/Delta_overall)),
+
+Overfull \hbox (18.62967pt too wide) in paragraph at lines 815--869
+[]\T1/ptm/m/n/10 counts en-tropy round-off re-cov-ery, sep-a-rately from []\T1/zi4/m/n/10 nsim_other_warning[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 nsim_calculation_failure
+
+Overfull \hbox (2.22668pt too wide) in paragraph at lines 815--869
+[]\T1/ptm/m/n/10 (ac-tual er-rors/invalid es-ti-mates) and []\T1/zi4/m/n/10 nsim_unavailable []\T1/ptm/m/n/10 (all un-avail-able repli-cates, in-clud-ing single-
+[14]
+Overfull \hbox (0.52673pt too wide) in paragraph at lines 870--909
+[]\T1/ptm/m/n/10 Delta's opt-in nui-sance test by de-fault re-tains that dis-crep-ancy and the ex-ist-ing ACE/entropy/MCMC
+[15]
+Overfull \hbox (83.46672pt too wide) in paragraph at lines 928--947
+[]\T1/ptm/m/n/10 Tips out-side se-lected clades, in-clud-ing small rem-nants of im-bal-anced trees, are re-ported in []\T1/zi4/m/n/10 selection$uncovered_tips[]\T1/ptm/m/n/10 .
+
+Overfull \hbox (15.78856pt too wide) in paragraph at lines 971--984
+[]\T1/ptm/m/n/10 A []\T1/zi4/m/n/10 fastphylosig_heterogeneity []\T1/ptm/m/n/10 list con-tain-ing []\T1/zi4/m/n/10 clades []\T1/ptm/m/n/10 (one row per clade and trait), []\T1/zi4/m/n/10 heterogeneity
+[16]
+Overfull \hbox (2.63655pt too wide) in paragraph at lines 1044--1050
+\T1/ptm/m/n/10 trix/data.frame in-put re-turns one row per trait. Re-sults in-clude tim-ing meta-data and a small []\T1/zi4/m/n/10 workflow
+[17]
+Overfull \hbox (2.698pt too wide) in paragraph at lines 1090--1095
+[]\T1/ptm/m/n/10 A con-nected []\T1/zi4/m/n/10 "phylo" []\T1/ptm/m/n/10 ob-ject with a unique struc-tural root and fi-nite, non-negative
+
+Overfull \hbox (6.39885pt too wide) in paragraph at lines 1090--1095
+\T1/ptm/m/n/10 branch lengths, or a con-text re-turned by []\T1/zi4/m/n/10 prepare_tree()[]\T1/ptm/m/n/10 . Zero ter-mi-nal branches
+[18]
+Overfull \hbox (0.65735pt too wide) in paragraph at lines 1116--1121
+\T1/ptm/m/n/10 Re-sults in-clude tim-ing meta-data and a small []\T1/zi4/m/n/10 workflow []\T1/ptm/m/n/10 at-tribute. Per-trait []\T1/zi4/m/n/10 status []\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 message[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 note
+
+Overfull \hbox (10.24957pt too wide) in paragraph at lines 1138--1148
+\T1/ptm/m/n/10 one of the four pub-lic pro-duc-tion func-tions: []\T1/zi4/m/n/10 fast_k()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_lambda()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_d()[]\T1/ptm/m/n/10 , or []\T1/zi4/m/n/10 fast_delta()[]\T1/ptm/m/n/10 .
+[19]
+Overfull \hbox (4.05705pt too wide) in paragraph at lines 1183--1189
+\T1/ptm/m/n/10 need method-specific sim-u-la-tion, pro-file, null-retention, MCMC, or di-ag-nos-tic con-trols. []\T1/zi4/m/n/10 fast_ace()
+
+Overfull \hbox (34.401pt too wide) in paragraph at lines 1205--1208
+[]\T1/zi4/m/n/10 fast_k()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_lambda()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_d()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_delta()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_ace()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 check_tree()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 match_tree_data()[]\T1/ptm/m/n/10 ,
+[20]
+Overfull \hbox (50.99916pt too wide) in paragraph at lines 1289--1293
+[]\T1/ptm/m/n/10 A list with el-e-ments []\T1/zi4/m/n/10 tree[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 X[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 data[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 report[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 matched_species[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 tree_tips_removed[]\T1/ptm/m/n/10 , and []\T1/zi4/m/n/10 data_rows_removed[]\T1/ptm/m/n/10 .
+[21] (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/inconsolata/ts1zi4.fd) [22{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}]
+Overfull \hbox (11.33038pt too wide) in paragraph at lines 1409--1412
+[]\T1/ptm/m/n/10 Result pro-duced by [][][]\T1/zi4/m/n/10 fast_signal[][][][]\T1/ptm/m/n/10 , [][][]\T1/zi4/m/n/10 fast_k[][][][]\T1/ptm/m/n/10 , [][][]\T1/zi4/m/n/10 fast_lambda[][][][]\T1/ptm/m/n/10 , [][][]\T1/zi4/m/n/10 fast_d[][][][]\T1/ptm/m/n/10 , or [][][]\T1/zi4/m/n/10 fast_delta[][][][]\T1/ptm/m/n/10 . 
+[23] [24]
+Overfull \hbox (14.60883pt too wide) in paragraph at lines 1504--1509
+[]\T1/ptm/m/n/10 An ob-ject of class []\T1/zi4/m/n/10 c("fastphylosig_tree", "list")[]\T1/ptm/m/n/10 . Pass it as the tree ar-gu-ment to []\T1/zi4/m/n/10 fast_signal()[]\T1/ptm/m/n/10 ,
+[25]
+Overfull \hbox (78.8286pt too wide) in paragraph at lines 1561--1565
+[]\T1/ptm/m/n/10 A []\T1/zi4/m/n/10 "phylo" []\T1/ptm/m/n/10 ob-ject with class []\T1/zi4/m/n/10 "fastphylosig_resolved_tree" []\T1/ptm/m/n/10 and an at-tribute named []\T1/zi4/m/n/10 "fastphylosig_resolution"[]\T1/ptm/m/n/10 .
+[26] (./Rd2.ind [27]
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 3.
+
+[28]) (./Rd2.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)<c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (28 pages, 169504 bytes).
+Transcript written on Rd2.log.
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2026-06-01>
+L3 programming layer <2026-09-09>
+
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/bk10.clo)) (c:/Users/wenyi/AppData/Local/R/R-4.6.1/share/texmf/tex/latex/Rd.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/tools/bm.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/alltt.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/url/url.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty)) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty)) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/eucal.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/psnfss/times.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/inconsolata/zi4.sty `inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.tex (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils.tex (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.tex))))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics/color.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/base/makeidx.sty)
+Writing index file Rd2.idx
+(c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/psnfss/t1ptm.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/l3kernel/l3backend-pdftex.def) (./Rd2.aux) (./Rd2.out) (./Rd2.out) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi4.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd) (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd) (./Rd2.toc [1{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]) [2]
+Overfull \hbox (3.26625pt too wide) in paragraph at lines 124--128
+[]\T1/ptm/m/n/10 A list con-tain-ing []\T1/zi4/m/n/10 budget[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 bytes_used[]\T1/ptm/m/n/10 , num-bers of struc-tural and nu-mer-i-cal en-tries, hit/miss/eviction
+[3]
+Overfull \hbox (13.4684pt too wide) in paragraph at lines 161--163
+[]\T1/ptm/m/n/10 Character vec-tor se-lect-ing one or more meth-ods. The de-fault checks []\T1/zi4/m/n/10 "K"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "lambda"[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (16.27863pt too wide) in paragraph at lines 167--180
+[]\T1/ptm/m/n/10 An ob-ject of class []\T1/zi4/m/n/10 fastphylosig_tree_check[]\T1/ptm/m/n/10 . Its []\T1/zi4/m/n/10 ready []\T1/ptm/m/n/10 field is a log-i-cal scalar and []\T1/zi4/m/n/10 ready_by_signal
+[4]
+Overfull \hbox (9.36676pt too wide) in paragraph at lines 245--261
+[]\T1/ptm/m/n/10 Likelihood-only fits ([]\T1/zi4/m/n/10 CI = FALSE[]\T1/ptm/m/n/10 , in-clud-ing Delta's in-ter-nal ACE fits) reuse a pri-vate na-tive workspace.
+[5] [6]
+Overfull \hbox (41.1387pt too wide) in paragraph at lines 353--364
+[]\T1/ptm/m/n/10 For vec-tor in-put, a com-pact []\T1/zi4/m/n/10 phylo.d[]\T1/ptm/m/n/10 -like ob-ject with-out ca-per's []\T1/zi4/m/n/10 NodalVals []\T1/ptm/m/n/10 or em-bed-ded []\T1/zi4/m/n/10 comparative.data[]\T1/ptm/m/n/10 .
+
+Overfull \hbox (8.43782pt too wide) in paragraph at lines 353--364
+\T1/ptm/m/n/10 In ad-di-tion to the legacy []\T1/zi4/m/n/10 Pval1[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 Pval0 []\T1/ptm/m/n/10 fields, it re-ports the null-specific aliases []\T1/zi4/m/n/10 P_random[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 P_Brownian[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (13.95885pt too wide) in paragraph at lines 353--364
+\T1/ptm/m/n/10 their Bernoulli Monte Carlo stan-dard er-rors []\T1/zi4/m/n/10 MCSE_P_random[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 MCSE_P_Brownian[]\T1/ptm/m/n/10 , and []\T1/zi4/m/n/10 nsim_requested[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (57.18091pt too wide) in paragraph at lines 353--364
+[]\T1/zi4/m/n/10 nsim_successful_random[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 nsim_successful_brownian[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 nsim_failed_random[]\T1/ptm/m/n/10 , and []\T1/zi4/m/n/10 nsim_failed_brownian[]\T1/ptm/m/n/10 .
+
+Overfull \hbox (47.2693pt too wide) in paragraph at lines 369--373
+[]\T1/ptm/m/n/10 Every trait also has a machine-readable []\T1/zi4/m/n/10 status []\T1/ptm/m/n/10 ([]\T1/zi4/m/n/10 "ok"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "partial"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "invalid_trait"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "insufficient_data"[]\T1/ptm/m/n/10 ,
+[7] [8]
+Overfull \hbox (19.66768pt too wide) in paragraph at lines 471--487
+[]\T1/ptm/m/n/10 Native ACE scratch can be reused across fits within one anal-y-sis. The []\T1/zi4/m/n/10 fastphylosig.ace_cache_bytes
+
+Overfull \hbox (17.5604pt too wide) in paragraph at lines 488--509
+[]\T1/ptm/m/n/10 The out-put records []\T1/zi4/m/n/10 optimizer_warning[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 numerical_recovery[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 numerical_recovery_evaluations[]\T1/ptm/m/n/10 ,
+
+Overfull \hbox (41.58093pt too wide) in paragraph at lines 488--509
+[]\T1/zi4/m/n/10 entropy_recovery[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 entropy_recovery_rows[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 other_warning[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 calculation_failed []\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 failure_stage
+
+Overfull \hbox (11.0767pt too wide) in paragraph at lines 523--533
+\T1/ptm/m/n/10 trait. Re-sults re-port Delta, al-pha/beta chain means and SDs, ESS, split R-hat, batch-means []\T1/zi4/m/n/10 MCSE_Delta
+[9]
+Overfull \hbox (0.11769pt too wide) in paragraph at lines 543--554
+\T1/ptm/m/n/10 1.01, bulk/tail ESS be-low 100 per orig-i-nal chain, un-avail-able di-ag-nos-tics, or []\T1/zi4/m/n/10 relative_MCSE_Delta
+[10]
+Overfull \hbox (11.33598pt too wide) in paragraph at lines 627--632
+\T1/ptm/m/n/10 traits; D ac-cepts two states and Delta two or more states (in-clud-ing fac-tors/character
+[11]
+Overfull \hbox (35.9684pt too wide) in paragraph at lines 682--739
+\T1/zi4/m/n/10 = "multistart" []\T1/ptm/m/n/10 pro-vides de-ter-min-is-tic com-mon ARD fit-ting. []\T1/zi4/m/n/10 reference_unavailable
+
+Overfull \hbox (8.9875pt too wide) in paragraph at lines 682--739
+\T1/ptm/m/n/10 mass con-straints when in-for-ma-tive; their up-per bound may still equal one. Subtree-
+
+Overfull \hbox (14.78967pt too wide) in paragraph at lines 682--739
+[]\T1/ptm/m/n/10 also re-tains raw bounds, fi-nal width, []\T1/zi4/m/n/10 stop_reason[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 P_one_reason[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 gamma_clipped
+
+Overfull \hbox (20.90843pt too wide) in paragraph at lines 682--739
+\T1/ptm/m/n/10 c("A","B","C")). Their va-lid-ity only cov-ers that pre-de-clared do-main. []\T1/zi4/m/n/10 reference_fit
+
+Overfull \hbox (24.96007pt too wide) in paragraph at lines 682--739
+[]\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 reference_unavailable []\T1/ptm/m/n/10 ap-ply only to the de-fault []\T1/zi4/m/n/10 reference_test = "plugin"[]\T1/ptm/m/n/10 . 
+[12]
+Overfull \hbox (12.69604pt too wide) in paragraph at lines 756--766
+\T1/ptm/m/n/10 For lambda it is the sam-ple stan-dard de-vi-a-tion of lambda; D uses SD(D), and Delta uses SD(log(Delta)).
+[13]
+Overfull \hbox (0.72629pt too wide) in paragraph at lines 804--814
+\T1/ptm/m/n/10 Lo-cal state spaces drop un-ob-served states; state counts and fre-quen-cies re-tain orig-i-nal la-bels. Single-
+
+Overfull \hbox (9.87637pt too wide) in paragraph at lines 815--869
+\T1/ptm/m/n/10 re-search con-trols. An ex-plic-itly re-quested plu-gin ref-er-ence uses RMS(log(Delta_local/Delta_overall)),
+
+Overfull \hbox (18.62967pt too wide) in paragraph at lines 815--869
+[]\T1/ptm/m/n/10 counts en-tropy round-off re-cov-ery, sep-a-rately from []\T1/zi4/m/n/10 nsim_other_warning[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 nsim_calculation_failure
+
+Overfull \hbox (2.22668pt too wide) in paragraph at lines 815--869
+[]\T1/ptm/m/n/10 (ac-tual er-rors/invalid es-ti-mates) and []\T1/zi4/m/n/10 nsim_unavailable []\T1/ptm/m/n/10 (all un-avail-able repli-cates, in-clud-ing single-
+[14]
+Overfull \hbox (0.52673pt too wide) in paragraph at lines 870--909
+[]\T1/ptm/m/n/10 Delta's opt-in nui-sance test by de-fault re-tains that dis-crep-ancy and the ex-ist-ing ACE/entropy/MCMC
+[15]
+Overfull \hbox (83.46672pt too wide) in paragraph at lines 928--947
+[]\T1/ptm/m/n/10 Tips out-side se-lected clades, in-clud-ing small rem-nants of im-bal-anced trees, are re-ported in []\T1/zi4/m/n/10 selection$uncovered_tips[]\T1/ptm/m/n/10 .
+
+Overfull \hbox (15.78856pt too wide) in paragraph at lines 971--984
+[]\T1/ptm/m/n/10 A []\T1/zi4/m/n/10 fastphylosig_heterogeneity []\T1/ptm/m/n/10 list con-tain-ing []\T1/zi4/m/n/10 clades []\T1/ptm/m/n/10 (one row per clade and trait), []\T1/zi4/m/n/10 heterogeneity
+[16]
+Overfull \hbox (2.63655pt too wide) in paragraph at lines 1044--1050
+\T1/ptm/m/n/10 trix/data.frame in-put re-turns one row per trait. Re-sults in-clude tim-ing meta-data and a small []\T1/zi4/m/n/10 workflow
+[17]
+Overfull \hbox (2.698pt too wide) in paragraph at lines 1090--1095
+[]\T1/ptm/m/n/10 A con-nected []\T1/zi4/m/n/10 "phylo" []\T1/ptm/m/n/10 ob-ject with a unique struc-tural root and fi-nite, non-negative
+
+Overfull \hbox (6.39885pt too wide) in paragraph at lines 1090--1095
+\T1/ptm/m/n/10 branch lengths, or a con-text re-turned by []\T1/zi4/m/n/10 prepare_tree()[]\T1/ptm/m/n/10 . Zero ter-mi-nal branches
+[18]
+Overfull \hbox (0.65735pt too wide) in paragraph at lines 1116--1121
+\T1/ptm/m/n/10 Re-sults in-clude tim-ing meta-data and a small []\T1/zi4/m/n/10 workflow []\T1/ptm/m/n/10 at-tribute. Per-trait []\T1/zi4/m/n/10 status []\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 message[]\T1/ptm/m/n/10 /[]\T1/zi4/m/n/10 note
+
+Overfull \hbox (10.24957pt too wide) in paragraph at lines 1138--1148
+\T1/ptm/m/n/10 one of the four pub-lic pro-duc-tion func-tions: []\T1/zi4/m/n/10 fast_k()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_lambda()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_d()[]\T1/ptm/m/n/10 , or []\T1/zi4/m/n/10 fast_delta()[]\T1/ptm/m/n/10 .
+[19]
+Overfull \hbox (4.05705pt too wide) in paragraph at lines 1183--1189
+\T1/ptm/m/n/10 need method-specific sim-u-la-tion, pro-file, null-retention, MCMC, or di-ag-nos-tic con-trols. []\T1/zi4/m/n/10 fast_ace()
+
+Overfull \hbox (34.401pt too wide) in paragraph at lines 1205--1208
+[]\T1/zi4/m/n/10 fast_k()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_lambda()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_d()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_delta()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 fast_ace()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 check_tree()[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 match_tree_data()[]\T1/ptm/m/n/10 ,
+[20]
+Overfull \hbox (50.99916pt too wide) in paragraph at lines 1289--1293
+[]\T1/ptm/m/n/10 A list with el-e-ments []\T1/zi4/m/n/10 tree[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 X[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 data[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 report[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 matched_species[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 tree_tips_removed[]\T1/ptm/m/n/10 , and []\T1/zi4/m/n/10 data_rows_removed[]\T1/ptm/m/n/10 .
+[21] (c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/tex/latex/inconsolata/ts1zi4.fd) [22{c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}]
+Overfull \hbox (11.33038pt too wide) in paragraph at lines 1409--1412
+[]\T1/ptm/m/n/10 Result pro-duced by [][][]\T1/zi4/m/n/10 fast_signal[][][][]\T1/ptm/m/n/10 , [][][]\T1/zi4/m/n/10 fast_k[][][][]\T1/ptm/m/n/10 , [][][]\T1/zi4/m/n/10 fast_lambda[][][][]\T1/ptm/m/n/10 , [][][]\T1/zi4/m/n/10 fast_d[][][][]\T1/ptm/m/n/10 , or [][][]\T1/zi4/m/n/10 fast_delta[][][][]\T1/ptm/m/n/10 . 
+[23] [24]
+Overfull \hbox (14.60883pt too wide) in paragraph at lines 1504--1509
+[]\T1/ptm/m/n/10 An ob-ject of class []\T1/zi4/m/n/10 c("fastphylosig_tree", "list")[]\T1/ptm/m/n/10 . Pass it as the tree ar-gu-ment to []\T1/zi4/m/n/10 fast_signal()[]\T1/ptm/m/n/10 ,
+[25]
+Overfull \hbox (78.8286pt too wide) in paragraph at lines 1561--1565
+[]\T1/ptm/m/n/10 A []\T1/zi4/m/n/10 "phylo" []\T1/ptm/m/n/10 ob-ject with class []\T1/zi4/m/n/10 "fastphylosig_resolved_tree" []\T1/ptm/m/n/10 and an at-tribute named []\T1/zi4/m/n/10 "fastphylosig_resolution"[]\T1/ptm/m/n/10 .
+[26] (./Rd2.ind [27]
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 3.
+
+[28]) (./Rd2.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ )
+(see the transcript file for additional information)<c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/wenyi/AppData/Local/Temp/fastphylosig-rc1-tex-73683aac64e7/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (28 pages, 169995 bytes).
+Transcript written on Rd2.log.
+Saving output to 'source-manual.pdf' ...
+Done

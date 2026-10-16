@@ -342,10 +342,8 @@ TreeArrays parse_tree(const Rcpp::List& compiled) {
 // adding the branch above v.  This is exactly the scalar Schur complement of
 // the latent state at v.
 void compute_edge_weights(const TreeArrays& tree,
-                          std::vector<double>& aggregate,
                           std::vector<double>& outgoing) {
   const int n = tree.n_total;
-  aggregate.assign(static_cast<std::size_t>(n), 0.0);
   outgoing.assign(static_cast<std::size_t>(n), 0.0);
   for (std::size_t ii = 0; ii < tree.postorder.size(); ++ii) {
     const int node = tree.postorder[ii];
@@ -365,10 +363,7 @@ void compute_edge_weights(const TreeArrays& tree,
     if (!(s > 0.0L) || !std::isfinite(static_cast<double>(s))) {
       Rcpp::stop("tree Schur-complement precision is not finite and positive.");
     }
-    aggregate[static_cast<std::size_t>(node)] = static_cast<double>(s);
-    if (node == tree.root) {
-      outgoing[static_cast<std::size_t>(node)] = static_cast<double>(s);
-    } else if (node < tree.n_tip) {
+    if (node == tree.root || node < tree.n_tip) {
       outgoing[static_cast<std::size_t>(node)] = static_cast<double>(s);
     } else {
       // 1/(l + 1/s) avoids forming l*s, which can overflow even though the
@@ -408,9 +403,18 @@ double edge_alpha(const TreeArrays& tree,
 // centered GLS delta separate is important for large common offsets: forming
 // X - (baseline + delta) in one operation can discard the low bits of the
 // residuals before the Schur complement sees them.
-double tree_branch_precision(const TreeArrays& tree,
-                             const int node,
-                             const std::vector<double>& outgoing);
+double tree_branch_precision(const TreeArrays& tree, const int node,
+    const std::vector<double>& outgoing) {
+  if (node < tree.n_tip) return outgoing[static_cast<std::size_t>(node)];
+  long double s = 0.0L;
+  const int begin = tree.child_ptr[static_cast<std::size_t>(node)];
+  const int end = tree.child_ptr[static_cast<std::size_t>(node + 1)];
+  for (int k = begin; k < end; ++k) {
+    s += static_cast<long double>(outgoing[static_cast<std::size_t>(
+      tree.children[static_cast<std::size_t>(k)])]);
+  }
+  return static_cast<double>(s);
+}
 
 void upward_messages(const TreeArrays& tree,
                      const Rcpp::NumericMatrix& X,
@@ -420,7 +424,6 @@ void upward_messages(const TreeArrays& tree,
                      const std::vector<double>& baseline,
                      const std::vector<double>& delta,
                      std::vector<double>& message) {
-  const int n = tree.n_total;
   for (std::size_t ii = 0; ii < tree.postorder.size(); ++ii) {
     const int node = tree.postorder[ii];
     const std::size_t base = static_cast<std::size_t>(node) *
@@ -462,30 +465,9 @@ void upward_messages(const TreeArrays& tree,
       message[base + static_cast<std::size_t>(j)] = mean;
     }
   }
-  (void)n;
-}
-
-// The aggregate precision used by upward_messages.  For tips outgoing is
-// already the terminal precision; for an internal node the aggregate is the
-// parallel sum of child outgoing precisions.  Recompute it from the CSR list
-// here to keep the helper independent of a second mutable array.
-double tree_branch_precision(const TreeArrays& tree,
-                             const int node,
-                             const std::vector<double>& outgoing) {
-  if (node < tree.n_tip) return outgoing[static_cast<std::size_t>(node)];
-  long double s = 0.0L;
-  const int begin = tree.child_ptr[static_cast<std::size_t>(node)];
-  const int end = tree.child_ptr[static_cast<std::size_t>(node + 1)];
-  for (int k = begin; k < end; ++k) {
-    s += static_cast<long double>(outgoing[
-      static_cast<std::size_t>(tree.children[static_cast<std::size_t>(k)])
-    ]);
-  }
-  return static_cast<double>(s);
 }
 
 void downward_states(const TreeArrays& tree,
-                     const int col0,
                      const int chunk,
                      const std::vector<double>& outgoing,
                      const std::vector<double>& message,
@@ -498,9 +480,7 @@ void downward_states(const TreeArrays& tree,
   for (std::size_t ii = 1; ii < tree.preorder.size(); ++ii) {
     const int node = tree.preorder[ii];
     const int parent = tree.parent[static_cast<std::size_t>(node)];
-    const double alpha = edge_alpha(
-      tree, node, outgoing[static_cast<std::size_t>(node)]
-    );
+    const double alpha = edge_alpha(tree, node, outgoing[static_cast<std::size_t>(node)]);
     const std::size_t base = static_cast<std::size_t>(node) * stride;
     const std::size_t pbase = static_cast<std::size_t>(parent) * stride;
     for (int j = 0; j < chunk; ++j) {
@@ -513,27 +493,18 @@ void downward_states(const TreeArrays& tree,
       state[base + static_cast<std::size_t>(j)] = value;
     }
   }
-  (void)col0;
 }
 
 double sum_inv_one(const TreeArrays& tree,
                    const std::vector<double>& outgoing) {
   const std::size_t n = static_cast<std::size_t>(tree.n_total);
   std::vector<double> state(n, 0.0);
-  std::vector<double> message(n, 1.0);
-  std::vector<double> one_offset(1, 0.0);
-  // For an all-ones trait, every upward mean is exactly one.  Passing a
-  // one-filled message vector through the ordinary downward interpolation is
-  // sufficient and avoids forming an R matrix just for Q1.
-  (void)one_offset;
-  const std::size_t root_base = static_cast<std::size_t>(tree.root);
-  state[root_base] = 0.0;
+  // Every upward mean for an all-ones trait is exactly one; interpolate it
+  // directly without allocating messages or an R matrix just for Q1.
   for (std::size_t ii = 1; ii < tree.preorder.size(); ++ii) {
     const int node = tree.preorder[ii];
     const int parent = tree.parent[static_cast<std::size_t>(node)];
-    const double alpha = edge_alpha(
-      tree, node, outgoing[static_cast<std::size_t>(node)]
-    );
+    const double alpha = edge_alpha(tree, node, outgoing[static_cast<std::size_t>(node)]);
     state[static_cast<std::size_t>(node)] =
       state[static_cast<std::size_t>(parent)] +
       alpha * (1.0 - state[static_cast<std::size_t>(parent)]);
@@ -553,32 +524,17 @@ double sum_inv_one(const TreeArrays& tree,
   return out;
 }
 
-} // namespace
-
-// [[Rcpp::export]]
-Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
-                                 const Rcpp::NumericMatrix& X,
-                                 const int trait_chunk = 64) {
-  const TreeArrays tree = parse_tree(compiled_tree);
-  const R_xlen_t nrow = X.nrow();
-  const R_xlen_t ncol = X.ncol();
-  if (nrow != static_cast<R_xlen_t>(tree.n_tip)) {
-    Rcpp::stop("X must have one row per compiled_tree tip (in tip-id order).");
-  }
-  if (ncol < 1) {
-    Rcpp::stop("X must contain at least one trait column.");
-  }
-  if (ncol > static_cast<R_xlen_t>(std::numeric_limits<int>::max())) {
-    Rcpp::stop("X has too many trait columns for this kernel.");
-  }
-  if (trait_chunk < 1) {
-    Rcpp::stop("trait_chunk must be a positive integer.");
-  }
-
-  const int p = static_cast<int>(ncol);
-  std::vector<double> aggregate;
+struct KFactors {
+  // Immutable edge weights and normalization shared by all BM blocks.
   std::vector<double> outgoing;
-  compute_edge_weights(tree, aggregate, outgoing);
+  double sum_inv, normalization;
+};
+struct KWorkspace {
+  std::vector<double> message, state, baseline, delta;
+};
+KFactors prepare_k_factors(const TreeArrays& tree) {
+  std::vector<double> outgoing;
+  compute_edge_weights(tree, outgoing);
   const double sum_inv = sum_inv_one(tree, outgoing);
 
   long double trace_ld = 0.0L;
@@ -595,9 +551,40 @@ Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
     Rcpp::stop("the Brownian-tree K normalization is not finite and positive.");
   }
 
-  Rcpp::NumericVector means(p);
-  Rcpp::NumericVector numerator(p);
-  Rcpp::NumericVector denominator(p);
+  return KFactors{std::move(outgoing), sum_inv, norm_const};
+}
+void validate_k_matrix(const TreeArrays& tree, const Rcpp::NumericMatrix& X,
+    const int trait_chunk) {
+  const R_xlen_t nrow = X.nrow();
+  const R_xlen_t ncol = X.ncol();
+  if (nrow != static_cast<R_xlen_t>(tree.n_tip)) {
+    Rcpp::stop("X must have one row per compiled_tree tip (in tip-id order).");
+  }
+  if (ncol < 1) {
+    Rcpp::stop("X must contain at least one trait column.");
+  }
+  if (ncol > static_cast<R_xlen_t>(std::numeric_limits<int>::max())) {
+    Rcpp::stop("X has too many trait columns for this kernel.");
+  }
+  if (trait_chunk < 1) {
+    Rcpp::stop("trait_chunk must be a positive integer.");
+  }
+}
+struct KResult {
+  Rcpp::NumericVector k, means, numerator, denominator;
+};
+// Dimensions are checked once at the public boundary; native BM matrices are
+// constructed with the same checked tree. Both modes share all arithmetic.
+template<bool diagnostics>
+KResult evaluate_k(const TreeArrays& tree, const KFactors& factors,
+    const Rcpp::NumericMatrix& X, const int trait_chunk, KWorkspace& workspace) {
+  const int p = X.ncol();
+  const std::vector<double>& outgoing = factors.outgoing;
+  const double sum_inv = factors.sum_inv;
+  const double norm_const = factors.normalization;
+  Rcpp::NumericVector means(diagnostics ? p : 0);
+  Rcpp::NumericVector numerator(diagnostics ? p : 0);
+  Rcpp::NumericVector denominator(diagnostics ? p : 0);
   Rcpp::NumericVector kval(p);
 
   const int chunk_limit = std::max(1, std::min(trait_chunk, p));
@@ -605,14 +592,18 @@ Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
     const int chunk = std::min(chunk_limit, p - col0);
     const std::size_t cells = static_cast<std::size_t>(tree.n_total) *
       static_cast<std::size_t>(chunk);
-    std::vector<double> message(cells, 0.0);
-    std::vector<double> state(cells, 0.0);
+    workspace.message.resize(cells);
+    workspace.state.resize(cells);
+    std::vector<double>& message = workspace.message;
+    std::vector<double>& state = workspace.state;
     // Translate each trait by one observed tip before the first solve.  The
     // Brownian precision is not translation invariant (the root is fixed),
     // but q(x) = q(x-c1) + c q(1) is exact.  This keeps the state and current
     // arithmetic well-scaled for traits carrying a large common offset.
-    std::vector<double> baseline(static_cast<std::size_t>(chunk), 0.0);
-    std::vector<double> delta(static_cast<std::size_t>(chunk), 0.0);
+    workspace.baseline.resize(static_cast<std::size_t>(chunk));
+    workspace.delta.assign(static_cast<std::size_t>(chunk), 0.0);
+    std::vector<double>& baseline = workspace.baseline;
+    std::vector<double>& delta = workspace.delta;
     for (int j = 0; j < chunk; ++j) {
       baseline[static_cast<std::size_t>(j)] = X(0, col0 + j);
       if (!std::isfinite(baseline[static_cast<std::size_t>(j)])) {
@@ -626,7 +617,7 @@ Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
     upward_messages(
       tree, X, col0, chunk, outgoing, baseline, delta, message
     );
-    downward_states(tree, col0, chunk, outgoing, message, state);
+    downward_states(tree, chunk, outgoing, message, state);
     for (int j = 0; j < chunk; ++j) {
       long double qlinear = 0.0L;
       for (int tip = 0; tip < tree.n_tip; ++tip) {
@@ -650,7 +641,7 @@ Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
       if (!std::isfinite(a)) {
         Rcpp::stop("GLS means are not finite for X.");
       }
-      means[col0 + j] = a;
+      if (diagnostics) means[col0 + j] = a;
     }
 
     // Pass 2: run the same Schur complement on residual traits.  The edge
@@ -662,7 +653,7 @@ Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
     upward_messages(
       tree, X, col0, chunk, outgoing, baseline, delta, message
     );
-    downward_states(tree, col0, chunk, outgoing, message, state);
+    downward_states(tree, chunk, outgoing, message, state);
     for (int j = 0; j < chunk; ++j) {
       long double num = 0.0L;
       long double den = 0.0L;
@@ -690,20 +681,70 @@ Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
       }
       const double num_d = static_cast<double>(num);
       const double den_d = static_cast<double>(den);
-      numerator[col0 + j] = num_d;
-      denominator[col0 + j] = den_d;
+      if (diagnostics) {
+        numerator[col0 + j] = num_d;
+        denominator[col0 + j] = den_d;
+      }
       kval[col0 + j] = (den_d > 0.0 && std::isfinite(den_d))
         ? (num_d / den_d) / norm_const
         : std::numeric_limits<double>::quiet_NaN();
     }
   }
 
+  return KResult{kval, means, numerator, denominator};
+}
+
+} // namespace
+
+// [[Rcpp::export]]
+Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
+    const Rcpp::NumericMatrix& X, const int trait_chunk = 64) {
+  const TreeArrays tree = parse_tree(compiled_tree);
+  validate_k_matrix(tree, X, trait_chunk);
+  const KFactors factors = prepare_k_factors(tree);
+  KWorkspace workspace;
+  const KResult fitted = evaluate_k<true>(tree, factors, X, trait_chunk, workspace);
   return Rcpp::List::create(
-    Rcpp::Named("K") = kval,
-    Rcpp::Named("gls_mean") = means,
-    Rcpp::Named("numerator") = numerator,
-    Rcpp::Named("denominator") = denominator,
-    Rcpp::Named("sum_inv") = sum_inv,
-    Rcpp::Named("normalization") = norm_const
+    Rcpp::Named("K") = fitted.k,
+    Rcpp::Named("gls_mean") = fitted.means,
+    Rcpp::Named("numerator") = fitted.numerator,
+    Rcpp::Named("denominator") = fitted.denominator,
+    Rcpp::Named("sum_inv") = factors.sum_inv,
+    Rcpp::Named("normalization") = factors.normalization
   );
+}
+
+// Serial BM draws in replicate/preorder order, as in R's rnorm matrix.
+// [[Rcpp::export]]
+Rcpp::NumericVector heterogeneity_bm_k_cpp(const Rcpp::List& compiled_tree,
+    const int nsim, const int simulation_chunk) {
+  if (nsim < 2 || simulation_chunk < 1) Rcpp::stop("invalid BM simulation dimensions");
+  const TreeArrays tree = parse_tree(compiled_tree);
+  const KFactors factors = prepare_k_factors(tree);
+  KWorkspace workspace;
+  // Borrow the K selector's 64 MiB budget for dominant block buffers.
+  // One sample remains necessary when its fixed workspace exceeds the cap.
+  const double sample_bytes = 8.0 * (tree.n_tip + 2.0 * tree.n_total + 3.0);
+  const int fitting = static_cast<int>(std::max(1.0, std::floor(67108864.0 / sample_bytes)));
+  const int block = std::min(nsim, std::min(simulation_chunk, fitting));
+  Rcpp::NumericVector out(nsim);
+  std::vector<double> values(tree.n_total, 0.0), scale(tree.n_total);
+  for (int node = 0; node < tree.n_total; ++node) scale[node] = std::sqrt(tree.branch[node]);
+  for (int first = 0; first < nsim;) {
+    Rcpp::checkUserInterrupt();
+    const int width = std::min(block, nsim - first);
+    Rcpp::NumericMatrix draw(tree.n_tip, width);
+    for (int j = 0; j < width; ++j) {
+      for (std::size_t i = 1; i < tree.preorder.size(); ++i) {
+        const int node = tree.preorder[i];
+        const double increment = R::rnorm(0.0, 1.0) * scale[node];
+        values[node] = values[tree.parent[node]] + increment;
+      }
+      for (int tip = 0; tip < tree.n_tip; ++tip) draw(tip, j) = values[tip];
+    }
+    const Rcpp::NumericVector k = evaluate_k<false>(tree, factors, draw, width, workspace).k;
+    std::copy(k.begin(), k.end(), out.begin() + first);
+    first += width;
+  }
+  return out;
 }

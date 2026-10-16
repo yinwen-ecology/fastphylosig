@@ -161,7 +161,8 @@ test_that("Stage 5 strategy diagnostics do not add a public API", {
   expect_setequal(getNamespaceExports("fastphylosig"), c(
     "fast_signal", "fast_k", "fast_lambda", "fast_d", "fast_delta",
     "fast_ace", "prepare_tree", "cache_info", "match_tree_data",
-    "match_phylo_data", "plot_signal", "check_tree", "resolve_tree"
+    "match_phylo_data", "plot_signal", "check_tree", "resolve_tree",
+    "fast_hetero"
   ))
   expect_identical(names(formals(fastphylosig::fast_k)), c(
     "tree", "x", "test", "nsim", "se", "permutations", "return_sim",

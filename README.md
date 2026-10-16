@@ -1,4 +1,11 @@
-# fastphylosig
+# fastphylosig 0.3.4
+
+This local source version provides phylogenetic signal statistics and
+`fast_hetero()` for comparing signal across clades. The
+[heterogeneity guide](inst/HETERO_GUIDE_zh.md) covers selection, interpretation,
+diagnostics and runnable examples. Earlier Delta posterior/MCMC corrections
+are recorded in NEWS; no new estimator or RNG change is introduced by the
+0.3.4 documentation and cleanup revision.
 
 [Package website](https://yinwen-ecology.github.io/fastphylosig/) |
 [GitHub](https://github.com/yinwen-ecology/fastphylosig) |
@@ -10,7 +17,34 @@ categorical traits. Most analyses need one function: `fast_signal()`. The
 method-specific functions remain available when you want to inspect and
 control each step.
 
-## Speed on larger trees
+`fast_hetero()` selects maximal disjoint crowns within size bounds, or accepts
+explicit internal nodes. It reports local estimates, coverage, observed tip
+counts and trait-wise failures. Explicit nodes override automatic size bounds;
+`min_tips` still controls the minimum observed species per clade and trait.
+
+| Method | Clade dispersion | Optional heterogeneity reference |
+|---|---|---|
+| K | SD(log K) | BM on the selected crowns |
+| lambda | SD(lambda) | Approximate fitted common-local-lambda Gaussian reference; pooled REML by default |
+| D | SD(D) | Experimental shared-rate symmetric ER model, conditional on each crown's observed state counts |
+| Delta | SD(log Delta), local/overall contrasts | Use for description and MCMC diagnostics; heterogeneity tests remain experimental |
+
+`P_heterogeneity` is a method-specific reference probability, separate from
+ordinary signal P values. Lambda is interpreted on the extracted crown scale;
+a common whole-tree lambda need not imply equal local-crown parameters.
+Nested crowns are descriptive only. These comparisons describe signal patterns
+and reference departures; they do not identify evolutionary mechanisms.
+`plot(h, tree = tree)` colours crown-clade estimates on the phylogeny;
+`plot(h)` retains the estimate plot. Set `overall = TRUE` or
+`overall_test = TRUE` to include complete-tree signal estimates/tests in the
+result and plot, separately from dispersion testing.
+`clade_test = TRUE` adds each crown's ordinary signal test. D/Delta results
+include original state counts/frequencies; unavailable crowns remain explicit.
+See the [heterogeneity guide](inst/HETERO_GUIDE_zh.md). Delta's explicit
+experimental options remain documented for reproducibility. The existing
+0.3.1 release archive is separate and does not include this clade workflow.
+
+## Historical reference timings (0.3.0)
 
 ![Matched runtime ratios for four signal statistics](docs/release-0.3.0/benchmark_reference_four_methods_speedup.png)
 
@@ -33,14 +67,17 @@ See [all data, settings and diagnostic details](docs/release-0.3.0/README.md).
 
 ## Install
 
-The [0.3.1 GitHub patch release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1) contains five correctness fixes. Download its source archive and install with an existing C++ toolchain:
+To install a locally built 0.3.4 source archive with an existing C++ toolchain:
 
 ```r
-install.packages("fastphylosig_0.3.1.tar.gz", repos = NULL, type = "source")
+install.packages("fastphylosig_0.3.4.tar.gz", repos = NULL, type = "source")
 library(fastphylosig)
 ```
 
-For the previously published GitHub release:
+0.3.4 has not been published by this workflow. The
+[0.3.1 GitHub patch release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.1)
+and the earlier 0.3.0 release remain separate historical downloads. To install
+the latter:
 
 ```r
 install.packages("remotes")
@@ -281,6 +318,17 @@ scientific inference. These native web previews retain some annotation/curve
 overlaps; they are not collision-free manuscript figures.
 
 ## Compatibility and release status
+
+The current development revision retains modern Delta ratio diagnostics,
+pooled REML for the common lambda reference, and bounded ACE scratch reuse.
+See the [heterogeneity guide](inst/HETERO_GUIDE_zh.md) and
+[five-task audit](docs/signal-heterogeneity/five-goals-20261013/README_zh.md).
+Recommended clade analyses use K's BM dispersion reference, approximate
+common-local-lambda inference, and descriptive binary D or multistate Delta.
+D's conditional ER heterogeneity extension is experimental. Delta heterogeneity
+tests are outside the recommended workflow; explicit research calls remain
+available for reproducibility. Whole-tree and local signal tests remain separate.
+The local release checks do not substitute for fresh Linux/macOS CI results.
 
 The 0.3.1 patch fixes D type-7 thresholds, numeric species identities,
 D plot null probabilities and tails, approximately ultrametric lambda

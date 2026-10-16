@@ -1,0 +1,21 @@
+{
+  "package": "fastphylosig",
+  "version": "0.3.4",
+  "release_title": "fastphylosig 0.3.4",
+  "planned_tag": "v0.3.4",
+  "state": "frozen_ready_for_publication",
+  "public_release_performed": false,
+  "CRAN_submission_performed": false,
+  "source_archive": "fastphylosig_0.3.4.tar.gz",
+  "source_archive_sha256": "8B1A8940101997492D4F3E2AFE696717BFE63CC9905FE91E225A3534754B997D",
+  "source_archive_rebuilt": false,
+  "source_version_changed": false,
+  "maintainer_email": "yinwen-ecology@users.noreply.github.com",
+  "windows": "independently checked locally",
+  "Linux": "pass confirmed by maintainer, logs not independently reviewed locally",
+  "other_platforms": "not required for this release; not claimed verified",
+  "statistical_scope": "STATISTICAL_SCOPE.json",
+  "validation_summary": "VALIDATION_zh.md",
+  "git_base_head": "28d63332c4d0e5f7e273b3b5b297d0ab16139378",
+  "git_base_is_release_commit": false
+}

@@ -1,0 +1,584 @@
+{
+  "package": "fastphylosig",
+  "version": "0.3.4",
+  "exports": ["cache_info", "check_tree", "fast_ace", "fast_d", "fast_delta", "fast_hetero", "fast_k", "fast_lambda", "fast_signal", "match_phylo_data", "match_tree_data", "plot_signal", "prepare_tree", "resolve_tree"],
+  "functions": {
+    "cache_info": [
+      {
+        "name": "ctx",
+        "default": ""
+      }
+    ],
+    "check_tree": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "signal",
+        "default": "c(\"K\", \"lambda\", \"D\", \"Delta\")"
+      }
+    ],
+    "fast_ace": [
+      {
+        "name": "x",
+        "default": ""
+      },
+      {
+        "name": "phy",
+        "default": "NULL"
+      },
+      {
+        "name": "type",
+        "default": "\"discrete\""
+      },
+      {
+        "name": "method",
+        "default": "\"ML\""
+      },
+      {
+        "name": "CI",
+        "default": "TRUE"
+      },
+      {
+        "name": "model",
+        "default": "c(\"ER\", \"ARD\")"
+      },
+      {
+        "name": "kappa",
+        "default": "1"
+      },
+      {
+        "name": "ip",
+        "default": "0.1"
+      },
+      {
+        "name": "marginal",
+        "default": "FALSE"
+      },
+      {
+        "name": "prepared",
+        "default": "NULL"
+      },
+      {
+        "name": "progress",
+        "default": "interactive()"
+      }
+    ],
+    "fast_d": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "x",
+        "default": "NULL"
+      },
+      {
+        "name": "test",
+        "default": "TRUE"
+      },
+      {
+        "name": "nsim",
+        "default": "1000"
+      },
+      {
+        "name": "se",
+        "default": "NULL"
+      },
+      {
+        "name": "return_sim",
+        "default": "test"
+      },
+      {
+        "name": "verbose",
+        "default": "TRUE"
+      },
+      {
+        "name": "rnd.bias",
+        "default": "NULL"
+      },
+      {
+        "name": "permutations",
+        "default": "NULL"
+      },
+      {
+        "name": "random_states",
+        "default": "NULL"
+      },
+      {
+        "name": "brownian_states",
+        "default": "NULL"
+      },
+      {
+        "name": "ncores",
+        "default": "1"
+      },
+      {
+        "name": "X",
+        "default": "NULL"
+      },
+      {
+        "name": "permut",
+        "default": "NULL"
+      },
+      {
+        "name": "prepared",
+        "default": "NULL"
+      },
+      {
+        "name": "chunk_size",
+        "default": "128L"
+      },
+      {
+        "name": "keep_null",
+        "default": "return_sim"
+      },
+      {
+        "name": "progress",
+        "default": "interactive()"
+      }
+    ],
+    "fast_delta": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "x",
+        "default": "NULL"
+      },
+      {
+        "name": "test",
+        "default": "FALSE"
+      },
+      {
+        "name": "nsim",
+        "default": "1000"
+      },
+      {
+        "name": "se",
+        "default": "NULL"
+      },
+      {
+        "name": "mcmc_sim",
+        "default": "10000"
+      },
+      {
+        "name": "thin",
+        "default": "10"
+      },
+      {
+        "name": "burn",
+        "default": "100"
+      },
+      {
+        "name": "lambda0",
+        "default": "0.1"
+      },
+      {
+        "name": "proposal_sd",
+        "default": "0.5"
+      },
+      {
+        "name": "entropy",
+        "default": "c(\"LSE\", \"SE\", \"GINI\")"
+      },
+      {
+        "name": "model",
+        "default": "\"ARD\""
+      },
+      {
+        "name": "permutations",
+        "default": "NULL"
+      },
+      {
+        "name": "return_sim",
+        "default": "test"
+      },
+      {
+        "name": "verbose",
+        "default": "TRUE"
+      },
+      {
+        "name": "ncores",
+        "default": "1"
+      },
+      {
+        "name": "X",
+        "default": "NULL"
+      },
+      {
+        "name": "prepared",
+        "default": "NULL"
+      },
+      {
+        "name": "progress",
+        "default": "interactive()"
+      }
+    ],
+    "fast_hetero": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "data",
+        "default": ""
+      },
+      {
+        "name": "method",
+        "default": "c(\"K\", \"lambda\", \"D\", \"Delta\")"
+      },
+      {
+        "name": "nodes",
+        "default": "NULL"
+      },
+      {
+        "name": "min_tips",
+        "default": "20L"
+      },
+      {
+        "name": "max_tips",
+        "default": "200L"
+      },
+      {
+        "name": "test",
+        "default": "FALSE"
+      },
+      {
+        "name": "nsim",
+        "default": "999L"
+      },
+      {
+        "name": "simulation_chunk",
+        "default": "32L"
+      },
+      {
+        "name": "keep_null",
+        "default": "FALSE"
+      },
+      {
+        "name": "max_total_tips",
+        "default": "1000000L"
+      },
+      {
+        "name": "progress",
+        "default": "interactive()"
+      },
+      {
+        "name": "overall",
+        "default": "FALSE"
+      },
+      {
+        "name": "overall_test",
+        "default": "FALSE"
+      },
+      {
+        "name": "overall_nsim",
+        "default": "nsim"
+      },
+      {
+        "name": "d_nsim",
+        "default": "1000L"
+      },
+      {
+        "name": "delta_control",
+        "default": "list()"
+      },
+      {
+        "name": "clade_test",
+        "default": "FALSE"
+      },
+      {
+        "name": "clade_nsim",
+        "default": "overall_nsim"
+      },
+      {
+        "name": "lambda_reference",
+        "default": "c(\"REML\", \"ML\")"
+      }
+    ],
+    "fast_k": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "x",
+        "default": "NULL"
+      },
+      {
+        "name": "test",
+        "default": "FALSE"
+      },
+      {
+        "name": "nsim",
+        "default": "1000"
+      },
+      {
+        "name": "se",
+        "default": "NULL"
+      },
+      {
+        "name": "permutations",
+        "default": "NULL"
+      },
+      {
+        "name": "return_sim",
+        "default": "FALSE"
+      },
+      {
+        "name": "verbose",
+        "default": "TRUE"
+      },
+      {
+        "name": "ncores",
+        "default": "1"
+      },
+      {
+        "name": "X",
+        "default": "NULL"
+      },
+      {
+        "name": "prepared",
+        "default": "NULL"
+      },
+      {
+        "name": "trait_chunk",
+        "default": "64L"
+      },
+      {
+        "name": "simulation_chunk",
+        "default": "128L"
+      },
+      {
+        "name": "keep_null",
+        "default": "return_sim"
+      },
+      {
+        "name": "progress",
+        "default": "interactive()"
+      },
+      {
+        "name": "data",
+        "default": "NULL"
+      }
+    ],
+    "fast_lambda": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "x",
+        "default": "NULL"
+      },
+      {
+        "name": "test",
+        "default": "FALSE"
+      },
+      {
+        "name": "se",
+        "default": "NULL"
+      },
+      {
+        "name": "verbose",
+        "default": "TRUE"
+      },
+      {
+        "name": "ncores",
+        "default": "1"
+      },
+      {
+        "name": "X",
+        "default": "NULL"
+      },
+      {
+        "name": "lambda_profile",
+        "default": "NULL"
+      },
+      {
+        "name": "lambda_profile_points",
+        "default": "101"
+      },
+      {
+        "name": "prepared",
+        "default": "NULL"
+      },
+      {
+        "name": "trait_chunk",
+        "default": "64L"
+      },
+      {
+        "name": "progress",
+        "default": "interactive()"
+      },
+      {
+        "name": "data",
+        "default": "NULL"
+      }
+    ],
+    "fast_signal": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "data",
+        "default": "NULL"
+      },
+      {
+        "name": "method",
+        "default": "NULL"
+      },
+      {
+        "name": "...",
+        "default": ""
+      },
+      {
+        "name": "x",
+        "default": "NULL"
+      },
+      {
+        "name": "X",
+        "default": "NULL"
+      },
+      {
+        "name": "prepared",
+        "default": "NULL"
+      },
+      {
+        "name": "trait_chunk",
+        "default": "64L"
+      }
+    ],
+    "match_phylo_data": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "X",
+        "default": ""
+      },
+      {
+        "name": "prune",
+        "default": "TRUE"
+      },
+      {
+        "name": "verbose",
+        "default": "TRUE"
+      }
+    ],
+    "match_tree_data": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "data",
+        "default": "NULL"
+      },
+      {
+        "name": "prune",
+        "default": "TRUE"
+      },
+      {
+        "name": "verbose",
+        "default": "TRUE"
+      },
+      {
+        "name": "X",
+        "default": "NULL"
+      }
+    ],
+    "plot_signal": [
+      {
+        "name": "result",
+        "default": ""
+      },
+      {
+        "name": "p_col",
+        "default": "NULL"
+      },
+      {
+        "name": "alpha",
+        "default": "0.05"
+      },
+      {
+        "name": "main",
+        "default": "NULL"
+      },
+      {
+        "name": "xlab",
+        "default": "NULL"
+      },
+      {
+        "name": "ylab",
+        "default": "NULL"
+      },
+      {
+        "name": "null",
+        "default": "c(\"auto\", \"random\", \"brownian\")"
+      },
+      {
+        "name": "label",
+        "default": "c(\"none\", \"significant\", \"top\", \"all\")"
+      },
+      {
+        "name": "top_n",
+        "default": "10"
+      },
+      {
+        "name": "ridge_scale",
+        "default": "0.85"
+      },
+      {
+        "name": "col",
+        "default": "NULL"
+      },
+      {
+        "name": "pch",
+        "default": "19"
+      },
+      {
+        "name": "cex",
+        "default": "0.7"
+      },
+      {
+        "name": "...",
+        "default": ""
+      }
+    ],
+    "prepare_tree": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "max_cached_subsets",
+        "default": "16L"
+      },
+      {
+        "name": "cache_budget",
+        "default": "512 * 1024^2"
+      }
+    ],
+    "resolve_tree": [
+      {
+        "name": "tree",
+        "default": ""
+      },
+      {
+        "name": "signal",
+        "default": ""
+      },
+      {
+        "name": "outgroup",
+        "default": "NULL"
+      }
+    ]
+  },
+  "previous_candidate_signatures_identical": true
+}

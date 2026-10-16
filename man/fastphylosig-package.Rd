@@ -37,3 +37,12 @@ applicable; Delta additionally reports ESS, split R-hat, and estimate MCSE.
 null plot for K, a profile-likelihood plot for lambda, a two-null Fritz and
 Purvis D calibration plot, and a permutation null plot for Delta.
 }
+\section{Clade-scale signal}{
+\code{\link{fast_hetero}} reports local signal estimates, coverage, trait-wise
+failures and optional complete-tree comparisons. K dispersion can be calibrated
+against BM; lambda uses an approximate common-local-crown Gaussian reference.
+Binary D's count-conditioned ER reference is experimental. Delta is recommended
+for local/overall description and MCMC diagnostics; its explicit experimental
+heterogeneity options remain available. Ordinary signal probabilities and
+heterogeneity-reference probabilities answer separate questions.
+}

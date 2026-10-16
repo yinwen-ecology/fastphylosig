@@ -62,7 +62,10 @@ test_that("Delta ACE workspace preserves fixed-seed observed and permutation pat
   cached_observed <- suppressWarnings(do.call(
     fastphylosig:::.delta_one, c(args, list(ace_workspace = workspace))
   ))
-  testthat::expect_equal(cached_observed, legacy_observed, tolerance = 0)
+  # Public ACE additionally evaluates the rate SE and may warn about its Hessian.
+  # Compare every original sampler field, rather than those different diagnostics.
+  original_fields <- setdiff(names(legacy_observed), "calculation_diagnostics")
+  testthat::expect_equal(cached_observed[original_fields], legacy_observed[original_fields], tolerance = 0)
 
   run_permutations <- function(ace_workspace) {
     vapply(seq_len(nrow(f$permutations)), function(i) {

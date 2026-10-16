@@ -78,7 +78,8 @@ test_that("Candidate 2 preserves fixed-seed observed and permutation Delta", {
   legacy_observed <- candidate2_legacy_delta_one(f, f$y, TRUE)
   set.seed(2050)
   production_observed <- suppressWarnings(new_delta_one(f$y, TRUE))
-  expect_equal(production_observed, legacy_observed, tolerance = 0)
+  # The new calculation flags are metadata absent from the legacy helper.
+  expect_equal(production_observed[names(legacy_observed)], legacy_observed, tolerance = 0)
 
   run_permutations <- function(use_legacy) {
     vapply(seq_len(nrow(f$permutations)), function(i) {

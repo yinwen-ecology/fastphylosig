@@ -150,7 +150,11 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
   n_saved <- rep(NA_real_, ncol(X0))
   alpha_sd <- beta_sd <- ESS_alpha <- ESS_beta <- rep(NA_real_, ncol(X0))
   split_Rhat_alpha <- split_Rhat_beta <- rep(NA_real_, ncol(X0))
+  ESS_Delta <- split_Rhat_Delta <- rep(NA_real_, ncol(X0))
+  rank_diagnostics <- stats::setNames(lapply(.delta_rank_fields(), function(nm)
+    rep(NA_real_, ncol(X0))), .delta_rank_fields())
   alpha_beta_cov <- MCSE_Delta <- rep(NA_real_, ncol(X0))
+  calculation_flags <- lapply(seq_len(ncol(X0)), function(j) .delta_calculation_flags())
   diagnostics_available <- rep(FALSE, ncol(X0))
   diagnostics_note <- rep(NA_character_, ncol(X0))
   saved_per_chain_requested <- .delta_saved_iterations(mcmc_sim, thin, burn)
@@ -182,6 +186,8 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
   mask_groups <- analysis$na_patterns
   ace_tree_workspaces <- vector("list", mask_groups$n_group)
   ace_workspaces <- new.env(parent = emptyenv())
+  ace_native_pool <- if(ace_engine=="fast") .fast_ace_native_pool() else NULL
+  on.exit(.fast_ace_pool_close(ace_native_pool),add=TRUE)
 
   # Reuse the packed NA masks and validated structural groups produced by
   # preparation; no second mask grouping or tree matching pass is performed.
@@ -259,7 +265,7 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
                             inherits = FALSE)
       if (is.null(ace_workspace)) {
         ace_workspace <- .fast_ace_workspace(
-          tree_workspace, model = model, nl = n_states[j]
+          tree_workspace, model = model, nl = n_states[j], native_pool=ace_native_pool
         )
         assign(workspace_key, ace_workspace, envir = ace_workspaces)
       }
@@ -276,9 +282,20 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
       error = function(e) e
     )
     if (inherits(calc, "error")) {
+      calculation_flags[[j]] <- calc$calculation_diagnostics
+      if (is.null(calculation_flags[[j]])) {
+        calculation_flags[[j]] <- .delta_calculation_flags()
+        calculation_flags[[j]]$calculation_failed <- TRUE
+        calculation_flags[[j]]$failure_stage <- "calculation"
+      }
       notes[j] <- conditionMessage(calc)
       next
     }
+    calculation_flags[[j]] <- calc$calculation_diagnostics
+    if(!is.null(calc$entropy_recovery)) notes[j] <- sprintf(
+      "Entropy roundoff repaired at %d node(s) (maximum correction %.3g)",
+      calc$entropy_recovery$below+calc$entropy_recovery$above,
+      calc$entropy_recovery$maximum_correction)
     Delta_fast[j] <- calc$delta
     alpha_mean[j] <- calc$alpha_mean
     beta_mean[j] <- calc$beta_mean
@@ -295,10 +312,13 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     beta_sd[j] <- diag$beta_sd
     ESS_alpha[j] <- diag$ESS_alpha
     ESS_beta[j] <- diag$ESS_beta
+    ESS_Delta[j] <- diag$ESS_Delta
+    split_Rhat_Delta[j] <- diag$split_Rhat_Delta
     split_Rhat_alpha[j] <- diag$split_Rhat_alpha
     split_Rhat_beta[j] <- diag$split_Rhat_beta
     alpha_beta_cov[j] <- diag$alpha_beta_cov
     MCSE_Delta[j] <- diag$MCSE_Delta
+    for (nm in names(rank_diagnostics)) rank_diagnostics[[nm]][j] <- diag[[nm]]
     diagnostics_available[j] <- isTRUE(diag$available)
     diagnostics_note[j] <- diag$note
 
@@ -326,13 +346,17 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
           ace_engine = ace_engine, ace_workspace = ace_workspace
         )
       } else {
+        # PSOCK already distributes full-tree fits across processes. Keep the
+        # inner ACE exponent kernel serial to avoid nested CPU oversubscription.
+        worker_workspace <- ace_workspace
+        if (!is.null(worker_workspace)) worker_workspace$fit_threads <- 1L
         sim_delta <- unlist(
           parallel::parLapply(
             delta_cluster, seq_len(nrow(perms)), .delta_permutation_worker,
             y = y, perms = perms, tree = group_tree, lambda0 = lambda0,
             proposal_sd = proposal_sd, mcmc_sim = mcmc_sim, thin = thin,
             burn = burn, entropy_code = entropy_code, model = model,
-            ace_engine = ace_engine, ace_workspace = ace_workspace
+            ace_engine = ace_engine, ace_workspace = worker_workspace
           ),
           use.names = FALSE
         )
@@ -346,7 +370,8 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
       } else {
         P_fast[j] <- mean(sim_delta[finite_sim] >= Delta_fast[j])
         if (n_failed_sim[j] > 0L) {
-          notes[j] <- sprintf("%d Delta permutations failed", n_failed_sim[j])
+          failure_note <- sprintf("%d Delta permutations failed", n_failed_sim[j])
+          notes[j] <- if(is.na(notes[j])) failure_note else paste(notes[j],failure_note,sep="; ")
         }
       }
       if (return_sim) {
@@ -421,7 +446,9 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
   delta_mcmc_diagnostics <- .delta_mcmc_warning_summary(
     trait = colnames(X0), delta = Delta_fast, ess_alpha = ESS_alpha,
     ess_beta = ESS_beta, rhat_alpha = split_Rhat_alpha,
-    rhat_beta = split_Rhat_beta, mcse_delta = MCSE_Delta
+    rhat_beta = split_Rhat_beta, mcse_delta = MCSE_Delta,
+    ess_delta = ESS_Delta, rhat_delta = split_Rhat_Delta,
+    rank_diagnostics = rank_diagnostics
   )
   affected_mcmc <- which(delta_mcmc_diagnostics$by_trait$warning)
   if (length(affected_mcmc)) {
@@ -460,6 +487,8 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     beta_sd = beta_sd,
     ESS_alpha = ESS_alpha,
     ESS_beta = ESS_beta,
+    ESS_Delta = ESS_Delta,
+    split_Rhat_Delta = split_Rhat_Delta,
     split_Rhat_alpha = split_Rhat_alpha,
     split_Rhat_beta = split_Rhat_beta,
     Rhat_alpha = split_Rhat_alpha,
@@ -485,6 +514,10 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     message = notes,
     stringsAsFactors = FALSE
   )
+  out[names(rank_diagnostics)] <- rank_diagnostics
+  prototype <- .delta_calculation_flags()
+  for (nm in names(prototype)) out[[nm]] <- vapply(calculation_flags, `[[`, prototype[[nm]], nm)
+  out <- .delta_attach_optimizer_retry(out,calculation_flags)
   if (test) {
     out$P_fast <- P_fast
     out$P_MCSE <- vapply(seq_len(nrow(out)), function(j) {
@@ -601,6 +634,8 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     beta_sd = out$beta_sd[[1]],
     ESS_alpha = out$ESS_alpha[[1]],
     ESS_beta = out$ESS_beta[[1]],
+    ESS_Delta = out$ESS_Delta[[1]],
+    split_Rhat_Delta = out$split_Rhat_Delta[[1]],
     split_Rhat_alpha = out$split_Rhat_alpha[[1]],
     split_Rhat_beta = out$split_Rhat_beta[[1]],
     Rhat_alpha = out$Rhat_alpha[[1]],
@@ -622,6 +657,8 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     message = out$message[[1]],
     parameters = attr(out, "delta_control")
   )
+  for (nm in .delta_rank_fields()) object[[nm]] <- out[[nm]][[1L]]
+  for(nm in intersect(.delta_optimizer_retry_fields(),names(out)))object[[nm]] <- out[[nm]][[1L]]
   object$stochastic <- attr(out, "delta_stochastic")
   object$rng_kind <- attr(out, "rng_kind")
   object$seed_metadata <- attr(out, "seed_metadata")
@@ -713,7 +750,9 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
 
 .delta_mcmc_warning_summary <- function(
     trait, delta, ess_alpha, ess_beta, rhat_alpha, rhat_beta, mcse_delta,
-    min_ess = 20, max_rhat = 1.1) {
+    min_ess = 20, max_rhat = 1.1, ess_delta = NULL, rhat_delta = NULL,
+    rank_diagnostics = NULL, n_chains = 2L, max_rank_rhat = 1.01,
+    min_ess_per_chain = 100, max_relative_mcse = .05) {
   fields <- list(
     trait = trait, delta = delta, ess_alpha = ess_alpha, ess_beta = ess_beta,
     rhat_alpha = rhat_alpha, rhat_beta = rhat_beta, mcse_delta = mcse_delta
@@ -732,6 +771,16 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
   }
 
   finite_delta <- is.finite(delta)
+  if ((!is.null(ess_delta) && length(ess_delta) != n) ||
+      (!is.null(rhat_delta) && length(rhat_delta) != n) ||
+      (!is.null(rank_diagnostics) &&
+       (!all(.delta_rank_fields() %in% names(rank_diagnostics)) ||
+        any(lengths(rank_diagnostics[.delta_rank_fields()]) != n))))
+    stop("Delta diagnostic vectors must have a common length.", call. = FALSE)
+  thresholds <- c(n_chains, max_rank_rhat, min_ess_per_chain, max_relative_mcse)
+  if (length(thresholds) != 4L || any(!is.finite(thresholds)) ||
+      n_chains < 1 || max_rank_rhat <= 1 || min_ess_per_chain <= 0 || max_relative_mcse <= 0)
+    stop("Modern Delta diagnostic thresholds must be finite and positive.", call. = FALSE)
   reason <- vapply(seq_len(n), function(i) {
     if (!finite_delta[i]) return(NA_character_)
     issues <- character()
@@ -758,6 +807,19 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     if (!is.finite(mcse_delta[i])) {
       issues <- c(issues, "MCSE_Delta is non-finite")
     }
+    if (!is.null(ess_delta) && (!is.finite(ess_delta[i]) || ess_delta[i] < min_ess))
+      issues <- c(issues, paste0("ESS_Delta is non-finite or < ", min_ess))
+    if (!is.null(rhat_delta) && (!is.finite(rhat_delta[i]) || rhat_delta[i] > max_rhat))
+      issues <- c(issues, paste0("split_Rhat_Delta is non-finite or > ", max_rhat))
+    if (!is.null(rank_diagnostics)) for (nm in setdiff(.delta_rank_fields(), "relative_MCSE_Delta")) {
+      value <- rank_diagnostics[[nm]][i]
+      limit <- if (startsWith(nm, "rank_Rhat")) max_rank_rhat else n_chains*min_ess_per_chain
+      bad <- !is.finite(value) || if (startsWith(nm, "rank_Rhat")) value > limit else value < limit
+      if (bad) issues <- c(issues, paste(nm, "is non-finite or", if (startsWith(nm, "rank_Rhat")) ">" else "<", limit))
+    }
+    relative <- mcse_delta[i]/abs(delta[i])
+    if (is.finite(relative) && relative > max_relative_mcse)
+      issues <- c(issues, paste0("relative_MCSE_Delta > ", max_relative_mcse))
     if (length(issues)) paste(issues, collapse = "; ") else NA_character_
   }, character(1))
 
@@ -773,9 +835,16 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     reason = reason,
     stringsAsFactors = FALSE
   )
+  if (!is.null(ess_delta)) by_trait$ESS_Delta <- as.numeric(ess_delta)
+  if (!is.null(rhat_delta)) by_trait$split_Rhat_Delta <- as.numeric(rhat_delta)
+  by_trait$relative_MCSE_Delta <- mcse_delta/abs(delta)
+  if (!is.null(rank_diagnostics)) by_trait[names(rank_diagnostics)] <- rank_diagnostics
   list(
     ess_minimum = as.numeric(min_ess),
     split_rhat_maximum = as.numeric(max_rhat),
+    rank_rhat_maximum = max_rank_rhat,
+    ess_per_chain_minimum = min_ess_per_chain,
+    relative_mcse_maximum = max_relative_mcse,
     warning_emitted = any(by_trait$warning),
     by_trait = by_trait,
     affected_traits = by_trait[by_trait$warning, , drop = FALSE]
@@ -855,10 +924,10 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
   sqrt(max(0, ((half - 1) / half * W + B / half) / W))
 }
 
-.delta_chain_mean_covariance <- function(alpha, beta) {
+.delta_chain_mean_covariance <- function(alpha, beta, ratio = NULL) {
   n <- length(alpha)
-  vals <- cbind(alpha, beta)
-  if (n < 2L) return(matrix(0, nrow = 2L, ncol = 2L))
+  vals <- cbind(alpha, beta, ratio)
+  if (n < 2L) return(matrix(0, nrow = ncol(vals), ncol = ncol(vals)))
   batch <- max(1L, floor(sqrt(n)))
   n_batch <- floor(n / batch)
   if (n_batch < 2L) {
@@ -876,7 +945,8 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
   beta_chain <- .delta_chain_matrix(beta_chain)
   if (is.null(alpha_chain) || is.null(beta_chain) ||
       !identical(dim(alpha_chain), dim(beta_chain)) ||
-      any(!is.finite(alpha_chain)) || any(!is.finite(beta_chain))) {
+      any(!is.finite(alpha_chain)) || any(!is.finite(beta_chain)) ||
+      any(alpha_chain <= 0) || any(beta_chain <= 0)) {
     return(list(
       available = FALSE,
       note = paste(
@@ -892,8 +962,9 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
   bb <- as.numeric(beta_chain)
   alpha_mean <- mean(aa)
   beta_mean <- mean(bb)
-  mean_cov <- matrix(0, nrow = 2L, ncol = 2L)
-  ess_alpha <- ess_beta <- 0
+  ratio <- beta_chain / alpha_chain
+  joint_mean_cov <- matrix(0, nrow = 3L, ncol = 3L)
+  ess_alpha <- ess_beta <- ess_delta <- 0
   chain_alpha_mean <- chain_beta_mean <- numeric(chains)
   chain_alpha_sd <- chain_beta_sd <- numeric(chains)
   for (j in seq_len(chains)) {
@@ -901,32 +972,18 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     b <- beta_chain[, j]
     ess_alpha <- ess_alpha + .delta_chain_ess(a)
     ess_beta <- ess_beta + .delta_chain_ess(b)
+    ess_delta <- ess_delta + .delta_chain_ess(ratio[, j])
     chain_alpha_mean[j] <- mean(a)
     chain_beta_mean[j] <- mean(b)
     chain_alpha_sd[j] <- if (length(a) > 1L) stats::sd(a) else 0
     chain_beta_sd[j] <- if (length(b) > 1L) stats::sd(b) else 0
-    mean_cov <- mean_cov + .delta_chain_mean_covariance(a, b) / chains^2
+    joint_mean_cov <- joint_mean_cov +
+      .delta_chain_mean_covariance(a, b, ratio[, j]) / chains^2
   }
-  g <- c(-beta_mean / alpha_mean^2, 1 / alpha_mean)
-  mcse <- if (is.finite(alpha_mean) && alpha_mean != 0 &&
-              all(is.finite(mean_cov))) {
-    variance_terms <- c(
-      g[1L]^2 * mean_cov[1L, 1L],
-      2 * g[1L] * g[2L] * mean_cov[1L, 2L],
-      g[2L]^2 * mean_cov[2L, 2L]
-    )
-    var_delta <- sum(variance_terms)
-    roundoff_tol <- 64 * .Machine$double.eps *
-      max(1, sum(abs(variance_terms)))
-    if (is.finite(var_delta) && var_delta >= -roundoff_tol) {
-      sqrt(max(0, var_delta))
-    } else {
-      NA_real_
-    }
-  } else {
-    NA_real_
-  }
-  list(
+  mean_cov <- joint_mean_cov[1:2, 1:2, drop = FALSE]
+  v <- joint_mean_cov[3L, 3L]
+  mcse <- if (is.finite(v) && v >= 0) sqrt(v) else NA_real_
+  c(list(
     available = TRUE,
     note = "Diagnostics computed from saved alpha/beta MCMC traces.",
     alpha_mean = alpha_mean,
@@ -943,6 +1000,8 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     beta_chain_sd = chain_beta_sd,
     ESS_alpha = max(1, min(length(aa), ess_alpha)),
     ESS_beta = max(1, min(length(bb), ess_beta)),
+    ESS_Delta = max(1, min(length(aa), ess_delta)),
+    split_Rhat_Delta = .delta_split_rhat(ratio),
     split_Rhat_alpha = .delta_split_rhat(alpha_chain),
     split_Rhat_beta = .delta_split_rhat(beta_chain),
     Rhat_alpha = .delta_split_rhat(alpha_chain),
@@ -953,7 +1012,7 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     n_saved = length(aa),
     n_chains = chains,
     n_iter = n
-  )
+  ), .delta_modern_diagnostics(alpha_chain, beta_chain, mcse))
 }
 
 .delta_mcmc_diagnostics <- function(calc) {
@@ -981,6 +1040,9 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
       error = function(e) NULL
     )
     if (is.list(cpp)) {
+      if (!all(.delta_rank_fields() %in% names(cpp)))
+        cpp <- c(cpp, .delta_modern_diagnostics(.delta_chain_matrix(alpha_chain),
+          .delta_chain_matrix(beta_chain), cpp$MCSE_Delta))
       cpp$available <- TRUE
       cpp$note <- "Diagnostics computed from saved alpha/beta MCMC traces."
       return(cpp)
@@ -1003,10 +1065,13 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     diag$beta_sd <- NA_real_
     diag$ESS_alpha <- NA_real_
     diag$ESS_beta <- NA_real_
+    diag$ESS_Delta <- NA_real_
+    diag$split_Rhat_Delta <- NA_real_
     diag$split_Rhat_alpha <- NA_real_
     diag$split_Rhat_beta <- NA_real_
     diag$alpha_beta_cov <- NA_real_
     diag$MCSE_Delta <- NA_real_
+    diag[.delta_rank_fields()] <- rep(list(NA_real_), length(.delta_rank_fields()))
   }
   diag
 }
@@ -1037,7 +1102,14 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
                        entropy_code, model, ace_engine, keep_chains = TRUE,
                        ace_workspace = NULL, reuse_buffers = TRUE) {
   y <- y[tree$tip.label]
-  ar <- if (identical(ace_engine, "fast")) {
+  flags <- .delta_calculation_flags()
+  stage_error <- function(e, stage) {
+    flags$calculation_failed <- TRUE
+    flags$failure_stage <- stage
+    e$calculation_diagnostics <- flags
+    stop(e)
+  }
+  ar <- tryCatch(withCallingHandlers(if (identical(ace_engine, "fast")) {
     if (is.null(ace_workspace)) {
       fast_ace(
         y, tree, type = "discrete", method = "ML", model = model,
@@ -1052,15 +1124,58 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     ape::ace(
       y, tree, type = "discrete", method = "ML", model = model
     )$lik.anc
-  }
+  }, warning = function(w) {
+    if (inherits(w,"fastphylosig_optimizer_retry_warning")) {
+      flags$optimizer_retry <<- TRUE
+      flags$optimizer_recovered <<- isTRUE(w$recovered)
+      flags$optimizer_retry_details <<- w$diagnostics
+    } else if (inherits(w, "fastphylosig_optimizer_warning")) flags$optimizer_warning <<- TRUE
+    else if (inherits(w, "fastphylosig_numerical_recovery_warning")) {
+      flags$numerical_recovery <<- TRUE
+      flags$numerical_recovery_evaluations <<- flags$numerical_recovery_evaluations + w$evaluations
+    } else flags$other_warning <<- TRUE
+  }), error = function(e) stage_error(e, "ACE"))
   if (is.complex(ar)) {
     ar <- Re(ar)
   }
   ar <- as.matrix(ar)
   storage.mode(ar) <- "double"
-  delta_mcmc_cpp(
+  mcmc_warnings <- 0L
+  out <- tryCatch(withCallingHandlers(delta_mcmc_cpp(
     probabilities = ar, lambda0 = lambda0, proposal_sd = proposal_sd,
     sim = mcmc_sim, thin = thin, burn = burn, entropy_type = entropy_code,
     return_chains = isTRUE(keep_chains)
-  )
+  ), warning = function(w) mcmc_warnings <<- mcmc_warnings + 1L),
+    error = function(e) stage_error(e, "MCMC"))
+  if (!is.null(out$entropy_recovery)) {
+    flags$entropy_recovery <- TRUE
+    flags$entropy_recovery_rows <- out$entropy_recovery$below + out$entropy_recovery$above
+  }
+  # The native sampler emits one warning for its structured entropy recovery.
+  # Other sampler warnings remain visible and are never called optimizer issues.
+  flags$other_warning <- flags$other_warning || mcmc_warnings > as.integer(flags$entropy_recovery)
+  out$calculation_diagnostics <- flags
+  out
+}
+
+.delta_calculation_flags <- function() {
+  list(optimizer_warning = FALSE, numerical_recovery = FALSE,
+    numerical_recovery_evaluations = 0, entropy_recovery = FALSE,
+    entropy_recovery_rows = 0L, other_warning = FALSE,
+    calculation_failed = FALSE, failure_stage = NA_character_)
+}
+
+# Optional fields preserve the complete historical output on healthy paths.
+.delta_optimizer_retry_fields <- function() {
+  c("optimizer_retry","optimizer_recovered","optimizer_retry_details")
+}
+
+.delta_attach_optimizer_retry <- function(out, flags) {
+  retried <- vapply(flags,function(z)isTRUE(z$optimizer_retry),logical(1))
+  if(any(retried)) {
+    out$optimizer_retry <- retried
+    out$optimizer_recovered <- vapply(flags,function(z)isTRUE(z$optimizer_recovered),logical(1))
+    out$optimizer_retry_details <- I(lapply(flags,`[[`,"optimizer_retry_details"))
+  }
+  out
 }

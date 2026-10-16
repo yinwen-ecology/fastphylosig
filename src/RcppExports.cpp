@@ -11,6 +11,30 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// canonical_order_bytes_cpp
+Rcpp::IntegerVector canonical_order_bytes_cpp(const Rcpp::List& keys);
+RcppExport SEXP _fastphylosig_canonical_order_bytes_cpp(SEXP keysSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type keys(keysSEXP);
+    rcpp_result_gen = Rcpp::wrap(canonical_order_bytes_cpp(keys));
+    return rcpp_result_gen;
+END_RCPP
+}
+// canonical_tree_graph_cpp
+Rcpp::List canonical_tree_graph_cpp(const Rcpp::IntegerMatrix& edge, const Rcpp::NumericVector& edge_length, const int n_tip, const int n_node, const Rcpp::IntegerVector& tip_order);
+RcppExport SEXP _fastphylosig_canonical_tree_graph_cpp(SEXP edgeSEXP, SEXP edge_lengthSEXP, SEXP n_tipSEXP, SEXP n_nodeSEXP, SEXP tip_orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix& >::type edge(edgeSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type edge_length(edge_lengthSEXP);
+    Rcpp::traits::input_parameter< const int >::type n_tip(n_tipSEXP);
+    Rcpp::traits::input_parameter< const int >::type n_node(n_nodeSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type tip_order(tip_orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(canonical_tree_graph_cpp(edge, edge_length, n_tip, n_node, tip_order));
+    return rcpp_result_gen;
+END_RCPP
+}
 // phylo_d_stream_cpp
 Rcpp::List phylo_d_stream_cpp(const arma::vec& observed, const Rcpp::IntegerMatrix& edge, const arma::vec& edge_length, const int n_tip, const int nsim, const double prop_state1, const int chunk_size, const bool return_sim, const int n_threads);
 RcppExport SEXP _fastphylosig_phylo_d_stream_cpp(SEXP observedSEXP, SEXP edgeSEXP, SEXP edge_lengthSEXP, SEXP n_tipSEXP, SEXP nsimSEXP, SEXP prop_state1SEXP, SEXP chunk_sizeSEXP, SEXP return_simSEXP, SEXP n_threadsSEXP) {
@@ -27,6 +51,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const bool >::type return_sim(return_simSEXP);
     Rcpp::traits::input_parameter< const int >::type n_threads(n_threadsSEXP);
     rcpp_result_gen = Rcpp::wrap(phylo_d_stream_cpp(observed, edge, edge_length, n_tip, nsim, prop_state1, chunk_size, return_sim, n_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// delta_warning_reason_cpp
+Rcpp::CharacterVector delta_warning_reason_cpp(const double delta, const Rcpp::List& d);
+RcppExport SEXP _fastphylosig_delta_warning_reason_cpp(SEXP deltaSEXP, SEXP dSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const double >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type d(dSEXP);
+    rcpp_result_gen = Rcpp::wrap(delta_warning_reason_cpp(delta, d));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -187,8 +222,165 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// heterogeneity_mk_prepare_cpp
+SEXP heterogeneity_mk_prepare_cpp(const Rcpp::List& core, const Rcpp::IntegerMatrix& rate_index, const arma::vec& rates);
+RcppExport SEXP _fastphylosig_heterogeneity_mk_prepare_cpp(SEXP coreSEXP, SEXP rate_indexSEXP, SEXP ratesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type core(coreSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix& >::type rate_index(rate_indexSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type rates(ratesSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_mk_prepare_cpp(core, rate_index, rates));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_mk_release_cpp
+void heterogeneity_mk_release_cpp(SEXP workspace);
+RcppExport SEXP _fastphylosig_heterogeneity_mk_release_cpp(SEXP workspaceSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< SEXP >::type workspace(workspaceSEXP);
+    heterogeneity_mk_release_cpp(workspace);
+    return R_NilValue;
+END_RCPP
+}
+// heterogeneity_mk_simulate_cpp
+Rcpp::IntegerMatrix heterogeneity_mk_simulate_cpp(SEXP workspace, const int nsim);
+RcppExport SEXP _fastphylosig_heterogeneity_mk_simulate_cpp(SEXP workspaceSEXP, SEXP nsimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type workspace(workspaceSEXP);
+    Rcpp::traits::input_parameter< const int >::type nsim(nsimSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_mk_simulate_cpp(workspace, nsim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_mk_loglik_bounds_cpp
+Rcpp::NumericMatrix heterogeneity_mk_loglik_bounds_cpp(SEXP workspace, const Rcpp::List& core, const Rcpp::IntegerMatrix& states);
+RcppExport SEXP _fastphylosig_heterogeneity_mk_loglik_bounds_cpp(SEXP workspaceSEXP, SEXP coreSEXP, SEXP statesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type workspace(workspaceSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type core(coreSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix& >::type states(statesSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_mk_loglik_bounds_cpp(workspace, core, states));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fast_ace_fit_prepare_cpp
+SEXP fast_ace_fit_prepare_cpp(const Rcpp::IntegerMatrix& edge, const arma::vec& edge_length, const Rcpp::IntegerVector& tip_state, const Rcpp::IntegerMatrix& rate_index, const int n_threads);
+RcppExport SEXP _fastphylosig_fast_ace_fit_prepare_cpp(SEXP edgeSEXP, SEXP edge_lengthSEXP, SEXP tip_stateSEXP, SEXP rate_indexSEXP, SEXP n_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix& >::type edge(edgeSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type edge_length(edge_lengthSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type tip_state(tip_stateSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix& >::type rate_index(rate_indexSEXP);
+    Rcpp::traits::input_parameter< const int >::type n_threads(n_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_ace_fit_prepare_cpp(edge, edge_length, tip_state, rate_index, n_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fast_ace_fit_deviance_cpp
+double fast_ace_fit_deviance_cpp(SEXP prepared, const arma::vec& par, const bool recovery_guard);
+RcppExport SEXP _fastphylosig_fast_ace_fit_deviance_cpp(SEXP preparedSEXP, SEXP parSEXP, SEXP recovery_guardSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type prepared(preparedSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type par(parSEXP);
+    Rcpp::traits::input_parameter< const bool >::type recovery_guard(recovery_guardSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_ace_fit_deviance_cpp(prepared, par, recovery_guard));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fast_ace_er_deviance_cpp
+double fast_ace_er_deviance_cpp(SEXP prepared, double rate);
+RcppExport SEXP _fastphylosig_fast_ace_er_deviance_cpp(SEXP preparedSEXP, SEXP rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type prepared(preparedSEXP);
+    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_ace_er_deviance_cpp(prepared, rate));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fast_ace_er_reference_cpp
+Rcpp::List fast_ace_er_reference_cpp(SEXP prepared);
+RcppExport SEXP _fastphylosig_fast_ace_er_reference_cpp(SEXP preparedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type prepared(preparedSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_ace_er_reference_cpp(prepared));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fast_ace_fit_update_cpp
+void fast_ace_fit_update_cpp(SEXP prepared, const Rcpp::IntegerVector& states);
+RcppExport SEXP _fastphylosig_fast_ace_fit_update_cpp(SEXP preparedSEXP, SEXP statesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type prepared(preparedSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type states(statesSEXP);
+    fast_ace_fit_update_cpp(prepared, states);
+    return R_NilValue;
+END_RCPP
+}
+// fast_ace_fit_recoveries_cpp
+double fast_ace_fit_recoveries_cpp(SEXP prepared);
+RcppExport SEXP _fastphylosig_fast_ace_fit_recoveries_cpp(SEXP preparedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type prepared(preparedSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_ace_fit_recoveries_cpp(prepared));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fast_ace_fit_stability_cpp
+Rcpp::NumericVector fast_ace_fit_stability_cpp(SEXP prepared);
+RcppExport SEXP _fastphylosig_fast_ace_fit_stability_cpp(SEXP preparedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type prepared(preparedSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_ace_fit_stability_cpp(prepared));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fast_ace_fit_liks_cpp
+Rcpp::List fast_ace_fit_liks_cpp(SEXP prepared, const arma::vec& par, const bool marginal, const bool recovery_guard);
+RcppExport SEXP _fastphylosig_fast_ace_fit_liks_cpp(SEXP preparedSEXP, SEXP parSEXP, SEXP marginalSEXP, SEXP recovery_guardSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type prepared(preparedSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type par(parSEXP);
+    Rcpp::traits::input_parameter< const bool >::type marginal(marginalSEXP);
+    Rcpp::traits::input_parameter< const bool >::type recovery_guard(recovery_guardSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_ace_fit_liks_cpp(prepared, par, marginal, recovery_guard));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fast_ace_fit_bytes_cpp
+double fast_ace_fit_bytes_cpp(SEXP prepared);
+RcppExport SEXP _fastphylosig_fast_ace_fit_bytes_cpp(SEXP preparedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type prepared(preparedSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_ace_fit_bytes_cpp(prepared));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fast_ace_fit_release_cpp
+void fast_ace_fit_release_cpp(SEXP prepared);
+RcppExport SEXP _fastphylosig_fast_ace_fit_release_cpp(SEXP preparedSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< SEXP >::type prepared(preparedSEXP);
+    fast_ace_fit_release_cpp(prepared);
+    return R_NilValue;
+END_RCPP
+}
 // fast_ace_discrete_deviance_cpp
-double fast_ace_discrete_deviance_cpp(const Rcpp::IntegerMatrix& edge, const arma::vec& edge_length, const Rcpp::IntegerVector& tip_state, const Rcpp::IntegerMatrix& rate_index, const arma::vec& par, const bool reuse_buffers);
+Rcpp::NumericVector fast_ace_discrete_deviance_cpp(const Rcpp::IntegerMatrix& edge, const arma::vec& edge_length, const Rcpp::IntegerVector& tip_state, const Rcpp::IntegerMatrix& rate_index, const arma::vec& par, const bool reuse_buffers);
 RcppExport SEXP _fastphylosig_fast_ace_discrete_deviance_cpp(SEXP edgeSEXP, SEXP edge_lengthSEXP, SEXP tip_stateSEXP, SEXP rate_indexSEXP, SEXP parSEXP, SEXP reuse_buffersSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -250,6 +442,239 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// heterogeneity_tree_map_cpp
+Rcpp::List heterogeneity_tree_map_cpp(const Rcpp::List& core, const Rcpp::IntegerVector& nodes, const Rcpp::IntegerVector& tip_ids, const Rcpp::IntegerVector& tip_offsets);
+RcppExport SEXP _fastphylosig_heterogeneity_tree_map_cpp(SEXP coreSEXP, SEXP nodesSEXP, SEXP tip_idsSEXP, SEXP tip_offsetsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type core(coreSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type nodes(nodesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type tip_ids(tip_idsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type tip_offsets(tip_offsetsSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_tree_map_cpp(core, nodes, tip_ids, tip_offsets));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_plan_cpp
+Rcpp::List heterogeneity_plan_cpp(const Rcpp::List& core, const Rcpp::CharacterVector& labels, SEXP requested_nodes, const int min_tips, const int max_tips, const double max_total_tips);
+RcppExport SEXP _fastphylosig_heterogeneity_plan_cpp(SEXP coreSEXP, SEXP labelsSEXP, SEXP requested_nodesSEXP, SEXP min_tipsSEXP, SEXP max_tipsSEXP, SEXP max_total_tipsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type core(coreSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type labels(labelsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type requested_nodes(requested_nodesSEXP);
+    Rcpp::traits::input_parameter< const int >::type min_tips(min_tipsSEXP);
+    Rcpp::traits::input_parameter< const int >::type max_tips(max_tipsSEXP);
+    Rcpp::traits::input_parameter< const double >::type max_total_tips(max_total_tipsSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_plan_cpp(core, labels, requested_nodes, min_tips, max_tips, max_total_tips));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_scan_cpp
+Rcpp::List heterogeneity_scan_cpp(const Rcpp::List& plan, const Rcpp::NumericMatrix& X, const std::string method, const int min_tips, const bool keep_cores, SEXP delta_control, const bool signal_test);
+RcppExport SEXP _fastphylosig_heterogeneity_scan_cpp(SEXP planSEXP, SEXP XSEXP, SEXP methodSEXP, SEXP min_tipsSEXP, SEXP keep_coresSEXP, SEXP delta_controlSEXP, SEXP signal_testSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type plan(planSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< const int >::type min_tips(min_tipsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type keep_cores(keep_coresSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type delta_control(delta_controlSEXP);
+    Rcpp::traits::input_parameter< const bool >::type signal_test(signal_testSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_scan_cpp(plan, X, method, min_tips, keep_cores, delta_control, signal_test));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_k_signal_cpp
+Rcpp::List heterogeneity_k_signal_cpp(const Rcpp::List& cores, const Rcpp::List& data, const Rcpp::LogicalVector& eligible, const int nsim, const int simulation_chunk);
+RcppExport SEXP _fastphylosig_heterogeneity_k_signal_cpp(SEXP coresSEXP, SEXP dataSEXP, SEXP eligibleSEXP, SEXP nsimSEXP, SEXP simulation_chunkSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type cores(coresSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::LogicalVector& >::type eligible(eligibleSEXP);
+    Rcpp::traits::input_parameter< const int >::type nsim(nsimSEXP);
+    Rcpp::traits::input_parameter< const int >::type simulation_chunk(simulation_chunkSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_k_signal_cpp(cores, data, eligible, nsim, simulation_chunk));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_bootstrap_summary_cpp
+Rcpp::List heterogeneity_bootstrap_summary_cpp(const std::vector<double>& draws, const double observed, const bool keep_null);
+RcppExport SEXP _fastphylosig_heterogeneity_bootstrap_summary_cpp(SEXP drawsSEXP, SEXP observedSEXP, SEXP keep_nullSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type draws(drawsSEXP);
+    Rcpp::traits::input_parameter< const double >::type observed(observedSEXP);
+    Rcpp::traits::input_parameter< const bool >::type keep_null(keep_nullSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_bootstrap_summary_cpp(draws, observed, keep_null));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_bootstrap_bounds_cpp
+Rcpp::List heterogeneity_bootstrap_bounds_cpp(const std::vector<double>& draws, const double observed);
+RcppExport SEXP _fastphylosig_heterogeneity_bootstrap_bounds_cpp(SEXP drawsSEXP, SEXP observedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type draws(drawsSEXP);
+    Rcpp::traits::input_parameter< const double >::type observed(observedSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_bootstrap_bounds_cpp(draws, observed));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_delta_flags_cpp
+Rcpp::IntegerVector heterogeneity_delta_flags_cpp(const Rcpp::List& full, const Rcpp::List& local);
+RcppExport SEXP _fastphylosig_heterogeneity_delta_flags_cpp(SEXP fullSEXP, SEXP localSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type full(fullSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type local(localSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_delta_flags_cpp(full, local));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_calibrate_cpp
+Rcpp::List heterogeneity_calibrate_cpp(const Rcpp::List& compiled, const double observed, const int nsim, const int simulation_chunk, const bool keep_null);
+RcppExport SEXP _fastphylosig_heterogeneity_calibrate_cpp(SEXP compiledSEXP, SEXP observedSEXP, SEXP nsimSEXP, SEXP simulation_chunkSEXP, SEXP keep_nullSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type compiled(compiledSEXP);
+    Rcpp::traits::input_parameter< const double >::type observed(observedSEXP);
+    Rcpp::traits::input_parameter< const int >::type nsim(nsimSEXP);
+    Rcpp::traits::input_parameter< const int >::type simulation_chunk(simulation_chunkSEXP);
+    Rcpp::traits::input_parameter< const bool >::type keep_null(keep_nullSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_calibrate_cpp(compiled, observed, nsim, simulation_chunk, keep_null));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_d_calibrate_cpp
+Rcpp::List heterogeneity_d_calibrate_cpp(const Rcpp::List& compiled, const Rcpp::List& data, const int d_nsim, const int nsim, const bool test, const bool keep_null);
+RcppExport SEXP _fastphylosig_heterogeneity_d_calibrate_cpp(SEXP compiledSEXP, SEXP dataSEXP, SEXP d_nsimSEXP, SEXP nsimSEXP, SEXP testSEXP, SEXP keep_nullSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type compiled(compiledSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< const int >::type d_nsim(d_nsimSEXP);
+    Rcpp::traits::input_parameter< const int >::type nsim(nsimSEXP);
+    Rcpp::traits::input_parameter< const bool >::type test(testSEXP);
+    Rcpp::traits::input_parameter< const bool >::type keep_null(keep_nullSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_d_calibrate_cpp(compiled, data, d_nsim, nsim, test, keep_null));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_nuisance_add_gamma_cpp
+Rcpp::NumericVector heterogeneity_nuisance_add_gamma_cpp(double lower, double upper, double gamma);
+RcppExport SEXP _fastphylosig_heterogeneity_nuisance_add_gamma_cpp(SEXP lowerSEXP, SEXP upperSEXP, SEXP gammaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< double >::type gamma(gammaSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_nuisance_add_gamma_cpp(lower, upper, gamma));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_nuisance_prepare_cpp
+SEXP heterogeneity_nuisance_prepare_cpp(const Rcpp::List& core, const Rcpp::IntegerMatrix& patterns, const Rcpp::IntegerMatrix& rate_index, const Rcpp::NumericMatrix& log_proposal, const Rcpp::LogicalVector& tail, const bool equal_rates);
+RcppExport SEXP _fastphylosig_heterogeneity_nuisance_prepare_cpp(SEXP coreSEXP, SEXP patternsSEXP, SEXP rate_indexSEXP, SEXP log_proposalSEXP, SEXP tailSEXP, SEXP equal_ratesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type core(coreSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix& >::type patterns(patternsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix& >::type rate_index(rate_indexSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type log_proposal(log_proposalSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::LogicalVector& >::type tail(tailSEXP);
+    Rcpp::traits::input_parameter< const bool >::type equal_rates(equal_ratesSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_nuisance_prepare_cpp(core, patterns, rate_index, log_proposal, tail, equal_rates));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_nuisance_release_cpp
+void heterogeneity_nuisance_release_cpp(SEXP pointer);
+RcppExport SEXP _fastphylosig_heterogeneity_nuisance_release_cpp(SEXP pointerSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< SEXP >::type pointer(pointerSEXP);
+    heterogeneity_nuisance_release_cpp(pointer);
+    return R_NilValue;
+END_RCPP
+}
+// heterogeneity_nuisance_mixture_cpp
+Rcpp::NumericMatrix heterogeneity_nuisance_mixture_cpp(const Rcpp::List& components);
+RcppExport SEXP _fastphylosig_heterogeneity_nuisance_mixture_cpp(SEXP componentsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type components(componentsSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_nuisance_mixture_cpp(components));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_nuisance_box_cpp
+Rcpp::List heterogeneity_nuisance_box_cpp(SEXP pointer, const Rcpp::NumericVector& lower, const Rcpp::NumericVector& upper, const double gamma, const bool keep_likelihood, const int boundary_power, const bool constrain_rows, const int correlation);
+RcppExport SEXP _fastphylosig_heterogeneity_nuisance_box_cpp(SEXP pointerSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP gammaSEXP, SEXP keep_likelihoodSEXP, SEXP boundary_powerSEXP, SEXP constrain_rowsSEXP, SEXP correlationSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type pointer(pointerSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< const double >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< const bool >::type keep_likelihood(keep_likelihoodSEXP);
+    Rcpp::traits::input_parameter< const int >::type boundary_power(boundary_powerSEXP);
+    Rcpp::traits::input_parameter< const bool >::type constrain_rows(constrain_rowsSEXP);
+    Rcpp::traits::input_parameter< const int >::type correlation(correlationSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_nuisance_box_cpp(pointer, lower, upper, gamma, keep_likelihood, boundary_power, constrain_rows, correlation));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_ard_boundary_cpp
+Rcpp::List heterogeneity_ard_boundary_cpp(const Rcpp::NumericMatrix& lower, const Rcpp::NumericMatrix& upper, double time, const int boundary_power);
+RcppExport SEXP _fastphylosig_heterogeneity_ard_boundary_cpp(SEXP lowerSEXP, SEXP upperSEXP, SEXP timeSEXP, SEXP boundary_powerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< double >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type boundary_power(boundary_powerSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_ard_boundary_cpp(lower, upper, time, boundary_power));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_count_simulate_cpp
+Rcpp::IntegerVector heterogeneity_count_simulate_cpp(const int k, const Rcpp::LogicalVector& observed);
+RcppExport SEXP _fastphylosig_heterogeneity_count_simulate_cpp(SEXP kSEXP, SEXP observedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::LogicalVector& >::type observed(observedSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_count_simulate_cpp(k, observed));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_count_loglik_cpp
+Rcpp::NumericMatrix heterogeneity_count_loglik_cpp(const Rcpp::IntegerMatrix& x, const int k);
+RcppExport SEXP _fastphylosig_heterogeneity_count_loglik_cpp(SEXP xSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_count_loglik_cpp(x, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterogeneity_delta_between_cpp
+double heterogeneity_delta_between_cpp(const Rcpp::NumericVector& local);
+RcppExport SEXP _fastphylosig_heterogeneity_delta_between_cpp(SEXP localSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type local(localSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_delta_between_cpp(local));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fast_k_tree_permutation_cpp
 Rcpp::List fast_k_tree_permutation_cpp(const Rcpp::List& compiled_tree, const Rcpp::NumericMatrix& X, const int nsim, SEXP permutations, const int trait_chunk, const bool return_sim, const bool include_observed, const int n_threads, const int simulation_chunk);
 RcppExport SEXP _fastphylosig_fast_k_tree_permutation_cpp(SEXP compiled_treeSEXP, SEXP XSEXP, SEXP nsimSEXP, SEXP permutationsSEXP, SEXP trait_chunkSEXP, SEXP return_simSEXP, SEXP include_observedSEXP, SEXP n_threadsSEXP, SEXP simulation_chunkSEXP) {
@@ -299,6 +724,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// heterogeneity_bm_k_cpp
+Rcpp::NumericVector heterogeneity_bm_k_cpp(const Rcpp::List& compiled_tree, const int nsim, const int simulation_chunk);
+RcppExport SEXP _fastphylosig_heterogeneity_bm_k_cpp(SEXP compiled_treeSEXP, SEXP nsimSEXP, SEXP simulation_chunkSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type compiled_tree(compiled_treeSEXP);
+    Rcpp::traits::input_parameter< const int >::type nsim(nsimSEXP);
+    Rcpp::traits::input_parameter< const int >::type simulation_chunk(simulation_chunkSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_bm_k_cpp(compiled_tree, nsim, simulation_chunk));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fast_lambda_tree_fixed_cpp
 Rcpp::List fast_lambda_tree_fixed_cpp(const Rcpp::List& compiled_tree, const Rcpp::NumericMatrix& X, const Rcpp::NumericVector& lambda, const int trait_chunk, const int n_threads);
 RcppExport SEXP _fastphylosig_fast_lambda_tree_fixed_cpp(SEXP compiled_treeSEXP, SEXP XSEXP, SEXP lambdaSEXP, SEXP trait_chunkSEXP, SEXP n_threadsSEXP) {
@@ -333,6 +771,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// heterogeneity_lambda_calibrate_cpp
+Rcpp::List heterogeneity_lambda_calibrate_cpp(const Rcpp::List& compiled, const Rcpp::List& data, const double observed, const int nsim, const bool keep_null, const bool reml, const double lambda_fixed);
+RcppExport SEXP _fastphylosig_heterogeneity_lambda_calibrate_cpp(SEXP compiledSEXP, SEXP dataSEXP, SEXP observedSEXP, SEXP nsimSEXP, SEXP keep_nullSEXP, SEXP remlSEXP, SEXP lambda_fixedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type compiled(compiledSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< const double >::type observed(observedSEXP);
+    Rcpp::traits::input_parameter< const int >::type nsim(nsimSEXP);
+    Rcpp::traits::input_parameter< const bool >::type keep_null(keep_nullSEXP);
+    Rcpp::traits::input_parameter< const bool >::type reml(remlSEXP);
+    Rcpp::traits::input_parameter< const double >::type lambda_fixed(lambda_fixedSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterogeneity_lambda_calibrate_cpp(compiled, data, observed, nsim, keep_null, reml, lambda_fixed));
+    return rcpp_result_gen;
+END_RCPP
+}
 // group_na_masks_cpp
 Rcpp::List group_na_masks_cpp(SEXP present);
 RcppExport SEXP _fastphylosig_group_na_masks_cpp(SEXP presentSEXP) {
@@ -362,7 +817,6 @@ Rcpp::List tree_core_validate_cpp(SEXP edge, SEXP edge_length, SEXP n_tip);
 RcppExport SEXP _fastphylosig_tree_core_validate_cpp(SEXP edgeSEXP, SEXP edge_lengthSEXP, SEXP n_tipSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type edge(edgeSEXP);
     Rcpp::traits::input_parameter< SEXP >::type edge_length(edge_lengthSEXP);
     Rcpp::traits::input_parameter< SEXP >::type n_tip(n_tipSEXP);
@@ -372,7 +826,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_fastphylosig_canonical_order_bytes_cpp", (DL_FUNC) &_fastphylosig_canonical_order_bytes_cpp, 1},
+    {"_fastphylosig_canonical_tree_graph_cpp", (DL_FUNC) &_fastphylosig_canonical_tree_graph_cpp, 5},
     {"_fastphylosig_phylo_d_stream_cpp", (DL_FUNC) &_fastphylosig_phylo_d_stream_cpp, 9},
+    {"_fastphylosig_delta_warning_reason_cpp", (DL_FUNC) &_fastphylosig_delta_warning_reason_cpp, 2},
     {"_fastphylosig_delta_diagnostics_cpp", (DL_FUNC) &_fastphylosig_delta_diagnostics_cpp, 2},
     {"_fastphylosig_fast_k_chol_batch_cpp", (DL_FUNC) &_fastphylosig_fast_k_chol_batch_cpp, 3},
     {"_fastphylosig_fast_k_chol_permutation_cpp", (DL_FUNC) &_fastphylosig_fast_k_chol_permutation_cpp, 5},
@@ -384,15 +841,49 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fastphylosig_phylo_d_sums_cpp", (DL_FUNC) &_fastphylosig_phylo_d_sums_cpp, 5},
     {"_fastphylosig_brownian_threshold_cpp", (DL_FUNC) &_fastphylosig_brownian_threshold_cpp, 2},
     {"_fastphylosig_brownian_tree_threshold_cpp", (DL_FUNC) &_fastphylosig_brownian_tree_threshold_cpp, 5},
+    {"_fastphylosig_heterogeneity_mk_prepare_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_mk_prepare_cpp, 3},
+    {"_fastphylosig_heterogeneity_mk_release_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_mk_release_cpp, 1},
+    {"_fastphylosig_heterogeneity_mk_simulate_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_mk_simulate_cpp, 2},
+    {"_fastphylosig_heterogeneity_mk_loglik_bounds_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_mk_loglik_bounds_cpp, 3},
+    {"_fastphylosig_fast_ace_fit_prepare_cpp", (DL_FUNC) &_fastphylosig_fast_ace_fit_prepare_cpp, 5},
+    {"_fastphylosig_fast_ace_fit_deviance_cpp", (DL_FUNC) &_fastphylosig_fast_ace_fit_deviance_cpp, 3},
+    {"_fastphylosig_fast_ace_er_deviance_cpp", (DL_FUNC) &_fastphylosig_fast_ace_er_deviance_cpp, 2},
+    {"_fastphylosig_fast_ace_er_reference_cpp", (DL_FUNC) &_fastphylosig_fast_ace_er_reference_cpp, 1},
+    {"_fastphylosig_fast_ace_fit_update_cpp", (DL_FUNC) &_fastphylosig_fast_ace_fit_update_cpp, 2},
+    {"_fastphylosig_fast_ace_fit_recoveries_cpp", (DL_FUNC) &_fastphylosig_fast_ace_fit_recoveries_cpp, 1},
+    {"_fastphylosig_fast_ace_fit_stability_cpp", (DL_FUNC) &_fastphylosig_fast_ace_fit_stability_cpp, 1},
+    {"_fastphylosig_fast_ace_fit_liks_cpp", (DL_FUNC) &_fastphylosig_fast_ace_fit_liks_cpp, 4},
+    {"_fastphylosig_fast_ace_fit_bytes_cpp", (DL_FUNC) &_fastphylosig_fast_ace_fit_bytes_cpp, 1},
+    {"_fastphylosig_fast_ace_fit_release_cpp", (DL_FUNC) &_fastphylosig_fast_ace_fit_release_cpp, 1},
     {"_fastphylosig_fast_ace_discrete_deviance_cpp", (DL_FUNC) &_fastphylosig_fast_ace_discrete_deviance_cpp, 6},
     {"_fastphylosig_fast_ace_discrete_liks_cpp", (DL_FUNC) &_fastphylosig_fast_ace_discrete_liks_cpp, 7},
     {"_fastphylosig_delta_entropy_cpp", (DL_FUNC) &_fastphylosig_delta_entropy_cpp, 2},
     {"_fastphylosig_delta_mcmc_cpp", (DL_FUNC) &_fastphylosig_delta_mcmc_cpp, 8},
+    {"_fastphylosig_heterogeneity_tree_map_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_tree_map_cpp, 4},
+    {"_fastphylosig_heterogeneity_plan_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_plan_cpp, 6},
+    {"_fastphylosig_heterogeneity_scan_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_scan_cpp, 7},
+    {"_fastphylosig_heterogeneity_k_signal_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_k_signal_cpp, 5},
+    {"_fastphylosig_heterogeneity_bootstrap_summary_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_bootstrap_summary_cpp, 3},
+    {"_fastphylosig_heterogeneity_bootstrap_bounds_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_bootstrap_bounds_cpp, 2},
+    {"_fastphylosig_heterogeneity_delta_flags_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_delta_flags_cpp, 2},
+    {"_fastphylosig_heterogeneity_calibrate_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_calibrate_cpp, 5},
+    {"_fastphylosig_heterogeneity_d_calibrate_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_d_calibrate_cpp, 6},
+    {"_fastphylosig_heterogeneity_nuisance_add_gamma_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_nuisance_add_gamma_cpp, 3},
+    {"_fastphylosig_heterogeneity_nuisance_prepare_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_nuisance_prepare_cpp, 6},
+    {"_fastphylosig_heterogeneity_nuisance_release_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_nuisance_release_cpp, 1},
+    {"_fastphylosig_heterogeneity_nuisance_mixture_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_nuisance_mixture_cpp, 1},
+    {"_fastphylosig_heterogeneity_nuisance_box_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_nuisance_box_cpp, 8},
+    {"_fastphylosig_heterogeneity_ard_boundary_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_ard_boundary_cpp, 4},
+    {"_fastphylosig_heterogeneity_count_simulate_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_count_simulate_cpp, 2},
+    {"_fastphylosig_heterogeneity_count_loglik_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_count_loglik_cpp, 2},
+    {"_fastphylosig_heterogeneity_delta_between_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_delta_between_cpp, 1},
     {"_fastphylosig_fast_k_tree_permutation_cpp", (DL_FUNC) &_fastphylosig_fast_k_tree_permutation_cpp, 9},
     {"_fastphylosig_k_strategy_cpp", (DL_FUNC) &_fastphylosig_k_strategy_cpp, 7},
     {"_fastphylosig_fast_k_tree_batch_cpp", (DL_FUNC) &_fastphylosig_fast_k_tree_batch_cpp, 3},
+    {"_fastphylosig_heterogeneity_bm_k_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_bm_k_cpp, 3},
     {"_fastphylosig_fast_lambda_tree_fixed_cpp", (DL_FUNC) &_fastphylosig_fast_lambda_tree_fixed_cpp, 5},
     {"_fastphylosig_fast_lambda_tree_optimize_cpp", (DL_FUNC) &_fastphylosig_fast_lambda_tree_optimize_cpp, 9},
+    {"_fastphylosig_heterogeneity_lambda_calibrate_cpp", (DL_FUNC) &_fastphylosig_heterogeneity_lambda_calibrate_cpp, 7},
     {"_fastphylosig_group_na_masks_cpp", (DL_FUNC) &_fastphylosig_group_na_masks_cpp, 1},
     {"_fastphylosig_compile_tree_cpp", (DL_FUNC) &_fastphylosig_compile_tree_cpp, 3},
     {"_fastphylosig_tree_core_validate_cpp", (DL_FUNC) &_fastphylosig_tree_core_validate_cpp, 3},

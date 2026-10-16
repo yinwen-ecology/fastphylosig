@@ -434,17 +434,21 @@ Rcpp::List compile_tree_cpp(SEXP edge, SEXP edge_length, SEXP n_tip) {
   return compiled_list(parse_and_compile(edge, edge_length, n_tip));
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng = false)]]
 Rcpp::List tree_core_validate_cpp(SEXP edge, SEXP edge_length, SEXP n_tip) {
   try {
     const ParsedTree tree = parse_and_compile(edge, edge_length, n_tip);
+    bool binary = true;
+    for (int node = tree.n_tip + 1; node <= tree.n_total; ++node)
+      binary = binary && tree.children[node].size() == 2;
     return Rcpp::List::create(
       Rcpp::_["valid"] = true,
       Rcpp::_["message"] = "",
       Rcpp::_["n_tip"] = tree.n_tip,
       Rcpp::_["n_node"] = tree.n_node,
       Rcpp::_["n_total"] = tree.n_total,
-      Rcpp::_["root"] = tree.root
+      Rcpp::_["root"] = tree.root,
+      Rcpp::_["binary"] = binary
     );
   } catch (const std::exception& ex) {
     return Rcpp::List::create(

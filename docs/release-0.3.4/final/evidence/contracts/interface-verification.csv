@@ -1,0 +1,15 @@
+"export","signature_and_defaults_identical"
+"cache_info",TRUE
+"check_tree",TRUE
+"fast_ace",TRUE
+"fast_d",TRUE
+"fast_delta",TRUE
+"fast_hetero",TRUE
+"fast_k",TRUE
+"fast_lambda",TRUE
+"fast_signal",TRUE
+"match_phylo_data",TRUE
+"match_tree_data",TRUE
+"plot_signal",TRUE
+"prepare_tree",TRUE
+"resolve_tree",TRUE

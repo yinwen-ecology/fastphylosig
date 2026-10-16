@@ -1,0 +1,13 @@
+"case","result","RNG_state","next_uniform","next_normal"
+"K_FALSE",TRUE,TRUE,TRUE,TRUE
+"K_TRUE",TRUE,TRUE,TRUE,TRUE
+"lambda_FALSE",TRUE,TRUE,TRUE,TRUE
+"lambda_TRUE",TRUE,TRUE,TRUE,TRUE
+"D_FALSE",TRUE,TRUE,TRUE,TRUE
+"D_TRUE",TRUE,TRUE,TRUE,TRUE
+"Delta_ER_description",TRUE,TRUE,TRUE,TRUE
+"Delta_ER_plugin",TRUE,TRUE,TRUE,TRUE
+"Delta_ER_nuisance",TRUE,TRUE,TRUE,TRUE
+"Delta_ARD_description",TRUE,TRUE,TRUE,TRUE
+"Delta_ARD_plugin",TRUE,TRUE,TRUE,TRUE
+"Delta_ARD_nuisance",TRUE,TRUE,TRUE,TRUE

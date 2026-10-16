@@ -54,7 +54,7 @@ jobs:
             exit 1
           fi
           log_file="$RUNNER_TEMP/R-CMD-check-no-openmp.log"
-          R CMD check --no-manual --no-multiarch "${tarballs[0]}" 2>&1 | tee "$log_file"
+          R CMD check --as-cran --no-manual --no-multiarch "${tarballs[0]}" 2>&1 | tee "$log_file"
           if grep -E -- '(^|[[:space:]])(-fopenmp|-qopenmp|-openmp|/openmp)([[:space:]]|$)' "$log_file"; then
             echo "An OpenMP compiler flag was present in the disabled build."
             exit 1

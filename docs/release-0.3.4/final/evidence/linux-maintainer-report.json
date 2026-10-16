@@ -1,0 +1,12 @@
+{
+  "package": "fastphylosig",
+  "version": "0.3.4",
+  "status": "pass_reported_by_maintainer",
+  "source": "Direct maintainer statement in the release-preparation conversation on 2026-10-16",
+  "log_independently_reviewed_locally": false,
+  "R_version": null,
+  "compiler_version": null,
+  "exact_check_flags": null,
+  "checked_archive_sha256": null,
+  "other_platforms_required_for_this_release": false
+}

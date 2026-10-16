@@ -38,9 +38,7 @@ topology, tip labels, or branch-length paths.
 }
 \seealso{\code{check_tree}, \code{prepare_tree}}
 \examples{
-\dontrun{
 tree <- ape::rtree(8)
 tree <- resolve_tree(tree, signal = "K")
 attr(tree, "fastphylosig_resolution")
-}
 }

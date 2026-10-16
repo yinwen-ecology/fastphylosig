@@ -1,0 +1,16 @@
+[
+  {
+    "path": "src/heterogeneity_binary.cpp",
+    "release_034_sha256": "7B66BEB0761A56F61984A916C0B99CA01664EC1848110C8AFD9E441A85D237F8",
+    "performance_candidate_version": "0.3.3.9021",
+    "performance_candidate_sha256": "7B66BEB0761A56F61984A916C0B99CA01664EC1848110C8AFD9E441A85D237F8",
+    "byte_identical": true
+  },
+  {
+    "path": "src/lambda_tree.cpp",
+    "release_034_sha256": "C111C32C41AE4A68349A60ACB0720770604545420DA952ACA5A58767302D31F5",
+    "performance_candidate_version": "0.3.3.9021",
+    "performance_candidate_sha256": "C111C32C41AE4A68349A60ACB0720770604545420DA952ACA5A58767302D31F5",
+    "byte_identical": true
+  }
+]

@@ -3,11 +3,95 @@
 `fastphylosig` 用于计算连续、二元和分类性状的系统发育信号。多数分析只需
 使用 `fast_signal()`；需要逐步检查或调整方法参数时，再使用后面的专业函数。
 
+## 系统发育信号异质性（0.3.4）
+
+0.3.4 本地源码使用 `fast_hetero()`，此前开发阶段的长名称已移除。
+它在自动选取的互不重叠子树
+或指定节点的子树上计算 K／lambda／二元 D／多状态 Δ，并报告各类群的样本量、
+缺失值、状态组成及全树覆盖率。重点是描述信号强弱在树上的分布。
+异质性参考检验作为可选补充，与普通信号检验分别报告。
+已有 0.3.1 压缩包尚不包含此功能。
+
+K 使用 BM 参考；λ 使用共同局部冠群参数的近似参考。D 的条件 ER 异质性检验为实验性；Δ 推荐局部/总体描述，异质性检验仅作显式实验调用。原有普通信号检验不受此范围限制。
+
+```r
+h <- fast_hetero(
+  tree, trait, method = "K", min_tips = 20, max_tips = 200,
+  test = TRUE, nsim = 999, overall_test = TRUE, progress = FALSE
+)
+h$clades
+h$heterogeneity
+h$overall                              # 整棵树的信号值和信号检验
+h$selection$coverage
+plot(h)
+plot(h, tree = tree, node_labels = TRUE) # 在原树上着色
+plot(h, tree = tree, type = "fan")      # 扇形树
+
+hl <- fast_hetero(tree, trait, method = "lambda",
+                 test = TRUE, nsim = 999, overall_test = TRUE, progress = FALSE)
+hl$heterogeneity                       # SD(lambda)、共享 lambda、异质性 P 值
+plot(hl, tree = tree)
+
+# D 条件 ER 异质性检验：实验性；原有普通 D 信号检验不受此限制。
+hd <- fast_hetero(tree, binary_trait, method = "D", min_tips = 50,
+                 test = TRUE, nsim = 999, d_nsim = 1000,
+                 overall_test = TRUE, progress = FALSE)
+hd$heterogeneity                       # SD(D)、共用 ER 速率、异质性 P 值
+plot(hd, tree = tree)
+
+# 多状态性状：总体与局部信号、局部/总体偏差、树图。
+hdelta <- fast_hetero(tree, categorical_trait, method = "Delta",
+                     overall_test = TRUE, overall_nsim = 999,
+                     delta_control = list(model = "ER"), progress = FALSE)
+hdelta$clades[, c("node", "estimate", "n_states", "log_ratio_overall")]
+hdelta$clades$state_counts              # 保留原状态标签
+hdelta$heterogeneity                   # SD(log Δ)、局部/总体 RMS 偏差
+plot(hdelta, tree = tree)
+
+# 需要各子树的普通信号检验时，加 clade_test = TRUE。
+# 可选补充：共同 Mk 模型下的局部/总体 Δ 偏差参考检验。
+# 以下为显式实验性 Δ 异质性检验调用。
+hdelta_test <- fast_hetero(tree, categorical_trait, method = "Delta",
+                     nodes = hdelta$selection$nodes, test = TRUE, nsim = 999,
+                     delta_control = list(model = "ER"), progress = FALSE)
+hdelta_test$heterogeneity$P_heterogeneity
+```
+
+`P_BM` 检验 K 的离散程度是否大于各子树在 BM 下通常产生的离散程度。
+它有明确的 BM 前提；不能解释为任意演化模型下的“信号相同”检验。
+灰色区间是 BM 参考包络，不是 K 的置信区间。
+树图的颜色表示类群内部的估计；K／Δ 默认采用对数色阶，lambda／D 采用原值色阶。
+D 默认反转调色板，使较强信号的颜色方向与其他指标一致。
+灰色表示未选择或无法估计的位置，嵌套选择显示更内层类群的估计。
+`P_heterogeneity` 是统一的异质性检验字段，K 的 `P_BM` 继续保留。
+lambda 以共同局部冠群 lambda 参数的近似高斯模型为参考；D 以共用转移速率的二状态 ER
+模型为参考，并以每个有效类群的观测状态数量为条件。二者为参数自助法
+近似检验；不能解释为所有演化模型下通用的“信号相同”检验。
+`d_nsim` 控制 D 的随机／BM 标准化次数，`nsim` 控制异质性模拟次数。
+模拟保留各类群的状态比例；对应的 D 标准化均值在观测与模拟之间复用。
+图上分别标注整棵树的信号值与检验、类群间离散度与异质性检验。
+`overall_test = TRUE` 会计算整棵树的信号及检验：K 用 tip 随机化，lambda
+用相对于 lambda = 0 的似然比检验；D 显示随机关联与 BM 阈值模型两个
+信号 P 值。它们不等同于异质性检验。
+仅需总体信号值时用 `overall = TRUE`；两者默认关闭，避免大型树额外计算。
+Δ 的 `test = TRUE` 自动计算总体估计；检验统计量为
+`RMS(log(Δ_local / Δ_overall))`，不是 SD(log Δ)，也不是速率异质性检验。
+共同 ER／ARD 模型在原树上拟合，根状态采用均匀混合，缺失 tips 在似然中积分。
+模拟整棵树后，按原缺失模式重新估计各子树和总体 Δ。它是本包新增的近似参考
+检验，尚没有全面的误报率／功效校准。若任何模拟估计失败，P 值为 NA，
+并报告 `nsim_successful`、`status`、`message`；不删除失败模拟后继续算 P。
+检查观测 MCMC 的 ESS、split R-hat、MCSE_Delta，以及模拟的
+`nsim_MCMC_warning`。Δ 的普通总体和局部信号检验仍是 tip 随机化。
+单状态子树标为不可估计，不赋值为 0；小子树和不同状态组成的比较需要谨慎。
+不同类群的信号 P 值一显著一不显著，不等于两者信号显著不同。
+绘图只显示已计算的结果，不运行检验。`show_summary = FALSE` 可隐藏统计标注。
+详见[方法、PVR 局部解释度及限制](docs/signal-heterogeneity-zh.md)。
+
 ## 安装
 
 ```r
-# 从 GitHub v0.3.1 Release 下载源码包；安装需要现有 C++ 工具链。
-install.packages("fastphylosig_0.3.1.tar.gz", repos = NULL, type = "source")
+# 安装本地构建的 0.3.4 源码包（需要 C++ 工具链）
+install.packages("fastphylosig_0.3.4.tar.gz", repos = NULL, type = "source")
 library(fastphylosig)
 ```
 
@@ -144,6 +228,12 @@ context 可以通过 `saveRDS()` 保存，并在另一个 R 会话中用 `readRD
 
 ## 推断与诊断
 
+0.3.2.9000 将 Delta 修正为后验 `mean(beta/alpha)`，并加入对数正态提议的
+Hastings 密度比。估计、检验与 RNG 轨迹会与旧版不同。新增 `ESS_Delta` 和
+`split_Rhat_Delta`，`MCSE_Delta` 直接评价比值序列的均值误差。
+`fast_hetero()` 的切割、总体检验、异质性检验及其校准边界见
+[完整指南](inst/HETERO_GUIDE_zh.md)。
+
 K 随机化检验支持显式置换矩阵、分块计算和可选的零分布保存。D 分别报告
 随机零模型和 Brownian 零模型的 P 值与 Bernoulli Monte Carlo 标准误
 `MCSE_P_random`/`MCSE_P_Brownian`，分母为各自有限且成功的模拟数；
@@ -162,6 +252,21 @@ permutation P 值，也不保存 null。`test = TRUE` 时，`MCSE_P` 使用有�
 2--19 个物种的性状会汇总为一次批量警告。解释结果时应联合检查 ESS、split R-hat、
 `MCSE_Delta` 以及在存在时的 `MCSE_P`。警告不会自动重跑或延长链。
 
+## 支系间信号与系统发育保守性
+
+`fast_hetero()` 默认 `test = FALSE`。推荐对 Δ 使用
+`test = FALSE, overall = TRUE`，描述各支系及整树的信号；`overall_test = TRUE`
+仍可计算原有整树信号检验。Δ 异质性检验已移出推荐流程，显式研究调用保留。
+
+局部信号不同可以表述为“在所分析尺度上，不同支系表现出不同程度的近缘相似
+格局（系统发育保守性）”，并报告指标、样本量和状态组成。这个格局描述不要求
+先获得异质性 P；它自身不识别稳定选择、生态位保守过程或低演化速率。
+
+K 的可选 P 以 BM 为参考；λ 的可选 P 近似检验各冠群共享局部 λ，不能解释为
+整树共同 λ 的直接检验。不同冠群年龄及缺失后根节点移动会改变 λ 的尺度。
+D 的可选异质性 P 是给定状态计数的共同对称 ER 实验性检验。
+推荐切割、零假设、结果表和可执行示例见 [完整指南](inst/HETERO_GUIDE_zh.md)。
+
 ## 可重复性与性能
 
 1. 多个性状使用矩阵一次传入，避免在 R 中逐列循环。
@@ -174,6 +279,13 @@ permutation P 值，也不保存 null。`test = TRUE` 时，`MCSE_P` 使用有�
 要复现并行随机计算，需同时固定随机种子、显式模拟输入（如有）和 `ncores`。
 改变 Delta 的进程数会重新分配并行随机数流，不能保证零分布及其 P/MCSE 逐次一致。
 显式置换/状态矩阵可固定对应的随机化步骤，但 Delta MCMC 本身仍是随机的。
+
+Delta 与 `fast_hetero(method = "Delta")` 的大型 ACE 拟合默认最多用两个 OpenMP
+线程批量计算未缓存枝长的指数向量，并与完全相同枝长的精确缓存配合使用。
+是否启用并行取决于未缓存的计算量；剪枝累积、优化器和 MCMC 的执行顺序保持不变。
+`options(fastphylosig.ace_threads = 1L)` 可强制单线程；`0L` 恢复自动选择，正整数
+可请求更多线程，实际受 OpenMP 运行时上限约束。小子树、无 OpenMP 的构建和 PSOCK
+置换子进程内的拟合使用单线程。增加线程会占用更多 CPU；这个选项不重新分配随机数流。
 
 ## 绘图
 
