@@ -6,29 +6,39 @@
     <meta name="description" content="{{ page.description | default: site.description | escape }}">
     <title>{% if page.title %}{{ page.title | escape }} · {% endif %}fastphylosig</title>
     <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+    {% if page.alternate_url %}
+    <link rel="alternate" hreflang="{{ page.alternate_lang }}" href="{{ page.alternate_url | relative_url }}">
+    {% endif %}
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">{% if page.lang == 'zh-CN' %}跳到正文{% else %}Skip to content{% endif %}</a>
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="site-brand" href="{{ '/' | relative_url }}" aria-label="fastphylosig home">fastphylosig</a>
+        <a class="site-brand" href="{{ page.home_url | default: '/' | relative_url }}" aria-label="fastphylosig home">fastphylosig</a>
         <nav class="site-nav" aria-label="Project links">
           <a href="https://github.com/yinwen-ecology/fastphylosig">GitHub</a>
-          <a href="https://github.com/yinwen-ecology/fastphylosig/issues">Issues</a>
+          <a href="https://github.com/yinwen-ecology/fastphylosig/issues">{% if page.lang == 'zh-CN' %}问题反馈{% else %}Issues{% endif %}</a>
+          {% if page.lang == 'zh-CN' %}
+          <a href="{{ '/fast-hetero-case-zh.html' | relative_url }}">fast_hetero 案例</a>
+          {% else %}
           <a href="{{ '/fast-hetero-case.html' | relative_url }}">fast_hetero case</a>
-          <a href="https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4">v0.3.4 release</a>
+          {% endif %}
+          <a href="https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4">{% if page.lang == 'zh-CN' %}v0.3.4 发布版{% else %}v0.3.4 release{% endif %}</a>
+          {% if page.alternate_url %}
+          <a class="language-switch" href="{{ page.alternate_url | relative_url }}" lang="{{ page.alternate_lang }}" hreflang="{{ page.alternate_lang }}">{{ page.alternate_label }}</a>
+          {% endif %}
         </nav>
       </div>
     </header>
 
-    <main id="main-content" class="{% if page.url == '/' or page.url == '/index.html' %}home-page{% else %}document-page{% endif %} {{ page.page_class }}">
+    <main id="main-content" class="{% if page.url == '/' or page.url == '/index.html' or page.url == '/index-zh.html' %}home-page{% else %}document-page{% endif %} {{ page.page_class }}">
       {{ content }}
     </main>
 
     <footer class="site-footer">
       <div class="site-footer__inner">
-        <span>fastphylosig · phylogenetic signal statistics for R</span>
-        <a href="https://github.com/yinwen-ecology/fastphylosig">Source and documentation</a>
+        <span>fastphylosig · {% if page.lang == 'zh-CN' %}R 系统发育信号分析{% else %}phylogenetic signal statistics for R{% endif %}</span>
+        <a href="https://github.com/yinwen-ecology/fastphylosig">{% if page.lang == 'zh-CN' %}源码与文档{% else %}Source and documentation{% endif %}</a>
       </div>
     </footer>
   </body>

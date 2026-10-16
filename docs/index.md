@@ -2,6 +2,11 @@
 layout: default
 title: Fast phylogenetic signal analysis in R
 description: fastphylosig 0.3.4 measures phylogenetic signal and compares local and whole-tree patterns with fast_hetero().
+lang: en
+home_url: /
+alternate_url: /index-zh.html
+alternate_lang: zh-CN
+alternate_label: 中文
 ---
 
 <nav class="page-jumps" aria-label="Page sections">
@@ -60,7 +65,9 @@ Eight crowns, three trait types and four signal measures. Follow the same nodes 
 
 K uses a BM dispersion reference. Lambda's common-local-crown reference is approximate. D's heterogeneity extension remains experimental; Delta is recommended for local/overall description and diagnostics. Compare conservatism patterns at the scale of your biological question.
 
-[Read the fast_hetero() case study (中文)]({{ '/fast-hetero-case.html' | relative_url }}){: .button-link}
+[Read the fast_hetero() case study]({{ '/fast-hetero-case.html' | relative_url }}){: .button-link}
+
+[中文案例]({{ '/fast-hetero-case-zh.html' | relative_url }}) · [Technical workflow]({{ '/fast-hetero-case.html' | relative_url }}#workflow)
 
 </div>
 <figure>
@@ -70,6 +77,11 @@ K uses a BM dispersion reference. Lambda's common-local-crown reference is appro
   <figcaption>Native <code>plot()</code> output from the case study; all numbers, diagnostics, code and data are available on the case page.</figcaption>
 </figure>
 </div>
+
+<figure class="roadmap-figure hetero-roadmap">
+  <a href="{{ '/fast-hetero-roadmap.svg' | relative_url }}" aria-label="Open the fast_hetero technical workflow"><img src="{{ '/fast-hetero-roadmap.svg' | relative_url }}" alt="fast_hetero technical workflow, from tree compilation and crown selection through shared C++ kernels to local and whole-tree results, optional reference tests and native plots."></a>
+  <figcaption><code>fast_hetero()</code> workflow: select crowns, reuse the method kernels, then combine local estimates, optional whole-tree analysis and diagnostics. <a href="{{ '/fast-hetero-case.html' | relative_url }}#workflow">Follow the workflow in the case study</a> · <a href="{{ '/fast-hetero-roadmap-zh.svg' | relative_url }}">中文路线图</a></figcaption>
+</figure>
 
 ## Matched runtime comparison {#speed}
 

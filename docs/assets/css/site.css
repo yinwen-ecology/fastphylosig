@@ -74,6 +74,7 @@ img { max-width: 100%; height: auto; }
 .site-nav { display: flex; flex-wrap: wrap; gap: .35rem 1.2rem; }
 .site-nav a { color: #e1eff8; font-size: .93rem; text-decoration: none; }
 .site-nav a:hover { color: #fff; text-decoration: underline; }
+.site-nav .language-switch { padding-inline: .55rem; border: 1px solid #708fa5; border-radius: .3rem; }
 
 .home-page {
   width: min(calc(100% - 2rem), var(--content-wide));
@@ -222,6 +223,7 @@ p code, li code, td code { padding: .08rem .3rem; color: #173f5d; background: #e
 .roadmap-figure > a { max-width: 100%; overflow-x: auto; }
 .roadmap-figure img { display: block; width: 100%; min-width: 760px; max-width: 1100px; height: auto; margin: 0 auto; }
 .roadmap-figure figcaption { padding-top: .65rem; }
+.hetero-roadmap img { min-width: 680px; }
 .closing-links { display: flex; flex-wrap: wrap; gap: .7rem 1.4rem; padding-top: 1rem; border-top: 1px solid var(--line); }
 
 .document-page img { display: block; max-width: 100%; height: auto; margin-block: 1rem; }
