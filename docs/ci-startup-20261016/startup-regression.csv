@@ -1,0 +1,5 @@
+"startup","topology_trait_mode_comparisons","all_native_outputs_identical","final_rng_identical","environment_restored_on_success","environment_and_rng_restored_on_error"
+"unset",27,TRUE,TRUE,TRUE,TRUE
+"empty",27,TRUE,TRUE,TRUE,TRUE
+"relative",27,TRUE,TRUE,TRUE,TRUE
+"absolute",27,TRUE,TRUE,TRUE,TRUE

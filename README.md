@@ -1,11 +1,9 @@
 # fastphylosig 0.3.4
 
-This version provides phylogenetic signal statistics and
+The package provides phylogenetic signal statistics and
 `fast_hetero()` for comparing signal across clades. The
 [heterogeneity guide](inst/HETERO_GUIDE_zh.md) covers selection, interpretation,
-diagnostics and runnable examples. Earlier Delta posterior/MCMC corrections
-are recorded in NEWS; no new estimator or RNG change is introduced by the
-0.3.4 documentation and cleanup revision.
+diagnostics and runnable examples.
 
 The [fast_hetero case study](https://yinwen-ecology.github.io/fastphylosig/fast-hetero-case.html)
 walks through a 512-species example with local/overall results, native tree
@@ -45,10 +43,9 @@ result and plot, separately from dispersion testing.
 `clade_test = TRUE` adds each crown's ordinary signal test. D/Delta results
 include original state counts/frequencies; unavailable crowns remain explicit.
 See the [heterogeneity guide](inst/HETERO_GUIDE_zh.md). Delta's explicit
-experimental options remain documented for reproducibility. The existing
-0.3.1 release archive is separate and does not include this clade workflow.
+experimental options remain documented for reproducibility.
 
-## Historical reference timings (0.3.0)
+## Performance
 
 ![Matched runtime ratios for four signal statistics](docs/release-0.3.0/benchmark_reference_four_methods_speedup.png)
 
@@ -59,14 +56,14 @@ subject to the diagnostic caveat below. Each cell has 10 matched pairs;
 tree/data preparation is excluded. The dashed line is equal runtime; small-tree
 K is slower than phytools at 50 and 100 species, and those results remain visible.
 
-References are phytools 2.5.2 (K/lambda), caper (D) and a pinned Borges Delta
+References are phytools (K/lambda), caper (D) and a pinned Borges Delta
 implementation. K/lambda use `test = FALSE`; D includes 199 randomizations;
 Delta uses two 10,000-iteration MCMC chains without permutation testing.
 **Delta caveat:** 112/120 reference calls produced numerical warnings and
 did not expose final convergence information; one fast call reached an
 optimization iteration limit. Delta ratios describe observed returned-call
 times, not demonstrated equal-accuracy or converged-fit speedups.
-These Windows/R 4.6.1 timings are workload-specific, not universal guarantees.
+These Windows timings are workload-specific, not universal guarantees.
 See [all data, settings and diagnostic details](docs/release-0.3.0/README.md).
 
 ## Install
@@ -312,8 +309,8 @@ Null-distribution plots require retained simulations. Use
 
 The examples show multi-trait K permutation ridges, a lambda likelihood
 profile, D calibration against random and Brownian nulls, and a categorical
-Delta permutation distribution. They are actual `plot_signal()` outputs from
-version 0.3.0 on simulated demonstration data, not empirical findings.
+Delta permutation distribution. They are actual `plot_signal()` outputs on
+simulated demonstration data.
 See the [gallery and reproducible R code](docs/release-0.3.0/plot_signal_gallery.md) for
 single-trait K and separate D null displays, seeds, simulation settings,
 and diagnostic caveats. The short Delta example is for illustration, not
@@ -322,31 +319,18 @@ overlaps; they are not collision-free manuscript figures.
 
 ## Compatibility and release status
 
-The current development revision retains modern Delta ratio diagnostics,
+The package provides Delta ratio diagnostics,
 pooled REML for the common lambda reference, and bounded ACE scratch reuse.
-See the [heterogeneity guide](inst/HETERO_GUIDE_zh.md) and
-[five-task audit](docs/signal-heterogeneity/five-goals-20261013/README_zh.md).
+See the [heterogeneity guide](inst/HETERO_GUIDE_zh.md).
 Recommended clade analyses use K's BM dispersion reference, approximate
 common-local-lambda inference, and descriptive binary D or multistate Delta.
 D's conditional ER heterogeneity extension is experimental. Delta heterogeneity
 tests are outside the recommended workflow; explicit research calls remain
 available for reproducibility. Whole-tree and local signal tests remain separate.
-The local release checks do not substitute for fresh Linux/macOS CI results.
-
-The 0.3.1 patch fixes D type-7 thresholds, numeric species identities,
-D plot null probabilities and tails, approximately ultrametric lambda
-boundaries, and long mask-cache identities. See [patch notes](RELEASE_NOTES_0.3.1.md).
-Its 50K regression covers preparation, subset caches, persistence, fallback
-grouping and K without permutations. It does not qualify all methods or
-simulation workloads at 50K. The historical figures and runtime evidence
-below remain evidence for 0.3.0; no new performance benchmark was run for 0.3.1.
-
-The [0.3.0 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.0)
-retains declared compatibility with R 4.1.0 and above.
-Its public API, estimator definitions, RNG stream, and thread policy are
-unchanged from 0.2.0. K values may differ at floating-point rounding scale;
-the Stage 5 numerical and release checks document the qualification boundary.
-Current performance evidence is from the production 0.3.0 implementation on
-Windows with R 4.6.1/Rtools 4.5, not from the Stage 3C prototype.
-Cross-platform, R-devel, and second-BLAS qualification remain outside this
-local validation scope.
+R 4.1.0 and above are supported. The performance measurements above were made
+on Windows with R 4.6.1/Rtools 4.5. A 50,000-tip regression covers preparation,
+subset caches, persistence, fallback grouping and K without permutations;
+it does not qualify every method or simulation workload at that scale.
+See [NEWS](NEWS.md) for the version history and
+[GitHub Actions](https://github.com/yinwen-ecology/fastphylosig/actions) for
+the latest platform checks.

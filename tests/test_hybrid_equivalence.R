@@ -20,6 +20,20 @@ find_repo_root <- function(max_levels = 6L) {
   NA_character_
 }
 
+compile_stage4_harness <- function(harness, test_env) {
+  # R CMD check uses the relative R_TESTS=startup.Rs for its test process.
+  # sourceCpp starts R CMD SHLIB in a different temporary directory, where
+  # that startup file does not exist. Do not pass the check driver's startup
+  # hook to build subprocesses; restore the parent environment on every exit.
+  old_tests <- Sys.getenv("R_TESTS", unset = NA_character_)
+  on.exit({
+    if (is.na(old_tests)) Sys.unsetenv("R_TESTS") else
+      Sys.setenv(R_TESTS = old_tests)
+  }, add = TRUE)
+  Sys.unsetenv("R_TESTS")
+  Rcpp::sourceCpp(harness, env = test_env, rebuild = TRUE, showOutput = TRUE)
+}
+
 repo_root <- find_repo_root()
 if (is.na(repo_root)) {
   cat(paste(
@@ -65,7 +79,7 @@ if (is.na(repo_root)) {
   }
 
   test_env <- new.env(parent = globalenv())
-  Rcpp::sourceCpp(harness, env = test_env, rebuild = TRUE, showOutput = TRUE)
+  compile_stage4_harness(harness, test_env)
 
   make_tree <- function(kind, seed) {
     set.seed(seed)
