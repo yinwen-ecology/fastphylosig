@@ -20,18 +20,45 @@ test_that("bounded ARD recovery agrees with independent likelihoods at matching 
     current_reference <- .ace_recovery_reference_deviance(a, f$rates)
     expect_equal(-2*f$loglik, current_reference, tolerance=1e-8, info=a$key)
     expect_true(all(is.finite(f$rates) & f$rates >= 0), info=a$key)
-    # These fixtures require recovery: check genuine improvement over the
-    # current run's unfinished fit using the same independent objective.
-    baseline_reference <- .ace_recovery_reference_deviance(a,
-      f$diagnostics$optimizer_retry$original$par)
-    expect_lt(current_reference, baseline_reference)
     expect_true(all(is.finite(f$lik.anc)&f$lik.anc>=0&f$lik.anc<=1))
     expect_lt(max(abs(rowSums(f$lik.anc)-1)),1e-12)
-    expect_true(any(vapply(notes,inherits,logical(1),"fastphylosig_optimizer_retry_warning")))
     expect_false(any(vapply(notes,inherits,logical(1),"fastphylosig_optimizer_warning")))
-    expect_identical(f$diagnostics$optimizer_retry$original$convergence,1L)
-    expect_true(isTRUE(f$diagnostics$optimizer_retry$recovered))
+    # A platform may converge on its first attempt. Validate that answer above;
+    # only a real retry has an unfinished baseline and a retry warning.
+    retry <- f$diagnostics$optimizer_retry
+    expect_identical(any(vapply(notes,inherits,logical(1),
+      "fastphylosig_optimizer_retry_warning")), !is.null(retry))
+    if(!is.null(retry)) {
+      baseline_reference <- .ace_recovery_reference_deviance(a,retry$original$par)
+      expect_lt(current_reference,baseline_reference)
+      expect_identical(retry$original$convergence,1L)
+      expect_true(isTRUE(retry$recovered))
+    }
   }
+  expect_identical(.Random.seed,seed)
+})
+
+test_that("captured unfinished ARD fits exercise recovery on every platform", {
+  skip_if_not_installed("expm")
+  fixtures <- readRDS(test_path("fixtures","ace-ard-local-recovery.rds"))
+  recover <- function(a) {
+    w <- a$workspace
+    ptr <- fast_ace_fit_prepare_cpp(w$edge,w$edge_length,a$tip_state,
+      w$rate$rate_index,1L)
+    on.exit(fast_ace_fit_release_cpp(ptr))
+    dev <- function(p) fast_ace_fit_deviance_cpp(ptr,p,TRUE)
+    first <- a$fit
+    expect_identical(first$convergence,1L)
+    first$objective <- dev(first$par)
+    fit <- .fast_ace_recover_ard(dev,first,recheck=TRUE)
+    reference <- .ace_recovery_reference_deviance(a,fit$par)
+    expect_identical(fit$convergence,0L,info=a$key)
+    expect_equal(fit$objective,reference,tolerance=1e-8,info=a$key)
+    expect_lt(reference,.ace_recovery_reference_deviance(a,first$par))
+    expect_true(isTRUE(fit$diagnostics$optimizer_retry$recovered))
+  }
+  set.seed(733);seed <- .Random.seed
+  for(z in fixtures) recover(z$original)
   expect_identical(.Random.seed,seed)
 })
 

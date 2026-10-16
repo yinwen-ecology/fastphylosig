@@ -24,6 +24,21 @@
   x
 }
 
+.entropy_roundoff_expected <- function(raw,actual,k) {
+  # R's log() and C++ std::log() can round a near-uniform row to opposite
+  # sides of 1 (notably on ARM). Identify jitter only within an ulp-scale
+  # endpoint neighbourhood, then independently replay its shared draws.
+  # Interior entropies retain the original numerical tolerance.
+  tol <- min(1e-12,8*k*.Machine$double.eps)
+  low <- abs(raw)<=tol; high <- abs(raw-1)<=tol
+  lower_jitter <- low & actual>tol
+  upper_jitter <- high & actual<1-tol
+  expected <- raw
+  if(any(lower_jitter)) expected[lower_jitter] <- runif(1)/10000
+  if(any(upper_jitter)) expected[upper_jitter] <- 1-runif(1)/10000
+  expected
+}
+
 test_that("real Shannon roundoff input continues with the existing jitter", {
   old_rng <- RNGkind()
   on.exit(do.call(RNGkind,as.list(old_rng)),add=TRUE)
@@ -32,21 +47,29 @@ test_that("real Shannon roundoff input continues with the existing jitter", {
   for(uniform in c("Mersenne-Twister","L'Ecuyer-CMRG"))
     for(normal in c("Inversion","Box-Muller","Kinderman-Ramage")) {
       RNGkind(uniform,normal,"Rejection"); set.seed(617)
-      expected <- .entropy_roundoff_jitter(raw,ncol(p)); seed <- .Random.seed
-      set.seed(617); actual <- suppressWarnings(delta_entropy_cpp(p,2L))
+      actual <- as.numeric(suppressWarnings(delta_entropy_cpp(p,2L)))
+      entropy_seed <- .Random.seed
+      set.seed(617)
+      expected <- .entropy_roundoff_expected(raw,actual,ncol(p))
       expect_equal(as.numeric(actual),expected,tolerance=1e-14)
-      expect_identical(.Random.seed,seed)
+      expect_identical(.Random.seed,entropy_seed)
       expect_true(all(actual>0 & actual<1))
       set.seed(617)
       fit <- suppressWarnings(delta_mcmc_cpp(p,.1,.5,500L,5L,30L,2L,TRUE))
       seed <- .Random.seed
+      expect_identical(as.numeric(fit$entropy),actual)
       expect_true(is.finite(fit$delta) && fit$delta>0)
       if(!is.null(fit$entropy_recovery)) {
         expect_gt(fit$entropy_recovery$above,0)
         expect_lte(fit$entropy_recovery$maximum_correction,fit$entropy_recovery$tolerance)
       }
-      set.seed(617); x <- .entropy_roundoff_jitter(raw,ncol(p))
-      reference <- .delta_posterior_reference(x,.1,.5,500L,5L,30L)
+      # Start the independent posterior at the exact, already validated
+      # entropy vector and replay only the native endpoint draws. set.seed()
+      # also resets Box-Muller's cache, which .Random.seed alone cannot do.
+      set.seed(617)
+      invisible(.entropy_roundoff_expected(raw,actual,ncol(p)))
+      expect_identical(.Random.seed,entropy_seed)
+      reference <- .delta_posterior_reference(actual,.1,.5,500L,5L,30L)
       expect_equal(fit$alpha_chain,reference$alpha,tolerance=1e-8)
       expect_equal(fit$beta_chain,reference$beta,tolerance=1e-8)
       expect_equal(fit$delta,mean(reference$beta/reference$alpha),tolerance=1e-9)

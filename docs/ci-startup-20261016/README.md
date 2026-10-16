@@ -40,6 +40,25 @@ skipped. See [the final check log](00check.log).
 The existing GitHub Actions jobs provide the Linux, macOS, Windows, R-devel,
 PDF-manual and OpenMP-disabled checks after the fix is pushed.
 
+The first remote run confirmed the startup repair on Windows, Linux and the
+OpenMP-disabled job. It also exposed two independent test assumptions:
+
+- Some ARD fixtures converge on their initial attempt on other BLAS/LAPACK
+  configurations. Fresh fits now always receive the independent likelihood
+  and probability checks; retry diagnostics are checked when a retry occurs.
+  A separate test starts all five captured unfinished fits at locally
+  recomputed objectives, guaranteeing recovery-path coverage on every platform.
+- R's `log()` and C++ `std::log()` can round Shannon entropy to opposite sides
+  of 1 on ARM. The test now checks entropy accuracy at the existing tolerance,
+  replays the shared endpoint draws only in an ulp-scale boundary neighbourhood,
+  and evaluates the independent R posterior at the exact validated native
+  entropy input. It still compares the full chains and final RNG state. The
+  arithmetic Gini endpoint tests retain their strict independent expectations.
+
+Both affected test files passed locally after these corrections. These changes
+are confined to test assertions and fixtures' documentation; the installed R
+and C++ calculations and random-number calls remain unchanged.
+
 To rerun the focused regression from a checkout with a compatible package
 installed in the supplied library:
 

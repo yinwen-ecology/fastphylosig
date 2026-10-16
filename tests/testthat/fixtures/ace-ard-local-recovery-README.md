@@ -10,5 +10,8 @@ The saved independent deviance is evaluated at the saved recovered `fit$par`.
 It is not a platform-independent optimum that a new optimizer run must match.
 The regression test therefore checks saved rates against that saved reference,
 and newly fitted rates against a fresh independent expm/base-R-pruning oracle,
-at the original 1e-8 tolerance. It separately requires convergence, improvement
-over the current unfinished baseline, valid probabilities and unchanged RNG.
+at the original 1e-8 tolerance. Fresh fits may converge without a retry on a
+different platform; their likelihoods and probabilities are still checked.
+A separate regression starts from each captured unfinished optimizer return
+and recomputes its objective locally, so every platform exercises recovery,
+improvement against the matching baseline, and unchanged RNG.
