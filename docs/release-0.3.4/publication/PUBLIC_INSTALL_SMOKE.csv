@@ -1,0 +1,5 @@
+"method","version","local_estimates","overall_estimate","load_and_smoke_passed","warnings"
+"K","0.3.4",2,0.282896717547296,TRUE,0
+"lambda","0.3.4",2,7.93283536222752e-05,TRUE,0
+"D","0.3.4",2,1.60613935358129,TRUE,0
+"Delta","0.3.4",2,0.00160572500017607,TRUE,0

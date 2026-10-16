@@ -1,0 +1,44 @@
+* installing *source* package 'fastphylosig' ...
+** this is package 'fastphylosig' version '0.3.4'
+** using staged installation
+** libs
+specified C++17
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+using C++ compiler: 'G__~1.EXE (GCC) 14.3.0'
+using C++17
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+In file included from heterogeneity_nuisance.cpp:9:
+heterogeneity_transient.h: In function 'hetero_bounds::I hetero_transient::logmean_point(double)':
+heterogeneity_transient.h:78:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   78 |   if(v==0)return I(0);if(v==1)return I(1);
+      |   ^~
+heterogeneity_transient.h:78:23: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   78 |   if(v==0)return I(0);if(v==1)return I(1);
+      |                       ^~
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
+installing to C:/Users/wenyi/AppData/Local/Temp/fastphylosig-public-034-68dc45214d0b/library/00LOCK-fastphylosig/00new/fastphylosig/libs/x64
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (fastphylosig)

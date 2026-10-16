@@ -1,0 +1,20 @@
+[
+  {
+    "name": "fastphylosig-0.3.4-release-materials.zip",
+    "sha256": "46A4DA6056CF2BB1247794145D4E32658BEA100F7438427D4F04D8AE5978B1C3",
+    "size": 860411,
+    "verified_public_download": true
+  },
+  {
+    "name": "fastphylosig_0.3.4.tar.gz",
+    "sha256": "8B1A8940101997492D4F3E2AFE696717BFE63CC9905FE91E225A3534754B997D",
+    "size": 686861,
+    "verified_public_download": true
+  },
+  {
+    "name": "SHA256SUMS.txt",
+    "sha256": "BFB2DAD662C991679ECF0BCC5704DE83F86541C25DBFFA3856154F05B2095E9C",
+    "size": 199,
+    "verified_public_download": true
+  }
+]

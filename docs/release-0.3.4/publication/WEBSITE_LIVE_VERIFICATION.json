@@ -1,0 +1,77 @@
+{
+  "homepage": "https://yinwen-ecology.github.io/fastphylosig/",
+  "case_page": "https://yinwen-ecology.github.io/fastphylosig/fast-hetero-case.html",
+  "homepage_feature_verified": true,
+  "case_tables": 3,
+  "all_section_anchors_verified": true,
+  "synthetic_species": 512,
+  "assets": [
+    {
+      "name": "run-case.R",
+      "bytes": 5244,
+      "verified": true,
+      "sha256": "ABA75A574F6155DD384A1289387B9A8F5C90D582236036FD7AA5D6597F9641FE"
+    },
+    {
+      "name": "traits.csv",
+      "bytes": 22540,
+      "verified": true,
+      "sha256": "4E004C73F8909ECD4DD36421E2BDC151CB5DB3A059BDDFDDA5C96753D8E726E6"
+    },
+    {
+      "name": "tree.nwk",
+      "bytes": 6139,
+      "verified": true,
+      "sha256": "1DBA7E8D4B38C7A56DA1B3F4F67AB656C3CCB667A39680606537E4EC31A70705"
+    },
+    {
+      "name": "crowns.csv",
+      "bytes": 174,
+      "verified": true,
+      "sha256": "288740E1009EDFBB2C47549AD5C1D328CA4017D21BEAEB82753FED15B82012D2"
+    },
+    {
+      "name": "case-results.rds",
+      "bytes": 141898,
+      "verified": true,
+      "sha256": "7D8A79950B8A849B2ED50FC94046EA505D4D404833A717D4F218FC58CC6E1C1A"
+    },
+    {
+      "name": "warnings.json",
+      "bytes": 56,
+      "verified": true,
+      "sha256": "13D906D670CF6E375E44786672FC3CAF6CDD080E709FFAB50B3FBC145861EDC0"
+    },
+    {
+      "name": "session-info.txt",
+      "bytes": 822,
+      "verified": true,
+      "sha256": "B032F2E1DD3EA01CE5C93AE4F4C29EDD3B037F7A3378BCBA11E7ACE7D358F1D1"
+    },
+    {
+      "name": "K-tree.png",
+      "bytes": 30777,
+      "verified": true,
+      "sha256": "EC36D7CD38962D346DDC9763701E3801B6412BC7B910EC56DB0ABA3E67446402"
+    },
+    {
+      "name": "lambda-tree.png",
+      "bytes": 32606,
+      "verified": true,
+      "sha256": "69C2A991E20486FE7E656B03C5CE3ABA4F860B58EA843A1CE66C17F970A1F1C0"
+    },
+    {
+      "name": "D-tree.png",
+      "bytes": 30596,
+      "verified": true,
+      "sha256": "61CF9FBA771E419C48C469853C390E7FCBB9EDF54CC6CE49769BA96CC531F9CE"
+    },
+    {
+      "name": "Delta-tree.png",
+      "bytes": 33326,
+      "verified": true,
+      "sha256": "137CE734C7AC43749D13FED32CD42F912224DC6FE64182DC010441C53D475F2A"
+    }
+  ],
+  "renderer": "live GitHub Pages (Jekyll)"
+}
