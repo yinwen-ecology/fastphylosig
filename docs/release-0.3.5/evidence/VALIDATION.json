@@ -1,0 +1,84 @@
+{
+  "package": "fastphylosig",
+  "version": "0.3.5",
+  "status": "patch_candidate_not_released",
+  "platform": "Windows, R 4.6.1",
+  "check": "Status: OK",
+  "checks": {
+    "build": {
+      "exit_code": 0,
+      "elapsed_seconds": 1.6529765000013867
+    },
+    "check": {
+      "exit_code": 0,
+      "elapsed_seconds": 263.3323868000007
+    },
+    "baseline-contracts": {
+      "exit_code": 0,
+      "elapsed_seconds": 3.7793654999986757
+    },
+    "candidate-contracts": {
+      "exit_code": 0,
+      "elapsed_seconds": 3.844529200003308
+    },
+    "replay": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.6143487000008463
+    },
+    "mixed-rng": {
+      "exit_code": 0,
+      "elapsed_seconds": 1.1267738999958965
+    },
+    "baseline-interface": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.29054290000203764
+    },
+    "candidate-interface": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.28285479999613017
+    },
+    "r-syntax": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.28210889999900246
+    },
+    "native-build": {
+      "exit_code": 0,
+      "elapsed_seconds": 2.1852921999961836
+    },
+    "native-lifecycle": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.6165370000016992
+    },
+    "native-reconfigure": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.013655199996719602
+    },
+    "native-no-allocations": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.22866340000473429
+    },
+    "native-accounting": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.22306110000499757
+    }
+  },
+  "tests": {
+    "fail": 0,
+    "warn": 0,
+    "skip": 1,
+    "pass": 14438
+  },
+  "numerical_baseline": "reviewed 0.3.4.9003",
+  "public_contracts": 25,
+  "objective_values_replayed": 3956,
+  "posterior_matrices_replayed": 8,
+  "mcmc_replays": 8,
+  "mixed_rng_cases": 8,
+  "executable_R_syntax_identical": true,
+  "public_interface_identical": true,
+  "baseline_text_sha256": "6f82d96c45938afd81375380c52ba49c393dda5cea71a53e820395c33f374f78",
+  "checked_text_sha256": "6f82d96c45938afd81375380c52ba49c393dda5cea71a53e820395c33f374f78",
+  "native_text_identical": true,
+  "source_archive": "fastphylosig_0.3.5.tar.gz",
+  "source_sha256": "a9b0cec164004b3ad5fbffacf0d719fdc4e1a0d7a6eef79342fbe3a0c85a0fe3"
+}

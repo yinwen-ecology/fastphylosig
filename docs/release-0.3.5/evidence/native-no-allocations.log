@@ -1,0 +1,2 @@
+replacement allocations: 0; reported cache bytes: 27688; allocated bytes: 27688
+guards/lifetime/bitwise values OK; peak requested bytes: 28252

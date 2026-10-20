@@ -55,6 +55,13 @@ exponential priors on raw alpha and beta. Ancestral reconstruction,
 entropy, and MCMC calculations use Rcpp/RcppArmadillo. The ape comparison path
 is retained internally for regression tests, not exposed as a user engine.
 
+Since version 0.3.5, the shared ACE downpass corrects the ARD
+child-to-parent contribution under the row-generator convention. This can
+change ARD Delta, local/overall summaries, permutation values and subsequent
+RNG relative to 0.3.4, including ordinary descriptive use. ER retains its
+previous arithmetic and random stream. The ACE rate-standard-error correction
+does not enter Delta, which does not estimate or use those standard errors.
+
 Tiny entropy roundoff excursions are repaired only when the corresponding probability
 row is finite, bounded in [0,1] and normalized within a small tolerance. Repaired
 endpoints use the existing jitter, emit a warning and are described in the result
@@ -137,11 +144,11 @@ numbers. Original optimizer returns, budgets and candidate selection are
 retained. Optional \code{optimizer_retry}, \code{optimizer_recovered} and
 \code{optimizer_retry_details} fields appear only when a retry occurred;
 remaining optimizer warnings are not hidden or relabelled. Common multistart
-and the public ACE path are unchanged. ACE permits only machine-scale
+and public ACE rate fitting are unchanged. ACE permits only machine-scale
 probability boundary recovery; Delta validates every probability row before
 entropy or endpoint jitter. These abnormal paths can change estimates and
-subsequent random streams. Successful ordinary paths retain their arithmetic
-and draw order. Numerical recovery is reported, not treated as a convergence
+subsequent random streams. Within the corrected estimator, ordinary paths
+retain their arithmetic and draw order. Numerical recovery is reported, not treated as a convergence
 failure or evidence of model adequacy.
 
 Delta reuses the likelihood-only native ACE fitting workspace. Large uncached

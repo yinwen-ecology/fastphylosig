@@ -1,4 +1,10 @@
-# fastphylosig 0.3.4
+# fastphylosig
+
+The GitHub source on this branch is the **0.3.5 patch candidate**. It corrects
+ARD ancestral probabilities and discrete ACE rate standard errors. See the
+[patch notes and reanalysis guidance](docs/release-0.3.5/RELEASE_NOTES_en.md).
+The candidate has not been formally released; the published download below
+remains 0.3.4.
 
 The package provides phylogenetic signal statistics and
 `fast_hetero()` for comparing signal across clades. The

@@ -34,7 +34,10 @@ Optimized subset of \code{ape::ace()} for discrete maximum-likelihood
 ancestral-state reconstruction. The statistical target follows
 \code{ape::ace(type = "discrete", method = "ML")} for \code{"ER"} and
 \code{"ARD"} models, while the repeated pruning likelihood calculation is
-implemented in Rcpp/RcppArmadillo.
+implemented in Rcpp/RcppArmadillo. ARD full-tree ancestral probabilities use
+the row-generator transition convention. Rate standard errors use observed
+likelihood information. These two corrections intentionally differ from legacy
+\code{ape::ace()} downpass and deviance-Hessian standard errors.
 }
 \details{
 Discrete fits retain the spectral pruning arithmetic for ordinary
@@ -62,6 +65,19 @@ mixed-length fits batch only the remaining uncached branches using a compact
 worklist. The activation threshold counts uncached work, so a large tree with
 very few uncached branches does not incur parallel startup costs.
 The default \code{CI = TRUE} path is unaffected by this thread option.
+
+With \code{marginal = FALSE}, ancestor probabilities condition on all observed
+tips under a uniform root prior; \code{marginal = TRUE} returns scaled subtree
+likelihoods. In the full-tree downpass, a child's contribution for each parent
+state is \eqn{P L}, where \eqn{P = \exp(Qt)} has parent states in rows. Impossible
+ARD parent states with zero posterior and zero child contribution send zero
+messages. A positive posterior with zero contribution remains a failure.
+ER retains its existing floating-point arithmetic and Delta random stream.
+
+The deviance objective is negative twice log likelihood, so its Hessian divided
+by two is the observed information. Returned rate standard errors account for
+this factor. Boundary or unidentifiable fits can still have unavailable standard
+errors; correcting this scale does not make Wald inference valid at boundaries.
 }
 \value{
 An \code{ace}-like object containing \code{loglik}, \code{rates}, numerical
