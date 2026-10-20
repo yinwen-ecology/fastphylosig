@@ -155,11 +155,11 @@ img { max-width: 100%; height: auto; }
 figcaption { color: var(--muted); font-size: .88rem; line-height: 1.5; }
 .benchmark-figure figcaption { margin: .75rem .15rem .1rem; }
 .benchmark-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; margin: 1rem 0; }
+.benchmark-notes--single { grid-template-columns: 1fr; }
 .note-card { padding: 1rem 1.15rem; border: 1px solid var(--line); border-radius: .65rem; }
 .note-card p { margin: .25rem 0 0; font-size: .94rem; }
-.note-card--plain { background: #edf6f8; border-color: #cce1e6; }
 .note-card--caution { background: var(--warm); border-color: var(--warm-line); }
-.benchmark-details, .advanced-details {
+.advanced-details {
   margin: 1rem 0 1.5rem;
   padding: .9rem 1.1rem;
   background: #fff;
@@ -167,14 +167,14 @@ figcaption { color: var(--muted); font-size: .88rem; line-height: 1.5; }
   border-radius: .6rem;
 }
 summary { color: var(--navy); cursor: pointer; font-weight: 750; }
-.benchmark-details > div, .advanced-details > div { padding-top: .6rem; }
-.benchmark-details li { margin: .3rem 0; }
+.advanced-details > div { padding-top: .6rem; }
 
 .two-column { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; }
 .install-stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 1rem 0; }
 .content-card, .method-card { min-width: 0; padding: 1.15rem; background: #fff; border: 1px solid var(--line); border-radius: .7rem; }
 .content-card h3 { margin-top: 0; }
 .content-card p:last-child { margin-bottom: 0; }
+.code-label { margin: 0 0 .4rem; font-size: .92rem; font-weight: 500; color: var(--navy); }
 pre {
   max-width: 100%;
   padding: 1rem 1.1rem;
@@ -194,10 +194,12 @@ p code, li code, td code { padding: .08rem .3rem; color: #173f5d; background: #e
 .method-card p { min-height: 4.5em; margin: .3rem 0 .7rem; color: var(--muted); font-size: .92rem; }
 .method-card code { color: var(--teal); font-size: .9rem; font-weight: 700; }
 
-.hetero-feature { display: grid; grid-template-columns: 1fr 1.1fr; gap: 1.4rem; align-items: center; padding: 1.5rem; background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: .8rem; }
+.hetero-feature { padding: 1.5rem; background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: .8rem; text-align: center; }
+.hetero-feature h3 { margin: 0 0 .9rem; }
 .hetero-feature figure { margin: 0; }
-.hetero-feature img { display: block; width: 100%; }
-.hetero-feature figcaption { margin-top: .5rem; }
+.hetero-feature img { display: block; width: 100%; max-width: 820px; margin: 0 auto; }
+.hetero-feature figcaption { margin-top: .6rem; }
+.hetero-feature .button-link { margin-top: .9rem; }
 .case-page { --content-read: 1100px; }
 .case-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 1.5rem 0; }
 .case-facts div { padding: .9rem 1rem; border: 1px solid var(--line); background: #edf6f8; border-radius: .5rem; }
@@ -208,7 +210,7 @@ p code, li code, td code { padding: .08rem .3rem; color: #173f5d; background: #e
 .case-figure figcaption { margin-top: .6rem; }
 .case-downloads { display: flex; flex-wrap: wrap; gap: .5rem 1rem; padding: 1rem; background: #edf6f8; border-radius: .5rem; }
 
-.plot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; align-items: start; }
+.plot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; align-items: start; }
 .plot-card { min-width: 0; margin: 0; padding: .7rem; background: #fff; border: 1px solid var(--line); border-radius: .7rem; }
 .plot-card img { display: block; width: 100%; height: auto; border: 1px solid #edf0f2; }
 .plot-card figcaption { display: flex; flex-direction: column; gap: .15rem; min-height: 4.4em; padding: .65rem .2rem .1rem; }
@@ -240,7 +242,6 @@ p code, li code, td code { padding: .08rem .3rem; color: #173f5d; background: #e
 @media (max-width: 850px) {
   .speed-cards, .method-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .plot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .hetero-feature { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 620px) {

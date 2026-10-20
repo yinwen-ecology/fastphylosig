@@ -10,11 +10,11 @@ alternate_label: 中文
 ---
 
 <nav class="page-jumps" aria-label="Page sections">
-  <a href="#speed">Measured speed</a>
   <a href="#install">Install</a>
-  <a href="#clade-signal">Clade-scale signal</a>
   <a href="#workflow">Workflow</a>
+  <a href="#speed">Measured speed</a>
   <a href="#plots">Plot examples</a>
+  <a href="#clade-signal">Clade-scale signal</a>
 </nav>
 
 <section class="hero" id="top" markdown="1">
@@ -22,9 +22,9 @@ alternate_label: 中文
 
 # Fast phylogenetic signal analysis in R
 
-<p class="hero-proof"><strong>At 2,000 tips, observed reference/fastphylosig median-time ratios reached 151× for K, 23,591× for lambda, 224× for D, and 33.6× for Delta.</strong> Delta timings are summarized with <a href="#delta-caveat">MCMC diagnostics</a>.</p>
+<p class="hero-proof"><strong>At 2,000 tips, fastphylosig computes phylogenetic signal up to 23,591× faster.</strong></p>
 
-<p class="hero-lead">Estimate phylogenetic signal in continuous, binary, and categorical traits. Use <code>fast_signal()</code> for a whole-tree analysis and <code>fast_hetero()</code> to compare clade-scale patterns, with explicit coverage, diagnostics and native tree plots.</p>
+<p class="hero-lead">Phylogenetic signal measures how similar a trait is among closely related species. <code>fast_signal()</code> computes K, lambda, D or Delta in one call, and the speed advantage grows with tree size (<a href="#speed">see the benchmark</a>). <code>fast_hetero()</code> compares signal among clades within a large tree (<a href="#clade-signal">see the 512-species case study</a>).</p>
 
 <div class="speed-cards" aria-label="Observed reference-to-fast runtime ratios">
   <article class="speed-card">
@@ -45,54 +45,12 @@ alternate_label: 中文
   <article class="speed-card speed-card--delta">
     <p class="speed-card__method">Categorical Delta</p>
     <p class="speed-card__value">23.9–33.6×</p>
-    <p class="speed-card__note">at 2,000 tips · call time only · <a href="#delta-caveat">diagnostic warning</a></p>
+    <p class="speed-card__note">at 2,000 tips</p>
   </article>
 </div>
 
-<p class="hero-footnote">Ratios are reference median time ÷ fastphylosig median time. The 2,000-tip ranges span three designed signal scenarios; each range summarizes those scenarios.</p>
+<p class="hero-footnote">Ratios are reference median time ÷ fastphylosig median time, so a value above 1 means fastphylosig was faster. The references are phytools 2.5.2 for K and lambda, caper for D, and the published Borges (2019) code for Delta. Each range covers three designed signal scenarios (Brownian/noise mixtures with weights 0, 0.5 and 0.95).</p>
 </section>
-
-## Compare signal across clades with `fast_hetero()` {#clade-signal}
-
-Split a tree into prespecified monophyletic crowns or select maximal disjoint crowns within size bounds. Calculate local signal with the existing fast_* kernels, compare it with the whole tree, and colour the selected crowns by their estimates. The results retain actual sample sizes, missing observations, categorical state composition and fit/MCMC diagnostics.
-
-<div class="hetero-feature" markdown="1">
-<div markdown="1">
-
-### A reproducible 512-species walkthrough
-
-Eight crowns, three trait types and four signal measures. Follow the same nodes through K, lambda, binary D and multistate Delta; inspect a deliberately single-state crown instead of discarding it.
-
-K uses a BM dispersion reference. Lambda's common-local-crown reference is approximate. D's heterogeneity extension remains experimental; Delta is recommended for local/overall description and diagnostics. Compare conservatism patterns at the scale of your biological question.
-
-[Read the fast_hetero() case study]({{ '/fast-hetero-case.html' | relative_url }}){: .button-link}
-
-[中文案例]({{ '/fast-hetero-case-zh.html' | relative_url }}) · [Technical workflow]({{ '/fast-hetero-case.html' | relative_url }}#workflow)
-
-</div>
-<figure>
-  <a href="{{ '/fast-hetero-case.html' | relative_url }}" aria-label="Read the clade-scale signal case study">
-    <img src="{{ '/assets/fast-hetero-case/K-tree.png' | relative_url }}" alt="Native fast_hetero tree plot for eight selected crowns in a simulated 512-species tree, with whole-tree K, its ordinary signal P and a separate BM dispersion P.">
-  </a>
-  <figcaption>Native <code>plot()</code> output from the case study; all numbers, diagnostics, code and data are available on the case page.</figcaption>
-</figure>
-</div>
-
-<figure class="roadmap-figure hetero-roadmap">
-  <a href="{{ '/fast-hetero-roadmap.svg' | relative_url }}" aria-label="Open the fast_hetero technical workflow"><img src="{{ '/fast-hetero-roadmap.svg' | relative_url }}" alt="fast_hetero technical workflow, from tree compilation and crown selection through shared C++ kernels to local and whole-tree results, optional reference tests and native plots."></a>
-  <figcaption><code>fast_hetero()</code> workflow: select crowns, reuse the method kernels, then combine local estimates, optional whole-tree analysis and diagnostics. <a href="{{ '/fast-hetero-case.html' | relative_url }}#workflow">Follow the workflow in the case study</a> · <a href="{{ '/fast-hetero-roadmap-zh.svg' | relative_url }}">中文路线图</a></figcaption>
-</figure>
-
-## Matched runtime comparison {#speed}
-
-Benchmark version: v0.3.0. Four statistics, 50–2,000 tips, three signal scenarios, and 10 paired calls per setting. Timings cover method calls after tree and data preparation.
-
-<figure class="benchmark-figure">
-  <a class="figure-open" href="{{ '/release-0.3.0/benchmark_reference_four_methods_speedup.png' | relative_url }}" aria-label="Open the full-size four-statistic benchmark figure">
-    <img src="{{ '/release-0.3.0/benchmark_reference_four_methods_speedup.png' | relative_url }}" alt="Four aligned panels compare reference-to-fastphylosig runtime ratios for K, lambda, D, and Delta at 50, 100, 500, and 2,000 tips. A dashed horizontal line marks equal runtime; ratios below it mean the reference was faster.">
-  </a>
-  <figcaption><strong>Measured runtime by statistic and tree size.</strong> The dashed line marks equal median runtime. Click the figure to open the full-size PNG. Results are from Windows 11 x64 with R 4.6.1; setup and tree/data preparation were excluded.</figcaption>
-</figure>
 
 ## Install and get started {#install}
 
@@ -100,7 +58,7 @@ Benchmark version: v0.3.0. Four statistics, 50–2,000 tips, three signal scenar
 <article class="content-card" markdown="1">
 ### Install v0.3.4
 
-The [v0.3.4 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4) adds the documented clade-scale workflow, preserves experimental labels, and reduces repeated D/lambda calculations. The command below installs the frozen, checked source attachment.
+The [v0.3.4 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4) is the latest version. It provides the full clade-scale workflow and improves D/lambda performance.
 
 ```r
 install.packages(
@@ -110,48 +68,82 @@ install.packages(
 library(fastphylosig)
 ```
 
-Source installation requires a C++ toolchain. OpenMP is optional.
+Source installation needs a C++17 toolchain and, on Windows, Rtools. It also requires ape, Rcpp and RcppArmadillo.
 </article>
 
 <article class="content-card" markdown="1">
-### One-function analysis
+### One call for K, lambda, D or Delta
+
+<p class="code-label">Simulated example data</p>
 
 ```r
 set.seed(1)
 tree <- ape::rtree(30)
 trait <- setNames(stats::rnorm(30), tree$tip.label)
-fit <- fast_signal(tree, data = trait, method = "K",
-                   progress = FALSE)
-summary(fit)
-plot_signal(fit)
+binary <- setNames(as.integer(trait > stats::median(trait)), tree$tip.label)
+state <- setNames(sample(letters[1:3], 30, replace = TRUE), tree$tip.label)
 ```
 
-The same entry point supports continuous, binary, and categorical traits.
+<div class="two-column" markdown="1">
+<div markdown="1">
+
+<p class="code-label">K</p>
+
+```r
+k <- fast_signal(tree, data = trait, method = "K",
+                 test = TRUE, nsim = 999,
+                 return_sim = TRUE, progress = FALSE)
+```
+
+</div>
+<div markdown="1">
+
+<p class="code-label">lambda</p>
+
+```r
+lambda <- fast_signal(tree, data = trait, method = "lambda",
+                      test = TRUE, progress = FALSE)
+```
+
+</div>
+<div markdown="1">
+
+<p class="code-label">D</p>
+
+```r
+d <- fast_signal(tree, data = binary, method = "D",
+                 test = TRUE, nsim = 999,
+                 return_sim = TRUE, progress = FALSE)
+```
+
+</div>
+<div markdown="1">
+
+<p class="code-label">Delta</p>
+
+```r
+delta <- fast_signal(tree, data = state, method = "Delta",
+                     test = TRUE, nsim = 199, progress = FALSE)
+```
+
+</div>
+</div>
 </article>
 </div>
 
-## Choose a method
+## Technical workflow {#workflow}
 
-<div class="method-grid">
-  <article class="method-card"><h3>K</h3><p>Blomberg's K for continuous traits; supports permutation testing.</p><code>fast_k()</code></article>
-  <article class="method-card"><h3>Lambda</h3><p>Pagel's lambda for continuous traits; inspect the likelihood profile when needed.</p><code>fast_lambda()</code></article>
-  <article class="method-card"><h3>D</h3><p>Fritz and Purvis D for binary traits, with random and Brownian calibrations.</p><code>fast_d()</code></article>
-  <article class="method-card"><h3>Delta</h3><p>Delta for categorical traits with MCMC and Monte Carlo diagnostics.</p><code>fast_delta()</code></article>
-</div>
-
-## A convenient path, with explicit control when needed {#workflow}
-
-`fast_signal()` checks and prepares the tree, matches named trait data to tip labels, handles missing values trait by trait, and dispatches to the selected statistic. For repeated analyses or closer inspection, the same steps are available directly.
+<code>fast_signal()</code> combines tree checking, tree–trait matching, missing-value handling and signal calculation. If needed, the four steps can also be run separately.
 
 <figure class="roadmap-figure">
   <a href="{{ '/technical-roadmap.svg' | relative_url }}" aria-label="Open the full-size fastphylosig workflow diagram">
     <img src="{{ '/technical-roadmap.svg' | relative_url }}" alt="Workflow diagram: the high-level fast_signal route performs checks, tree preparation, data matching, and method dispatch; an advanced route exposes each preparation step before calling a method-specific function.">
   </a>
-  <figcaption>One high-level call or an explicit preparation path. Open the SVG for the full-size diagram.</figcaption>
+  <figcaption>Open the SVG for the full-size diagram.</figcaption>
 </figure>
 
 <details class="advanced-details">
-  <summary>Show the explicit preparation sequence</summary>
+  <summary>Run the four steps separately</summary>
   <div markdown="1">
 
 ```r
@@ -164,13 +156,24 @@ k <- fast_k(ctx, x = matched$data, test = TRUE, nsim = 999,
             progress = FALSE)
 ```
 
-Methods are selected explicitly; the package does not infer them from trait values. See the [Chinese usage guide](https://github.com/yinwen-ecology/fastphylosig/blob/main/USAGE_zh.md) and the [complete v0.3.0 examples]({{ '/release-0.3.0/README.html' | relative_url }}).
+See the [Chinese usage guide](https://github.com/yinwen-ecology/fastphylosig/blob/main/USAGE_zh.md) and the [complete v0.3.0 examples]({{ '/release-0.3.0/README.html' | relative_url }}).
   </div>
 </details>
 
-## See the native `plot_signal()` output {#plots}
+## Runtime against the standard implementations {#speed}
 
-These v0.3.0 examples use the package's own plotting function on simulated demonstration data. Click an image to inspect the original-size PNG; the linked gallery documents all six styles and their diagnostics.
+K and lambda are compared with phytools 2.5.2 `phylosig()`, D with caper 1.0.4 `phylo.d()`, and Delta with the [published Borges (2019) code](https://github.com/mrborges23/delta_statistic). Trees of 50 to 2,000 tips, three signal scenarios, and 10 paired replicates per setting (20 timed calls). Timing starts after tree and data preparation.
+
+<figure class="benchmark-figure">
+  <a class="figure-open" href="{{ '/release-0.3.0/benchmark_reference_four_methods_speedup.png' | relative_url }}" aria-label="Open the full-size four-statistic benchmark figure">
+    <img src="{{ '/release-0.3.0/benchmark_reference_four_methods_speedup.png' | relative_url }}" alt="Four aligned panels compare reference-to-fastphylosig runtime ratios for K, lambda, D, and Delta at 50, 100, 500, and 2,000 tips. A dashed horizontal line marks equal runtime; ratios below it mean the standard implementation was faster.">
+  </a>
+  <figcaption><strong>Measured runtime by statistic and tree size.</strong> The dashed line marks equal median runtime; ratios below it mean the standard implementation was faster. Click the figure to open the full-size PNG. Results are from Windows 11 x64 with R 4.6.1; setup and tree/data preparation were excluded.</figcaption>
+</figure>
+
+## `plot_signal` {#plots}
+
+Plots from simulated data.
 
 <div class="plot-grid">
   <figure class="plot-card">
@@ -191,37 +194,49 @@ These v0.3.0 examples use the package's own plotting function on simulated demon
     </a>
     <figcaption><strong>Fritz–Purvis D</strong><span>Random and Brownian null views.</span></figcaption>
   </figure>
+  <figure class="plot-card">
+    <a href="{{ '/release-0.3.0/plot_signal_Delta_categorical_demo.png' | relative_url }}" aria-label="Open full-size Delta permutation demo plot">
+      <img src="{{ '/release-0.3.0/plot_signal_Delta_categorical_demo.png' | relative_url }}" alt="Delta permutation demo showing the permuted distribution and the observed Delta marked by a vertical line.">
+    </a>
+    <figcaption><strong>Delta</strong><span>Permutation distribution and observed value.</span></figcaption>
+  </figure>
 </div>
 
 <p class="gallery-link"><a class="button-link" href="{{ '/release-0.3.0/plot_signal_gallery.html' | relative_url }}">View all six plot styles and the Delta demo</a></p>
-<p class="caution-line"><strong>Delta gallery:</strong> a short-chain illustration with diagnostic warnings and a three-draw permutation P value; the gallery documents the simulation settings.</p>
 
-## Validation and benchmark details
+## Compare clades within a large tree with `fast_hetero()` {#clade-signal}
 
-<div class="benchmark-notes">
-  <article class="note-card note-card--plain">
-    <h3>Small-tree K timings</h3>
-    <p>At 50 and 100 tips, reference K was faster; the figure includes these observations.</p>
-  </article>
+In a large tree (say more than 1,000 tips), a single signal value cannot describe how lineages differ: some clades may be more conserved, others more labile. I developed `fast_hetero()` to split the tree into crown clades (a node and all its descendants), estimate signal for each, and set the local estimates beside the whole-tree value. You can name the clades yourself, or let the function choose the largest non-overlapping clades within a size range. Results keep the real sample size of each clade, its missing observations, its state composition and its fit and MCMC diagnostics.
+
+<figure class="roadmap-figure hetero-roadmap">
+  <a href="{{ '/fast-hetero-roadmap.svg' | relative_url }}" aria-label="Open the fast_hetero technical workflow"><img src="{{ '/fast-hetero-roadmap.svg' | relative_url }}" alt="fast_hetero technical workflow, from tree compilation and crown selection through shared C++ kernels to local and whole-tree results, optional reference tests and native plots."></a>
+  <figcaption><code>fast_hetero()</code> workflow: select crowns, reuse the method kernels, then combine local estimates, optional whole-tree analysis and diagnostics. <a href="{{ '/fast-hetero-case.html' | relative_url }}#workflow">Follow the workflow in the case study</a> · <a href="{{ '/fast-hetero-roadmap-zh.svg' | relative_url }}">中文路线图</a></figcaption>
+</figure>
+
+<div class="hetero-feature" markdown="1">
+
+### Demonstration case
+
+<figure>
+  <a href="{{ '/fast-hetero-case.html' | relative_url }}" aria-label="Read the clade-scale signal case study">
+    <img src="{{ '/assets/fast-hetero-case/K-tree.png' | relative_url }}" alt="Native fast_hetero tree plot for eight selected crowns in a simulated 512-species tree, with whole-tree K, its ordinary signal P and a separate BM dispersion P.">
+  </a>
+  <figcaption>Built-in <code>plot()</code> output from the case study; numbers, diagnostics, code and data are on the case page.</figcaption>
+</figure>
+
+[Read the full case study]({{ '/fast-hetero-case.html' | relative_url }}){: .button-link}
+
+</div>
+
+## Other notes
+
+<div class="benchmark-notes benchmark-notes--single">
   <article class="note-card note-card--caution" id="delta-caveat">
     <h3>Delta diagnostics</h3>
-    <p>Delta ratios compare call times: reference warnings occurred in 112/120 calls without final convergence diagnostics, and one fast call reached its optimizer limit; see the linked results for diagnostic details.</p>
+    <p>Delta ratios compare returned calls, not accuracy. The reference emitted numerical warnings in 112 of 120 calls and exposes no final convergence check, and one fast call reached its optimizer limit. No warned call was removed or re-run, so these ratios do not show that the two implementations are equally accurate or equally converged. Warnings are retained in the <a href="{{ '/release-0.3.0/benchmark_reference_d_delta_runs.csv' | relative_url }}">raw timed-call records</a>, with counts by type in the <a href="{{ '/release-0.3.0/benchmark_reference_four_methods_qa.html' | relative_url }}">benchmark QA report</a>.</p>
   </article>
 </div>
 
-<details class="benchmark-details">
-  <summary>Benchmark settings</summary>
-  <div markdown="1">
-
-- **K and lambda:** estimates only (`test = FALSE`), without permutation testing.
-- **D:** 199 randomizations per call.
-- **Delta:** two 10,000-iteration MCMC chains (`thin = 10`, `burn = 100`), without permutation testing.
-- Ratios compare median call times; workloads differ across statistics.
-
-See the [full benchmark data, references and settings]({{ '/release-0.3.0/README.html' | relative_url }}).
-  </div>
-</details>
-
-The current release is [fastphylosig v0.3.4](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4). Independent Windows checks passed fresh compilation, examples, 13,679 assertions and PDF/HTML manual checks, with no errors or warnings and one incoming “New submission” note. One historical cross-install test was skipped; the development K four-mode bridge was separately exercised. Linux checking was confirmed by the maintainer. Other platforms are not claimed as validated in this round. The runtime figure above remains explicitly v0.3.0 evidence, not a new v0.3.4 benchmark. See the [release notes](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4) and [fast_hetero walkthrough]({{ '/fast-hetero-case.html' | relative_url }}).
+The current release is [fastphylosig v0.3.4](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4). The runtime figures above come from v0.3.0 and were not re-run for v0.3.4, because the core computational code did not change. See the [release notes](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4) and the [fast_hetero case study]({{ '/fast-hetero-case.html' | relative_url }}).
 
 <p class="closing-links"><a href="https://github.com/yinwen-ecology/fastphylosig">Source code</a><a href="https://github.com/yinwen-ecology/fastphylosig/issues">Report an issue</a><a href="{{ '/release-0.3.0/README.html' | relative_url }}">Benchmark and usage details</a></p>
