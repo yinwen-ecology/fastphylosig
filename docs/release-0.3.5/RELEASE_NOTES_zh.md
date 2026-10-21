@@ -1,7 +1,7 @@
-# fastphylosig 0.3.5 补丁候选版
+# fastphylosig 0.3.5
 
-当前状态为源码候选版，暂不正式发布，不创建发布标签或 GitHub Release。
-计算实现冻结自已审核的 0.3.4.9003；本次整理仅更新版本元数据与说明，
+发布日期：2026-10-21。计算实现冻结自已审核的 0.3.4.9003；
+正式发布准备仅更新版本元数据与说明，
 不改变数值算法、公开接口或默认参数。
 
 ## 修复对现有分析的影响
@@ -53,4 +53,6 @@ MCMC 警告保留。历史 ARD 校准不能作为修正后估计器的有效性�
 检查记录见 [VALIDATION.md](VALIDATION.md)，统计范围见
 [STATISTICAL_SCOPE.json](STATISTICAL_SCOPE.json)，冻结文件见
 [SOURCE_MANIFEST.json](SOURCE_MANIFEST.json)。最终源码包及 SHA256 在检查后记录；
-源码归档保留于本地材料目录，不替换已有 0.3.4 发布资产。
+源码包、验收材料与 SHA256 校验值随
+[0.3.5 发布版](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5)
+提供，已有版本标签和发布资产保留，便于追溯。

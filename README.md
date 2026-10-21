@@ -1,15 +1,17 @@
 # fastphylosig
 
-The GitHub source on this branch is the **0.3.5 patch candidate**. It corrects
-ARD ancestral probabilities and discrete ACE rate standard errors. See the
-[patch notes and reanalysis guidance](docs/release-0.3.5/RELEASE_NOTES_en.md).
-The candidate has not been formally released; the published download below
-remains 0.3.4.
+Fast phylogenetic signal analysis and clade comparisons in R. Use
+`fast_signal()` to calculate Blomberg's K, Pagel's lambda, Fritz–Purvis D or
+categorical Delta, and `fast_hetero()` to map local signal across a tree and
+compare it with whole-tree patterns. C++ pruning kernels, reusable prepared
+trees and batch workflows support large trees and multiple traits.
 
-The package provides phylogenetic signal statistics and
-`fast_hetero()` for comparing signal across clades. The
-[heterogeneity guide](inst/HETERO_GUIDE_zh.md) covers selection, interpretation,
-diagnostics and runnable examples.
+**Current release: [0.3.5](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5).**
+This patch corrects ARD full-tree ancestral probabilities and ER/ARD ACE rate
+standard errors, and retains the reviewed native performance improvements.
+Analyses using earlier ARD Delta/ancestral probabilities or ACE rate SEs should
+recalculate the affected outputs. K, lambda, D and ER Delta retain their result
+and RNG contracts. See the [patch notes and reanalysis guidance](docs/release-0.3.5/RELEASE_NOTES_en.md).
 
 The [fast_hetero case study](https://yinwen-ecology.github.io/fastphylosig/fast-hetero-case.html)
 walks through a 512-species example with local/overall results, native tree
@@ -20,10 +22,10 @@ plots, downloadable data and full R code.
 [Issues](https://github.com/yinwen-ecology/fastphylosig/issues) |
 [Chinese guide](USAGE_zh.md)
 
-`fastphylosig` calculates phylogenetic signal for continuous, binary, and
-categorical traits. Most analyses need one function: `fast_signal()`. The
-method-specific functions remain available when you want to inspect and
-control each step.
+Continuous, binary and multistate traits use an explicit method selection.
+The method-specific functions remain available when you want to inspect and
+control each step. The [heterogeneity guide](inst/HETERO_GUIDE_zh.md) explains
+clade selection, biological interpretation, diagnostics and recommended settings.
 
 `fast_hetero()` selects maximal disjoint crowns within size bounds, or accepts
 explicit internal nodes. It reports local estimates, coverage, observed tip
@@ -74,20 +76,20 @@ See [all data, settings and diagnostic details](docs/release-0.3.0/README.md).
 
 ## Install
 
-Download the [frozen 0.3.4 source package](https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.4/fastphylosig_0.3.4.tar.gz)
+Download the [frozen 0.3.5 source package](https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.5/fastphylosig_0.3.5.tar.gz)
 and install it with an existing C++ toolchain:
 
 ```r
-install.packages("fastphylosig_0.3.4.tar.gz", repos = NULL, type = "source")
+install.packages("fastphylosig_0.3.5.tar.gz", repos = NULL, type = "source")
 library(fastphylosig)
 ```
 
-The current GitHub release is [0.3.4](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4).
+The current GitHub release is [0.3.5](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5).
 Installation from the corresponding source tag is also available:
 
 ```r
 install.packages("remotes")
-remotes::install_github("yinwen-ecology/fastphylosig@v0.3.4")
+remotes::install_github("yinwen-ecology/fastphylosig@v0.3.5")
 library(fastphylosig)
 ```
 

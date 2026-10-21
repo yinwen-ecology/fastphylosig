@@ -1,9 +1,8 @@
-# fastphylosig 0.3.5 patch candidate
+# fastphylosig 0.3.5
 
-Status: source candidate, not formally released. No release tag or GitHub
-Release is created for this preparation. The implementation is frozen from
-the reviewed 0.3.4.9003 development snapshot; this step changes version metadata
-and documentation, not numerical algorithms or public defaults.
+Release date: 2026-10-21. The implementation is frozen from the reviewed
+0.3.4.9003 development snapshot. Final release preparation updates documentation
+and release metadata, without changing numerical algorithms or public defaults.
 
 ## Corrections and their effect on analyses
 
@@ -34,7 +33,7 @@ to both ER and ARD ACE, independently of that distinction.
 
 ## Performance and cache maintenance
 
-The candidate retains the reviewed exact exponent cache, resets it on
+The release retains the reviewed exact exponent cache, resets it on
 geometry reconfiguration and accounts for hash-node storage. The old
 reconfiguration issue was outside the ordinary R path, which configures an
 immutable workspace once. Allocation/evaluation failures cannot publish an
@@ -68,10 +67,10 @@ the corrected estimator. Local signal differences can describe conservatism
 patterns at the analysed scale; signal alone does not identify an evolutionary
 mechanism or rate shift.
 
-## Verification and candidate identity
+## Verification and source identity
 
 See [validation](VALIDATION.md), the frozen [statistical scope](STATISTICAL_SCOPE.json)
-and [source manifest](SOURCE_MANIFEST.json). The candidate source archive and
-its SHA256 are recorded after the final package check. Local archives are
-retained with the preparation materials; this commit does not publish release
-assets or replace the 0.3.4 release.
+and [source manifest](SOURCE_MANIFEST.json). The checked source package,
+validation materials and SHA256 checksums accompany the
+[0.3.5 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5).
+Earlier release tags and assets remain available for reproducibility.

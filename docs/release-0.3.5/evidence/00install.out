@@ -47,7 +47,7 @@ g++  -std=gnu++17 -I"C:/Users/wenyi/AppData/Local/R/R-46~1.1/include" -DNDEBUG  
 /bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
 g++ -shared -s -static-libgcc -o fastphylosig.dll tmp.def RcppExports.o canonicalization.o d_stream.o delta_diagnostics.o fast_signal.o heterogeneity.o heterogeneity_binary.o heterogeneity_nuisance.o heterogeneity_reference.o k_permutation.o k_tree.o lambda_tree.o na_mask.o tree_core.o -fopenmp -LC:/Users/wenyi/AppData/Local/R/R-46~1.1/bin/x64 -lRlapack -LC:/Users/wenyi/AppData/Local/R/R-46~1.1/bin/x64 -lRblas -lgfortran -lquadmath -LC:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/lib/x64 -LC:/Users/wenyi/AppData/Local/rtools45/x86_64-w64-mingw32.static.posix/lib -LC:/Users/wenyi/AppData/Local/R/R-46~1.1/bin/x64 -lR
 /bin/sh: warning: setlocale: LC_ALL: cannot change locale (English_United States.utf8)
-installing to C:/Users/wenyi/AppData/Local/Temp/fastphylosig-patch-035-u9r20hyp/fastphylosig.Rcheck/00LOCK-FASTPH~1/00new/fastphylosig/libs/x64
+installing to C:/Users/wenyi/AppData/Local/Temp/fastphylosig-release-035-i_67c08_/fastphylosig.Rcheck/00LOCK-FASTPH~1/00new/fastphylosig/libs/x64
 ** R
 ** inst
 ** byte-compile and prepare package for lazy loading

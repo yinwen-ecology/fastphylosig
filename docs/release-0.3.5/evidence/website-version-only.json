@@ -1,0 +1,23 @@
+[
+  {
+    "path": "docs/index.md",
+    "before_sha256": "5a8aa2ebc4bac7e392862a67c73ad30c5d71e0a15db7fc856c8410fac6c922fd",
+    "after_sha256": "9f0a716d05aea285f7a5b0e3891cbce59b95a4669bacf85f7ccc6c755496978a",
+    "version_only": true,
+    "replacements": 10
+  },
+  {
+    "path": "docs/index-zh.md",
+    "before_sha256": "872daca33f5ce6b0fa21c98c69b516021764625abab96417676b0a8a4276d9cd",
+    "after_sha256": "a09787b1988dc6d43a54d4bb7a74493f851189e8431d18cf7fb45eac954d45d3",
+    "version_only": true,
+    "replacements": 10
+  },
+  {
+    "path": "docs/_layouts/default.html",
+    "before_sha256": "330ed5096d3b8811c949178cd79f5778cae71e4f8030a08a1a9d43de4139da15",
+    "after_sha256": "5873ca14622c1a24af952afb2a09b725d0fca9ed643f4ee514f8a44834715106",
+    "version_only": true,
+    "replacements": 3
+  }
+]

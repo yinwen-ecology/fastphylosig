@@ -1,65 +1,65 @@
 {
   "package": "fastphylosig",
   "version": "0.3.5",
-  "status": "patch_candidate_not_released",
+  "status": "release",
   "platform": "Windows, R 4.6.1",
   "check": "Status: OK",
   "checks": {
     "build": {
       "exit_code": 0,
-      "elapsed_seconds": 1.6529765000013867
+      "elapsed_seconds": 1.7032572999999047
     },
     "check": {
       "exit_code": 0,
-      "elapsed_seconds": 263.3323868000007
+      "elapsed_seconds": 274.79116939999994
     },
     "baseline-contracts": {
       "exit_code": 0,
-      "elapsed_seconds": 3.7793654999986757
+      "elapsed_seconds": 4.064797100000078
     },
     "candidate-contracts": {
       "exit_code": 0,
-      "elapsed_seconds": 3.844529200003308
+      "elapsed_seconds": 3.941328199999816
     },
     "replay": {
       "exit_code": 0,
-      "elapsed_seconds": 0.6143487000008463
+      "elapsed_seconds": 0.6355114999998932
     },
     "mixed-rng": {
       "exit_code": 0,
-      "elapsed_seconds": 1.1267738999958965
+      "elapsed_seconds": 1.146459299999833
     },
     "baseline-interface": {
       "exit_code": 0,
-      "elapsed_seconds": 0.29054290000203764
+      "elapsed_seconds": 0.2902291000000332
     },
     "candidate-interface": {
       "exit_code": 0,
-      "elapsed_seconds": 0.28285479999613017
+      "elapsed_seconds": 0.3004854000000705
     },
     "r-syntax": {
       "exit_code": 0,
-      "elapsed_seconds": 0.28210889999900246
+      "elapsed_seconds": 0.2664154999999937
     },
     "native-build": {
       "exit_code": 0,
-      "elapsed_seconds": 2.1852921999961836
+      "elapsed_seconds": 2.2428530000001956
     },
     "native-lifecycle": {
       "exit_code": 0,
-      "elapsed_seconds": 0.6165370000016992
+      "elapsed_seconds": 0.6146039000000201
     },
     "native-reconfigure": {
       "exit_code": 0,
-      "elapsed_seconds": 0.013655199996719602
+      "elapsed_seconds": 0.013593399999990652
     },
     "native-no-allocations": {
       "exit_code": 0,
-      "elapsed_seconds": 0.22866340000473429
+      "elapsed_seconds": 0.2266021999998884
     },
     "native-accounting": {
       "exit_code": 0,
-      "elapsed_seconds": 0.22306110000499757
+      "elapsed_seconds": 0.22726249999982429
     }
   },
   "tests": {
@@ -80,5 +80,5 @@
   "checked_text_sha256": "6f82d96c45938afd81375380c52ba49c393dda5cea71a53e820395c33f374f78",
   "native_text_identical": true,
   "source_archive": "fastphylosig_0.3.5.tar.gz",
-  "source_sha256": "a9b0cec164004b3ad5fbffacf0d719fdc4e1a0d7a6eef79342fbe3a0c85a0fe3"
+  "source_sha256": "eb27317dc527eaa5e0bc6d280e309570ba7c8764f5712746f08009a70ec3e4d1"
 }

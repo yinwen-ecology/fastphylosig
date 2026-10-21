@@ -32,6 +32,6 @@
   },
   "diagnostics": "Keep all failures, numerical recoveries, optimizer retries/warnings and MCMC warnings",
   "biological_interpretation": "Local differences describe conservatism patterns at the analysed scale; no mechanism or rate inference by signal alone",
-  "status": "patch_candidate_not_released",
+  "status": "release",
   "scope_unchanged_from": "0.3.4"
 }

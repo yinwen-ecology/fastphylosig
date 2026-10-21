@@ -1,4 +1,4 @@
-# fastphylosig 0.3.5 (patch candidate, not released)
+# fastphylosig 0.3.5
 
 - Correct the ARD ancestral-state downpass to use the child contribution
   `P * L_child` under the row-generator convention. Impossible parent states

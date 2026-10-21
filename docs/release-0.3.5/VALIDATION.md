@@ -1,8 +1,8 @@
-# Final local validation: 0.3.5 patch candidate
+# Final local validation: 0.3.5 release
 
-Date: 2026-10-20. Platform: Windows, R 4.6.1. This record applies to the
-frozen candidate archive, not to the previously published 0.3.4 archive.
-GitHub CI reports its own platform results on the draft source pull request.
+Date: 2026-10-21. Platform: Windows, R 4.6.1. This record applies to the
+final release archive, not to the previously published 0.3.4 archive.
+GitHub CI reports its platform results on the release pull request and main branch.
 
 ## Package check
 
@@ -70,17 +70,18 @@ Evidence: [lifecycle](evidence/native-lifecycle.log),
 [replacement allocations](evidence/native-no-allocations.log),
 [accounting](evidence/native-accounting.log).
 
-## Archive identity and remaining release step
+## Archive identity and publication
 
 The single checked source archive is `fastphylosig_0.3.5.tar.gz`:
 
 ```text
-a9b0cec164004b3ad5fbffacf0d719fdc4e1a0d7a6eef79342fbe3a0c85a0fe3
+eb27317dc527eaa5e0bc6d280e309570ba7c8764f5712746f08009a70ec3e4d1
 ```
 
-It is retained locally with preparation logs. `verify_source.py` checks the
+It is retained locally with preparation logs and distributed as a release asset.
+`verify_source.py` checks the
 194 frozen package inputs, scope and optional archive hash. Public release
 notes identify affected ARD outputs and both ER/ARD ACE SE corrections.
 No additional statistical method or calibration claim is introduced by this
-version-preparation step. Formal tagging, release publication and asset
-uploads are deferred.
+version-preparation step. The release assets include the source package,
+validation-materials ZIP and SHA256 checksums; earlier release assets remain available.

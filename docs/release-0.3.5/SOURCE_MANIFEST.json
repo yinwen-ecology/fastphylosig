@@ -1,7 +1,7 @@
 {
   "package": "fastphylosig",
   "version": "0.3.5",
-  "status": "patch_candidate_not_released",
+  "status": "release",
   "algorithm_baseline": "reviewed 0.3.4.9003",
   "hash_policy": "SHA256; CRLF normalized to LF for UTF-8 text without NUL bytes; binary bytes retained",
   "native_files_identical_to_reviewed_snapshot": 31,
@@ -24,7 +24,7 @@
     },
     {
       "path": "NEWS.md",
-      "sha256": "28de3a555a981fb136cb52c605a70625747c067d27f1d695164c2fa3800aaa64"
+      "sha256": "4f7e2fee49082686a5da89f6fbf2fc9628298a7dd9d697ec8be403769404514c"
     },
     {
       "path": "R/RcppExports.R",
@@ -112,7 +112,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "400cb4211df9ad71b3d320976562391313868a7a92ae587f1d58221208e01657"
+      "sha256": "3c2ddf53609df64fb340774b43b592d928192eb09f18f16b52417c88a8fa5f88"
     },
     {
       "path": "inst/DELTA_REFERENCE.md",

@@ -3,18 +3,17 @@
 `fastphylosig` 用于计算连续、二元和分类性状的系统发育信号。多数分析只需
 使用 `fast_signal()`；需要逐步检查或调整方法参数时，再使用后面的专业函数。
 
-当前分支为 **0.3.5 补丁候选版**，尚未正式发布。它修正了 ARD 祖先概率和
+当前发布版为 **0.3.5**。它修正了 ARD 祖先概率和
 离散 ACE 速率标准误。使用过 ARD Δ、ARD 全树祖先概率或 ACE 标准误的分析，
 请参阅[补丁说明与重算建议](docs/release-0.3.5/RELEASE_NOTES_zh.md)。
 
-## 系统发育信号异质性（0.3.4）
+## 系统发育信号异质性
 
-0.3.4 本地源码使用 `fast_hetero()`，此前开发阶段的长名称已移除。
+使用 `fast_hetero()` 比较支系信号。
 它在自动选取的互不重叠子树
 或指定节点的子树上计算 K／lambda／二元 D／多状态 Δ，并报告各类群的样本量、
 缺失值、状态组成及全树覆盖率。重点是描述信号强弱在树上的分布。
 异质性参考检验作为可选补充，与普通信号检验分别报告。
-已有 0.3.1 压缩包尚不包含此功能。
 
 K 使用 BM 参考；λ 使用共同局部冠群参数的近似参考。D 的条件 ER 异质性检验为实验性；Δ 推荐局部/总体描述，异质性检验仅作显式实验调用。原有普通信号检验不受此范围限制。
 
@@ -94,15 +93,13 @@ lambda 以共同局部冠群 lambda 参数的近似高斯模型为参考；D 以
 ## 安装
 
 ```r
-# 安装本地构建的 0.3.4 源码包（需要 C++ 工具链）
-install.packages("fastphylosig_0.3.4.tar.gz", repos = NULL, type = "source")
+# 安装 0.3.5 源码包（需要 C++ 工具链及 ape、Rcpp、RcppArmadillo）
+install.packages("https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.5/fastphylosig_0.3.5.tar.gz", repos = NULL, type = "source")
 library(fastphylosig)
 ```
 
-已发布的旧版本仍可通过
-`remotes::install_github("yinwen-ecology/fastphylosig@v0.3.0")` 安装。
-原有性能证据和图表属于 0.3.0，不能作为 0.3.1 的新性能结论。
-本轮 50K 验证仅覆盖树准备、子集缓存、持久化、fallback 分组及无置换 K，
+也可用 `remotes::install_github("yinwen-ecology/fastphylosig@v0.3.5")` 安装固定标签。
+保留的 50K 验证覆盖树准备、子集缓存、持久化、fallback 分组及无置换 K，
 不代表所有方法与模拟场景均已在 50K 完成验证。
 
 从源码安装需要 C++ 编译工具，OpenMP 为可选加速项。

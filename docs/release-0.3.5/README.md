@@ -1,8 +1,8 @@
-# 0.3.5 patch candidate materials
+# 0.3.5 release materials
 
-This directory prepares a source patch for review. It does not announce a
-formal release, create a release tag, change the published download, or
-change the statistical scope.
+This directory records the 0.3.5 source release, mathematical corrections,
+reanalysis guidance and validation. Statistical scope and public interfaces
+are unchanged from the reviewed patch candidate.
 
 - [English patch notes and reanalysis guidance](RELEASE_NOTES_en.md)
 - [中文补丁说明与重算建议](RELEASE_NOTES_zh.md)
@@ -11,8 +11,10 @@ change the statistical scope.
 - [Frozen package-input manifest](SOURCE_MANIFEST.json)
 - [Source archive checksum](SHA256SUMS.txt)
 
-The local `fastphylosig_0.3.5.tar.gz` archive is retained under `local/` with
-preparation logs and is excluded from Git. The manifest verifies the package
+The checked `fastphylosig_0.3.5.tar.gz` archive and validation-materials ZIP are
+available from the [0.3.5 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5).
+Local copies and preparation logs are retained under `local/` and excluded
+from Git. The manifest verifies the package
 inputs in this commit. To check them from the repository root, run:
 
 ```sh
@@ -29,7 +31,7 @@ suite, including `test-ace-mathematics.R` and its analytic/enumeration helper.
 The standalone cache test in `tests/native/test-ace-exponent-cache.cpp` checks
 guarded allocations, failure recovery, reconfiguration, eviction and accounting.
 The local Windows check and source assertions are recorded here; GitHub CI
-reports its platform results on the candidate's draft pull request.
+reports its platform results on the release pull request and main branch.
 
 The retained corrected trajectory in `evidence/baseline-captured.rds` is an
 input for exact replay, not a new statistical calibration. With an installed

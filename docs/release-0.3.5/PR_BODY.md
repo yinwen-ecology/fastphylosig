@@ -7,7 +7,7 @@ mathematical corrections. K, lambda, D and ER Delta retain their result/RNG
 contracts.
 
 Retain the reviewed exact exponent cache and same-kernel GEMV/copy optimizations.
-Freeze the candidate as 0.3.5 with bilingual impact/reanalysis notes, source
+Freeze the release as 0.3.5 with bilingual impact/reanalysis notes, source
 manifest, checksum and validation evidence. The preparation itself matches
 0.3.4.9003 executable R syntax, native DLL code, exports and defaults.
 
@@ -24,8 +24,11 @@ Validation on Windows/R 4.6.1:
 - 14 exports/defaults and all 21 executable R syntax trees unchanged; native `.text` SHA256 identical.
 - Independent mathematical regressions and standalone guarded cache lifecycle/reconfiguration/accounting checks pass.
 
-See [candidate materials](https://github.com/yinwen-ecology/fastphylosig/blob/codex/prepare-v0.3.5/docs/release-0.3.5/README.md) for the frozen source
+See [release materials](https://github.com/yinwen-ecology/fastphylosig/blob/v0.3.5/docs/release-0.3.5/README.md) for the frozen source
 identity and evidence. Existing CI provides separate platform checks.
 
-This is a **draft source candidate**. Do not merge, tag or publish a GitHub
-Release as part of this preparation; published 0.3.4 assets remain unchanged.
+The maintainer has authorized the formal 0.3.5 release. The project website
+changes only current version numbers/links; its existing content is preserved.
+The repository README introduces the current release and correction impacts.
+Earlier release tags/assets remain available. After publication, main is the
+single retained branch; removed branch tips are archived in a local Git bundle.

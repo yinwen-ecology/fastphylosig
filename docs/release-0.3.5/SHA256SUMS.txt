@@ -1,1 +1,2 @@
-a9b0cec164004b3ad5fbffacf0d719fdc4e1a0d7a6eef79342fbe3a0c85a0fe3  fastphylosig_0.3.5.tar.gz
+eb27317dc527eaa5e0bc6d280e309570ba7c8764f5712746f08009a70ec3e4d1  fastphylosig_0.3.5.tar.gz
+2fd2cb0c4797e0a50c8f18d57e511be76ecec45a572686b3a08e7e458ccea0b9  fastphylosig-0.3.5-release-materials.zip

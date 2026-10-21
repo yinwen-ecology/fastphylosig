@@ -25,7 +25,7 @@ def normalized(name, data):
 
 
 manifest = json.loads((OUT / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
-assert manifest["version"] == "0.3.5" and manifest["status"] == "patch_candidate_not_released"
+assert manifest["version"] == "0.3.5" and manifest["status"] == "release"
 for item in manifest["files"]:
     name = item["path"]
     assert hashlib.sha256(normalized(name, (ROOT / name).read_bytes())).hexdigest() == item["sha256"], name
