@@ -245,7 +245,7 @@ R-hat, bulk/tail ESS, ratio MCSE and relative MCSE are retained for local and
 overall Delta. Ratio diagnostics enter reference-replicate warning counts.
 
 Delta heterogeneity tests are outside the recommended workflow. Their
-implementation is retained unchanged for explicit experimental calls;
+implementation remains available for explicit experimental calls;
 the installed HETERO_NUISANCE_zh.md records the research controls.
 An explicitly requested plugin reference uses RMS(log(Delta_local/Delta_overall)),
 distinct from between-crown dispersion. One common ER/ARD Mk rate matrix is
@@ -258,14 +258,18 @@ by retained tree/state count. Rates are reference-model parameters, not
 evidence of rate shifts. Analysis-owned ACE scratch is bounded by
 \code{options(fastphylosig.ace_cache_bytes = 64 * 1024^2)}; zero disables
 cross-fit caching. Active fits and allocator overhead are outside this bound.
-The expanded calibration includes random/missing and unequal crowns,
+ARD Delta uses the corrected ACE downpass since 0.3.5. Local/overall
+estimates and experimental tests can differ from 0.3.4; ER is unchanged.
+The historical calibration includes random/missing and unequal crowns,
 2--8 states and asymmetric models. High-state and sparse ARD reference
 inference remains exploratory; state scarcity can prevent a reference P.
 These checks do not establish general nominal error control.
 This approximate reference check has numerical
 tests and a bounded three-state whole-tree calibration: two ER scenarios
 gave 4.5\% and 5\% rejection (200 datasets each, 199 replicates, default MCMC).
-An asymmetric ARD scenario was conservative with 12.5\% unavailable results;
+Before the ARD downpass correction, one asymmetric ARD scenario was
+conservative with 12.5\% unavailable results; that result does not validate
+the corrected ARD estimator. In the historical runs,
 rare-state data can make all reference tests unavailable. These cases do
 not establish validity across tree shapes, state counts or missingness.
 \code{reference_fit="multistart"} optionally fits common ARD Q using the existing

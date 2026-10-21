@@ -15,6 +15,7 @@
 #include <unordered_map>
 
 #include "numeric_utils.h"
+#include "ace_exponent_cache.h"
 #include "d_kernels.h"
 #include "bounded_optimize.h"
 #include "heterogeneity_bounds.h"
@@ -309,6 +310,7 @@ struct AcePruningWorkspace {
   std::vector<int> exponent_edges;
   int batch_begin = 0, batch_end = 0;
   AceTransitionWorkspace transition;
+  AceExponentCache eigen_exponents;
   arma::vec left, right, product;
   bool initialized = false;
   arma::uword er_recoveries = 0;
@@ -373,6 +375,13 @@ struct AceFitWorkspace {
       scratch.exponent_workers.resize(threads);
       for (auto& worker : scratch.exponent_workers) worker.set_size(k);
     }
+    // Small distinct-length ARD fits are below the exponent batch threshold.
+    // Their exact eigenvalues can recur across different Q optimizer trials.
+    if(k==3 && rates.ncol()==3 && lengths.n_elem>=64 && lengths.n_elem<=8191u/3u &&
+        scratch.edge_exp_slot.empty() && scratch.exponent_workers.empty() &&
+        std::any_of(rates.begin(),rates.end(),[](int value){return value>1;}) &&
+        lengths.is_finite() && arma::all(lengths>0))
+      scratch.eigen_exponents.configure(lengths.n_elem);
   }
 };
 
@@ -473,15 +482,25 @@ double ace_er_reference_deviance(AceFitWorkspace& w, double q) {
 // multiplication. Keep that operation (including signed zeros) exactly.
 // Within the normal real range, cexp uses the same exp result;
 // overflowing/underflowing, nonfinite and complex inputs retain std::exp.
-void ace_exponents_reuse(const arma::cx_vec& lambda, const double length,
-                         arma::cx_vec& out) {
-  out.set_size(lambda.n_elem);
+inline std::complex<double> ace_exponent_value(const std::complex<double>& eigenvalue,
+                                               const double length) {
   const std::complex<double> factor(length,0.0);
-  for (arma::uword j=0; j<lambda.n_elem; ++j) {
-    const std::complex<double> z=lambda[j]*factor;
-    out[j]=z.imag()==0 && z.real()>=-700 && z.real()<=700 ?
-      std::complex<double>(std::exp(z.real()),z.imag()) : std::exp(z);
-  }
+  const std::complex<double> z=eigenvalue*factor;
+  return z.imag()==0 && z.real()>=-700 && z.real()<=700 ?
+    std::complex<double>(std::exp(z.real()),z.imag()) : std::exp(z);
+}
+
+void ace_exponents_reuse(const arma::cx_vec& lambda,const double length,arma::cx_vec& out) {
+  out.set_size(lambda.n_elem);
+  for(arma::uword j=0;j<lambda.n_elem;++j)out[j]=ace_exponent_value(lambda[j],length);
+}
+
+// The reuse workspace is already sized and distinct from the operands.
+// Delegate to the same Armadillo gemv dispatch used by glue_times, retaining
+// its BLAS/ATLAS/emulation and scalar-argument choices exactly.
+inline void ace_gemv_reuse(arma::cx_vec& out,const arma::cx_mat& A,
+                           const arma::cx_vec& x) {
+  arma::gemv<false,false,false>::apply(out.memptr(),A,x.memptr());
 }
 
 void ace_transition_multiply_reuse(const arma::cx_vec& lambda,
@@ -494,20 +513,28 @@ void ace_transition_multiply_reuse(const arma::cx_vec& lambda,
                                     const arma::cx_mat* tip_transformed = NULL,
                                     const int tip_column = 0,
                                     const arma::cx_mat* exponents = NULL,
-                                    const int exp_column = 0) {
+                                    const int exp_column = 0,
+                                    const AceExponentCache* eigen_exponents = NULL,
+                                    const int edge_row = 0) {
   if (tip_transformed != NULL) {
-    ws.transformed = tip_transformed->col(tip_column);
+    std::copy_n(tip_transformed->colptr(tip_column),ws.transformed.n_elem,ws.transformed.memptr());
   } else {
     for (arma::uword i = 0; i < liks.n_cols; ++i) {
       ws.child(i) = std::complex<double>(liks(child,i), 0.0);
     }
-    ws.transformed = inv_gamma * ws.child;
+    ace_gemv_reuse(ws.transformed,inv_gamma,ws.child);
   }
-  if (exponents == NULL) ace_exponents_reuse(lambda,edge_length,ws.exp_lambda);
-  else ws.exp_lambda = exponents->col(exp_column);
-  ws.transformed %= ws.exp_lambda;
-  ws.gamma_transformed = gamma * ws.transformed;
-  out = arma::real(ws.gamma_transformed);
+  if(eigen_exponents != NULL) {
+    // Same component-wise complex products and order as %=, without copying
+    // cached values through exp_lambda. This cache is only enabled for k=3.
+    for(arma::uword j=0;j<3;++j)ws.transformed[j] *= eigen_exponents->value(j,edge_row);
+  } else {
+    if(exponents != NULL)std::copy_n(exponents->colptr(exp_column),ws.exp_lambda.n_elem,ws.exp_lambda.memptr());
+    else ace_exponents_reuse(lambda,edge_length,ws.exp_lambda);
+    ws.transformed %= ws.exp_lambda;
+  }
+  ace_gemv_reuse(ws.gamma_transformed,gamma,ws.transformed);
+  for(arma::uword i=0;i<out.n_elem;++i)out[i]=std::real(ws.gamma_transformed[i]);
 }
 
 arma::vec ace_transition_multiply(const arma::cx_vec& lambda,
@@ -672,6 +699,12 @@ double ace_discrete_pruning_internal(const Rcpp::IntegerMatrix& edge,
   }
   std::fill(ws.exp_ready.begin(),ws.exp_ready.end(),false);
   ws.batch_begin = ws.batch_end = 0;
+  const AceExponentCache* eigen_exponents = NULL;
+  if(reuse_buffers && !analytic_er && !stable && ws.eigen_exponents.prepare(lambda,edge_length,
+      [](const std::complex<double>& value,const double length) {
+        return ace_exponent_value(value,length);
+      }))
+    eigen_exponents = &ws.eigen_exponents;
   auto prepare_exponent_batch = [&](const int begin) {
     const bool mixed = !ws.exponent_edges.empty();
     const int count = mixed ? static_cast<int>(ws.exponent_edges.size()) : n_edge;
@@ -744,7 +777,7 @@ double ace_discrete_pruning_internal(const Rcpp::IntegerMatrix& edge,
     }
     ace_transition_multiply_reuse(lambda,gamma,inv_gamma,liks,child,
                                   length,transition_workspace,out,cached,column,
-                                  exponents,exp_column);
+                                  exponents,exp_column,eigen_exponents,edge_row);
   };
   for (int e = 0; e < n_edge; e += 2) {
     const int e_right = e + 1;
@@ -823,6 +856,31 @@ double ace_discrete_pruning_internal(const Rcpp::IntegerMatrix& edge,
         }
         normalized_at[row] = step;
       };
+      // Q has parent states in rows. The child contribution at each parent
+      // state is P * L_child, represented here as L_child * P.t(). Retain the
+      // historical ER arithmetic exactly: its P is mathematically symmetric,
+      // and changing its floating-point direction can alter Delta endpoint RNG.
+      const bool er_downpass = ace_is_er(rate_index);
+      const auto propagate = [&](const int parent, const int child, const arma::mat& P) {
+        const arma::rowvec denom = er_downpass ?
+          arma::rowvec(lik_anc.row(child) * P) :
+          arma::rowvec(lik_anc.row(child) * P.t());
+        arma::rowvec tmp;
+        if (arma::any(denom == 0.0)) {
+          if (er_downpass) return false;
+          // A reducible ARD Q can make a parent state impossible. Its posterior
+          // and child contribution are both zero, so that state's message is
+          // zero rather than 0/0. A positive posterior with zero contribution
+          // remains a numerical failure; do not silently discard its mass.
+          tmp.zeros(k);
+          for (int j = 0; j < k; ++j) {
+            if (denom[j] != 0.0) tmp[j] = lik_anc(parent, j) / denom[j];
+            else if (lik_anc(parent, j) != 0.0) return false;
+          }
+        } else tmp = lik_anc.row(parent) / denom;
+        lik_anc.row(child) = (tmp * P) % lik_anc.row(child);
+        return true;
+      };
       int step = 0;
       for (int e = n_edge - 2; e >= 0; e -= 2) {
         const int e_right = e + 1;
@@ -835,12 +893,8 @@ double ace_discrete_pruning_internal(const Rcpp::IntegerMatrix& edge,
           const arma::mat P = stable ? ace_stable_transition(Q,edge_length(e)) :
             analytic_er ? ace_er_transition_matrix(k,par[0],edge_length(e)) :
             ace_transition_matrix(lambda, gamma, inv_gamma, edge_length(e));
-          const arma::rowvec denom = lik_anc.row(des_left) * P;
-          if (arma::any(denom == 0.0)) {
+          if (!propagate(anc, des_left, P))
             return std::numeric_limits<double>::infinity();
-          }
-          const arma::rowvec tmp = lik_anc.row(anc) / denom;
-          lik_anc.row(des_left) = (tmp * P) % lik_anc.row(des_left);
         }
 
         const int des_right = edge(e_right, 1) - n_tip - 1;
@@ -849,12 +903,8 @@ double ace_discrete_pruning_internal(const Rcpp::IntegerMatrix& edge,
           const arma::mat P = stable ? ace_stable_transition(Q,edge_length(e_right)) :
             analytic_er ? ace_er_transition_matrix(k,par[0],edge_length(e_right)) :
             ace_transition_matrix(lambda, gamma, inv_gamma, edge_length(e_right));
-          const arma::rowvec denom = lik_anc.row(des_right) * P;
-          if (arma::any(denom == 0.0)) {
+          if (!propagate(anc, des_right, P))
             return std::numeric_limits<double>::infinity();
-          }
-          const arma::rowvec tmp = lik_anc.row(anc) / denom;
-          lik_anc.row(des_right) = (tmp * P) % lik_anc.row(des_right);
         }
 
         ++step;
@@ -1954,7 +2004,7 @@ double fast_ace_fit_bytes_cpp(SEXP prepared) {
   for (const auto& worker : s.exponent_workers) bytes += sizeof(std::complex<double>)*worker.n_elem;
   bytes += sizeof(int)*(s.edge_exp_slot.capacity()+s.exponent_edges.capacity())+
     (s.transformed_ready.capacity()+s.exp_ready.capacity()+7)/8;
-  return bytes;
+  return bytes+s.eigen_exponents.bytes();
 }
 
 // [[Rcpp::export(rng = false)]]

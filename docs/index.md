@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Fast phylogenetic signal analysis in R
-description: fastphylosig 0.3.4 measures phylogenetic signal and compares local and whole-tree patterns with fast_hetero().
+description: fastphylosig 0.3.5 measures phylogenetic signal and compares local and whole-tree patterns with fast_hetero().
 lang: en
 home_url: /
 alternate_url: /index-zh.html
@@ -18,7 +18,7 @@ alternate_label: 中文
 </nav>
 
 <section class="hero" id="top" markdown="1">
-<p class="eyebrow">fastphylosig · R package · v0.3.4</p>
+<p class="eyebrow">fastphylosig · R package · v0.3.5</p>
 
 # Fast phylogenetic signal analysis in R
 
@@ -56,13 +56,13 @@ alternate_label: 中文
 
 <div class="install-stack" markdown="1">
 <article class="content-card" markdown="1">
-### Install v0.3.4
+### Install v0.3.5
 
-The [v0.3.4 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4) is the latest version. It provides the full clade-scale workflow and improves D/lambda performance.
+The [v0.3.5 release](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5) is the latest version. It provides the full clade-scale workflow and improves D/lambda performance.
 
 ```r
 install.packages(
-  "https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.4/fastphylosig_0.3.4.tar.gz",
+  "https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.5/fastphylosig_0.3.5.tar.gz",
   repos = NULL, type = "source"
 )
 library(fastphylosig)
@@ -237,6 +237,6 @@ In a large tree (say more than 1,000 tips), a single signal value cannot describ
   </article>
 </div>
 
-The current release is [fastphylosig v0.3.4](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4). The runtime figures above come from v0.3.0 and were not re-run for v0.3.4, because the core computational code did not change. See the [release notes](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4) and the [fast_hetero case study]({{ '/fast-hetero-case.html' | relative_url }}).
+The current release is [fastphylosig v0.3.5](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5). The runtime figures above come from v0.3.0 and were not re-run for v0.3.4, because the core computational code did not change. See the [release notes](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5) and the [fast_hetero case study]({{ '/fast-hetero-case.html' | relative_url }}).
 
 <p class="closing-links"><a href="https://github.com/yinwen-ecology/fastphylosig">Source code</a><a href="https://github.com/yinwen-ecology/fastphylosig/issues">Report an issue</a><a href="{{ '/release-0.3.0/README.html' | relative_url }}">Benchmark and usage details</a></p>

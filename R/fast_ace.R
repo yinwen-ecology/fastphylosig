@@ -270,7 +270,8 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
       if (inherits(solved, "try-error")) {
         rep(NaN, rate$np)
       } else {
-        sqrt(diag(solved))
+        # dev = -2 * loglik, so observed information is Hessian(dev) / 2.
+        sqrt(2 * diag(solved))
       }
     }
   }

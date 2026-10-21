@@ -1,3 +1,32 @@
+# fastphylosig 0.3.5
+
+- Correct the ARD ancestral-state downpass to use the child contribution
+  `P * L_child` under the row-generator convention. Impossible parent states
+  with zero posterior and zero contribution send zero messages. Shared ACE
+  fitting, transition matrices, normalization and Delta MCMC kernels are reused.
+- ARD ancestral probabilities and downstream Delta estimates, local/overall
+  summaries, tests and subsequent RNG may change. The ER downpass retains its
+  previous arithmetic; K, lambda, D and ER Delta keep their result/RNG contracts.
+- Scale discrete ACE rate standard errors by the information matrix for the
+  negative twice log likelihood. This corrects both ER and ARD standard errors;
+  fitted rates are unchanged and Delta does not use these standard errors.
+- Add independent latent-state enumeration, analytic two-state transitions and
+  information-curvature regressions. Reference-package checks remain for valid
+  point-likelihood comparisons, not for the corrected ARD probabilities or SEs.
+- Cache exact eigenvalue exponent columns for eligible small three-state ARD
+  fits. Reset entries on reconfiguration, account for hash-node storage and
+  publish only complete columns. The normal R path configures its immutable
+  workspace once; its earlier reconfiguration boundary issue was not triggered.
+- Reuse Armadillo's existing GEMV dispatch in pre-sized scratch and remove
+  repeated vector preparation/copies. Exact exponent evaluation, optimizer
+  steps, MCMC, corrected results and RNG contracts are retained. Cache lifecycle,
+  memory bounds, FP controls and full-call equivalence have regression checks.
+- Retain public interfaces, defaults and statistical scope: K's BM reference,
+  lambda's approximate common-local-crown reference, experimental D inference,
+  and descriptive Delta with experimental heterogeneity tests outside the
+  recommended workflow. Historical ARD calibration does not validate the
+  corrected estimator. See docs/release-0.3.5 for impact and reanalysis guidance.
+
 # fastphylosig 0.3.4
 
 - Consolidate `fast_hetero()` clade selection, coverage, trait-wise missing
@@ -17,9 +46,6 @@
   results and RNG; speed gains depend on workload. K kernels are unchanged.
 - Remove two unused private scalar encoding helpers. Refresh documentation,
   source/Rd agreement and executable short examples. No public API is removed.
-
-This is a local source revision. The independent 0.3.1 submission and its
-review status are unchanged; this entry does not announce CRAN acceptance.
 
 # fastphylosig 0.3.3.9021 (development)
 

@@ -4,7 +4,8 @@
 # continuous-time Markov-chain definition, but the oracle performs each
 # transition with base-R eigen algebra.  Keeping the reference independent of
 # the C++ expression-template path catches both allocation-oriented rewrites
-# and accidental changes to pruning/reconstruction semantics.
+# and accidental changes to pruning/reconstruction semantics. Full-tree
+# probabilities use independent inside/outside messages, not ACE's downpass.
 
 .ace_opt_rate_index <- function(model, k) {
   out <- matrix(0L, k, k)
@@ -57,31 +58,23 @@
 
   lik_anc <- liks[(n_tip + 1L):n_total, , drop = FALSE]
   if (!marginal) {
-    for (e in rev(seq.int(1L, nrow(edge), by = 2L))) {
-      anc <- edge[e, 1L] - n_tip
-      des_left <- edge[e, 2L] - n_tip
-      if (des_left > 0L) {
-        denom <- as.numeric(lik_anc[des_left, , drop = FALSE] %*%
-                              transition[[e]])
-        tmp <- lik_anc[anc, ] / denom
-        lik_anc[des_left, ] <-
-          as.numeric(tmp %*% transition[[e]]) * lik_anc[des_left, ]
-      }
-
-      des_right <- edge[e + 1L, 2L] - n_tip
-      if (des_right > 0L) {
-        denom <- as.numeric(lik_anc[des_right, , drop = FALSE] %*%
-                              transition[[e + 1L]])
-        tmp <- lik_anc[anc, ] / denom
-        lik_anc[des_right, ] <-
-          as.numeric(tmp %*% transition[[e + 1L]]) * lik_anc[des_right, ]
-      }
-
-      rowsums <- rowSums(lik_anc)
-      for (r in seq_len(nrow(lik_anc))) {
-        if (rowsums[r] != 0) lik_anc[r, ] <- lik_anc[r, ] / rowsums[r]
+    outside <- matrix(0, n_total, k)
+    root <- setdiff(edge[, 1L], edge[, 2L])
+    outside[root, ] <- 1/k
+    for (parent in rev(unique(edge[, 1L]))) {
+      children <- which(edge[, 1L] == parent)
+      for (e in children) {
+        message <- outside[parent, ]
+        for (sibling in setdiff(children, e)) {
+          message <- message * as.numeric(transition[[sibling]] %*%
+                                            liks[edge[sibling, 2L], ])
+        }
+        value <- as.numeric(message %*% transition[[e]])
+        outside[edge[e, 2L], ] <- value/sum(value)
       }
     }
+    lik_anc <- (liks * outside)[(n_tip + 1L):n_total, , drop = FALSE]
+    lik_anc <- lik_anc/rowSums(lik_anc)
   }
 
   list(deviance = -2 * log_comp, lik.anc = lik_anc)

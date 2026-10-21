@@ -1,0 +1,786 @@
+{
+  "package": "fastphylosig",
+  "version": "0.3.5",
+  "status": "release",
+  "algorithm_baseline": "reviewed 0.3.4.9003",
+  "hash_policy": "SHA256; CRLF normalized to LF for UTF-8 text without NUL bytes; binary bytes retained",
+  "native_files_identical_to_reviewed_snapshot": 31,
+  "files": [
+    {
+      "path": ".Rbuildignore",
+      "sha256": "29908fe312cf3c04b545e0f51264f6969fdd12edc5d364df8946431758d1e967"
+    },
+    {
+      "path": "DESCRIPTION",
+      "sha256": "8d5386a90b8b0c51022e1ffa178a71228fe6bfbdfcdcd110074a01408efef25b"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "a78785ff3f76f3815eb12236ea604484178bf311296ac4e942f53a97c6b2d354"
+    },
+    {
+      "path": "NAMESPACE",
+      "sha256": "4cce182b77ea31df9c0a834fb796e6779b04cb734fb1a4ff253528b32e601ff1"
+    },
+    {
+      "path": "NEWS.md",
+      "sha256": "4f7e2fee49082686a5da89f6fbf2fc9628298a7dd9d697ec8be403769404514c"
+    },
+    {
+      "path": "R/RcppExports.R",
+      "sha256": "38c9d6a9f1dec0cecd5ad952c1b61f69d66e37060c01738be8fa23cd8a7091d1"
+    },
+    {
+      "path": "R/ace_native_pool.R",
+      "sha256": "0e6317d83a661e72fa1ee517b4dcd42cbc4191a7d6b32343abec267283fd9d16"
+    },
+    {
+      "path": "R/ace_optimizer_recovery.R",
+      "sha256": "b67499ae4fd3990852fadd8cced0db7b686a86cdfb972c6e117e5ebec89323cb"
+    },
+    {
+      "path": "R/analysis_preparation.R",
+      "sha256": "80cb66d61a2a2962b6941329b88fc3afc9f83389ff53d43a4518c27423618a02"
+    },
+    {
+      "path": "R/canonicalization_v2.R",
+      "sha256": "77f9a9c7f939d451965e8c898f9b83de037cb998a92f3894d1aa14a16ae689e9"
+    },
+    {
+      "path": "R/check_tree.R",
+      "sha256": "d87c8530a680f3247cdca32db4c7c5a155db9a00474644d5dd2f945644ede32e"
+    },
+    {
+      "path": "R/delta_rank_diagnostics.R",
+      "sha256": "d197bcd665ea5a328f87b1e10286cab89047c09c9141cc67e2eb2166d1c5b3c9"
+    },
+    {
+      "path": "R/fast_ace.R",
+      "sha256": "01047199abd05563adb080b8f84c0eac27111c868a190145c2c77607bf7b67ea"
+    },
+    {
+      "path": "R/fast_d.R",
+      "sha256": "231e0d1286678d3b6301b749cf51332f0e9f7ffa080bf515c3867f3ec982a46a"
+    },
+    {
+      "path": "R/fast_delta.R",
+      "sha256": "911712d4641db5ab42f966f2260138d99006bd514ac76225b8fbd3d4aca10523"
+    },
+    {
+      "path": "R/fast_signal.R",
+      "sha256": "5371d3dfa95d7c03d3f104b104d45c13e1f22d1fb425511e62889446f76ec7c8"
+    },
+    {
+      "path": "R/heterogeneity_delta.R",
+      "sha256": "778ced5a246efb22f9f47977bc1b1634060e413df1e0c7b60d11db35ee852b68"
+    },
+    {
+      "path": "R/heterogeneity_nuisance.R",
+      "sha256": "3eb45f457d2c4bb5b9afb09d35283737b304361f6a58970278cb755e7cde72e6"
+    },
+    {
+      "path": "R/match_phylo_data.R",
+      "sha256": "c73c54bbfcdd7f20b0578d4edc302c566b3571bdf4466e3c3093355710ed0cd2"
+    },
+    {
+      "path": "R/plot_signal.R",
+      "sha256": "9b24899d830c051b02a2e70d0197c431c0898edb4299289d642f47123a66051c"
+    },
+    {
+      "path": "R/prepare_tree.R",
+      "sha256": "2fe94cc9c3a0c825e0c48957c83e23253d9e5ba7e7833c3e197b4fa6283e0ac8"
+    },
+    {
+      "path": "R/resolve_tree.R",
+      "sha256": "07daa3a35cdd0ec1a6bc1eeb5dbb2442b44d6407b2462559a06dc7b267da7ffe"
+    },
+    {
+      "path": "R/result_methods.R",
+      "sha256": "f4814c44fd181b5125eb26cb20fd7816ff9f844ce1a4ceec49e38e2b3a5e4b2e"
+    },
+    {
+      "path": "R/runtime.R",
+      "sha256": "ccb6085dbae5a080d6e382c7f946124e2d5147d863fab38b3145eed520479f00"
+    },
+    {
+      "path": "R/signal_heterogeneity.R",
+      "sha256": "fba3f6040f6940389cde1ae0fe623135faee2df07a6bac87d232e9665e1ff270"
+    },
+    {
+      "path": "R/tree_requirements.R",
+      "sha256": "5923972b223dfe1548fb0a26ff6048affa2e80dfcff162615df21f39196f7b97"
+    },
+    {
+      "path": "README.md",
+      "sha256": "3c2ddf53609df64fb340774b43b592d928192eb09f18f16b52417c88a8fa5f88"
+    },
+    {
+      "path": "inst/DELTA_REFERENCE.md",
+      "sha256": "77628197f42a4ab64829c952dd9aa23f1ca506ad2e5112c535369c497bae7702"
+    },
+    {
+      "path": "inst/EXPERT_REVIEW.md",
+      "sha256": "af1474fb4b0cc877346aa64bd8fdd04cf147b58712cda212311510dd07479a81"
+    },
+    {
+      "path": "inst/HETERO_GUIDE_zh.md",
+      "sha256": "490d359d4b127f1eb2ad33fa3275678ae0e28bf90509dca69e7f4e9d6d6c495a"
+    },
+    {
+      "path": "inst/HETERO_NUISANCE_zh.md",
+      "sha256": "031b58988068ee04d14fada5487f3e1be4287484b165f45b440bdbdbb9d07f63"
+    },
+    {
+      "path": "inst/POST_0.1.0_TECH_DEBT.md",
+      "sha256": "080622bb39cd3ff0029e9c258d2b36f10c938a57a260802447a2903f6fd5423b"
+    },
+    {
+      "path": "inst/RC_READINESS.md",
+      "sha256": "fa1df5d8ed725901f507e660d0a30fdf36c9c7c2f13dfd09a4e70b49b406a3fa"
+    },
+    {
+      "path": "inst/examples/heterogeneity-workflow.R",
+      "sha256": "1e920a66e8516773e6cc61ce11f2c61fe1961be1fe44a3dc0f43ac8b189297c7"
+    },
+    {
+      "path": "man/cache_info.Rd",
+      "sha256": "e4882f2a66c9db6de02dc18ad329ff057fa9c4658f88635c11007aa8f9c9becc"
+    },
+    {
+      "path": "man/check_tree.Rd",
+      "sha256": "e6708555cc2676afc78c7f4f59324bbbf375c488b2042f5ced8d8f9b56ab719a"
+    },
+    {
+      "path": "man/fast_ace.Rd",
+      "sha256": "47db60acc2613f4d9cac51404437507234266edd6961987f91586d3ca8b8c69c"
+    },
+    {
+      "path": "man/fast_d.Rd",
+      "sha256": "3e5ca8b885db8008a7421129f5109bd660c89d011832178e38e3c37a73d8d4a8"
+    },
+    {
+      "path": "man/fast_delta.Rd",
+      "sha256": "27262dc8811bf0a27d3b621f9f9f2056f1978f48399fbef631c5f8ef54c0e7b1"
+    },
+    {
+      "path": "man/fast_hetero.Rd",
+      "sha256": "05554c29d7527c6f27d5a48b3f88866ef1d40584f58eb03070921dceb164972f"
+    },
+    {
+      "path": "man/fast_k.Rd",
+      "sha256": "b81755d2d45b3834913374c14cb1957857d08e04f86bea01dccfa728c0551960"
+    },
+    {
+      "path": "man/fast_lambda.Rd",
+      "sha256": "0f63ad2d9e3f62c6fe172cbaee1776e1971605abe38b6fe2faf862ba31930c4d"
+    },
+    {
+      "path": "man/fast_signal.Rd",
+      "sha256": "fe7c5c723ae5321802a2db5b1f24c26b6c2455a8db7a00e2af88cea676969ad3"
+    },
+    {
+      "path": "man/fastphylosig-package.Rd",
+      "sha256": "ed91a63e5b0e91f15b969c8e1d2103b3a960858c4b2a0271cbc44f0d17c00751"
+    },
+    {
+      "path": "man/match_phylo_data.Rd",
+      "sha256": "699e40f77fce4d624c6f40cf9725c54aa283d05699ab1fd0e15729d144b52c42"
+    },
+    {
+      "path": "man/match_tree_data.Rd",
+      "sha256": "78d5511fe9aad8f789bc8bb70cb1cbeac2d2ee23e4a824f3dfc93c6c5ddf8769"
+    },
+    {
+      "path": "man/plot.fastphylosig_heterogeneity.Rd",
+      "sha256": "0a9d935556745b48e0ed589ec5e3f9e92ecfa12244642de7272c92d4515fd2eb"
+    },
+    {
+      "path": "man/plot_signal.Rd",
+      "sha256": "5da5d5167a1d187ad8b7ca306a42e3001db365749a48186ca295d5a720c797d5"
+    },
+    {
+      "path": "man/prepare_tree.Rd",
+      "sha256": "a4fe2846b7d67f96afba2a55eae1806e196938971e48ae7dc81fe889ad106938"
+    },
+    {
+      "path": "man/resolve_tree.Rd",
+      "sha256": "99206f5280e7a3ec4e79fd534fa8361f77d7539d3b14290981bceae147e7ed8b"
+    },
+    {
+      "path": "man/result_methods.Rd",
+      "sha256": "55cade4a7cc2528d5294bffa9698d76297fb05b6f7b56303bbea02335289c91b"
+    },
+    {
+      "path": "src/Makevars",
+      "sha256": "f4596d215353a0daba76ff6d0e8eab9776dd822c24bc14582e9c072f9f3604db"
+    },
+    {
+      "path": "src/Makevars.win",
+      "sha256": "f4596d215353a0daba76ff6d0e8eab9776dd822c24bc14582e9c072f9f3604db"
+    },
+    {
+      "path": "src/RcppExports.cpp",
+      "sha256": "ade8f7e543ea59043068df89e8599cfdb50e920ff150db1a7d28ce0dd24dd3af"
+    },
+    {
+      "path": "src/ace_exponent_cache.h",
+      "sha256": "abef2b2c1a47ae689341aff8f66618f5ce23e059e8a27142436a37f8fd852512"
+    },
+    {
+      "path": "src/bounded_optimize.h",
+      "sha256": "90d598f26a7606828ab3953c1bfa77ced59ac184874925f7e64112bb585f191e"
+    },
+    {
+      "path": "src/canonicalization.cpp",
+      "sha256": "a671c635d3aaaaad7fbbf33f361b68a10be7ce671e9bf92e969608a89fdae655"
+    },
+    {
+      "path": "src/continuous_kernels.h",
+      "sha256": "47dd89913055ae8ba8b7e9f5e675ecc41405e4b94b5ad5378d869768ff635606"
+    },
+    {
+      "path": "src/d_kernels.h",
+      "sha256": "606caea44fb3d524edea71e7f355259d3a5cb59ec17d20e8f0e71ee960be1824"
+    },
+    {
+      "path": "src/d_stream.cpp",
+      "sha256": "343a0c36bc5b07e8d742974c631dcf7ead3125414588a3624f649c0cdaab697b"
+    },
+    {
+      "path": "src/delta_diagnostics.cpp",
+      "sha256": "5d4bd781a8bf464a38fe44163d0a230ee42d4561ecdee1707f347bcbbdce7483"
+    },
+    {
+      "path": "src/fast_signal.cpp",
+      "sha256": "f05c4e642b567a0f694528a307e8fe27f8b95a36773c673cd63d28a21da76bf9"
+    },
+    {
+      "path": "src/heterogeneity.cpp",
+      "sha256": "d194eaf56849466fd16cfcebc5dbcd4f432a3bcc98c6e3921206e4d5bc903849"
+    },
+    {
+      "path": "src/heterogeneity_ard_boundary.h",
+      "sha256": "bfb28048d487156afa8b09ba94118e7c12c06dc88ea6a24c577529af464d5c4d"
+    },
+    {
+      "path": "src/heterogeneity_binary.cpp",
+      "sha256": "3995063e709107a368740054830ca57a187cf3966872a43a2a853c5e03dc95a4"
+    },
+    {
+      "path": "src/heterogeneity_bootstrap.h",
+      "sha256": "dcdd5712f48e9a1fd23b28a06a90d55403bc680d6f9fcbc48076853e9c8544e0"
+    },
+    {
+      "path": "src/heterogeneity_bounds.h",
+      "sha256": "3acd8138a85a5802322ad618d282d665ac750f381bcafb5839bbab03a8511d69"
+    },
+    {
+      "path": "src/heterogeneity_forest_shared.h",
+      "sha256": "2b4e9067ba0452bcea9512dfc9119e385672afcfcf286cee8a645ebbe874555a"
+    },
+    {
+      "path": "src/heterogeneity_mass.h",
+      "sha256": "70f48f7b15b5cddd756a0a2826992d2e929f00d1fbdd8feffedf9db2979c6ffb"
+    },
+    {
+      "path": "src/heterogeneity_nuisance.cpp",
+      "sha256": "b820bf7b20e06b2a6acce856a58881307db63b87c76fcbd1fbe8bfa70fd7abe6"
+    },
+    {
+      "path": "src/heterogeneity_reference.cpp",
+      "sha256": "5617de701b00bd9bd90184f828ce9b18448f8ef7fc54887a757a446808ce7029"
+    },
+    {
+      "path": "src/heterogeneity_repeats.h",
+      "sha256": "8f557e128acdb56373881001362839a6dd995b7c230fcdfde57af75b35b8f010"
+    },
+    {
+      "path": "src/heterogeneity_taylor.h",
+      "sha256": "1419b3d99251aae6802552ad526cac62f68cd6164afaaef90a9fd231894255c5"
+    },
+    {
+      "path": "src/heterogeneity_transient.h",
+      "sha256": "16825ede477baa6cae0e462bb17c72a6d088e280b7ddb60e8dce5783683dc8a7"
+    },
+    {
+      "path": "src/k_permutation.cpp",
+      "sha256": "2235beceab259381fca77c3ebbd889598d20faa309efced1c7c1adc77686e049"
+    },
+    {
+      "path": "src/k_strategy.h",
+      "sha256": "8a33cb6e010a0b8d3bdd0ff6a4f7a5e00d2a7bec5df93b93127efb4b5c47c49a"
+    },
+    {
+      "path": "src/k_tree.cpp",
+      "sha256": "4438f10880d76930e35d5101feccfd6e942039b8b544df5f5c4ced6b2f657367"
+    },
+    {
+      "path": "src/lambda_tree.cpp",
+      "sha256": "342f5c5cbaa80e50403a6094941a535cbfe83cee5a1d94014793609ccd82748a"
+    },
+    {
+      "path": "src/na_mask.cpp",
+      "sha256": "46fb0062ca99a4a03429083c7ae79eb395caac1ffcd3cce3c203a9af1589b3de"
+    },
+    {
+      "path": "src/numeric_utils.h",
+      "sha256": "0b69a3a17419d8cf73ccca9cfaf1de64300b9a8ad3584b84a4c33d359cf1507d"
+    },
+    {
+      "path": "src/tree_core.cpp",
+      "sha256": "c74e8c8312800eb2e4d17a9b2b1a271be1ccce1f9e9124d1e374d027b0f442c8"
+    },
+    {
+      "path": "src/tree_core.h",
+      "sha256": "4a59e1314493733e2de728c87da5e33efa85ff67fd895c3f125219af65aac888"
+    },
+    {
+      "path": "tests/native/test-ace-exponent-cache.cpp",
+      "sha256": "e8c262bacb66b622ff671c97a168115065b0341ddcb332ab35a3b0948a3af5ee"
+    },
+    {
+      "path": "tests/test_hybrid_equivalence.R",
+      "sha256": "20c4160ae81354b84b13fc693217707d474fa593923bb1d9fd4472f237b678c6"
+    },
+    {
+      "path": "tests/testthat.R",
+      "sha256": "ac9e59b15e4fbd65b9c177ce0cb4c55a0fd059a63833719fcd97ef676b458152"
+    },
+    {
+      "path": "tests/testthat/fixtures/ace-ard-local-recovery-README.md",
+      "sha256": "ebb3db8bd3a042f183300dc9c1494c16e90f59281230fd1b7e093b0cbb2ae127"
+    },
+    {
+      "path": "tests/testthat/fixtures/ace-ard-local-recovery.rds",
+      "sha256": "7e81ec0e579f6152c16ceaa1771ea8060ab7013f0e97e94af7db233d08d500a3"
+    },
+    {
+      "path": "tests/testthat/fixtures/ace-ard-stability-README.md",
+      "sha256": "f2b2036cf8a8ceef8c316daeccd622a6f1c03af326bca12de0e34ea5d53fcdf8"
+    },
+    {
+      "path": "tests/testthat/fixtures/ace-ard-stability.rds",
+      "sha256": "69c92ff03e1b9dadb060728686bddd9ad51caca7e7084cc07e0b476ee07ac9e8"
+    },
+    {
+      "path": "tests/testthat/fixtures/ace-er-singular.rds",
+      "sha256": "88788b07756a48a3bf42f23bf6339269411cc54b121ecbe72e8384b93ca02367"
+    },
+    {
+      "path": "tests/testthat/fixtures/ace-near-absorbing-README.md",
+      "sha256": "adffede74b05b7467408b854b6f7861f03cabb26472dae6f4c298b4efe5b5ef0"
+    },
+    {
+      "path": "tests/testthat/fixtures/ace-near-absorbing.rds",
+      "sha256": "c97b835474b6dcd142d0ca08f6830bc9520a6e6e5da3f2fc122eb0e07cc54d38"
+    },
+    {
+      "path": "tests/testthat/fixtures/d_polytomy_tail_boundary_audit.csv",
+      "sha256": "4fedf3e9cd3f856610b00af4d0f92afd983f5c1512a8051dccf222823a9b206e"
+    },
+    {
+      "path": "tests/testthat/fixtures/delta-entropy-roundoff.rds",
+      "sha256": "666077626a62bb88a3d3ef682baaac1f21e315e09665e38df7ae27e9387d9012"
+    },
+    {
+      "path": "tests/testthat/fixtures/delta-rank-oracle-README.md",
+      "sha256": "0bfb929ab6a2a9ec28ef40c0fcf5c7c0dc8477b730dc8cae231b4858b7bf3838"
+    },
+    {
+      "path": "tests/testthat/fixtures/delta-rank-oracle.rds",
+      "sha256": "ada0e53aea851fb452a395145473bd7fb262316d55126a1959da5710af30ec81"
+    },
+    {
+      "path": "tests/testthat/fixtures/stage2b2b-old-inspect-tree.R",
+      "sha256": "ba7b8eeafa9b97532c21cc22013b0f1fb523f60afec5f94242211c3806309289"
+    },
+    {
+      "path": "tests/testthat/fixtures/warning_status_stability.csv",
+      "sha256": "955ba05f68fcaa16e1f3b86dbcd3364249b838308ecc631fa2298f8a43e40b82"
+    },
+    {
+      "path": "tests/testthat/helper-ace-mathematics.R",
+      "sha256": "a95336855418ad9f0110d24c7dbbe6e476f8e642e093cd14d4092d34f6089780"
+    },
+    {
+      "path": "tests/testthat/helper-ace-recovery-reference.R",
+      "sha256": "ea0c421b798b1d096f29a9648c7617f55df7d78c15d1ae16b6b92ed2d982d438"
+    },
+    {
+      "path": "tests/testthat/helper-delta-opt-reference.R",
+      "sha256": "595ce1592a2dd13fff1e2b6031e3995e3465fa6bac31eefb870afcee195baf4b"
+    },
+    {
+      "path": "tests/testthat/helper-delta-posterior-reference.R",
+      "sha256": "df0440f35b0eade7d690ee39b5793dd5882aeece50ccb1b90b5ff345c18c7091"
+    },
+    {
+      "path": "tests/testthat/helper-heterogeneity-reference.R",
+      "sha256": "b3884ad0146ff0dbf2ea3c3673cfccb9af5c18f7604adee01bf9e9df3e893fb6"
+    },
+    {
+      "path": "tests/testthat/helper-stage2b2b-oracle.R",
+      "sha256": "f4c95f01ca7e4b49352f7e8261cc5bcb84ec02ff74a0966ec9a17c96950f2b89"
+    },
+    {
+      "path": "tests/testthat/test-ace-ard-local-recovery.R",
+      "sha256": "412ab5d5d4e655acaa5f26b8e03d971e25240dce7d4ef45aefc5ef9993f655b2"
+    },
+    {
+      "path": "tests/testthat/test-ace-ard-stability.R",
+      "sha256": "0081a14df550a750aef0ba499f01425d93aca47999189c462efed7225fd99425"
+    },
+    {
+      "path": "tests/testthat/test-ace-distinct-exponents.R",
+      "sha256": "3e490950a793f87336426351c8de6aaa2d6b39cdb0c42f659f5240e11a60ea9d"
+    },
+    {
+      "path": "tests/testthat/test-ace-eigen-exponents.R",
+      "sha256": "7b56831dd712e182ac0d540c055cf8b29eaa4145c2a2246ca387cf9be5cd67b1"
+    },
+    {
+      "path": "tests/testthat/test-ace-er-recovery.R",
+      "sha256": "648be741240f859b10b5000d6b2e2d689e2721cf1e6bffc82bcd76d889ec8e86"
+    },
+    {
+      "path": "tests/testthat/test-ace-mathematics.R",
+      "sha256": "2e5dece2e2715d674d262ade6bdc06255040a04e93d8a21b3c64614877dc0f52"
+    },
+    {
+      "path": "tests/testthat/test-ace-mixed-exponents.R",
+      "sha256": "6eadfe061dfddb27ebd940325afa877de4f9e720b27c53f0432a8fa397cdb814"
+    },
+    {
+      "path": "tests/testthat/test-ace-native-pool.R",
+      "sha256": "9af78b7d291be6184913302d7129431cec715e5d42c439780b92da0a9103254e"
+    },
+    {
+      "path": "tests/testthat/test-ace-near-absorbing.R",
+      "sha256": "c017ace482c068f56d6fb3644d5278fce8b1084d6c473e82acd1c5e924f1d581"
+    },
+    {
+      "path": "tests/testthat/test-ace-real-exponent-contract.R",
+      "sha256": "35472fde1840f390f5186dbace0bf9a4e85c5fc36452cd9c33b1834b7dbb6a8b"
+    },
+    {
+      "path": "tests/testthat/test-ace-topology-guard.R",
+      "sha256": "f18ceb002bb3e055c78e3b34818f97ba9180eec6063452a77e8edc8666b568ec"
+    },
+    {
+      "path": "tests/testthat/test-canonicalization-v2-estimator-parity.R",
+      "sha256": "fcc628b849b34a878df7c2ef975479efd962118bc490b0f5d45e22c89d3ee36b"
+    },
+    {
+      "path": "tests/testthat/test-canonicalization-v2-persistence.R",
+      "sha256": "d8ae0800790489f91aeb2e17a42f4e228d8b7e19916c3775e78914b45fa13339"
+    },
+    {
+      "path": "tests/testthat/test-canonicalization-v2-production.R",
+      "sha256": "4093f6ccdfa7d23b01721c096e624d0530eb55ae3c611cc1bc852d15287e3348"
+    },
+    {
+      "path": "tests/testthat/test-check-tree.R",
+      "sha256": "b23f3ddd6f45b1fbf1cd5fd43d155ed2363d8cc26cfac6c822ecb074e110502f"
+    },
+    {
+      "path": "tests/testthat/test-d-mcse-output.R",
+      "sha256": "ef9e9c8cb4af34523969a2f27b380bd231fe3da76fe7364bb582ede604ad56b0"
+    },
+    {
+      "path": "tests/testthat/test-d-plot-null-binding.R",
+      "sha256": "ee4c8e47c163cbfd6d711bf7230bf10883cabd449cd1af773be9ebf17c4f1c75"
+    },
+    {
+      "path": "tests/testthat/test-d-polytomy-tail-boundary.R",
+      "sha256": "1d35e8fbbac4a2c9cf90bf5369299799818ad32d27e13bf5ab249f94b96cbdd8"
+    },
+    {
+      "path": "tests/testthat/test-d-preparation.R",
+      "sha256": "05a8c65947fdc1b6f97edec111b9f60768c67680da6195bdeb21c5552fe415e2"
+    },
+    {
+      "path": "tests/testthat/test-d-shared-factors.R",
+      "sha256": "96f600853d6c7baca31502bb58e362530b2f744607b74df71db231f7f5c8ca94"
+    },
+    {
+      "path": "tests/testthat/test-d-streaming.R",
+      "sha256": "7bcaf1be090bc56be8eb1dbb9604cd2059a8979ea5d228678d93aa17958a8fd9"
+    },
+    {
+      "path": "tests/testthat/test-d-topology-guard.R",
+      "sha256": "2a865c8ccac287b32d3c28e8893d881a595615b327503453757dc9118c8e5af4"
+    },
+    {
+      "path": "tests/testthat/test-d-type7-boundary.R",
+      "sha256": "6be99dc943e40acf0c0da8f799e8154e2ce77dcf5441a6e3298ab0cfa34beaa9"
+    },
+    {
+      "path": "tests/testthat/test-delta-ace-candidate2-production.R",
+      "sha256": "e8563de66fe9d92f3956182c16380b12bf94d3e8e9e3e792c6b2187bedc48b94"
+    },
+    {
+      "path": "tests/testthat/test-delta-ace-candidate3a.R",
+      "sha256": "3445a3193cb82388086824563aff4d57730a9ddf653528af3eddff2b2a5f1bc4"
+    },
+    {
+      "path": "tests/testthat/test-delta-ace-workspace.R",
+      "sha256": "7510f72876f5236fb14b2a77f1899655bb3c3556c6cd10a30f2ebe03755648ed"
+    },
+    {
+      "path": "tests/testthat/test-delta-cache-budget.R",
+      "sha256": "f01fb834dbb3acbb64994ec3f77f78f44868d248329d3367a342dba028b3ebce"
+    },
+    {
+      "path": "tests/testthat/test-delta-diagnostics.R",
+      "sha256": "cff818c45beb46efe52b49ef54d9c46d5750902ad37df74aa49da03e100d1bbc"
+    },
+    {
+      "path": "tests/testthat/test-delta-entropy-roundoff.R",
+      "sha256": "8b9f8471674ca3a9db3c2e756c1abb15a18c83191f131fe9612d74be221a1159"
+    },
+    {
+      "path": "tests/testthat/test-delta-performance.R",
+      "sha256": "2252d0a35dce247e03cf538ccc9cd2b674b10d3a247937a01241c8f9b5dbe47f"
+    },
+    {
+      "path": "tests/testthat/test-delta-posterior.R",
+      "sha256": "027acd543c6de6dda8d390dcfaf9c1feff2c3b2f0034c99b345f7847e428ad7f"
+    },
+    {
+      "path": "tests/testthat/test-delta-rank-diagnostics.R",
+      "sha256": "53970014bfda027979563913b9e96c99f496d06e9a5646674629efee42cf376c"
+    },
+    {
+      "path": "tests/testthat/test-delta-rank-sort-reuse.R",
+      "sha256": "fd5da9d5f7407b3e47f22cb9d345fd55040aa3bb1b11bc4134e6bda672955bd3"
+    },
+    {
+      "path": "tests/testthat/test-delta-scalar-warning.R",
+      "sha256": "b06b662e33a2f3d0d4feb929fb72ac57eadc6723a8cd5b44b0ff9da91885cce5"
+    },
+    {
+      "path": "tests/testthat/test-delta-worker-failure-audit.R",
+      "sha256": "2d8dadfa454d4e76d23822c67e04a5b70cf399be6f2f5abb879e95358267cdf6"
+    },
+    {
+      "path": "tests/testthat/test-fast-ace-transition-optimization.R",
+      "sha256": "74a3ddf2e761597f9ae0c003eface3c9c72adceff262a0920cb8b0e0dba3a675"
+    },
+    {
+      "path": "tests/testthat/test-fast-signal-api-split.R",
+      "sha256": "0d4f2d5f5bdce05743ac60a1c18ebc402132d43f3ac283d41bf80340862254d4"
+    },
+    {
+      "path": "tests/testthat/test-fast-signal.R",
+      "sha256": "2189a3fb49ecb6a500ceb81b2e9fccf99d7a7a815b1db92d3b387e87dca78998"
+    },
+    {
+      "path": "tests/testthat/test-golden-contracts.R",
+      "sha256": "a215efa85ba9557bbb83fee94d848000e3d5c9021946534f0de0ac0d48c72a7b"
+    },
+    {
+      "path": "tests/testthat/test-hetero-ard-availability.R",
+      "sha256": "3b40d8980df1f0d88d664f3325db9dac0a97fcbd48e8a8b6612c2421067b5b1a"
+    },
+    {
+      "path": "tests/testthat/test-hetero-audit.R",
+      "sha256": "301f27db656a672d2d23aec875f858c2c6a87432dc15a4b83253d2857b9842b8"
+    },
+    {
+      "path": "tests/testthat/test-hetero-deep-performance.R",
+      "sha256": "fcc435dac39d69ab61ed04039f9a47a2c16ece84f5341a838aaad73a133b30f4"
+    },
+    {
+      "path": "tests/testthat/test-hetero-delta-warning-categories.R",
+      "sha256": "d63ccbecf2fd2a095c97b3218d502c6b487fb07c2a8c9ed12d905e52f8671208"
+    },
+    {
+      "path": "tests/testthat/test-hetero-delta.R",
+      "sha256": "9a131f70397042ca5f5c84b5c4577961c842e62ac2dcc0e1f8c88fb3cb70a380"
+    },
+    {
+      "path": "tests/testthat/test-hetero-er-profile.R",
+      "sha256": "1cb45028f74763b79f1f23a18ebb03f2cd1484e430d291679fe7791d1451501e"
+    },
+    {
+      "path": "tests/testthat/test-hetero-explicit-node-bounds.R",
+      "sha256": "58781c91bfded9ed9ebcab37a4905f9e22c764b0c55cb36ac75bc86416e96206"
+    },
+    {
+      "path": "tests/testthat/test-hetero-lambda-d.R",
+      "sha256": "671693a6da8acce1624943f81f111d242cc27055db08f1608a2bcfb0343c2dfb"
+    },
+    {
+      "path": "tests/testthat/test-hetero-lambda-reml.R",
+      "sha256": "cf7d5fcf1ee4497f31c997220a6d1f9d26ec7e2c5c0b633dc04c708a67bf6fea"
+    },
+    {
+      "path": "tests/testthat/test-hetero-nuisance-correlation.R",
+      "sha256": "ca573cf85c0fbce0acea86d64e5b423bea411b7affd87f4161db7012aac78b88"
+    },
+    {
+      "path": "tests/testthat/test-hetero-nuisance-forest.R",
+      "sha256": "e974f85b7298a8da8e622c069ac16d10f90cdaff235b03cf0dab82fe79e981c4"
+    },
+    {
+      "path": "tests/testthat/test-hetero-nuisance-transient.R",
+      "sha256": "fba4845c52aa07196c9da45317398e4dc5c452ecc6a177433ff303ed350f728c"
+    },
+    {
+      "path": "tests/testthat/test-hetero-nuisance.R",
+      "sha256": "de7071738d6004bb4955b74d32863fe4a9efc1db4bf16569cd2fa58f5a79a7a8"
+    },
+    {
+      "path": "tests/testthat/test-hetero-nuisance_validity.R",
+      "sha256": "6892032e9d26f987b58e72caa15789210139f62c9476a2c48252a0f3056e0012"
+    },
+    {
+      "path": "tests/testthat/test-hetero-reference-design.R",
+      "sha256": "bdf41bc1370257df36084aeb9fa24eda5c8b0f89749daaf1fbced35e632eae4d"
+    },
+    {
+      "path": "tests/testthat/test-hetero-scope-scale.R",
+      "sha256": "f34fd8131a292976acc11993775a6a5d259fa308c9af85081cf8d51f83e2cfe1"
+    },
+    {
+      "path": "tests/testthat/test-hetero-tree-plot.R",
+      "sha256": "f893c54d1b48c6ed2dea2a7d366f42040cc7113bacfe8f9d076a6bafb1e9f875"
+    },
+    {
+      "path": "tests/testthat/test-heterogeneity-cpp.R",
+      "sha256": "63430794ef78a80df42312b9b950e6c352dc2115b306fb6a3ea5617a3af80db2"
+    },
+    {
+      "path": "tests/testthat/test-input-contracts.R",
+      "sha256": "269c67bf32d22f9e93cfcce911b57d39b3092c7994b1c10f9b265347b6e628ee"
+    },
+    {
+      "path": "tests/testthat/test-iterative-canonical-signature.R",
+      "sha256": "5ca9802465564248152026b49c0ecd9e08aeb2603f3b336aacb805fc2504c17e"
+    },
+    {
+      "path": "tests/testthat/test-k-permutation-kernel.R",
+      "sha256": "7a9ee0b76c48746e31293ba4c6c7ab3c922cec974f16ff5b9ecf999f446c5e61"
+    },
+    {
+      "path": "tests/testthat/test-k-production-validation.R",
+      "sha256": "331ac157b8bcaf0ed863081019fe01019b871ab517dd1fe6dfb74d6a23c047c9"
+    },
+    {
+      "path": "tests/testthat/test-k-stage4-contract.R",
+      "sha256": "983623f073f6c561638c13ce38e91445d45aa4bf16c97ab1caa983dd384129e3"
+    },
+    {
+      "path": "tests/testthat/test-k-stage5-release.R",
+      "sha256": "dd2e73aafb7aece26161055d29f6f15055fbc01848f39a076b06300a9cb2957e"
+    },
+    {
+      "path": "tests/testthat/test-k-strategy-selector.R",
+      "sha256": "7a6873c619da43fbb2595813e70a0961b9253cd12347dd86aadb8dd5280a6fdb"
+    },
+    {
+      "path": "tests/testthat/test-k-tree-engine.R",
+      "sha256": "b577f2d3c9f77b5a03e8f0fe555baf101358ea205477b9bcbe7023ccde27bbf6"
+    },
+    {
+      "path": "tests/testthat/test-lambda-fixed-validation.R",
+      "sha256": "9ea68bd67704ba2299f8ac5b66242053bde585784d2ee9d656c0d028928ebfe4"
+    },
+    {
+      "path": "tests/testthat/test-lambda-near-ultrametric-boundary.R",
+      "sha256": "120cd65588baafce1f01933ea3c2c1a770a24447a420b4376cd01722c7b35840"
+    },
+    {
+      "path": "tests/testthat/test-lambda-optimizer-validation.R",
+      "sha256": "0c95558bd928a28ad1d81aea5432cb9d32c58ee431a6d54e9c7e2d5e1b4567a1"
+    },
+    {
+      "path": "tests/testthat/test-lambda-tree-kernel.R",
+      "sha256": "471d7260f722717df8104c18f273afb4c3901d936c26f3028c1ccd51dffe1995"
+    },
+    {
+      "path": "tests/testthat/test-lambda-tree-optimizer.R",
+      "sha256": "e6a79a68c0d0bbc9cfe28a3e4648406d6622c1dadcf9f64b87a9614255d2feed"
+    },
+    {
+      "path": "tests/testthat/test-large-mask-cache-index.R",
+      "sha256": "13727e45547e706403cce3d98fc18245deca65e8e17a9f176425010b99291db8"
+    },
+    {
+      "path": "tests/testthat/test-na-mask.R",
+      "sha256": "d91911bc14c2f5bb76a71f1ccf42b227d673d65eac737ee9ca6efe99a86bbd1b"
+    },
+    {
+      "path": "tests/testthat/test-numeric-species-identity.R",
+      "sha256": "fc76980bc4372dbb0cc93aba600817912e789ee64bc65eec65d87086a10dfa9c"
+    },
+    {
+      "path": "tests/testthat/test-prepare-tree.R",
+      "sha256": "bba45ab7c78765aa464b76c2560cda007ce846c55da1002a8c8e8e36e6dd6bac"
+    },
+    {
+      "path": "tests/testthat/test-progress-contract.R",
+      "sha256": "034aa1b5cb500b546c2ae4ce32af20a33118054ebbe63a68672225b3917ab2f6"
+    },
+    {
+      "path": "tests/testthat/test-release-boundary-audit.R",
+      "sha256": "3042661062d6f98b4516158b2253a2b3368c4c10327b69682dd291382e015fa6"
+    },
+    {
+      "path": "tests/testthat/test-resolve-tree.R",
+      "sha256": "de03e79fcfc06d230eb9f2dd53d9132adae22facfda503c4307c95c59771a962"
+    },
+    {
+      "path": "tests/testthat/test-result-methods.R",
+      "sha256": "b2f5e78b358b9cb837628ba078360f9df28794c794cfc2cac1c85487b9997086"
+    },
+    {
+      "path": "tests/testthat/test-retained-subtree-inspection-cache.R",
+      "sha256": "b17722da9381c33168810c5d391572ade9f320aadab084df31404270ca585462"
+    },
+    {
+      "path": "tests/testthat/test-root-sensitivity-contract.R",
+      "sha256": "b08dbf3d58eef857fd2e8f985bbb52ea5201bf72adaecd9d100dc6d9441e60c6"
+    },
+    {
+      "path": "tests/testthat/test-runtime-progress.R",
+      "sha256": "f36666e5456d77e6c626739ad018b23e9ae3309228b21a25e37338514be17172"
+    },
+    {
+      "path": "tests/testthat/test-signal-heterogeneity.R",
+      "sha256": "0ae2355c59f7129d8d8d9c462d1d741d09398a6fa8ed560bb01626a74b59f0f9"
+    },
+    {
+      "path": "tests/testthat/test-single-boundary-context-validation.R",
+      "sha256": "ad72e9d6d14385f81e4e985548ff8353fc8fdddf71be899e43bb0968f0688444"
+    },
+    {
+      "path": "tests/testthat/test-stage2b1-raw-boundary.R",
+      "sha256": "cf6578e10ba79f712f8cb2872666866bba712791e96de22e23f2439b91874584"
+    },
+    {
+      "path": "tests/testthat/test-stage2b2b-inspection-equivalence.R",
+      "sha256": "6e16f520b7f0ee21efec0560b66b823e780857b056e2024a15c2012f9f08c844"
+    },
+    {
+      "path": "tests/testthat/test-trait-failure-semantics.R",
+      "sha256": "101228d0068622d6bb4e92dbf24641e5f0a3ba8789e10ecfbc0e2d909f9c8db7"
+    },
+    {
+      "path": "tests/testthat/test-tree-core.R",
+      "sha256": "9201f78dcbb22442d22a520a150cbae9bcbe17c60e27d2333a97897752c36046"
+    },
+    {
+      "path": "tests/testthat/test-tree-requirements-registry.R",
+      "sha256": "8912b5bacd3a76d079c7598eb4de2c2111eb64b53921e5bb48b0e5f6cebd4775"
+    },
+    {
+      "path": "tests/testthat/test-unified-fast-signal-equivalence.R",
+      "sha256": "d763aa01acdd2e2b232680ce4f6cd4545f905bcfd5ed834b77ffde1bfe3bbf16"
+    },
+    {
+      "path": "tests/testthat/test-warning-status-stability.R",
+      "sha256": "2650563d812e33b361734088b974094a540e7217bfaa90e38af6df33aa747fcb"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+"workload","kind","normal","identical"
+"delta","Mersenne-Twister","Inversion",TRUE
+"hetero","Mersenne-Twister","Inversion",TRUE
+"delta","Mersenne-Twister","Box-Muller",TRUE
+"hetero","Mersenne-Twister","Box-Muller",TRUE
+"delta","L'Ecuyer-CMRG","Inversion",TRUE
+"hetero","L'Ecuyer-CMRG","Inversion",TRUE
+"delta","L'Ecuyer-CMRG","Box-Muller",TRUE
+"hetero","L'Ecuyer-CMRG","Box-Muller",TRUE

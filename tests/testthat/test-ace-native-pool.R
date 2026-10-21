@@ -33,7 +33,8 @@ test_that("pooled fits retain fresh optimizer results and cleanup on eviction", 
   old <- options(fastphylosig.ace_cache_bytes=64*1024^2)
   on.exit(options(old))
   pool <- .fast_ace_native_pool();on.exit(.fast_ace_pool_close(pool),add=TRUE)
-  set.seed(778);tr <- ape::rtree(32)
+  # Distinct lengths and >=33 tips also exercise the eigenvalue-column cache.
+  set.seed(778);tr <- ape::rtree(96)
   tw <- .fast_ace_tree_workspace(tr)
   pooled <- .fast_ace_workspace(tw,"ARD",3L,pool)
   fresh <- .fast_ace_workspace(tw,"ARD",3L)
@@ -43,7 +44,7 @@ test_that("pooled fits retain fresh optimizer results and cleanup on eviction", 
       CI=TRUE,estimate_se=FALSE))
     list(fit=fit,seed=.Random.seed,next_normal=rnorm(4),next_uniform=runif(4))
   }
-  states <- rep(1:3,length.out=32)
+  states <- rep(1:3,length.out=96)
   for(z in list(states,rev(states),replace(states,7,NA_integer_)))
     expect_identical(run(pooled,z),run(fresh,z))
   expect_length(ls(pool$entries),1)

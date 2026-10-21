@@ -1,0 +1,64 @@
+{
+  "baseline": "0.3.4.9002",
+  "candidate": "0.3.4.9003 (same algorithms as 0.3.5)",
+  "platform": "Windows, R 4.6.1; eight independent processes, ABBAABBA; 30 calls per workload/process",
+  "counts": {
+    "public_contracts": 25,
+    "objective_replay": 3956,
+    "posterior_replay": 8,
+    "mcmc_replay": 8,
+    "mixed_rng_cases": 8,
+    "broad_fp": {
+      "deviances": 1632,
+      "posteriors": 3264,
+      "mismatches": 0,
+      "unavailable": 0
+    }
+  },
+  "performance": [
+    {
+      "workload": "scan",
+      "values": {
+        "baseline": [
+          0.304307134946187,
+          0.313067436218262,
+          0.304889067014058,
+          0.311631067593892
+        ],
+        "final": [
+          0.290843931833903,
+          0.29527812798818,
+          0.293393635749817,
+          0.293039766947428
+        ]
+      },
+      "medians": {
+        "baseline": 0.308260067303975,
+        "final": 0.2932167013486225
+      },
+      "reduction_percent": 4.880089103632823
+    },
+    {
+      "workload": "rare_pectinate",
+      "values": {
+        "baseline": [
+          0.0487260341644287,
+          0.0491191307703654,
+          0.0483891725540161,
+          0.0491190354029338
+        ],
+        "final": [
+          0.0462300936381022,
+          0.0494516372680664,
+          0.0471275329589844,
+          0.0473652998606364
+        ]
+      },
+      "medians": {
+        "baseline": 0.04892253478368125,
+        "final": 0.0472464164098104
+      },
+      "reduction_percent": 3.4260660885256033
+    }
+  ]
+}

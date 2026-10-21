@@ -1,7 +1,7 @@
 ---
 layout: default
 title: R 系统发育信号快速分析
-description: fastphylosig 0.3.4 计算系统发育信号，并通过 fast_hetero() 比较支系与整树格局。
+description: fastphylosig 0.3.5 计算系统发育信号，并通过 fast_hetero() 比较支系与整树格局。
 lang: zh-CN
 home_url: /index-zh.html
 alternate_url: /
@@ -14,7 +14,7 @@ alternate_label: English
 </nav>
 
 <section class="hero" id="top" markdown="1">
-<p class="eyebrow">fastphylosig · R 包 · v0.3.4</p>
+<p class="eyebrow">fastphylosig · R 包 · v0.3.5</p>
 
 # R 系统发育信号快速分析
 
@@ -37,13 +37,13 @@ alternate_label: English
 <div class="install-stack" markdown="1">
 <article class="content-card" markdown="1">
 
-### 安装 v0.3.4
+### 安装 v0.3.5
 
-[v0.3.4 发布版](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4) 是最新的版本，提供完整的支系分析流程，并优化了 D/lambda 的计算性能。
+[v0.3.5 发布版](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5) 是最新的版本，提供完整的支系分析流程，并优化了 D/lambda 的计算性能。
 
 ```r
 install.packages(
-  "https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.4/fastphylosig_0.3.4.tar.gz",
+  "https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.5/fastphylosig_0.3.5.tar.gz",
   repos = NULL, type = "source"
 )
 library(fastphylosig)
@@ -189,6 +189,6 @@ K 和 lambda 对比 phytools 2.5.2 的 `phylosig()`，D 对比 caper 1.0.4 的 `
   <article class="note-card note-card--caution" id="delta-caveat"><h3>Delta 诊断</h3><p>Delta 比值比较的是返回调用，不是精度。参考实现在 120 次调用中有 112 次出现数值告警，且不提供最终收敛检查；fast 实现有一次达到优化器限制。带告警的调用没有被剔除或重跑，因此这些比值不能说明两种实现的精度或收敛程度相当。告警记录保留在<a href="{{ '/release-0.3.0/benchmark_reference_d_delta_runs.csv' | relative_url }}">原始计时记录</a>中，分类汇总见<a href="{{ '/release-0.3.0/benchmark_reference_four_methods_qa.html' | relative_url }}">基准 QA 报告</a>。</p></article>
 </div>
 
-当前发布版为 [fastphylosig v0.3.4](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4)。上面的性能数据来自 v0.3.0，由于核心计算代码未改变，未针对 v0.3.4 重跑。详见[发布说明](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.4)与 [fast_hetero 案例]({{ '/fast-hetero-case-zh.html' | relative_url }})。
+当前发布版为 [fastphylosig v0.3.5](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5)。上面的性能数据来自 v0.3.0，由于核心计算代码未改变，未针对 v0.3.4 重跑。详见[发布说明](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5)与 [fast_hetero 案例]({{ '/fast-hetero-case-zh.html' | relative_url }})。
 
 <p class="closing-links"><a href="https://github.com/yinwen-ecology/fastphylosig">源码</a><a href="https://github.com/yinwen-ecology/fastphylosig/issues">问题反馈</a><a href="{{ '/release-0.3.0/README.html' | relative_url }}">基准与使用细节</a></p>

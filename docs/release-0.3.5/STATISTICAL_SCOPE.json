@@ -1,0 +1,37 @@
+{
+  "package": "fastphylosig",
+  "version": "0.3.5",
+  "heterogeneity_test_default": false,
+  "methods": {
+    "K": {
+      "recommended_description": true,
+      "heterogeneity_status": "BM_reference",
+      "null": "BM on a fixed tree and prespecified disjoint crowns"
+    },
+    "lambda": {
+      "recommended_description": true,
+      "heterogeneity_status": "approximate_common_local_crown_reference",
+      "approximate": true,
+      "default_reference_fit": "pooled_REML",
+      "whole_tree_common_lambda_test": false
+    },
+    "D": {
+      "recommended_description": true,
+      "heterogeneity_status": "experimental",
+      "null": "Shared-rate symmetric binary ER conditional on crown counts and finite normalization draws",
+      "ordinary_random_Brownian_signal_tests_retained": true
+    },
+    "Delta": {
+      "recommended_description": true,
+      "heterogeneity_status": "experimental_not_recommended",
+      "recommended_heterogeneity_test": false,
+      "explicit_research_interfaces_retained": true,
+      "ordinary_signal_tests_retained": true,
+      "single_state_assigned_zero": false
+    }
+  },
+  "diagnostics": "Keep all failures, numerical recoveries, optimizer retries/warnings and MCMC warnings",
+  "biological_interpretation": "Local differences describe conservatism patterns at the analysed scale; no mechanism or rate inference by signal alone",
+  "status": "release",
+  "scope_unchanged_from": "0.3.4"
+}
