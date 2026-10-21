@@ -1,344 +1,208 @@
 # fastphylosig
 
-Fast phylogenetic signal analysis and clade comparisons in R. Use
-`fast_signal()` to calculate Blomberg's K, Pagel's lambda, Fritz–Purvis D or
-categorical Delta, and `fast_hetero()` to map local signal across a tree and
-compare it with whole-tree patterns. C++ pruning kernels, reusable prepared
-trees and batch workflows support large trees and multiple traits.
+Fast phylogenetic signal analysis for continuous, binary and multistate traits in R. Use `fast_signal()` to select K, lambda, D or Delta, and `fast_hetero()` to compare clade-level signal and map patterns of phylogenetic conservatism. C++ kernels, batch input and reusable tree contexts support large trees and repeated analyses.
 
-**Current release: [0.3.5](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5).**
-This patch corrects ARD full-tree ancestral probabilities and ER/ARD ACE rate
-standard errors, and retains the reviewed native performance improvements.
-Analyses using earlier ARD Delta/ancestral probabilities or ACE rate SEs should
-recalculate the affected outputs. K, lambda, D and ER Delta retain their result
-and RNG contracts. See the [patch notes and reanalysis guidance](docs/release-0.3.5/RELEASE_NOTES_en.md).
+With optimized C++ kernels, fastphylosig is up to **23,591 times faster** than standard implementations such as phytools and caper (lambda on a 2,000-species tree, compared with phytools), and is particularly suited to large phylogenetic trees with more than 10,000 tips.
 
-The [fast_hetero case study](https://yinwen-ecology.github.io/fastphylosig/fast-hetero-case.html)
-walks through a 512-species example with local/overall results, native tree
-plots, downloadable data and full R code.
+[Website](https://yinwen-ecology.github.io/fastphylosig/) · [中文指南](USAGE_zh.md) · [fast_hetero case study](https://yinwen-ecology.github.io/fastphylosig/fast-hetero-case.html)
 
-[Package website](https://yinwen-ecology.github.io/fastphylosig/) |
-[GitHub](https://github.com/yinwen-ecology/fastphylosig) |
-[Issues](https://github.com/yinwen-ecology/fastphylosig/issues) |
-[Chinese guide](USAGE_zh.md)
-
-Continuous, binary and multistate traits use an explicit method selection.
-The method-specific functions remain available when you want to inspect and
-control each step. The [heterogeneity guide](inst/HETERO_GUIDE_zh.md) explains
-clade selection, biological interpretation, diagnostics and recommended settings.
-
-`fast_hetero()` selects maximal disjoint crowns within size bounds, or accepts
-explicit internal nodes. It reports local estimates, coverage, observed tip
-counts and trait-wise failures. Explicit nodes override automatic size bounds;
-`min_tips` still controls the minimum observed species per clade and trait.
-
-| Method | Clade dispersion | Optional heterogeneity reference |
-|---|---|---|
-| K | SD(log K) | BM on the selected crowns |
-| lambda | SD(lambda) | Approximate fitted common-local-lambda Gaussian reference; pooled REML by default |
-| D | SD(D) | Experimental shared-rate symmetric ER model, conditional on each crown's observed state counts |
-| Delta | SD(log Delta), local/overall contrasts | Use for description and MCMC diagnostics; heterogeneity tests remain experimental |
-
-`P_heterogeneity` is a method-specific reference probability, separate from
-ordinary signal P values. Lambda is interpreted on the extracted crown scale;
-a common whole-tree lambda need not imply equal local-crown parameters.
-Nested crowns are descriptive only. These comparisons describe signal patterns
-and reference departures; they do not identify evolutionary mechanisms.
-`plot(h, tree = tree)` colours crown-clade estimates on the phylogeny;
-`plot(h)` retains the estimate plot. Set `overall = TRUE` or
-`overall_test = TRUE` to include complete-tree signal estimates/tests in the
-result and plot, separately from dispersion testing.
-`clade_test = TRUE` adds each crown's ordinary signal test. D/Delta results
-include original state counts/frequencies; unavailable crowns remain explicit.
-See the [heterogeneity guide](inst/HETERO_GUIDE_zh.md). Delta's explicit
-experimental options remain documented for reproducibility.
-
-## Performance
-
-![Matched runtime ratios for four signal statistics](docs/release-0.3.0/benchmark_reference_four_methods_speedup.png)
-
-On 2,000-species trees, observed reference/fastphylosig median runtime ratios
-were **135–151 for K**, **20,697–23,591 for lambda**, and **218–224 for D**
-across three simulated signal scenarios. Delta call-time ratios were 23.9–33.6,
-subject to the diagnostic caveat below. Each cell has 10 matched pairs;
-tree/data preparation is excluded. The dashed line is equal runtime; small-tree
-K is slower than phytools at 50 and 100 species, and those results remain visible.
-
-References are phytools (K/lambda), caper (D) and a pinned Borges Delta
-implementation. K/lambda use `test = FALSE`; D includes 199 randomizations;
-Delta uses two 10,000-iteration MCMC chains without permutation testing.
-**Delta caveat:** 112/120 reference calls produced numerical warnings and
-did not expose final convergence information; one fast call reached an
-optimization iteration limit. Delta ratios describe observed returned-call
-times, not demonstrated equal-accuracy or converged-fit speedups.
-These Windows timings are workload-specific, not universal guarantees.
-See [all data, settings and diagnostic details](docs/release-0.3.0/README.md).
+**Current release: [0.3.5](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5).** This patch corrects ARD full-tree ancestral probabilities and ER/ARD ACE rate standard errors. See the [patch notes and reanalysis guidance](docs/release-0.3.5/RELEASE_NOTES_en.md) for affected outputs.
 
 ## Install
 
-Download the [frozen 0.3.5 source package](https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.5/fastphylosig_0.3.5.tar.gz)
-and install it with an existing C++ toolchain:
+Requires R ≥ 4.1.0 and a C++ toolchain, such as Rtools matching your R version on Windows. OpenMP is optional. The release passed CI on Linux, Windows and macOS, including a build without OpenMP.
 
 ```r
-install.packages("fastphylosig_0.3.5.tar.gz", repos = NULL, type = "source")
+# Install dependencies on first use
+install.packages(c("ape", "Rcpp", "RcppArmadillo"))
+install.packages(
+  "https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.5/fastphylosig_0.3.5.tar.gz",
+  repos = NULL, type = "source"
+)
 library(fastphylosig)
+
+# Alternatively, install the fixed release tag
+# install.packages("remotes")
+# remotes::install_github("yinwen-ecology/fastphylosig@v0.3.5")
 ```
 
-The current GitHub release is [0.3.5](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5).
-Installation from the corresponding source tag is also available:
+## Start with one command
 
-```r
-install.packages("remotes")
-remotes::install_github("yinwen-ecology/fastphylosig@v0.3.5")
-library(fastphylosig)
-```
-
-Source installation requires a C++ toolchain. OpenMP is optional.
-
-## Start here: one command
-
-Once you have a `phylo` tree and named trait data, choose a method and run:
+Provide a `phylo` tree and named trait data, then select the method explicitly:
 
 ```r
 set.seed(1)
 tree <- ape::rtree(30)
-trait <- stats::setNames(stats::rnorm(30), tree$tip.label)
+trait <- setNames(stats::rnorm(30), tree$tip.label)
 
-fit <- fast_signal(
-  tree, data = trait, method = "K", progress = FALSE
-)
+fit <- fast_signal(tree, data = trait, method = "K", progress = FALSE)
 summary(fit)
 ```
 
-That is enough for a standard analysis. `fast_signal()` checks the tree,
-matches species, handles missing values trait by trait, and runs the selected
-calculation.
+`fast_signal()` checks the tree, matches species and handles missing values per trait before running the selected method.
 
-Choose `method` from the question and trait type:
-
-| Target | `method` | Input | Returns |
+| Method | Selector | Traits | Estimates and tests |
 |---|---|---|---|
-| Blomberg's K | `"K"` | continuous | K estimate; optional permutation test |
-| Pagel's lambda | `"lambda"` | continuous | lambda likelihood and LR test |
-| Fritz--Purvis D | `"D"` | binary | random and Brownian null comparisons |
-| Delta | `"Delta"` | categorical | Delta estimate, MCMC diagnostics, optional permutation test |
+| Blomberg's K | `"K"` | Continuous | K; optional tip-randomization test |
+| Pagel's lambda | `"lambda"` | Continuous | ML estimate; optional likelihood-ratio test against lambda = 0 |
+| Fritz–Purvis D | `"D"` | Binary | D; random-association and Brownian-threshold null tests |
+| Delta | `"Delta"` | Multistate categorical | Delta, MCMC diagnostics; optional tip-randomization test |
 
-The method is always explicit; it is not guessed from trait values. Use
-`print(fit)`, `summary(fit)`, `as.data.frame(fit)`, or `plot_signal(fit)` to
-inspect the result. Unknown or method-inapplicable arguments produce an error.
+Inspect results with `print()`, `summary()` or `as.data.frame()`. Plotting requires the corresponding saved simulations or likelihood profile, as shown below.
 
-## How the workflow runs
+## Workflow and specialist functions
 
-![fastphylosig technical roadmap](docs/technical-roadmap.svg)
+![fastphylosig workflow](docs/technical-roadmap.svg)
 
-The tree and trait data feed either workflow. The general workflow performs
-the preparation boxes automatically. The advanced workflow exposes the same
-preparation order before a method-specific calculation. The editable
-[draw.io source](docs/technical-roadmap.drawio) and
-[Mermaid source](docs/technical-roadmap.md) are included for website use.
-
-## Advanced use: prepare, then calculate
-
-Use the explicit path when you need an auditable tree/data record or controls
-that belong to one method:
+For explicit preparation and reusable tree calculations:
 
 ```r
-checked <- check_tree(tree, signal = "K")
-checked
-
-# Safe representation changes only; an explicit outgroup is required if the
-# selected method needs a root and the tree is unrooted.
-tree_ready <- resolve_tree(tree, signal = "K")
+checked <- check_tree(tree, signal = "K")          # Read-only inspection
+tree_ready <- resolve_tree(tree, signal = "K")    # Edge order and node numbering
 matched <- match_tree_data(tree_ready, data = trait)
 ctx <- prepare_tree(matched$tree)
 ```
 
-After preparation, call the method-specific function directly:
-
-| Function | Trait | Statistical target |
-|---|---|---|
-| `fast_k()` | continuous | Blomberg's K and permutation test |
-| `fast_lambda()` | continuous | Pagel's lambda likelihood and LR test |
-| `fast_d()` | binary | Fritz and Purvis D with random and Brownian nulls |
-| `fast_delta()` | categorical | Delta, MCMC diagnostics, and permutation test |
+| Function | Main controls |
+|---|---|
+| `fast_k()` | Custom permutations, block processing and null retention |
+| `fast_lambda()` | Likelihood profiles and approximate confidence intervals |
+| `fast_d()` | Random/Brownian state inputs and null retention |
+| `fast_delta()` | Multivariate traits; ER/ARD models, MCMC chain length and sampling controls (`mcmc_sim`, `thin`, `burn`), and convergence diagnostics |
+| `fast_ace()` | Discrete ancestral-state ML estimates and rate standard errors |
 
 ```r
-k_fit <- fast_k(ctx, x = matched$data, test = TRUE, nsim = 999,
+fit_k <- fast_k(ctx, x = matched$data, test = TRUE, nsim = 999,
                 return_sim = TRUE, progress = FALSE)
-lambda_fit <- fast_lambda(ctx, trait, test = TRUE,
+fit_lambda <- fast_lambda(ctx, trait, test = TRUE,
                           lambda_profile = TRUE, progress = FALSE)
-binary <- stats::setNames(as.integer(trait > stats::median(trait)),
-                          tree$tip.label)
-d_fit <- fast_d(ctx, binary, test = TRUE, nsim = 99,
+
+binary <- setNames(as.integer(trait > stats::median(trait)), names(trait))
+fit_d <- fast_d(ctx, binary, nsim = 999,
                 return_sim = TRUE, keep_null = TRUE, progress = FALSE)
-categorical <- stats::setNames(rep(c("a", "b", "c"), length.out = 30),
-                               tree$tip.label)
-delta_fit <- fast_delta(ctx, categorical, test = TRUE,
+
+# Delta: for multivariate, discrete traits
+categorical <- setNames(rep(c("a", "b", "c"), length.out = length(trait)),
+                        names(trait))
+fit_delta <- fast_delta(ctx, categorical, test = TRUE, nsim = 99,
                         mcmc_sim = 10000, thin = 10, burn = 100,
                         return_sim = TRUE, progress = FALSE)
 ```
 
-The method-specific controls are deliberately separate: K uses `permutations` and
-`simulation_chunk`; lambda uses `lambda_profile`; D uses separate random and
-Brownian state controls plus `keep_null`; Delta uses MCMC and permutation
-controls. `fast_ace()` separately exposes the ancestral-state reconstruction
-used by Delta. The result
-classes and legacy fields remain stable.
+`fast_delta()` defaults to ARD; the clade example below explicitly selects ER. Choose models and simulation budgets for the study design. The 99 permutations above are a quick demonstration.
 
-## Repeated analyses
+For repeated analyses, pass multiple traits as a matrix/data frame and reuse `ctx`. Prepared contexts support `saveRDS()`/`readRDS()`; prepare them again after changing the source tree.
 
-Prepare a tree once when it will be used repeatedly:
+## Runtime benchmarks
 
-```r
-ctx <- prepare_tree(tree)
-X <- cbind(trait_1 = trait, trait_2 = trait + stats::rnorm(length(trait)))
-fits <- fast_signal(ctx, data = X, method = "K", verbose = FALSE)
-cache_info(ctx)
-```
+![Matched runtime ratios for four signal statistics](docs/release-0.3.0/benchmark_reference_four_methods_speedup.png)
 
-Preparation compiles topology and traversal data. Dense covariance,
-Cholesky, and spectral payloads are not created by the production K, lambda,
-D, or Delta paths. A prepared context is a snapshot: later changes to the
-original `phylo` object do not update it. On every external reuse, the V2
-context schema and an exact protected snapshot check the cached tree's tip
-labels, edge matrix, branch lengths, and `Nnode` value before any cache or
-numerical kernel is used. Changes to those fields are rejected. `node.label`
-and other non-computational attributes are outside this integrity contract;
-`node.label` may be reordered when internal nodes are renumbered.
-V2 contexts can be saved with `saveRDS()` and reused after `readRDS()`; older
-or unrecognized context schemas must be rebuilt with `prepare_tree()`.
+On 2,000-species trees, observed median reference/fastphylosig runtime ratios were **135–151× for K**, **20,697–23,591× for lambda** and **218–224× for D**. Tree/data preparation is excluded; each scenario has 10 matched pairs. Gains depend on the workload, and small-tree K can be slower than phytools.
 
-## Tree and data details
+Delta returned-call ratios were 23.9–33.6×, with numerical warnings in 112/120 reference calls and one fast fit reaching an optimizer limit. These timings do not establish equal accuracy or convergence. See [benchmark settings, raw records and diagnostics](docs/release-0.3.0/README.md).
 
-`check_tree()` is read only. `resolve_tree()` may reorder edges and renumber
-internal nodes on a copy when this changes representation only. V2 keeps tip
-IDs and `tip.label` unchanged, assigns the root to `n_tip + 1`, orders child
-subtrees by the exact UTF-8 byte order of their minimum descendant tip, and
-numbers remaining internal nodes in canonical preorder. Edges are emitted in
-canonical postorder while each branch length stays associated with its
-biological child edge. The canonical computational representation,
-fingerprint, and estimator outputs are invariant to valid internal-node
-renumbering and edge-row order in the tested fixtures and locales. These
-functions do not guess a biological root, select
-an outgroup, invent or jitter branch lengths, resolve biological polytomies,
-ultrametricize a tree, or silently delete tips. `match_phylo_data()` remains a
-deprecated alias for `match_tree_data()`.
+## Compare signal across clades
 
-Method boundaries are intentional:
+`fast_hetero()` selects maximal disjoint crowns within size bounds, or accepts explicit internal nodes. It reports local estimates, sample sizes, missingness, categorical state composition and coverage, with optional whole-tree signal and reference tests of clade dispersion.
 
-- K and D require finite, strictly positive branches. D accepts rooted
-  polytomies through its compatibility path but rejects unary internal nodes,
-  including unary nodes exposed after matching or NA pruning.
-- Lambda permits a zero internal branch only when its transformed terminal
-  variances remain valid; zero terminal branches are rejected.
-- Delta and `fast_ace()` require a conventionally rooted, fully binary tree
-  with finite, strictly positive branches.
-- Root placement is supplied by the user and can affect the statistic.
-- Measurement-error input (`se != NULL`) is not implemented.
-
-Species identifiers should be unique vector names or matrix/data-frame row
-names. Their input order need not match the tree: matched data are reordered
-to tree-tip order. An unnamed input is accepted only when its entries or rows
-already correspond to `tree$tip.label` order. Missing values are then handled per
-trait. Each unique retained-tip mask is validated and cached once. Inputs are
-not modified. A wrong positional order without identifiers cannot be detected
-automatically and can assign traits to the wrong species.
-
-## Inference and diagnostics
-
-K randomization supports explicit permutation matrices, bounded chunks, and
-optional null retention. D reports separate P values and Bernoulli Monte Carlo
-standard errors (`MCSE_P_random` and `MCSE_P_Brownian`) for its random and
-Brownian nulls, using the finite successful count for each null. These fields
-are `NA` when `test = FALSE`. D retains both null vectors only when both
-`return_sim = TRUE` and `keep_null = TRUE`; their defaults are respectively
-`test` and `return_sim`.
-
-Lambda can retain an approximate likelihood profile. The nominal 95% interval
-uses a regular grid and the cutoff
-`max(logL) - 0.5 * qchisq(0.95, df = 1)`; threshold crossings are linearly
-interpolated. It is a grid/profile approximation, not an exact confidence
-interval.
-
-Delta defaults include `test = FALSE`, `nsim = 1000`, `return_sim = test`,
-`mcmc_sim = 10000`, `thin = 10`, `burn = 100`, and `model = "ARD"`; therefore
-no permutation P value or null vector is produced unless testing is enabled.
-With `test = TRUE`, `MCSE_P` uses the number of finite successful permutations,
-and `return_sim = TRUE` retains the Delta null vector. Interpret ESS, split
-R-hat, `MCSE_Delta`, and, when present, `MCSE_P` together with the point
-estimate. Fewer than two species shared globally by the tree and data is a
-call-level error. After matching, a trait with fewer than two non-missing
-species receives an explicit per-trait insufficient-data result; a completed
-trait with 2--19 retained species contributes to one batch warning. Non-finite
-diagnostics, ESS below 20, or split R-hat above 1.1 also produce one batch
-warning. Warnings never rerun or extend the chain automatically.
-
-## Reproducibility and performance
-
-Use `set.seed()` or controlled permutations for stochastic comparisons.
-Record the package version, tree/data fingerprints, simulation counts,
-threads, chunk sizes, and whether preparation time is included.
-
-For throughput:
-
-1. Submit multiple traits as a matrix instead of looping in R.
-2. Reuse a `prepare_tree()` context.
-3. Keep null distributions only when they are needed.
-4. Use `ncores` for K randomization, binary-tree D, or sufficiently large
-   Delta permutation jobs; small parallel jobs may be slower than serial work.
-5. Set `progress = FALSE` to suppress progress stages and species-matching
-   messages. Statistical warnings and errors are still signalled. Results
-   retain timing metadata.
-
-For stochastic parallel paths, replay requires the seed, explicit simulation
-inputs (when supplied), and `ncores` to be held fixed. In particular, changing
-Delta's process count repartitions worker RNG streams and is not guaranteed to
-reproduce null draws or derived P/MCSE values draw for draw. Explicit
-permutation/state matrices isolate the corresponding randomization step, but
-Delta's MCMC fits remain stochastic. Record the worker configuration with the
-result. Small jobs may be faster in serial.
-
-## Plotting
+This separate 256-species example provides several crowns within the requested 50–100-tip range:
 
 ```r
-plot_signal(k_fit)
-plot_signal(lambda_fit)
-plot_signal(d_fit)
-plot_signal(delta_fit)
+set.seed(2)
+tree_h <- ape::stree(256, type = "balanced")
+tree_h$edge.length <- rep(1, nrow(tree_h$edge))
+trait_h <- ape::rTraitCont(tree_h)
+binary_h <- ape::rTraitDisc(tree_h, model = "ER", k = 2, rate = 0.15)
+categorical_h <- ape::rTraitDisc(tree_h, model = "ER", k = 3, rate = 0.15)
+
+h <- fast_hetero(
+  tree_h, trait_h, method = "K", min_tips = 50, max_tips = 100,
+  test = TRUE, nsim = 999, overall_test = TRUE, progress = FALSE
+)
+h$clades                    # Local estimates, sample sizes and diagnostics
+h$heterogeneity             # Dispersion and reference test
+h$overall                   # Whole-tree estimate and ordinary signal test
+h$selection$coverage
+nodes <- h$selection$nodes  # Reuse the same crowns across methods
+
+plot(h, tree = tree_h, node_labels = TRUE)
+plot(h, tree = tree_h, type = "fan")
+
+hl <- fast_hetero(tree_h, trait_h, method = "lambda", nodes = nodes,
+                  min_tips = 50, test = TRUE, nsim = 999,
+                  overall_test = TRUE, progress = FALSE)
+hd <- fast_hetero(tree_h, binary_h, method = "D", nodes = nodes,
+                  min_tips = 50, test = FALSE, d_nsim = 1000,
+                  overall_test = TRUE, progress = FALSE)
+hdelta <- fast_hetero(tree_h, categorical_h, method = "Delta", nodes = nodes,
+                      min_tips = 50, test = FALSE, overall = TRUE,
+                      delta_control = list(model = "ER"), progress = FALSE)
+hdelta$clades[, c("node", "estimate", "n_states", "log_ratio_overall")]
+hdelta$clades$state_counts
+plot(hdelta, tree = tree_h)
 ```
 
-Null-distribution plots require retained simulations. Use
-`return_sim = TRUE` for K and Delta; D requires both `return_sim = TRUE` and
-`keep_null = TRUE`.
+<details>
+<summary><strong>Choose crowns and interpret results</strong></summary>
 
-### What `plot_signal()` displays
+- Use `nodes` for prespecified biological groups, or size bounds for an automatic scan. Inspect coverage, sample sizes and crown ages. Explicit nodes override automatic size selection; `min_tips` still applies after NA removal.
+- `overall = TRUE` adds the whole-tree estimate; `overall_test = TRUE` adds its ordinary signal test; `clade_test = TRUE` adds ordinary tests for each crown. These are separate from the heterogeneity reference enabled by `test = TRUE`. `overall_nsim`/`clade_nsim` control K/Delta ordinary tests; D uses `d_nsim`.
+- Tree colours show local signal. Annotations summarize already computed overall and heterogeneity results; `show_summary = FALSE` hides them. Plotting does not rerun tests. Select `trait = "column_name"` for a multi-trait result.
 
-![Native plot_signal examples](docs/release-0.3.0/plot_signal_gallery_overview.png)
+| Method | Dispersion summary | Heterogeneity reference and current use |
+|---|---|---|
+| K | `SD(log K)` | BM reference; `P_BM` and its common alias `P_heterogeneity`. Shaded envelopes are BM reference ranges. |
+| lambda | `SD(lambda)` | Approximate common-local-crown Gaussian reference, using pooled REML by default. Interpret alongside crown age and cut scale. |
+| D | `SD(D)` | Local/overall description recommended; shared symmetric ER inference conditional on crown state counts remains experimental (`test = TRUE`). |
+| Delta | `SD(log Delta)`, local/overall log ratios and RMS | Local/overall description and diagnostics recommended; heterogeneity tests remain experimental research interfaces. |
 
-The examples show multi-trait K permutation ridges, a lambda likelihood
-profile, D calibration against random and Brownian nulls, and a categorical
-Delta permutation distribution. They are actual `plot_signal()` outputs on
-simulated demonstration data.
-See the [gallery and reproducible R code](docs/release-0.3.0/plot_signal_gallery.md) for
-single-trait K and separate D null displays, seeds, simulation settings,
-and diagnostic caveats. The short Delta example is for illustration, not
-scientific inference. These native web previews retain some annotation/curve
-overlaps; they are not collision-free manuscript figures.
+Local differences describe conservatism patterns at the analysed scale. Ordinary signal P values and heterogeneity P values answer different questions; one significant and one nonsignificant signal P value do not establish a clade difference.
 
-## Compatibility and release status
+Heterogeneity tests require at least two non-overlapping crowns. Nested nodes support descriptive scans with `test = FALSE`. Single-state D/Delta crowns remain unavailable rather than being assigned zero. Retain failures and fit/MCMC diagnostics with the estimates.
 
-The package provides Delta ratio diagnostics,
-pooled REML for the common lambda reference, and bounded ACE scratch reuse.
-See the [heterogeneity guide](inst/HETERO_GUIDE_zh.md).
-Recommended clade analyses use K's BM dispersion reference, approximate
-common-local-lambda inference, and descriptive binary D or multistate Delta.
-D's conditional ER heterogeneity extension is experimental. Delta heterogeneity
-tests are outside the recommended workflow; explicit research calls remain
-available for reproducibility. Whole-tree and local signal tests remain separate.
-R 4.1.0 and above are supported. The performance measurements above were made
-on Windows with R 4.6.1/Rtools 4.5. A 50,000-tip regression covers preparation,
-subset caches, persistence, fallback grouping and K without permutations;
-it does not qualify every method or simulation workload at that scale.
-See [NEWS](NEWS.md) for the version history and
-[GitHub Actions](https://github.com/yinwen-ecology/fastphylosig/actions) for
-the latest platform checks.
+The [worked case study](https://yinwen-ecology.github.io/fastphylosig/fast-hetero-case.html) includes downloadable data, results and R code. See the [fast_hetero workflow](docs/fast-hetero-roadmap.md) and [method notes](docs/signal-heterogeneity-zh.md) (Chinese) for additional detail.
+
+</details>
+
+## Tree and data requirements
+
+- **Trees:** K/D require finite positive lengths; D supports rooted polytomies but rejects unary nodes. Lambda permits valid zero internal branches but rejects zero terminal branches. Delta/ACE require rooted, fully bifurcating trees with positive lengths. `resolve_tree()` normalizes edge order and node numbering; root/outgroup choice remains with the user.
+- **Traits:** use unique vector names or matrix/data-frame row names. Unnamed input assumes tree-tip order. Missing values are handled per trait; measurement-error input is currently unsupported (`se = NULL`).
+
+## Plotting and visualization
+
+| K permutation null (example) | Lambda likelihood profile (example) |
+|---|---|
+| ![K permutation null (example)](docs/release-0.3.0/plot_signal_K_single_trait.png) | ![Lambda likelihood profile (example)](docs/release-0.3.0/plot_signal_lambda_profile.png) |
+
+```r
+plot_signal(fit_k)
+plot_signal(fit_lambda)
+plot_signal(fit_d)
+plot_signal(fit_delta)
+```
+
+K and Delta plots use saved randomization distributions; D overlays both null distributions; lambda displays its likelihood profile and approximate interval. For null plots, set `test = TRUE, return_sim = TRUE`; D also requires `keep_null = TRUE`. Lambda uses `lambda_profile = TRUE`.
+
+<details>
+<summary><strong>Inference and MCMC diagnostics</strong></summary>
+
+- **Delta:** the estimate is posterior `mean(beta / alpha)`. Inspect `ESS_Delta`, `split_Rhat_Delta`, `MCSE_Delta` and available rank diagnostics, plus successful permutations and `MCSE_P` when testing. Defaults are ARD, `mcmc_sim = 10000`, `thin = 10`, `burn = 100`, `test = FALSE`.
+- **D:** null simulations standardize D even when `test = FALSE`. Results include `MCSE_P_random` and `MCSE_P_Brownian`. In `fast_hetero()`, `d_nsim` controls this standardization and `nsim` controls optional heterogeneity simulation.
+
+</details>
+
+<details>
+<summary><strong>Performance and reproducibility</strong></summary>
+
+- **Efficiency:** batch traits, reuse prepared contexts and retain null distributions only when needed. `progress = FALSE` silences progress/matching messages while retaining statistical warnings and timing metadata.
+
+<details>
+<summary><strong>Parallel execution and reproducibility</strong></summary>
+
+- **Parallel reproducibility:** K randomization and binary-tree D use OpenMP threads; Delta permutations use R workers, controlled by `ncores`. Fix seeds, controls, explicit simulation inputs (if supplied) and `ncores`. Changing Delta worker count can change random-stream allocation.
+- **ACE threads:** large ACE fits within Delta/clade scans automatically use at most two OpenMP threads. `options(fastphylosig.ace_threads = 1L)` forces serial evaluation; `0L` restores automatic selection. This setting does not reallocate random streams.
+
+</details>
+
+</details>
