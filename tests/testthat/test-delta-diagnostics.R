@@ -37,7 +37,7 @@ test_that("Delta exposes saved-chain diagnostics without changing the estimator 
   expect_false(".Random.seed" %in% names(fit$stochastic))
 })
 
-test_that("Permutation P MCSE uses finite successful permutations", {
+test_that("Permutation P MCSE uses complete corrected random permutations", {
   set.seed(702)
   tree <- ape::rtree(14)
   x <- rep(c("a", "b", "c"), length.out = ape::Ntip(tree))
@@ -52,7 +52,7 @@ test_that("Permutation P MCSE uses finite successful permutations", {
   if (is.finite(fit$P) && sum(finite) > 0) {
     expect_equal(
       fit$P_MCSE,
-      sqrt(fit$P * (1 - fit$P) / sum(finite)),
+      fastphylosig:::.delta_p_mcse(fit$P, sum(finite)),
       tolerance = 1e-12
     )
   } else {

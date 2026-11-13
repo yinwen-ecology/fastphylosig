@@ -559,9 +559,6 @@ print.fastphylosig_result <- function(x, ..., digits = getOption("digits")) {
   invisible(x)
 }
 
-# `%||%` is kept local to avoid importing a dependency for a two-token helper.
-`%||%` <- function(x, y) if (is.null(x) || !length(x)) y else x
-
 #' @export
 summary.fastphylosig_result <- function(object, ...) {
   method <- .result_method(object)

@@ -4,7 +4,7 @@
 # is being validated.  Releases that do not expose
 # fast_lambda_tree_optimize_cpp() skip these tests cleanly.  The oracle is the
 # dense C_lambda GLS likelihood used by phytools::phylosig(method = "lambda")
-# followed by stats::optimize() over [0, max_lambda].
+# followed by independent dense-grid basin refinement and endpoint comparison.
 
 .lov_has_engine <- function() {
   exists("fast_lambda_tree_optimize_cpp", envir = asNamespace("fastphylosig"),
@@ -218,8 +218,19 @@
 
 .lov_opt_oracle <- function(tree, y, max_lambda = .lov_max_lambda(tree)) {
   lik <- function(z) .lov_oracle(tree, y, z)$logLik
-  fit <- stats::optimize(lik, interval = c(0, max_lambda),
-                         maximum = TRUE)
+  grid <- sort(unique(max_lambda * c(seq(0, 1, length.out=1001),
+    2^-(1:35), 1-2^-(1:35))))
+  vals <- vapply(grid, lik, numeric(1))
+  n <- length(grid)
+  peaks <- which(is.finite(vals[2:(n-1)]) &
+    vals[2:(n-1)] >= vals[1:(n-2)] & vals[2:(n-1)] >= vals[3:n] &
+    (vals[2:(n-1)] > vals[1:(n-2)] | vals[2:(n-1)] > vals[3:n])) + 1L
+  candidates <- c(grid, vapply(peaks, function(k)
+    optimize(lik, grid[c(k-1L,k+1L)], maximum=TRUE, tol=1e-9)$maximum,
+    numeric(1)))
+  objectives <- vapply(candidates, lik, numeric(1))
+  winner <- which.max(objectives)
+  fit <- list(maximum=candidates[winner], objective=objectives[winner])
   at0 <- lik(0)
   LR <- if (is.finite(fit$objective) && is.finite(at0)) {
     max(0, 2 * (fit$objective - at0))

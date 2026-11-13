@@ -1,3 +1,14 @@
+> **Retired V1 audit drivers:** The obsolete runners depended on removed V1
+> canonicalization internals and were retired during reference/old-version test
+> cleanup. Historical evidence and results are retained; retired source is
+> recoverable from pre-cleanup Git history. Current package tests assert V2
+> and current inspection contracts directly.
+>
+> The retired driver is prepare_complexity_audit.R. combine_results.R is retained and can still aggregate the historical CSV results.
+>
+> The original README below is historical context. Commands for retired drivers
+> are no longer runnable as written.
+
 # fastphylosig 0.2.0 Stage 2B2A benchmark
 
 This directory contains the read-only preparation-complexity audit for Stage

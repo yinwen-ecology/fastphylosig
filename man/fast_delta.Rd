@@ -31,7 +31,7 @@ entropy \code{"SE"}, or normalized Gini impurity \code{"GINI"}.}
 \item{model}{Discrete transition model used by \code{fast_ace()}: \code{"ER"}
 or \code{"ARD"}.}
 \item{permutations}{Optional integer permutation matrix with exactly
-\code{nsim} rows and one column per retained tip.}
+\code{nsim} rows and one column per retained tip. Rows must represent independent uniform random permutations for the Monte Carlo interpretation below. Repeated rows and identity permutations are allowed. The function validates indices, not the sampling design; arbitrary or exhaustive rows do not automatically define an exact test.}
 \item{return_sim}{Whether to retain simulated Delta values.}
 \item{verbose}{Whether to report species matching.}
 \item{progress}{Whether to report method-level progress stages and elapsed
@@ -106,12 +106,32 @@ The public defaults include \code{test = FALSE}, \code{nsim = 1000},
 \code{burn = 100}, and \code{model = "ARD"}. Thus permutation P,
 \code{MCSE_P}, and retained null values are absent unless testing is
 enabled; null values additionally require \code{return_sim = TRUE}.
-\code{MCSE_P} uses the finite successful permutation count. These are
+\code{MCSE_P} is available only when every requested permutation succeeds and the exceedance count is strictly between zero and \code{nsim}. These are
 computational defaults rather than a guarantee
 of adequate mixing for every data set. Users should increase the chain when
 ESS, split R-hat, or Monte Carlo error is inadequate.
 }
 \details{
+The default test independently permutes tip labels uniformly and refits ancestral
+states and the Delta MCMC for each permutation. With B requested permutations
+and b simulated Delta values greater than or equal to the observed Delta,
+\code{P = (b + 1)/(B + 1)}. This Monte Carlo rank correction avoids zero
+P values. Its inferential interpretation requires exchangeable tip labels under
+the null and the same stochastic statistic procedure for observed and permuted
+data; it does not establish MCMC convergence or a global optimization optimum.
+User-supplied permutations must satisfy the same sampling assumptions. An
+exhaustive or otherwise nonrandom design is not automatically an exact test.
+
+If any permutation fails, P and its Monte Carlo standard error are unavailable
+(\code{NA}); the observed Delta, successful/failed counts, partial status, and
+requested retained simulations remain available, with a warning. Failed draws
+are not discarded to form a selected null distribution. For complete runs,
+\code{MCSE_P = sqrt(B*q*(1-q))/(B+1)}, where \code{q = b/B}, is a conditional
+binomial plug-in sampling error for independent random permutations. It excludes
+uncertainty in the observed stochastic Delta and systematic numerical error.
+When b is zero or B this plug-in error is reported as \code{NA}, not zero,
+because finite sampling cannot establish zero uncertainty.
+
 Native ACE scratch can be reused across fits within one analysis. The
 \code{fastphylosig.ace_cache_bytes} option limits retained storage, with a
 default of \code{64 * 1024^2} bytes. Zero disables cross-fit caching. Active fits and allocator overhead

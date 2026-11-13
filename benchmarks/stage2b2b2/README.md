@@ -1,3 +1,14 @@
+> **Retired V1 audit drivers:** The obsolete runners depended on removed V1
+> canonicalization internals and were retired during reference/old-version test
+> cleanup. Historical evidence and results are retained; retired source is
+> recoverable from pre-cleanup Git history. Current package tests assert V2
+> and current inspection contracts directly.
+>
+> The retired drivers are run_baseline.R and verify_ordering_contract.R.
+>
+> The original README below is historical context. Commands for retired drivers
+> are no longer runnable as written.
+
 # fastphylosig 0.2.0 Stage 2B2B Candidate 2 baseline
 
 This directory contains the Candidate-1 post-freeze direct baseline. The

@@ -9,6 +9,7 @@
 // columns in bounded chunks.
 
 #include <Rcpp.h>
+#include "k_scale.h"
 
 #include <algorithm>
 #include <cmath>
@@ -543,10 +544,12 @@ KFactors prepare_k_factors(const TreeArrays& tree) {
       tree.root_distance[static_cast<std::size_t>(tip)]
     );
   }
-  const double trace = static_cast<double>(trace_ld);
-  const double norm_const =
-    (trace - static_cast<double>(tree.n_tip) / sum_inv) /
-    static_cast<double>(tree.n_tip - 1);
+  // The trace may exceed double range while the per-tip normalization is
+  // representable. Keep both the subtraction and division extended.
+  const double norm_const = static_cast<double>(
+    (trace_ld - static_cast<long double>(tree.n_tip) /
+      static_cast<long double>(sum_inv)) /
+    static_cast<long double>(tree.n_tip - 1));
   if (!std::isfinite(norm_const) || norm_const <= 0.0) {
     Rcpp::stop("the Brownian-tree K normalization is not finite and positive.");
   }
@@ -635,7 +638,7 @@ KResult evaluate_k(const TreeArrays& tree, const KFactors& factors,
           static_cast<long double>(tree.branch[static_cast<std::size_t>(tip)]);
       }
       delta[static_cast<std::size_t>(j)] =
-        static_cast<double>(qlinear) / sum_inv;
+        static_cast<double>(qlinear / static_cast<long double>(sum_inv));
       const double a = baseline[static_cast<std::size_t>(j)] +
         delta[static_cast<std::size_t>(j)];
       if (!std::isfinite(a)) {
@@ -685,8 +688,11 @@ KResult evaluate_k(const TreeArrays& tree, const KFactors& factors,
         numerator[col0 + j] = num_d;
         denominator[col0 + j] = den_d;
       }
-      kval[col0 + j] = (den_d > 0.0 && std::isfinite(den_d))
-        ? (num_d / den_d) / norm_const
+      // Diagnostic energies can exceed double range even when their ratio
+      // is finite. Keep the calculation extended until the dimensionless K
+      // has been formed; narrowing here also loses tiny nonzero energies.
+      kval[col0 + j] = (den > 0.0L && std::isfinite(den))
+        ? static_cast<double>((num / den) / static_cast<long double>(norm_const))
         : std::numeric_limits<double>::quiet_NaN();
     }
   }
@@ -699,18 +705,26 @@ KResult evaluate_k(const TreeArrays& tree, const KFactors& factors,
 // [[Rcpp::export]]
 Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
     const Rcpp::NumericMatrix& X, const int trait_chunk = 64) {
-  const TreeArrays tree = parse_tree(compiled_tree);
+  TreeArrays tree = parse_tree(compiled_tree);
   validate_k_matrix(tree, X, trait_chunk);
+  const int branch_exponent = fastphylosig::normalize_k_tree(tree);
+  std::vector<int> trait_exponents;
+  const Rcpp::NumericMatrix scaled = fastphylosig::normalize_k_traits(X, trait_exponents);
   const KFactors factors = prepare_k_factors(tree);
   KWorkspace workspace;
-  const KResult fitted = evaluate_k<true>(tree, factors, X, trait_chunk, workspace);
+  KResult fitted = evaluate_k<true>(tree, factors, scaled, trait_chunk, workspace);
+  for (int j = 0; j < X.ncol(); ++j) {
+    fitted.means[j] = std::scalbn(fitted.means[j], trait_exponents[j]);
+    fitted.numerator[j] = std::scalbn(fitted.numerator[j], 2*trait_exponents[j]);
+    fitted.denominator[j] = std::scalbn(fitted.denominator[j], 2*trait_exponents[j]-branch_exponent);
+  }
   return Rcpp::List::create(
     Rcpp::Named("K") = fitted.k,
     Rcpp::Named("gls_mean") = fitted.means,
     Rcpp::Named("numerator") = fitted.numerator,
     Rcpp::Named("denominator") = fitted.denominator,
-    Rcpp::Named("sum_inv") = factors.sum_inv,
-    Rcpp::Named("normalization") = factors.normalization
+    Rcpp::Named("sum_inv") = std::scalbn(factors.sum_inv, -branch_exponent),
+    Rcpp::Named("normalization") = std::scalbn(factors.normalization, branch_exponent)
   );
 }
 
@@ -719,7 +733,8 @@ Rcpp::List fast_k_tree_batch_cpp(const Rcpp::List& compiled_tree,
 Rcpp::NumericVector heterogeneity_bm_k_cpp(const Rcpp::List& compiled_tree,
     const int nsim, const int simulation_chunk) {
   if (nsim < 2 || simulation_chunk < 1) Rcpp::stop("invalid BM simulation dimensions");
-  const TreeArrays tree = parse_tree(compiled_tree);
+  TreeArrays tree = parse_tree(compiled_tree);
+  fastphylosig::normalize_k_tree(tree);
   const KFactors factors = prepare_k_factors(tree);
   KWorkspace workspace;
   // Borrow the K selector's 64 MiB budget for dominant block buffers.

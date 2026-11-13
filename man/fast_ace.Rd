@@ -65,6 +65,13 @@ mixed-length fits batch only the remaining uncached branches using a compact
 worklist. The activation threshold counts uncached work, so a large tree with
 very few uncached branches does not incur parallel startup costs.
 The default \code{CI = TRUE} path is unaffected by this thread option.
+Optimization uses \code{stats::nlminb}. Some BLAS implementations, including
+MKL 2026.2, can give different optimizer trajectories when the alignment of
+internal work arrays changes, even if likelihoods at identical rates agree
+exactly. Changing thread or workspace settings therefore does not guarantee
+bit-for-bit equality of fitted rates, ancestor probabilities or downstream
+Delta draws. Keep the software/BLAS configuration and controls fixed, inspect
+convergence diagnostics, and assess sensitivity in weakly identified ARD fits.
 
 With \code{marginal = FALSE}, ancestor probabilities condition on all observed
 tips under a uniform root prior; \code{marginal = TRUE} returns scaled subtree
@@ -76,8 +83,12 @@ ER retains its existing floating-point arithmetic and Delta random stream.
 
 The deviance objective is negative twice log likelihood, so its Hessian divided
 by two is the observed information. Returned rate standard errors account for
-this factor. Boundary or unidentifiable fits can still have unavailable standard
-errors; correcting this scale does not make Wald inference valid at boundaries.
+this factor. If the numerical Hessian is non-finite, not positive definite, or
+cannot be reliably inverted, the entire \code{se} vector is \code{NaN} and one
+warning is issued; fitted rates and ancestral probabilities remain available.
+Positive inverse diagonal entries alone do not establish a valid covariance
+matrix. Boundary or unidentifiable fits can have unavailable standard errors;
+even a positive-definite Hessian does not make Wald inference valid at boundaries.
 }
 \value{
 An \code{ace}-like object containing \code{loglik}, \code{rates}, numerical

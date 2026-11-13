@@ -45,6 +45,7 @@ struct TreeArrays {
   std::vector<int> postorder;
   std::vector<double> branch;
   std::vector<double> root_distance;
+  int branch_scale_exponent; // original C = normalized C * 2^exponent
 };
 
 bool has_field(const Rcpp::List& x, const char* name) {
@@ -211,7 +212,7 @@ TreeArrays parse_tree(const Rcpp::List& compiled) {
   if (branch_sexp == R_NilValue) {
     Rcpp::stop("compiled_tree must contain branch_length_by_node.");
   }
-  const std::vector<double> branch = numeric_vector(
+  std::vector<double> branch = numeric_vector(
     branch_sexp, static_cast<R_xlen_t>(n_total),
     "compiled_tree branch_length_by_node", true);
 
@@ -298,6 +299,29 @@ TreeArrays parse_tree(const Rcpp::List& compiled) {
     }
   }
 
+  // Normalize only extreme common tree units. Powers of two preserve relative
+  // edge lengths exactly whenever representable; do not silently erase an
+  // edge when the tree itself spans more than the double dynamic range.
+  int branch_scale_exponent = 0;
+  double largest_branch = 0;
+  for (int node = 0; node < n_total; ++node)
+    if (node != root) largest_branch = std::max(largest_branch, branch[node]);
+  if (largest_branch > 0) {
+    const int exponent = std::ilogb(largest_branch);
+    if (exponent > 300 || exponent < -300) {
+      bool safe = true;
+      for (int node = 0; node < n_total; ++node) if (node != root) {
+        const double value = std::scalbn(branch[node], -exponent);
+        if (!std::isfinite(value) || (branch[node] > 0 && value == 0)) safe = false;
+      }
+      if (safe) {
+        branch_scale_exponent = exponent;
+        for (int node = 0; node < n_total; ++node)
+          if (node != root) branch[node] = std::scalbn(branch[node], -exponent);
+      }
+    }
+  }
+
   std::vector<double> root_distance(static_cast<std::size_t>(n_total), 0.0);
   for (std::size_t i = 1; i < preorder.size(); ++i) {
     const int node = preorder[i];
@@ -321,6 +345,7 @@ TreeArrays parse_tree(const Rcpp::List& compiled) {
   out.preorder.swap(preorder);
   out.postorder.swap(postorder);
   out.branch = branch;
+  out.branch_scale_exponent = branch_scale_exponent;
   out.root_distance.swap(root_distance);
   return out;
 }
@@ -663,6 +688,17 @@ struct LambdaTraitPoint {
   std::string status;
 };
 
+// Exact power-of-two rescaling keeps residual squares representable even
+// when long double has only the double exponent range. Ordinary inputs keep
+// the original arithmetic path and output bit pattern.
+int lambda_trait_scale_exponent(const Rcpp::NumericMatrix& X, const int trait) {
+  double largest = 0;
+  for (int i = 0; i < X.nrow(); ++i)
+    largest = std::max(largest, std::abs(X(i, trait)));
+  if (largest == 0 || !std::isfinite(largest)) return 0;
+  const int exponent = std::ilogb(largest);
+  return (exponent > 300 || exponent < -300) ? exponent : 0;
+}
 // Owned scratch buffers shared by the public optimizer and heterogeneity.
 // Pruning overwrites every node; no trait-dependent values are cached here.
 struct LambdaTraitWorkspace {
@@ -683,7 +719,8 @@ LambdaTraitPoint evaluate_lambda_trait(const TreeArrays& tree,
                                       const double lambda,
                                       const double max_lambda,
                                       LambdaTraitWorkspace& work,
-                                      const bool reml = false) {
+                                      const bool reml = false, const bool weights_ready = false,
+                                      const int scale_exponent = 0, const bool restore_branch_units = true) {
   LambdaTraitPoint out;
   out.gls_mean = NA_REAL;
   out.sigma2 = NA_REAL;
@@ -691,7 +728,25 @@ LambdaTraitPoint evaluate_lambda_trait(const TreeArrays& tree,
   out.valid = false;
   out.status = "undefined";
 
-  update_weights(tree, lambda, max_lambda, work.weights);
+  if (scale_exponent != 0) {
+    Rcpp::NumericMatrix normalized(X.nrow(), 1);
+    for (int i = 0; i < X.nrow(); ++i)
+      normalized(i, 0) = std::scalbn(X(i, trait), -scale_exponent);
+    out = evaluate_lambda_trait(tree, normalized, 0, lambda, max_lambda,
+                                work, reml, weights_ready, 0, false);
+    if (!out.valid) return out;
+    out.gls_mean = std::scalbn(out.gls_mean, scale_exponent);
+    out.sigma2 = std::scalbn(out.sigma2, 2 * scale_exponent -
+      (restore_branch_units ? tree.branch_scale_exponent : 0));
+    out.log_lik -= static_cast<double>(tree.n_tip - (reml ? 1 : 0)) *
+      static_cast<double>(scale_exponent) * std::log(2.0);
+    if (!std::isfinite(out.sigma2))
+      out.status = "ok; sigma2 exceeds double range";
+    else if (out.sigma2 == 0)
+      out.status = "ok; sigma2 underflows double range";
+    return out;
+  }
+  if (!weights_ready) update_weights(tree, lambda, max_lambda, work.weights);
   const LambdaWeights& w = work.weights;
   if (!w.ok) {
     out.status = w.status;
@@ -741,10 +796,12 @@ LambdaTraitPoint evaluate_lambda_trait(const TreeArrays& tree,
     out.status = "sigma2 or logLik is not finite";
     return out;
   }
-  out.sigma2 = static_cast<double>(sig);
+  out.sigma2 = std::scalbn(static_cast<double>(sig),
+    restore_branch_units ? -tree.branch_scale_exponent : 0);
   out.log_lik = static_cast<double>(ll);
   out.valid = true;
-  out.status = "ok";
+  out.status = !std::isfinite(out.sigma2) ? "ok; sigma2 exceeds double range" :
+    out.sigma2 == 0 ? "ok; sigma2 underflows double range" : "ok";
   return out;
 }
 
@@ -786,6 +843,13 @@ Rcpp::List fast_lambda_tree_fixed_cpp(
   Rcpp::LogicalVector lambda_valid(n_lambda);
   Rcpp::CharacterVector lambda_status(n_lambda);
   const double na = NA_REAL;
+  std::vector<int> scale_exponents(p, 0);
+  bool has_scaled_traits = false;
+  for (int j = 0; j < p; ++j) {
+    scale_exponents[j] = lambda_trait_scale_exponent(X, j);
+    has_scaled_traits = has_scaled_traits || scale_exponents[j] != 0;
+  }
+  LambdaTraitWorkspace scaled_work(tree.n_total);
 
   for (int li = 0; li < n_lambda; ++li) {
     const double lam = lambda[li];
@@ -803,6 +867,22 @@ Rcpp::List fast_lambda_tree_fixed_cpp(
       continue;
     }
 
+    if (has_scaled_traits) {
+      bool row_ok = true;
+      for (int j = 0; j < p; ++j) {
+        const LambdaTraitPoint point = evaluate_lambda_trait(
+          tree, X, j, lam, max_lambda, scaled_work, false, false, scale_exponents[j]);
+        means(li, j) = point.gls_mean;
+        sigma2(li, j) = point.sigma2;
+        log_lik(li, j) = point.log_lik;
+        valid(li, j) = point.valid;
+        status(li, j) = point.status;
+        row_ok = row_ok && point.valid;
+      }
+      lambda_valid[li] = row_ok;
+      lambda_status[li] = row_ok ? "ok" : "one or more traits are undefined";
+      continue;
+    }
     bool row_ok = true;
     std::string row_status = "ok";
     const int chunk_limit = std::max(1, std::min(trait_chunk, p));
@@ -881,10 +961,12 @@ Rcpp::List fast_lambda_tree_fixed_cpp(
           row_status = "one or more traits are undefined";
           continue;
         }
-        sigma2(li, col0 + j) = static_cast<double>(sig);
+        sigma2(li, col0 + j) = std::scalbn(static_cast<double>(sig), -tree.branch_scale_exponent);
         log_lik(li, col0 + j) = static_cast<double>(ll);
         valid(li, col0 + j) = true;
-        status(li, col0 + j) = "ok";
+        status(li, col0 + j) = !std::isfinite(sigma2(li, col0 + j)) ?
+          "ok; sigma2 exceeds double range" : sigma2(li, col0 + j) == 0 ?
+          "ok; sigma2 underflows double range" : "ok";
       }
     }
     lambda_valid[li] = row_ok;
@@ -915,12 +997,26 @@ class LambdaTraitCache {
                      const int trait_chunk,
                      const int n_threads)
     : tree_(tree), X_(X), max_lambda_(max_lambda),
-      trait_chunk_(trait_chunk), n_threads_(n_threads), work_(tree.n_total) {
+      trait_chunk_(trait_chunk), n_threads_(n_threads), work_(tree.n_total), scale_exponents_(X.ncol(), 0) {
+    for (int j = 0; j < X.ncol(); ++j)
+      scale_exponents_[j] = lambda_trait_scale_exponent(X, j);
     // Scalar optimizer evaluations do not use chunking or OpenMP yet; retain
     // the controls in the cache so the public signature stays aligned with
     // the fixed batch kernel while keeping this first optimizer deterministic.
   }
 
+  void prime_common_grid(const std::vector<double>& grid) {
+    if (X_.ncol() < 2) return;
+    for (std::size_t i = 0; i < grid.size(); ++i) {
+      const double lambda = grid[i];
+      update_weights(tree_, lambda, max_lambda_, work_.weights);
+      for (int j = 0; j < X_.ncol(); ++j) {
+        const LambdaTraitPoint point = evaluate_lambda_trait(
+          tree_, X_, j, lambda, max_lambda_, work_, false, true, scale_exponents_[j]);
+        cache_.insert(std::make_pair(std::make_pair(lambda, j), point));
+      }
+    }
+  }
   const LambdaTraitPoint& eval(const double lambda, const int trait) {
     const std::pair<double, int> key(lambda, trait);
     std::map<std::pair<double, int>, LambdaTraitPoint>::const_iterator hit =
@@ -928,7 +1024,7 @@ class LambdaTraitCache {
     if (hit != cache_.end()) return hit->second;
 
     const LambdaTraitPoint point = evaluate_lambda_trait(
-      tree_, X_, trait, lambda, max_lambda_, work_
+      tree_, X_, trait, lambda, max_lambda_, work_, false, false, scale_exponents_[trait]
     );
     const std::pair<
       std::map<std::pair<double, int>, LambdaTraitPoint>::iterator, bool
@@ -943,6 +1039,7 @@ class LambdaTraitCache {
   int trait_chunk_;
   int n_threads_;
   LambdaTraitWorkspace work_;
+  std::vector<int> scale_exponents_;
   std::map<std::pair<double, int>, LambdaTraitPoint> cache_;
 };
 
@@ -1032,6 +1129,52 @@ double brent_minimize(const double lower, const double upper, const double tol,
   return brent_minimize_value(lower, upper, tol, objective, nullptr);
 }
 
+std::vector<double> lambda_search_grid(const double upper) {
+  std::vector<double> grid;
+  for (int k = 0; k <= 64; ++k) grid.push_back(upper * (static_cast<double>(k) / 64.0));
+  for (int k = 7; k <= 40; ++k) {
+    const double offset = std::ldexp(upper, -k);
+    grid.push_back(offset);
+    grid.push_back(upper - offset);
+  }
+  std::sort(grid.begin(), grid.end());
+  grid.erase(std::unique(grid.begin(), grid.end()), grid.end());
+  return grid;
+}
+
+// Shared by observed fits and bootstrap refits so the estimator is identical.
+double lambda_global_minimize(const double upper, const double tol,
+    const std::function<double(double)>& objective, double* minimum_value) {
+  // Profile likelihoods can have multiple modes. Scan for separate basins,
+  // refine each, and compare endpoints (invalid endpoints remain +Inf).
+  const std::vector<double> grid = lambda_search_grid(upper);
+  std::vector<double> values(grid.size());
+  double candidate = 0.0;
+  double best_value = std::numeric_limits<double>::infinity();
+  for (std::size_t k = 0; k < grid.size(); ++k) {
+    values[k] = objective(grid[k]);
+    if (values[k] < best_value) {
+      best_value = values[k];
+      candidate = grid[k];
+    }
+  }
+  for (std::size_t k = 1; k + 1 < grid.size(); ++k) {
+    if (std::isfinite(values[k]) && values[k] <= values[k - 1] &&
+        values[k] <= values[k + 1] &&
+        (values[k] < values[k - 1] || values[k] < values[k + 1])) {
+      double refined_value;
+      const double refined = brent_minimize_value(
+        grid[k - 1], grid[k + 1], tol, objective, &refined_value);
+      if (refined_value < best_value) {
+        candidate = refined;
+        best_value = refined_value;
+      }
+    }
+  }
+  if (minimum_value) *minimum_value = best_value;
+  return candidate;
+}
+
 double chi_square1_upper_tail(const double statistic) {
   if (!std::isfinite(statistic) || statistic < 0.0) return NA_REAL;
   return std::erfc(std::sqrt(0.5 * statistic));
@@ -1095,6 +1238,7 @@ Rcpp::List fast_lambda_tree_optimize_cpp(
 
   const int p = X.ncol();
   LambdaTraitCache cache(tree, X, upper, trait_chunk, n_threads);
+  cache.prime_common_grid(lambda_search_grid(upper));
 
   Rcpp::NumericVector lambda_hat(p, NA_REAL);
   Rcpp::NumericVector log_lik_hat(p, R_NegInf);
@@ -1117,13 +1261,8 @@ Rcpp::List fast_lambda_tree_optimize_cpp(
           std::numeric_limits<double>::infinity();
       };
 
-    double candidate = brent_minimize(0.0, upper, tol, objective);
-    candidate = std::max(0.0, std::min(upper, candidate));
+    const double candidate = lambda_global_minimize(upper, tol, objective, nullptr);
 
-    // Keep the Brent interior candidate as stats::optimize() does.  The
-    // lambda=0 endpoint is evaluated separately for logLik0/LR and is never
-    // substituted as an exact estimate; an invalid upper boundary remains
-    // +Inf in the minimizer and therefore cannot be selected.
     if (!std::isfinite(candidate)) {
       status[j] = "lambda likelihood is undefined on this trait/tree";
       continue;
@@ -1151,8 +1290,10 @@ Rcpp::List fast_lambda_tree_optimize_cpp(
   Rcpp::RObject profile_lambda_obj = R_NilValue;
   Rcpp::RObject profile_log_lik_obj = R_NilValue;
   if (profile) {
-    std::vector<double> grid;
-    grid.reserve(static_cast<std::size_t>(profile_points) +
+    // Reuse already evaluated search knots, including geometric boundary probes.
+    // A coarse regular profile can otherwise bridge a narrow excluded gap.
+    std::vector<double> grid = lambda_search_grid(upper);
+    grid.reserve(grid.size() + static_cast<std::size_t>(profile_points) +
                 static_cast<std::size_t>(p) + 3U);
     for (int i = 0; i < profile_points; ++i) {
       grid.push_back(upper * static_cast<double>(i) /
@@ -1225,6 +1366,7 @@ Rcpp::List heterogeneity_lambda_calibrate_cpp(const Rcpp::List& compiled,
   std::vector<TreeArrays> trees;
   std::vector<Rcpp::NumericMatrix> values;
   std::vector<double> bounds;
+  std::vector<int> scale_exponents;
   std::vector<LambdaTraitWorkspace> work;
   work.reserve(n);
   double common_bound = std::numeric_limits<double>::infinity();
@@ -1239,34 +1381,21 @@ Rcpp::List heterogeneity_lambda_calibrate_cpp(const Rcpp::List& compiled,
       y(k, 0) = x[k];
     }
     values.push_back(y);
+    scale_exponents.push_back(lambda_trait_scale_exponent(y, 0));
     bounds.push_back(phytools_max_lambda(trees.back()));
     common_bound = std::min(common_bound, bounds.back());
   }
   const std::function<double(double)> pooled = [&](double lambda) {
     long double sum = 0;
     for (int i = 0; i < n; ++i) {
-      const LambdaTraitPoint point = evaluate_lambda_trait(trees[i], values[i], 0, lambda, bounds[i], work[i], reml);
+      const LambdaTraitPoint point = evaluate_lambda_trait(trees[i], values[i], 0, lambda, bounds[i], work[i], reml, false, scale_exponents[i]);
       if (!point.valid) return std::numeric_limits<double>::infinity();
       sum -= point.log_lik;
     }
     return static_cast<double>(sum);
   };
-  // Search a coarse grid as well as Brent's full interval. Profile sums need
-  // not be unimodal; refine every grid-local minimum rather than assuming one.
-  double common = brent_minimize(0, common_bound, 1e-7, pooled);
-  double best = pooled(common);
-  std::vector<double> grid(33);
-  for (int k = 0; k <= 32; ++k) {
-    grid[k] = pooled(common_bound * k / 32.0);
-    if (grid[k] < best) { best = grid[k]; common = common_bound * k / 32.0; }
-  }
-  for (int k = 1; k < 32; ++k) if (grid[k] <= grid[k-1] && grid[k] <= grid[k+1] &&
-      (grid[k] < grid[k-1] || grid[k] < grid[k+1])) {
-    const double candidate = brent_minimize(common_bound * (k-1) / 32.0,
-      common_bound * (k+1) / 32.0, 1e-7, pooled);
-    const double value = pooled(candidate);
-    if (value < best) { best = value; common = candidate; }
-  }
+  double best;
+  double common = lambda_global_minimize(common_bound, 1e-7, pooled, &best);
   if (!R_IsNA(lambda_fixed)) {
     if (!std::isfinite(lambda_fixed) || lambda_fixed < 0 || lambda_fixed > common_bound)
       Rcpp::stop("fixed reference lambda is outside the common domain");
@@ -1300,7 +1429,7 @@ Rcpp::List heterogeneity_lambda_calibrate_cpp(const Rcpp::List& compiled,
           return point.valid ? -point.log_lik : std::numeric_limits<double>::infinity();
         };
         double minimum_value;
-        const double candidate = brent_minimize_value(0, bounds[i], 0.0001220703125,
+        const double candidate = lambda_global_minimize(bounds[i], 0.0001220703125,
           objective, &minimum_value);
         estimates[i] = std::isfinite(minimum_value) ? candidate : NA_REAL;
       }

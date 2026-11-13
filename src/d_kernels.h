@@ -4,6 +4,7 @@
 #include <Rcpp.h>
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <vector>
 
 namespace fastphylosig {
@@ -32,8 +33,23 @@ class DContrasts {
         w0_.push_back(y/(x+y)); w1_.push_back(1-w0_.back()); denom_.push_back(1);
         variance[node] += scale*x*y/(x+y);
       } else {
-        w0_.push_back(1/va); w1_.push_back(1/vb); denom_.push_back(w0_.back()+w1_.back());
-        variance[node] += (va*vb)/(va+vb);
+        const double wa = 1/va, wb = 1/vb, precision = wa+wb;
+        if (std::isfinite(precision)) {
+          w0_.push_back(wa); w1_.push_back(wb); denom_.push_back(precision);
+        } else {
+          // Subnormal positive branches can overflow reciprocals even though
+          // the ancestral mean is a finite convex combination. Store normalized
+          // weights only for this node; denominator 1 preserves sum()'s path.
+          const double scale = std::max(va, vb), x = va/scale, y = vb/scale;
+          w0_.push_back(y/(x+y)); w1_.push_back(x/(x+y)); denom_.push_back(1);
+        }
+        // Preserve ordinary-scale rounding, but avoid an overflowing product
+        // (or an underflowing/subnormal one) in the harmonic variance.
+        const double product = va*vb, sum = va+vb;
+        const double smaller = std::min(va, vb), larger = std::max(va, vb);
+        variance[node] += std::isfinite(product) && std::isfinite(sum) &&
+          product >= std::numeric_limits<double>::min()
+          ? product/sum : smaller/(1.0+smaller/larger);
       }
     }
   }

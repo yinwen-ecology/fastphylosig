@@ -282,12 +282,15 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
       error = function(e) e
     )
     if (inherits(calc, "error")) {
-      calculation_flags[[j]] <- calc$calculation_diagnostics
-      if (is.null(calculation_flags[[j]])) {
-        calculation_flags[[j]] <- .delta_calculation_flags()
-        calculation_flags[[j]]$calculation_failed <- TRUE
-        calculation_flags[[j]]$failure_stage <- "calculation"
+      # Assign only after the fallback is constructed: assigning NULL through
+      # [[ would remove the list entry, losing this trait and shifting others.
+      flags <- calc$calculation_diagnostics
+      if (is.null(flags)) {
+        flags <- .delta_calculation_flags()
+        flags$calculation_failed <- TRUE
+        flags$failure_stage <- "calculation"
       }
+      calculation_flags[[j]] <- flags
       notes[j] <- conditionMessage(calc)
       next
     }
@@ -331,7 +334,7 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
         if (ncores > 1L) {
           delta_cluster <- parallel::makeCluster(min(ncores, nsim))
           on.exit(parallel::stopCluster(delta_cluster), add = TRUE)
-          parallel::clusterEvalQ(delta_cluster, library(fastphylosig))
+          .delta_initialize_cluster(delta_cluster)
           parallel::clusterSetRNGStream(
             delta_cluster, sample.int(.Machine$integer.max, 1L)
           )
@@ -365,14 +368,16 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
       n_failed_sim[j] <- sum(!finite_sim)
       successful_simulations[j] <- sum(finite_sim)
       successful_permutations[j] <- successful_simulations[j]
-      if (!any(finite_sim)) {
-        notes[j] <- "all Delta permutations failed"
+      if (n_failed_sim[j] > 0L) {
+        # Conditioning on numerical success can distort the null distribution.
+        failure_note <- sprintf(
+          "%d Delta permutations failed; P and MCSE_P are unavailable",
+          n_failed_sim[j]
+        )
+        notes[j] <- if (is.na(notes[j])) failure_note else
+          paste(notes[j], failure_note, sep = "; ")
       } else {
-        P_fast[j] <- mean(sim_delta[finite_sim] >= Delta_fast[j])
-        if (n_failed_sim[j] > 0L) {
-          failure_note <- sprintf("%d Delta permutations failed", n_failed_sim[j])
-          notes[j] <- if(is.na(notes[j])) failure_note else paste(notes[j],failure_note,sep="; ")
-        }
+        P_fast[j] <- (1 + sum(sim_delta >= Delta_fast[j])) / (nsim + 1)
       }
       if (return_sim) {
         sim_list[[j]] <- sim_delta
@@ -436,6 +441,16 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
         length(small_retained), if (length(small_retained) == 1L) "" else "s",
         retained_detail
       ),
+      call. = FALSE
+    )
+  }
+
+  failed_tests <- which(is.finite(Delta_fast) & n_failed_sim > 0L)
+  if (isTRUE(test) && length(failed_tests)) {
+    warning(
+      paste0("Delta permutation failures for ",
+             paste(colnames(X0)[failed_tests], collapse = ", "),
+             "; P and MCSE_P are unavailable. Inspect failed permutation counts."),
       call. = FALSE
     )
   }
@@ -657,6 +672,8 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
     message = out$message[[1]],
     parameters = attr(out, "delta_control")
   )
+  # Preserve the same calculation audit fields as a one-column batch result.
+  for (nm in names(.delta_calculation_flags())) object[[nm]] <- out[[nm]][[1L]]
   for (nm in .delta_rank_fields()) object[[nm]] <- out[[nm]][[1L]]
   for(nm in intersect(.delta_optimizer_retry_fields(),names(out)))object[[nm]] <- out[[nm]][[1L]]
   object$stochastic <- attr(out, "delta_stochastic")
@@ -744,8 +761,12 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
       !is.finite(n_successful) || n_successful < 1) {
     return(NA_real_)
   }
-  p <- min(1, max(0, p))
-  sqrt(p * (1 - p) / n_successful)
+  # P includes the observed statistic: P = (b + 1) / (B + 1).
+  # Conditional on that statistic, b is binomial for iid random permutations.
+  q <- ((n_successful + 1) * p - 1) / n_successful
+  # Boundary plug-in variances falsely suggest certainty after finite sampling.
+  if (!is.finite(q) || q <= 0 || q >= 1) return(NA_real_)
+  sqrt(n_successful * q * (1 - q)) / (n_successful + 1)
 }
 
 .delta_mcmc_warning_summary <- function(
@@ -868,7 +889,8 @@ fast_delta <- function(tree, x = NULL, test = FALSE, nsim = 1000,
   # The package kernel returns rows = saved iterations, columns = chains.
   # Accept the common transposed form for direct diagnostic callers when it
   # is unambiguous (two/few rows and many columns).
-  if (nrow(x) <= 4L && ncol(x) > nrow(x)) x <- t(x)
+  # A single retained iteration must remain a row, not become one chain.
+  if (nrow(x) > 1L && nrow(x) <= 4L && ncol(x) > nrow(x)) x <- t(x)
   storage.mode(x) <- "double"
   x
 }

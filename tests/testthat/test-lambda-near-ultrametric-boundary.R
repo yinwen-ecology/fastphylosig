@@ -40,15 +40,27 @@ test_that('near-ultrametric lambda bounds agree with feasible edge constraints',
     expect_equal(optimized$max_lambda,upper,tolerance=1e-14)
     expect_true(optimized$valid[1])
     expect_lte(optimized$lambda[1],upper)
-    oracle <- optimize(function(lambda) {
+    dense_ll <- function(lambda) {
       V <- lambda*C; diag(V) <- diag(C)
-      inverse <- solve(V)
+      inverse <- tryCatch(solve(V), error=function(e) NULL)
+      if (is.null(inverse)) return(-Inf)
       mu <- sum(inverse %*% x[,1])/sum(inverse)
       variance <- as.numeric(crossprod(x[,1]-mu,inverse %*% (x[,1]-mu)))/4
       -.5*(4*(log(2*pi)+1+log(variance)) +
         as.numeric(determinant(V,logarithm=TRUE)$modulus))
-    }, c(0,upper), maximum=TRUE)
-    expect_equal(optimized$logLik[1],oracle$objective,tolerance=1e-6)
+    }
+    grid <- seq(0, upper, length.out=2001)
+    vals <- vapply(grid, dense_ll, numeric(1))
+    peaks <- which(vals[2:2000] >= vals[1:1999] &
+                   vals[2:2000] >= vals[3:2001]) + 1L
+    refined <- vapply(peaks, function(k)
+      optimize(dense_ll, grid[c(k-1L,k+1L)], maximum=TRUE,
+               tol=1e-10)$objective, numeric(1))
+    # Include feasible endpoints; singular covariances contribute -Inf.
+    oracle <- max(c(vals, refined))
+    expect_equal(optimized$logLik[1],oracle,tolerance=1e-6)
+    expect_equal(optimized$logLik[1],dense_ll(optimized$lambda[1]),
+                 tolerance=1e-7)
     fit <- fastphylosig::fast_lambda(ctx,setNames(x[,1],tree$tip.label),
       test=FALSE,verbose=FALSE,progress=FALSE)
     expect_true(is.finite(fit$lambda))

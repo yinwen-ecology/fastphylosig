@@ -1,92 +1,3 @@
-.legacy_canonical_tree_signature <- function(tree) {
-  if (!inherits(tree, "phylo")) return(NULL)
-  edge <- tree$edge
-  if (!is.matrix(edge) || ncol(edge) != 2L || !nrow(edge)) return(NULL)
-  tip <- as.character(tree$tip.label)
-  n_tip <- length(tip)
-  values <- suppressWarnings(as.numeric(edge))
-  if (any(!is.finite(values)) || any(values != floor(values))) return(NULL)
-  edge <- matrix(as.integer(values), ncol = 2L)
-  ids <- sort(unique(c(edge[, 1L], edge[, 2L])))
-  internal <- ids[ids > n_tip]
-  root_candidates <- setdiff(unique(edge[, 1L]), unique(edge[, 2L]))
-  root <- if (length(root_candidates) == 1L) root_candidates[[1L]] else NA_integer_
-  descendants <- function(node, active = integer()) {
-    if (node <= n_tip) return(tip[[node]])
-    if (node %in% active) return(paste0("!cycle:", node))
-    kids <- edge[edge[, 1L] == node, 2L]
-    if (!length(kids)) return(paste0("!empty:", node))
-    sort(unlist(lapply(kids, descendants, active = c(active, node)),
-                use.names = FALSE))
-  }
-  root_key <- if (is.finite(root)) {
-    paste(descendants(root), collapse = "\r")
-  } else {
-    NA_character_
-  }
-  outdegree <- tabulate(edge[, 1L], nbins = max(c(n_tip, ids)))
-  polytomy <- if (length(internal)) sum(outdegree[internal] > 2L) else 0L
-  list(
-    tip_label = tip,
-    root = root,
-    root_descendants = root_key,
-    root_degree = if (is.finite(root)) outdegree[[root]] else NA_integer_,
-    polytomies = as.integer(polytomy),
-    edge_length = if (!is.null(tree$edge.length) &&
-                      length(tree$edge.length) == nrow(edge)) {
-      as.numeric(tree$edge.length)
-    } else NULL,
-    edge = edge
-  )
-}
-
-.legacy_internal_order <- function(tree) {
-  before <- .legacy_canonical_tree_signature(tree)
-  edge <- before$edge
-  n_tip <- length(before$tip_label)
-  ids <- sort(unique(c(edge)))
-  internal <- ids[ids > n_tip]
-  roots <- setdiff(unique(edge[, 1L]), unique(edge[, 2L]))
-  root <- roots[[1L]]
-  parent <- edge[, 1L]
-  child <- edge[, 2L]
-  children_of <- function(node) child[parent == node]
-  memo <- new.env(parent = emptyenv())
-  descendants <- function(node, active = integer()) {
-    key <- as.character(node)
-    if (exists(key, memo, inherits = FALSE)) {
-      return(get(key, memo, inherits = FALSE))
-    }
-    if (node <= n_tip) {
-      ans <- if (length(before$tip_label) >= node) {
-        before$tip_label[[node]]
-      } else {
-        paste0("#", node)
-      }
-      assign(key, ans, memo)
-      return(ans)
-    }
-    if (node %in% active) return(paste0("!cycle:", node))
-    kids <- children_of(node)
-    ans <- if (!length(kids)) {
-      paste0("!empty:", node)
-    } else {
-      sort(unlist(lapply(kids, descendants, active = c(active, node)),
-                  use.names = FALSE))
-    }
-    assign(key, ans, memo)
-    ans
-  }
-  remaining <- setdiff(internal, root)
-  if (length(remaining)) {
-    keys <- vapply(remaining, function(node) {
-      paste(descendants(node), collapse = "\r")
-    }, character(1L))
-    remaining <- remaining[order(keys, remaining)]
-  }
-  c(root, remaining)
-}
-
 .renumber_internal_nodes <- function(tree, permutation) {
   n_tip <- length(tree$tip.label)
   old <- seq.int(n_tip + 1L, n_tip + tree$Nnode)
@@ -134,62 +45,50 @@
   )
 }
 
-test_that("iterative canonical signatures exactly match the recursive definition", {
+test_that("V2 canonicalization preserves tree structure under representation changes", {
   set.seed(20260904)
-  random <- ape::rtree(17L)
-  random$node.label <- paste0("node", seq_len(random$Nnode))
-  balanced <- ape::compute.brlen(ape::stree(16L, type = "balanced"))
-  pectinate <- .make_pectinate_tree(40L)
-  polytomy <- ape::compute.brlen(ape::stree(12L, type = "star"))
-  shuffled <- .shuffle_edge_rows(random)
-  internals <- seq.int(length(random$tip.label) + 1L,
-                       length(random$tip.label) + random$Nnode)
-  renumbered <- .renumber_internal_nodes(random, rev(internals))
-  root <- setdiff(unique(random$edge[, 1L]), unique(random$edge[, 2L]))
-  other <- setdiff(internals, root)[[1L]]
-  root_swapped <- .renumber_internal_nodes(
-    random,
-    replace(replace(internals, root - length(random$tip.label), other),
-            other - length(random$tip.label), root)
-  )
   fixtures <- list(
-    balanced = balanced,
-    pectinate = pectinate,
-    random = random,
-    polytomy = polytomy,
-    shuffled_edge_order = shuffled,
-    safe_node_renumbering = renumbered,
-    different_root_numbering = root_swapped
+    random = ape::rtree(17L),
+    balanced = ape::compute.brlen(ape::stree(16L, type = "balanced")),
+    pectinate = .make_pectinate_tree(40L),
+    polytomy = ape::compute.brlen(ape::stree(12L, type = "star"))
   )
-
+  fields <- c("edge", "edge.length", "tip.label", "Nnode", "node.label")
   for (name in names(fixtures)) {
     tree <- fixtures[[name]]
-    expect_identical(
-      fastphylosig:::.canonical_tree_signature(tree),
-      .legacy_canonical_tree_signature(tree),
-      info = name
-    )
-    normalized <- fastphylosig:::.safe_canonicalize_core_v1_oracle(tree)
-    mapping <- attr(normalized, "fastphylosig_canonicalization")$mapping
-    expect_identical(
-      unname(as.integer(mapping$old_internal_order)),
-      unname(as.integer(.legacy_internal_order(tree))),
-      info = paste(name, "canonical internal order")
-    )
+    tree$node.label <- paste0("node", seq_len(tree$Nnode))
+    original <- serialize(tree, NULL)
+    internals <- seq.int(length(tree$tip.label) + 1L,
+                         length(tree$tip.label) + tree$Nnode)
+    variants <- list(tree, .shuffle_edge_rows(tree),
+                     .renumber_internal_nodes(tree, rev(internals)))
+    canonical <- fastphylosig:::.safe_canonicalize_core(tree)
+    fingerprint <- fastphylosig:::.v2_canonical_fingerprint_raw(tree)
+    expect_identical(canonical$tip.label, tree$tip.label, info = name)
+    expect_identical(sort(canonical$edge.length), sort(tree$edge.length), info = name)
+    expect_equal(ape::cophenetic.phylo(canonical), ape::cophenetic.phylo(tree),
+                 tolerance = 1e-12, info = name)
+    expect_identical(serialize(tree, NULL), original, info = name)
+    for (variant in variants) {
+      normalized <- fastphylosig:::.safe_canonicalize_core(variant)
+      expect_identical(normalized[fields], canonical[fields], info = name)
+      expect_identical(fastphylosig:::.v2_canonical_fingerprint_raw(variant),
+                       fingerprint, info = name)
+      expect_identical(fastphylosig:::.safe_canonicalize_core(normalized)[fields],
+                       canonical[fields], info = name)
+    }
   }
 })
 
-test_that("canonical signatures do not depend on recursive expression depth", {
+test_that("V2 traversal does not depend on recursive expression depth", {
   expression_limit <- getOption("expressions")
   for (n in c(1000L, 5000L, 20000L)) {
     tree <- .make_pectinate_tree(n)
-    signature <- fastphylosig:::.canonical_tree_signature(tree)
-    expect_identical(length(signature$tip_label), n)
-    expect_identical(
-      signature$root_descendants,
-      paste(sort(tree$tip.label), collapse = "\r"),
-      info = paste("pectinate", n)
-    )
+    graph <- fastphylosig:::.v2_build_graph(tree)
+    expect_length(graph$canonical_preorder, 2L * n - 1L)
+    expect_length(graph$canonical_postorder, 2L * n - 1L)
+    expect_setequal(graph$canonical_preorder, seq_len(2L * n - 1L))
+    expect_identical(graph$metrics$descendant_label_vectors_materialized, 0L)
     expect_identical(getOption("expressions"), expression_limit)
   }
 })

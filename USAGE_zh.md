@@ -2,7 +2,7 @@
 
 `fastphylosig` 是用于快速计算连续、二元和分类性状的系统发育信号的R包。由于使用了优化的C++内核，其速度比标准方法（phytools、caper等）要快最高达 23,591 倍（2000物种计算λ，和phytools比较，详见[中文性能介绍](https://yinwen-ecology.github.io/fastphylosig/index-zh.html#speed)），尤其适用于超过10000个tips的大型系统发育树。一般而言，只需要使用一行代码（统一入口函数 `fast_signal()`）即可进行系统发育信号分析；当你需要逐步检查树结构、调整特定方法参数或进行深度诊断时，再调用对应的专业函数。同时，对于大型系统发育树，本R包还提供了 `fast_hetero()` 函数用于分析内部的系统发育信号异质性（参阅[中文异质性介绍](https://yinwen-ecology.github.io/fastphylosig/index-zh.html#clade-signal)）。
 
-当前发布版本为 **0.3.5**。该版本修正了 ARD 模型的祖先状态概率与离散 ACE 速率的标准误，参阅[补丁说明与重算建议](docs/release-0.3.5/RELEASE_NOTES_zh.md)。
+当前 GitHub 源码版本为 **0.3.6**，更新内容见 [NEWS](NEWS.md)。此前打包发布的 0.3.5 保留为历史版本。
 
 ---
 
@@ -11,21 +11,13 @@
 从源码安装需要 C++ 编译工具链（如 Windows 下的 Rtools），并依赖 `ape`、`Rcpp` 和 `RcppArmadillo` 包。OpenMP 为可选的并行加速项。
 
 ```r
-# 首次安装时先安装依赖
-install.packages(c("ape", "Rcpp", "RcppArmadillo"))
-
-# 安装 0.3.5 源码包
-install.packages(
-  "https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.5/fastphylosig_0.3.5.tar.gz",
-  repos = NULL, type = "source"
-)
+# 安装当前 GitHub 源码（0.3.6）
+install.packages(c("ape", "Rcpp", "RcppArmadillo", "remotes"))
+remotes::install_github("yinwen-ecology/fastphylosig")
 library(fastphylosig)
-
-# 也可以通过 remotes 安装指定版本标签
-# remotes::install_github("yinwen-ecology/fastphylosig@v0.3.5")
 ```
 
-> **环境支持**：声明支持 R 4.1.0 及以上版本。正式版已通过 Linux、Windows、macOS 及禁用 OpenMP 的 CI 检查。
+> **兼容支持**：支持 R 4.1.0 及以上版本。此前版本已在 Linux、Windows、macOS 和禁用 OpenMP 的环境中通过 CI 检查；当前提交以 GitHub Actions 的检查结果为准。
 
 ---
 
@@ -286,6 +278,7 @@ plot_signal(fit_delta)
 - **多核加速（`ncores`）**：K 随机化与二叉树 D 的 C++ 内核使用 OpenMP 线程，Delta 置换分析使用 R 工作进程，均通过 `ncores` 控制。
 - **结果复现规则**：并行随机计算的完全复现，必须**同时固定随机种子（`set.seed`）、显式模拟输入（如有）以及相同的 `ncores` 数值**。更改 Delta 的进程数会改变并行随机数流的分配，使生成的零分布及 P/MCSE 可能发生变化。
 - **OpenMP 内部线程控制**：Delta 与 `fast_hetero(method = "Delta")` 中的大型 ACE 拟合默认最多使用 2 个 OpenMP 线程并行计算未缓存枝长的指数向量。可通过 `options(fastphylosig.ace_threads = 1L)` 强制单线程运行，或设为 `0L` 恢复自动选择。调整此选项不会改变随机数流的分配。
+- **数值可重复性**：ACE 使用 R 的 stats::nlminb() 优化。在部分 BLAS（包括 MKL 2026.2）中，优化器内部工作数组的内存对齐变化可改变优化轨迹，即使同一组速率的似然计算完全一致。因此，更换 ACE 线程或工作区设置并不保证拟合速率、祖先概率或后续 Delta 随机抽样逐位一致。比较结果时请固定软件、BLAS 和运行参数，查看收敛诊断，并对难以唯一估计速率的 ARD 拟合进行敏感性分析。
 
 </details>
 

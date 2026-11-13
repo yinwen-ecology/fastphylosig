@@ -172,6 +172,8 @@
       )
       object$lambda_CI_level <- 0.95
       object$lambda_CI_cutoff <- out$lambda_CI_cutoff_fast[[1]]
+      object$lambda_CI_intervals <- out$lambda_CI_intervals_fast[[1]]
+      object$lambda_CI_disconnected <- out$lambda_CI_disconnected_fast[[1]]
     }
   }
 
@@ -578,6 +580,8 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
     rep(NA_real_, p)
   sim_list <- vector("list", p)
   lambda_profile_list <- vector("list", p)
+  lambda_CI_intervals_list <- rep(list(data.frame(lower = numeric(), upper = numeric())), p)
+  lambda_CI_disconnected_fast <- rep(NA, p)
   notes <- rep(NA_character_, p)
   status <- rep("ok", p)
   nonfinite_trait <- vapply(
@@ -758,6 +762,11 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
         lambda_gls_mean_tree[idx] <- as.numeric(tree_fit$gls_mean)
         lambda_sig2_tree[idx] <- as.numeric(tree_fit$sigma2)
 
+        # A finite likelihood can coexist with a variance outside double range.
+        # Preserve that diagnostic without classifying the lambda fit as invalid.
+        range_note <- as.logical(tree_fit$valid) &
+          grepl("sigma2 .*double range", as.character(tree_fit$status))
+        if (any(range_note)) notes[idx[range_note]] <- as.character(tree_fit$status[range_note])
         invalid <- !as.logical(tree_fit$valid)
         if (any(invalid)) {
           notes[idx[invalid]] <- as.character(tree_fit$status[invalid])
@@ -777,12 +786,18 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
             ci <- .lambda_profile_ci(
               profile = profile,
               lambda_hat = lambda_tree[[col]],
-              logL_hat = logL_tree[[col]]
+              logL_hat = logL_tree[[col]],
+              loglik = function(z) fast_lambda_tree_fixed_cpp(
+                group$compiled_tree, Xg[, j, drop = FALSE], z,
+                trait_chunk = 1L, n_threads = 1L
+              )$logLik[1L, 1L]
             )
             lambda_profile_list[[col]] <- profile
             lambda_CI_lower_fast[col] <- ci[["lower"]]
             lambda_CI_upper_fast[col] <- ci[["upper"]]
             lambda_CI_cutoff_fast[col] <- ci[["cutoff"]]
+            lambda_CI_intervals_list[[col]] <- ci$intervals
+            lambda_CI_disconnected_fast[col] <- ci$disconnected
           }
         }
         if (engine == "tree") {
@@ -902,12 +917,14 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
           profile <- grid_profiles[[j]]
           ci <- .lambda_profile_ci(
             profile = profile, lambda_hat = lambda_fast[[col]],
-            logL_hat = logL_fast[[col]]
+            logL_hat = logL_fast[[col]], loglik = function(z) lik_one(z, Xg[, j], j)
           )
           lambda_profile_list[[col]] <- profile
           lambda_CI_lower_fast[col] <- ci[["lower"]]
           lambda_CI_upper_fast[col] <- ci[["upper"]]
           lambda_CI_cutoff_fast[col] <- ci[["cutoff"]]
+            lambda_CI_intervals_list[[col]] <- ci$intervals
+            lambda_CI_disconnected_fast[col] <- ci$disconnected
         }
       }
       if (engine == "validate") {
@@ -984,6 +1001,8 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
     out$lambda_CI_upper_fast <- lambda_CI_upper_fast
     out$lambda_CI_cutoff_fast <- lambda_CI_cutoff_fast
     out$lambda_profile_fast <- I(lambda_profile_list)
+    out$lambda_CI_intervals_fast <- I(lambda_CI_intervals_list)
+    out$lambda_CI_disconnected_fast <- lambda_CI_disconnected_fast
   }
   if (method == "lambda" && engine == "validate") {
     out$lambda_tree <- lambda_tree
@@ -1073,16 +1092,19 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
                                        n_points, batch_lik = NULL,
                                        scalar_lik, Y) {
   grid <- seq(0, max_lambda, length.out = n_points)
-  extra <- c(0, lambda_hat)
+  # Match native optimizer search knots, including near-boundary probes.
+  offsets <- max_lambda * 2^-(7:40)
+  extra <- c(seq(0, max_lambda, length.out = 65L), offsets,
+             max_lambda - offsets, lambda_hat)
   if (max_lambda >= 1) extra <- c(extra, 1)
   lambda <- sort(unique(c(grid, extra)))
   logL <- if (!is.null(batch_lik)) {
     batch_lik(lambda)
   } else {
-    vapply(lambda, function(z) {
-      vapply(seq_len(ncol(Y)), function(j) scalar_lik(z, Y[, j]),
-             numeric(1))
-    }, numeric(ncol(Y)))
+    # Keep the same grid-by-trait orientation as the native batch evaluator.
+    vapply(seq_len(ncol(Y)), function(j) {
+      vapply(lambda, function(z) scalar_lik(z, Y[, j]), numeric(1))
+    }, numeric(length(lambda)))
   }
   if (is.null(dim(logL))) logL <- matrix(logL, ncol = ncol(Y))
   lapply(seq_len(ncol(Y)), function(j) {
@@ -1096,62 +1118,65 @@ fast_signal <- function(tree, data = NULL, method = NULL, ..., x = NULL,
   })
 }
 
-.lambda_profile_ci <- function(profile, lambda_hat, logL_hat, level = 0.95) {
+# Return grid-detected LR components, refining bracketed crossings. Legacy
+# lower/upper bounds are its envelope, not the gaps between modes.
+.lambda_profile_ci <- function(profile, lambda_hat, logL_hat, level = 0.95,
+                               loglik = NULL) {
   profile_max <- max(c(profile$logL, logL_hat), na.rm = TRUE)
-  if (!is.finite(profile_max)) {
-    profile_max <- logL_hat
-  }
   cutoff <- profile_max - 0.5 * stats::qchisq(level, df = 1)
-  lambda <- profile$lambda
-  delta <- profile$logL - cutoff
-  finite <- is.finite(lambda) & is.finite(delta)
-  lambda <- lambda[finite]
-  delta <- delta[finite]
-  if (length(lambda) < 2L || !is.finite(lambda_hat)) {
-    return(c(lower = NA_real_, upper = NA_real_, cutoff = cutoff))
+  intervals <- data.frame(lower = numeric(), upper = numeric())
+  empty <- list(lower = NA_real_, upper = NA_real_, cutoff = cutoff,
+                intervals = intervals, disconnected = NA)
+  if (!is.finite(profile_max) || !is.finite(lambda_hat)) return(empty)
+  keep <- is.finite(profile$lambda)
+  lambda <- profile$lambda[keep]
+  delta <- profile$logL[keep] - cutoff
+  ord <- order(lambda)
+  lambda <- lambda[ord]
+  delta <- delta[ord]
+  if (length(lambda) < 2L) return(empty)
+  inside <- is.finite(delta) & delta >= 0
+  if (!any(inside)) return(empty)
+  starts <- which(inside & !c(FALSE, utils::head(inside, -1L)))
+  ends <- which(inside & !c(utils::tail(inside, -1L), FALSE))
+  crossing <- function(i, j) {
+    # Do not interpolate across an unknown or infinite likelihood evaluation.
+    if (!is.finite(delta[i]) || !is.finite(delta[j])) {
+      return(if (inside[i]) lambda[i] else lambda[j])
+    }
+    if (delta[i] == 0) return(lambda[i])
+    if (delta[j] == 0) return(lambda[j])
+    if (!is.null(loglik)) {
+      # Refine only existing brackets: this cannot discover unsampled modes.
+      # uniroot's default tolerance is too coarse near a sharp boundary peak.
+      root <- tryCatch(stats::uniroot(
+        function(z) {
+          value <- loglik(z) - cutoff
+          if (length(value) != 1L || !is.finite(value)) {
+            stop("non-finite profile likelihood during CI refinement")
+          }
+          value
+        }, interval = lambda[c(i, j)], f.lower = delta[i], f.upper = delta[j],
+        tol = 1e-12 * max(1, abs(lambda[c(i, j)])),
+        maxiter = 1000L, check.conv = TRUE
+      )$root, error = function(e) NA_real_)
+      if (is.finite(root)) return(root)
+      warning("lambda CI boundary refinement failed; using grid interpolation",
+              call. = FALSE)
+    }
+    if (delta[i] == delta[j]) return(mean(lambda[c(i, j)]))
+    lambda[i] - delta[i] * (lambda[j] - lambda[i]) / (delta[j] - delta[i])
   }
-  left <- which(lambda <= lambda_hat)
-  right <- which(lambda >= lambda_hat)
-  lower <- .lambda_profile_bound(lambda[left], delta[left],
-                                 side = "left")
-  upper <- .lambda_profile_bound(lambda[right], delta[right],
-                                 side = "right")
-  c(lower = lower, upper = upper, cutoff = cutoff)
+  lower <- vapply(starts, function(i) {
+    if (i == 1L) lambda[i] else crossing(i - 1L, i)
+  }, numeric(1))
+  upper <- vapply(ends, function(i) {
+    if (i == length(lambda)) lambda[i] else crossing(i, i + 1L)
+  }, numeric(1))
+  intervals <- data.frame(lower = unname(lower), upper = unname(upper))
+  list(lower = min(lower), upper = max(upper), cutoff = cutoff,
+       intervals = intervals, disconnected = nrow(intervals) > 1L)
 }
-
-.lambda_profile_bound <- function(lambda, delta, side = c("left", "right")) {
-  side <- match.arg(side)
-  if (length(lambda) < 1L) return(NA_real_)
-  if (length(lambda) == 1L) return(lambda[[1L]])
-
-  if (side == "left") {
-    if (!any(delta < 0) || !any(delta >= 0)) {
-      return(min(lambda))
-    }
-    idx <- which(delta[-length(delta)] < 0 & delta[-1L] >= 0)
-    if (!length(idx)) {
-      return(min(lambda))
-    }
-    i <- idx[[length(idx)]]
-  } else {
-    if (!any(delta < 0) || !any(delta >= 0)) {
-      return(max(lambda))
-    }
-    idx <- which(delta[-length(delta)] >= 0 & delta[-1L] < 0)
-    if (!length(idx)) {
-      return(max(lambda))
-    }
-    i <- idx[[1L]]
-  }
-
-  d1 <- delta[[i]]
-  d2 <- delta[[i + 1L]]
-  if (d1 == d2) {
-    return(mean(lambda[c(i, i + 1L)]))
-  }
-  lambda[[i]] + (0 - d1) * (lambda[[i + 1L]] - lambda[[i]]) / (d2 - d1)
-}
-
 
 # Small utilities --------------------------------------------------------------
 

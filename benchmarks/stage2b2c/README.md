@@ -1,3 +1,14 @@
+> **Retired V1 audit drivers:** The obsolete runners depended on removed V1
+> canonicalization internals and were retired during reference/old-version test
+> cleanup. Historical evidence and results are retained; retired source is
+> recoverable from pre-cleanup Git history. Current package tests assert V2
+> and current inspection contracts directly.
+>
+> The retired driver is audit_canonical_contract.R. The independent public-workflow audit_downstream_propagation.R is retained.
+>
+> The original README below is historical context. Commands for retired drivers
+> are no longer runnable as written.
+
 # Stage 2B2C Canonicalization Contract Safety Audit
 
 This directory contains audit-only scripts and evidence. It does not contain a

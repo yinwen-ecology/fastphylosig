@@ -11,7 +11,8 @@
 #' @param data Named vector, matrix, or data.frame. Species names must be
 #'   supplied as names or row names unless rows are already in tree-tip order.
 #' @param X Deprecated compatibility alias for `data`.
-#' @param prune Whether to drop tree tips that are absent from \code{X}.
+#' @param prune Whether to drop tree tips that are absent from \code{data}.
+#'   When FALSE, the tree is retained and only shared data rows are returned.
 #' @param verbose Whether to print one short message when rows/tips are
 #'   removed.  A complete match is silent.
 #' @return A list with elements \code{tree}, \code{X}, \code{data},
@@ -45,7 +46,7 @@ match_tree_data <- function(tree, data = NULL, prune = TRUE, verbose = TRUE,
   tree_tips <- as.character(tree$tip.label)
   data_names <- rownames(X0)
   matched <- tree_tips[tree_tips %in% data_names]
-  removed_tree <- setdiff(tree_tips, data_names)
+  # Removal counts describe the returned tree, not merely unmatched tips.
   removed_data <- setdiff(data_names, tree_tips)
   if (length(matched) < 2L && !isTRUE(allow_insufficient)) {
     stop("Fewer than two species are shared by tree and data.", call. = FALSE)
@@ -59,6 +60,7 @@ match_tree_data <- function(tree, data = NULL, prune = TRUE, verbose = TRUE,
     NULL
   }
   matched_tree <- if (is.list(matched_group)) matched_group$tree else tree
+  removed_tree <- setdiff(tree_tips, matched_tree$tip.label)
   matched_X <- if (length(matched)) X0[matched, , drop = FALSE] else
     X0[FALSE, , drop = FALSE]
 

@@ -45,7 +45,7 @@ counts are displayed as \code{P < 1/nsim} rather than \code{P = 0}. For lambda, 
 uses a deterministic likelihood-ratio test rather than random simulations, the
 helper draws the stored profile log-likelihood curve when available, marks
 \code{lambda_hat}, \code{lambda = 0}, \code{lambda = 1}, and an approximate
-95 percent profile-likelihood confidence interval. The confidence interval is
+95 percent profile-likelihood confidence set. Disconnected components are drawn separately rather than filling the gaps between them. The confidence interval is
 the region with log-likelihood at least
 \code{max(logL) - 0.5 * qchisq(0.95, df = 1)}. Old lambda results without a
 stored profile fall back to a compact likelihood-ratio summary.

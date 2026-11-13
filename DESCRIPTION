@@ -1,10 +1,10 @@
 Package: fastphylosig
 Type: Package
 Title: Fast Phylogenetic Signal Statistics
-Version: 0.3.5
+Version: 0.3.6
 Authors@R:
     person("Yin", "Wen", role = c("aut", "cre"),
-           email = "yinwen-ecology@users.noreply.github.com")
+           email = "wenyinsci@126.com")
 Description: Provides one-command and method-specific workflows for
     phylogenetic signal in continuous, binary, and categorical traits. Compiled
     tree-pruning algorithms implement Blomberg's K and Pagel's lambda without
@@ -16,7 +16,12 @@ Description: Provides one-command and method-specific workflows for
     conservative tree diagnostics, bounded simulation memory, and structured
     timing and Monte Carlo uncertainty metadata. Clade scans describe local
     and overall signal in continuous, binary and multistate traits, with
-    optional model-reference tests of signal dispersion or deviation.
+    optional model-reference tests of signal dispersion or deviation. Methods
+    follow Blomberg, Garland and Ives (2003)
+    <doi:10.1111/j.0014-3820.2003.tb00285.x> for K, Pagel (1999)
+    <doi:10.1038/44766> for lambda, Fritz and Purvis (2010)
+    <doi:10.1111/j.1523-1739.2010.01455.x> for D, and Borges et al. (2019)
+    <doi:10.1093/bioinformatics/bty800> for categorical Delta.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Depends:
@@ -25,7 +30,8 @@ Imports:
     ape,
     parallel,
     Rcpp,
-    stats
+    stats,
+    utils
 LinkingTo:
     Rcpp,
     RcppArmadillo

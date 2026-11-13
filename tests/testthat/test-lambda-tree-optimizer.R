@@ -1,4 +1,4 @@
-test_that("tree lambda optimizer matches R bounded optimize and fixed kernel", {
+test_that("tree lambda optimizer matches independent dense global search and fixed kernel", {
   skip_if_not_installed("ape")
   skip_if_not(exists("fast_lambda_tree_fixed_cpp", asNamespace("fastphylosig")))
   skip_if_not(exists("fast_lambda_tree_optimize_cpp", asNamespace("fastphylosig")))
@@ -30,10 +30,28 @@ test_that("tree lambda optimizer matches R bounded optimize and fixed kernel", {
       )
       as.numeric(fixed$logLik[1, 1])
     }
-    ref <- stats::optimize(objective, c(0, got$max_lambda), maximum = TRUE,
-                           tol = 1e-8)
-    expect_equal(got$lambda[j], ref$maximum, tolerance = 1e-8)
-    expect_equal(got$logLik[j], ref$objective, tolerance = 1e-8)
+    C <- ape::vcv(tree)
+    dense <- function(z) {
+      V <- z * C
+      diag(V) <- diag(C)
+      W <- tryCatch(solve(V), error = function(e) NULL)
+      if (is.null(W)) return(-Inf)
+      y <- X[, j]
+      a <- sum(W %*% y) / sum(W)
+      q <- sum((y-a) * (W %*% (y-a)))
+      -.5 * (length(y) * (1 + log(2*pi) + log(q/length(y))) +
+        as.numeric(determinant(V, logarithm=TRUE)$modulus))
+    }
+    grid <- seq(0, got$max_lambda, length.out=2001)
+    vals <- vapply(grid, dense, numeric(1))
+    peaks <- which(vals[2:2000] >= vals[1:1999] &
+                   vals[2:2000] >= vals[3:2001]) + 1L
+    candidates <- c(0, got$max_lambda, vapply(peaks, function(k)
+      optimize(dense, grid[c(k-1L,k+1L)], maximum=TRUE,
+               tol=1e-10)$maximum, numeric(1)))
+    ref_value <- max(vapply(candidates, dense, numeric(1)))
+    expect_equal(got$logLik[j], ref_value, tolerance=1e-8)
+    expect_equal(got$logLik[j], dense(got$lambda[j]), tolerance=1e-8)
 
     fixed_hat <- fastphylosig:::fast_lambda_tree_fixed_cpp(
       compiled, X[, j, drop = FALSE], got$lambda[j], trait_chunk = 1L
@@ -67,8 +85,13 @@ test_that("tree lambda optimizer matches R bounded optimize and fixed kernel", {
     )
     expect_equal(got_phytools$lambda[[1L]], ref_phytools$lambda,
                  tolerance = 5e-4)
-    expect_equal(got_phytools$logLik[[1L]], ref_phytools$logL,
-                 tolerance = 1e-5)
+    # phytools uses a single interior Brent optimum and may stop short of
+    # an endpoint. Our full-domain estimate must never have lower likelihood.
+    expect_gte(got_phytools$logLik[[1L]] + 1e-10, ref_phytools$logL)
+    # The independent dense global oracle above validates the optimum at
+    # tight tolerance; the default-tolerance fit must agree in likelihood.
+    expect_equal(got_phytools$logLik[[1L]], got$logLik[[1L]],
+                 tolerance = 1e-7)
   }
 })
 

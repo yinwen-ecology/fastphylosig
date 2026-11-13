@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "numeric_utils.h"
+#include "k_scale.h"
 #include "k_strategy.h"
 
 #ifdef _OPENMP
@@ -155,6 +156,9 @@ Tree parse_tree(const Rcpp::List& compiled) {
   tree.branch = branch;
   for (int i = 0; i < n_total; ++i) {
     const int par = parent_raw[static_cast<std::size_t>(i)];
+    if (par < 0 || par > n_total || (i == root ? par != 0 : par == 0)) {
+      Rcpp::stop("compiled_tree$parent contains an invalid node id.");
+    }
     tree.parent[static_cast<std::size_t>(i)] = par == 0 ? -1 : par - 1;
     const int pre = preorder_raw[static_cast<std::size_t>(i)];
     const int post = postorder_raw[static_cast<std::size_t>(i)];
@@ -477,11 +481,13 @@ void compute_one(const Tree& tree, const Cache& cache,
         denominator += diff * diff /
           static_cast<long double>(tree.branch[static_cast<std::size_t>(node)]);
       }
-      const double den = static_cast<double>(denominator);
-      const double num = static_cast<double>(numerator);
+      // Preserve finite dimensionless K when the individual energies exceed
+      // double range or underflow. Narrow only after forming the ratio.
       out[static_cast<std::size_t>(col0 + j)] =
-        den > 0.0 && std::isfinite(den) && std::isfinite(num)
-        ? (num / den) / cache.normalization
+        denominator > 0.0L && std::isfinite(denominator) &&
+          std::isfinite(numerator)
+        ? static_cast<double>((numerator / denominator) /
+            static_cast<long double>(cache.normalization))
         : std::numeric_limits<double>::quiet_NaN();
     }
   }
@@ -917,11 +923,13 @@ inline void compute_block(const Tree& tree, const Cache& cache,
         denominator += diff * diff / static_cast<long double>(
           tree.branch[static_cast<std::size_t>(node)]);
       }
-      const double den = static_cast<double>(denominator);
-      const double num = static_cast<double>(numerator);
+      // Preserve finite dimensionless K when the individual energies exceed
+      // double range or underflow. Narrow only after forming the ratio.
       workspace.out[layout.slot(i, j)] =
-        den > 0.0 && std::isfinite(den) && std::isfinite(num)
-        ? (num / den) / cache.normalization
+        denominator > 0.0L && std::isfinite(denominator) &&
+          std::isfinite(numerator)
+        ? static_cast<double>((numerator / denominator) /
+            static_cast<long double>(cache.normalization))
         : std::numeric_limits<double>::quiet_NaN();
     }
   }
@@ -953,17 +961,6 @@ inline void compute_one_hybrid(const Tree& tree, const Cache& cache,
         block_out[static_cast<std::size_t>(j)];
     }
   }
-}
-
-// Transitional internal alias for the Stage 4 candidate's earlier helper
-// spelling.  New production dispatch uses compute_one_hybrid().
-inline void compute_hybrid_one(const Tree& tree, const Cache& cache,
-                               const std::vector<double>& q,
-                               const double* x, const int ncol,
-                               const std::vector<int>& perm,
-                               const int trait_chunk,
-                               std::vector<double>& out) {
-  compute_one_hybrid(tree, cache, q, x, ncol, perm, trait_chunk, out);
 }
 
 // ---------------------------------------------------------------------------
@@ -1030,13 +1027,16 @@ Rcpp::List fast_k_tree_permutation_cpp(
   if (simulation_chunk < 1) {
     Rcpp::stop("simulation_chunk must be a positive integer.");
   }
-  const Tree tree = parse_tree(compiled_tree);
+  Tree tree = parse_tree(compiled_tree);
+  const int branch_exponent = fastphylosig::normalize_k_tree(tree);
   const int n = tree.n_tip;
   const int p = X.ncol();
   if (X.nrow() != n || p < 1) {
     Rcpp::stop("X must have one row per compiled tree tip and at least one trait.");
   }
-  const double* x = REAL(X);
+  std::vector<int> trait_exponents;
+  const Rcpp::NumericMatrix scaled = fastphylosig::normalize_k_traits(X, trait_exponents);
+  const double* x = REAL(scaled);
   for (R_xlen_t i = 0; i < X.size(); ++i) {
     if (!std::isfinite(x[i])) Rcpp::stop("X must contain only finite values.");
   }
@@ -1502,8 +1502,8 @@ Rcpp::List fast_k_tree_permutation_cpp(
     Rcpp::Named("permutation_mode") = supplied ? "controlled" : "internal_rng",
     Rcpp::Named("include_observed") = (!supplied && include_observed),
     Rcpp::Named("simulation_chunk") = simulation_chunk,
-    Rcpp::Named("sum_inv") = cache.sum_inv,
-    Rcpp::Named("normalization") = cache.normalization
+    Rcpp::Named("sum_inv") = std::scalbn(cache.sum_inv, -branch_exponent),
+    Rcpp::Named("normalization") = std::scalbn(cache.normalization, branch_exponent)
   );
   if (return_sim) out["sim_K"] = sim;
   return out;

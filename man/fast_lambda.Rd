@@ -25,7 +25,8 @@ parallel lambda evaluation.}
 default stores it for vector input and skips it for batch input.}
 \item{lambda_profile_points}{Number of regular profile grid points (at least
 5). The fitted lambda, and lambda 1 when allowed by the tree, are inserted in
-addition to the regular grid.}
+addition to the regular grid. The optimizer search knots, including
+geometrically spaced points near both boundaries, are also included.}
 \item{prepared}{Optional object returned by \code{prepare_tree()}; when
 supplied it is used in place of \code{tree} after V2 integrity validation.}
 \item{trait_chunk}{Positive integer number of traits processed per C++ block.}
@@ -39,9 +40,11 @@ kept compatible with the former continuous \code{fast_signal()} API. When a
 profile is requested, the grid runs from zero to the tree-specific allowed
 maximum. The nominal 95 percent profile interval uses
 \code{max(logL) - 0.5 * qchisq(0.95, df = 1)} as its cutoff; bounds are found by
-linear interpolation at threshold crossings and fall back to grid endpoints
-when a crossing is absent. The interval is therefore an approximate
-grid/profile interval, not an exact confidence interval.
+numerically refining threshold crossings bracketed by the grid using the
+profile likelihood. If refinement fails, a warning is issued and linear
+interpolation is used. Bounds fall back to grid endpoints when a crossing
+is absent. This is an approximate likelihood-ratio interval, not an exact
+finite-sample confidence interval.
 }
 \value{
 For vector input, a \code{phylosig}-compatible result; matrix/data.frame input
@@ -49,6 +52,26 @@ returns one row per trait. Results include timing metadata and a small
 \code{workflow} attribute. Per-trait \code{status} and
 \code{message}/\code{note} fields distinguish valid fits from invalid,
 insufficient, or undefined trait-level results.
+For extreme finite trait scales, the fitted variance may overflow to
+\code{Inf} or underflow to zero while lambda and log likelihood remain
+valid. The \code{message}/\code{note} field records this variance-range
+limitation; it does not indicate a constant trait.
+}
+\details{
+The approximate likelihood-ratio confidence set can have disconnected
+components. \code{lambda_CI_intervals} contains all grid-detected components
+(as a data frame with \code{lower} and \code{upper} columns), and
+\code{lambda_CI_disconnected} identifies a set with more than one component.
+The legacy \code{lambda_CI} bounds give the envelope of this set; values in
+between disconnected components are not included in the confidence set.
+For table results the corresponding fields are
+\code{lambda_CI_intervals_fast}, \code{lambda_CI_disconnected_fast}, and
+\code{lambda_CI_lower_fast}/\code{lambda_CI_upper_fast}.
+The set remains a profile-grid approximation: narrow components between grid
+points may be missed, as may narrow excluded gaps between components.
+Boundary-enriched search knots reduce this risk but do not eliminate it.
+Non-finite evaluations are not interpolated across.
+Increase \code{lambda_profile_points} to assess grid sensitivity.
 }
 \seealso{\code{fast_signal()}, \code{fast_k()}}
 \examples{

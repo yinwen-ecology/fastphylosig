@@ -11,7 +11,8 @@ supplied as names or row names unless rows are already in
 \code{tree$tip.label} order.}
 \item{X}{Deprecated compatibility alias for \code{data}. Supply only one of
 \code{data} and \code{X}.}
-\item{prune}{Whether to drop tree tips that are absent from \code{X}.}
+\item{prune}{Whether to drop tree tips that are absent from \code{data}.
+When FALSE, the tree is retained and only shared data rows are returned.}
 \item{verbose}{Whether to print a short matching message.}
 }
 \description{

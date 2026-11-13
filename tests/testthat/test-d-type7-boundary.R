@@ -123,3 +123,29 @@ test_that('two-tip D retains natural calibration degeneracy', {
   expect_true(is.na(fit$DEstimate))
   expect_match(fit$note, 'identical')
 })
+
+# Exercise both sides of the large-tree selection cutoff against independent
+# R Brownian draws, quantiles and the separate matrix contrast implementation.
+test_that('large D streaming selection preserves type-7 thresholds and RNG', {
+  for (n in c(2047L, 2048L, 2049L)) {
+    set.seed(20261112)
+    tree <- ape::reorder.phylo(ape::rtree(n), 'pruningwise')
+    observed <- rep(0:1, length.out = n)
+    for (p in c(0, 1/n, .25, .5, 1 - 1/n, 1)) {
+      set.seed(921)
+      for (sim in 1:2) for (tip in (n - 1):1) runif(1, 0, tip + 1)
+      raw <- d_type7_raw(tree, 2L)
+      expected_seed <- .Random.seed
+      expected <- as.numeric(fastphylosig:::phylo_d_sums_cpp(
+        d_type7_states(raw, p), tree$edge, tree$edge.length, n))
+      for (threads in c(1L, 2L)) {
+        set.seed(921)
+        actual <- fastphylosig:::phylo_d_stream_cpp(observed, tree$edge,
+          tree$edge.length, n, 2L, p, 32L, TRUE, threads)
+        expect_equal(actual$brownian, expected, tolerance = 1e-12,
+                     info = paste(n, p, threads))
+        expect_identical(.Random.seed, expected_seed)
+      }
+    }
+  }
+})

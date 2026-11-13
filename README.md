@@ -6,24 +6,17 @@ With optimized C++ kernels, fastphylosig is up to **23,591 times faster** than s
 
 [Website](https://yinwen-ecology.github.io/fastphylosig/) · [中文指南](USAGE_zh.md) · [fast_hetero case study](https://yinwen-ecology.github.io/fastphylosig/fast-hetero-case.html)
 
-**Current release: [0.3.5](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5).** This patch corrects ARD full-tree ancestral probabilities and ER/ARD ACE rate standard errors. See the [patch notes and reanalysis guidance](docs/release-0.3.5/RELEASE_NOTES_en.md) for affected outputs.
+**Current GitHub source: 0.3.6.** See [NEWS](NEWS.md) for numerical, inference and reliability fixes. The previous packaged GitHub release remains [0.3.5](https://github.com/yinwen-ecology/fastphylosig/releases/tag/v0.3.5).
 
 ## Install
 
-Requires R ≥ 4.1.0 and a C++ toolchain, such as Rtools matching your R version on Windows. OpenMP is optional. The release passed CI on Linux, Windows and macOS, including a build without OpenMP.
+Requires R ≥ 4.1.0 and a C++ toolchain, such as Rtools matching your R version on Windows. OpenMP is optional. Previous releases were checked on Linux, Windows and macOS, including a build without OpenMP; see the GitHub Actions status for the current commit.
 
 ```r
-# Install dependencies on first use
-install.packages(c("ape", "Rcpp", "RcppArmadillo"))
-install.packages(
-  "https://github.com/yinwen-ecology/fastphylosig/releases/download/v0.3.5/fastphylosig_0.3.5.tar.gz",
-  repos = NULL, type = "source"
-)
+# Install current GitHub source (0.3.6)
+install.packages(c("ape", "Rcpp", "RcppArmadillo", "remotes"))
+remotes::install_github("yinwen-ecology/fastphylosig")
 library(fastphylosig)
-
-# Alternatively, install the fixed release tag
-# install.packages("remotes")
-# remotes::install_github("yinwen-ecology/fastphylosig@v0.3.5")
 ```
 
 ## Start with one command
@@ -202,6 +195,7 @@ K and Delta plots use saved randomization distributions; D overlays both null di
 
 - **Parallel reproducibility:** K randomization and binary-tree D use OpenMP threads; Delta permutations use R workers, controlled by `ncores`. Fix seeds, controls, explicit simulation inputs (if supplied) and `ncores`. Changing Delta worker count can change random-stream allocation.
 - **ACE threads:** large ACE fits within Delta/clade scans automatically use at most two OpenMP threads. `options(fastphylosig.ace_threads = 1L)` forces serial evaluation; `0L` restores automatic selection. This setting does not reallocate random streams.
+- **Numerical reproducibility:** ACE optimization uses R's stats::nlminb(). Some BLAS implementations (including MKL 2026.2) can produce different optimizer trajectories when internal work-array alignment changes, even when fixed-rate likelihood evaluations are identical. Changing ACE thread or workspace settings therefore need not preserve fitted rates, ancestral probabilities, or downstream Delta draws bit for bit. Keep the software/BLAS configuration and controls fixed, inspect convergence diagnostics, and assess sensitivity for weakly identified ARD fits.
 
 </details>
 

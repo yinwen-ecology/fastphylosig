@@ -226,33 +226,27 @@ test_that("custom permutation matrices are validated", {
   )
 })
 
-test_that("lambda batch matches phytools", {
+test_that("lambda batch matches independent global covariance likelihood", {
   set.seed(13)
   tree <- ape::rtree(25)
-  X <- matrix(
-    stats::rnorm(25 * 3),
-    nrow = 25,
-    dimnames = list(tree$tip.label, paste0("trait_", 1:3))
-  )
-
-  res <- fast_signal(
-    tree, X, method = "lambda", test = TRUE, verbose = FALSE
-  )
-  refs <- lapply(seq_len(ncol(X)), function(j) {
-    phytools::phylosig(
-      tree, X[, j], method = "lambda", test = TRUE, se = NULL
-    )
-  })
-  ref_lambda <- vapply(refs, `[[`, numeric(1), "lambda")
-  ref_logL <- vapply(refs, `[[`, numeric(1), "logL")
-  ref_P <- vapply(refs, `[[`, numeric(1), "P")
-
-  expect_lt(max(abs(res$lambda_fast - ref_lambda), na.rm = TRUE), 1e-5)
-  # Upstream phytools changed its optimizer path in current R releases;
-  # retain a reference tolerance that covers the documented floating-point
-  # difference without weakening the production result contract.
-  expect_lt(max(abs(res$logL_fast - ref_logL), na.rm = TRUE), 5e-4)
-  expect_lt(max(abs(res$P_fast - ref_P), na.rm = TRUE), 1e-5)
+  X <- matrix(stats::rnorm(25 * 3), nrow = 25,
+              dimnames = list(tree$tip.label, paste0("trait_", 1:3)))
+  res <- fast_signal(tree, X, method = "lambda", test = TRUE, verbose = FALSE)
+  for (j in seq_len(ncol(X))) {
+    ref <- .lambda_dense_reference(tree, X[, j])
+    upstream <- phytools::phylosig(
+      tree, X[, j], method = "lambda", test = TRUE, se = NULL)
+    expect_equal(res$lambda_fast[j], ref$lambda, tolerance = 1e-4)
+    expect_equal(res$logL_fast[j], ref$logL, tolerance = 1e-8)
+    expect_equal(res$P_fast[j], ref$P, tolerance = 1e-8)
+    expect_equal(res$logL_fast[j],
+                 ref$evaluate(res$lambda_fast[j])[["logL"]], tolerance = 1e-10)
+    # Keep the upstream comparison without requiring its lower interior/local
+    # likelihood when the legal endpoint or another mode is better.
+    expect_gte(res$logL_fast[j] + 1e-8, upstream$logL)
+    expect_equal(upstream$logL, ref$evaluate(upstream$lambda)[["logL"]],
+                 tolerance = 1e-8)
+  }
 })
 
 test_that("phylo.d C++ contrast sums match caper contrCalc", {
@@ -415,7 +409,11 @@ test_that("ACE point likelihoods retain ER/ARD reference compatibility", {
   ))
   fast_ard <- fast_ace(x_ard, tree, model = "ARD")
   expect_lt(abs(ref_ard$loglik - fast_ard$loglik), 1e-8)
-  expect_lt(max(abs(ref_ard$rates - fast_ard$rates)), 1e-7)
+  # Different optimizers can differ in rates on a near-optimal flat surface.
+  expect_lt(max(abs(ref_ard$rates - fast_ard$rates)), 1e-6)
+  independent <- .ace_math_loglik(tree, as.integer(x_ard),
+    .ace_math_q(fast_ard$index.matrix, fast_ard$rates)) + log(nlevels(x_ard))
+  expect_equal(fast_ard$loglik, independent, tolerance = 1e-10)
   # ARD full-tree probabilities are checked against exhaustive latent-state
   # sums, not ape's legacy downpass/matexpo calculation.
 })

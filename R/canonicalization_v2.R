@@ -351,11 +351,6 @@
   length(roots) == 1L && identical(as.integer(roots[[1L]]), as.integer(n_tip + 1L))
 }
 
-.v2_is_canonical_tree <- function(tree) {
-  if (!is.list(tree) || !inherits(tree, "phylo")) return(FALSE)
-  fields <- tryCatch(.v2_source_fields(tree), error = function(e) NULL)
-  !is.null(fields) && .v2_is_canonical_fields(fields)
-}
 
 .v2_canonical_fingerprint_fields <- function(fields) {
   edge <- fields$edge
@@ -444,11 +439,6 @@
   )
 }
 
-.v2_snapshot_equal <- function(left, right) {
-  left_raw <- if (is.list(left)) left$encoded else left
-  right_raw <- if (is.list(right)) right$encoded else right
-  is.raw(left_raw) && is.raw(right_raw) && identical(left_raw, right_raw)
-}
 
 .v2_context_schema_markers <- function() {
   list(

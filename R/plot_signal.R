@@ -1,5 +1,13 @@
 # Lightweight plotting helpers ------------------------------------------------
 
+# Let explicit base graphics arguments override our plotting defaults. Keep
+# duplicate caller arguments intact so base graphics still diagnoses them.
+.signal_plot_call <- function(fun, defaults, ...) {
+  supplied <- list(...)
+  defaults <- defaults[!names(defaults) %in% names(supplied)]
+  do.call(fun, c(defaults, supplied))
+}
+
 plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
                         xlab = NULL, ylab = NULL,
                         null = c("auto", "random", "brownian"),
@@ -86,11 +94,11 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
 
   if (n_ridge == 1L) {
     den <- stats::density(sim[[1L]], from = xlim[1], to = xlim[2], n = 256)
-    graphics::plot(
-      den$x, den$y, type = "n", xlim = xlim,
+    .signal_plot_call(graphics::plot, list(
+      x = den$x, y = den$y, type = "n", xlim = xlim,
       ylim = c(0, max(den$y) * 1.15), xlab = xlab, ylab = ylab,
-      main = main, ...
-    )
+      main = main
+    ), ...)
     graphics::polygon(
       c(den$x, rev(den$x)), c(rep(0, length(den$x)), rev(den$y)),
       col = grDevices::adjustcolor(col[[1L]], alpha.f = 0.35),
@@ -129,9 +137,9 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
   }
 
   graphics::plot.new()
-  graphics::plot.window(
-    xlim = xlim, ylim = c(0.7, n_ridge + ridge_scale + 0.35), ...
-  )
+  .signal_plot_call(graphics::plot.window, list(
+    xlim = xlim, ylim = c(0.7, n_ridge + ridge_scale + 0.35)
+  ), ...)
   graphics::axis(1)
   graphics::axis(2, at = seq_len(n_ridge), labels = dat$trait, las = 1)
   graphics::box()
@@ -222,11 +230,11 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
   p_random_label <- .format_d_plot_p(dat$Pval1[[1L]], extreme_random, n_random)
   p_brownian_label <- .format_d_plot_p(dat$Pval0[[1L]], extreme_brownian, n_brownian)
 
-  graphics::plot(
-    den_brownian$x, den_brownian$y, type = "n",
+  .signal_plot_call(graphics::plot, list(
+    x = den_brownian$x, y = den_brownian$y, type = "n",
     xlim = xlim, ylim = c(0, ymax), xlab = xlab, ylab = ylab,
-    main = main, ...
-  )
+    main = main
+  ), ...)
   graphics::polygon(
     c(den_brownian$x, rev(den_brownian$x)),
     c(rep(0, length(den_brownian$x)), rev(den_brownian$y)),
@@ -318,11 +326,11 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
   xlim <- xlim + c(-pad, pad)
 
   if (n == 1L) {
-    lr <- if ("LR" %in% names(dat)) dat$LR[[1L]] else NA_real_
-    graphics::plot(
-      NA, NA, xlim = xlim, ylim = c(0, 1), axes = FALSE,
-      xlab = xlab, ylab = ylab, main = main, ...
-    )
+  lr <- if ("LR" %in% names(dat)) dat$LR[[1L]] else NA_real_
+    .signal_plot_call(graphics::plot, list(
+      x = NA, y = NA, xlim = xlim, ylim = c(0, 1), axes = FALSE,
+      xlab = xlab, ylab = ylab, main = main
+    ), ...)
     graphics::axis(1)
     graphics::box()
     graphics::abline(v = c(0, 1), lty = 3, col = "gray70")
@@ -345,10 +353,10 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
     )
   } else {
     y <- seq_len(n)
-    graphics::plot(
-      NA, NA, xlim = xlim, ylim = c(0.5, n + 0.5), axes = FALSE,
-      xlab = xlab, ylab = ylab, main = main, ...
-    )
+    .signal_plot_call(graphics::plot, list(
+      x = NA, y = NA, xlim = xlim, ylim = c(0.5, n + 0.5), axes = FALSE,
+      xlab = xlab, ylab = ylab, main = main
+    ), ...)
     graphics::axis(1)
     graphics::axis(2, at = y, labels = dat$trait, las = 1)
     graphics::box()
@@ -395,6 +403,11 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
     max(c(profile$logL, logL_hat), na.rm = TRUE) -
       0.5 * stats::qchisq(0.95, df = 1)
   }
+  ci_intervals <- if ("ci_intervals" %in% names(dat)) {
+    dat$ci_intervals[[1L]]
+  } else if (is.finite(ci_lower) && is.finite(ci_upper)) {
+    data.frame(lower = ci_lower, upper = ci_upper)
+  } else data.frame(lower = numeric(), upper = numeric())
   lr <- if ("LR" %in% names(dat)) dat$LR[[1L]] else NA_real_
 
   if (is.null(main)) main <- "lambda profile likelihood"
@@ -411,17 +424,17 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
   ypad <- if (diff(ylim) == 0) 0.1 else 0.08 * diff(ylim)
   ylim <- ylim + c(-ypad, ypad)
 
-  graphics::plot(
-    profile$lambda, profile$logL, type = "l", lwd = 2,
+  .signal_plot_call(graphics::plot, list(
+    x = profile$lambda, y = profile$logL, type = "l", lwd = 2,
     col = col[[1L]], xlim = xlim, ylim = ylim,
-    xlab = xlab, ylab = ylab, main = main, ...
-  )
+    xlab = xlab, ylab = ylab, main = main
+  ), ...)
   graphics::abline(v = c(0, 1), lty = 3, col = "gray60")
   graphics::abline(h = cutoff, lty = 2, col = "gray45")
-  if (is.finite(ci_lower) && is.finite(ci_upper)) {
-    graphics::segments(ci_lower, cutoff, ci_upper, cutoff,
+  if (nrow(ci_intervals)) {
+    graphics::segments(ci_intervals$lower, cutoff, ci_intervals$upper, cutoff,
                        col = obs_col, lwd = 3)
-    graphics::abline(v = c(ci_lower, ci_upper), lty = 2,
+    graphics::abline(v = c(ci_intervals$lower, ci_intervals$upper), lty = 2,
                      col = grDevices::adjustcolor(obs_col, alpha.f = 0.75))
   }
   graphics::abline(v = lambda_hat, col = obs_col, lwd = 2)
@@ -433,11 +446,12 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
       "profile log-likelihood",
       paste0("lambda_hat = ", signif(lambda_hat, 4)),
       "lambda = 0 / 1",
-      if (is.finite(ci_lower) && is.finite(ci_upper)) {
-        paste0("approx. 95% CI = [", signif(ci_lower, 4), ", ",
-               signif(ci_upper, 4), "]")
+      if (nrow(ci_intervals)) {
+        paste0("approx. 95% LR set = ", paste0(
+          "[", signif(ci_intervals$lower, 4), ", ",
+          signif(ci_intervals$upper, 4), "]", collapse = " U "))
       } else {
-        "approx. 95% CI unavailable"
+        "approx. 95% LR set unavailable"
       },
       paste0("P = ", .format_p_value(dat$p_value[[1L]])),
       if (is.finite(lr)) paste0("LR = ", signif(lr, 4)) else NULL
@@ -520,6 +534,7 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
     # column belonging to the other null, as documented.
     d_null <- .resolve_d_null(null, p_col)
     custom_p <- !is.null(p_col) && !p_col %in% c("P_random", "P_Brownian",
+      "p_random", "p_brownian",
       "Pval1", "Pval0", "Pval1_fast", "Pval0_fast")
     if (!(null == "auto" && custom_p && is.data.frame(result))) {
       dat$p_value <- .d_plot_p(result, d_null, p_col)
@@ -658,7 +673,8 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
 
 .resolve_d_null <- function(null, p_col) {
   if (null != "auto") return(null)
-  if (!is.null(p_col) && p_col %in% c("P_Brownian", "Pval0", "Pval0_fast")) {
+  if (!is.null(p_col) && p_col %in% c("P_Brownian", "p_brownian",
+                                     "Pval0", "Pval0_fast")) {
     return("brownian")
   }
   "random"
@@ -666,8 +682,8 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
 
 .d_plot_p <- function(result, null, p_col = NULL) {
   candidates <- if (null == "brownian") {
-    c("P_Brownian", "Pval0_fast", "Pval0")
-  } else c("P_random", "Pval1_fast", "Pval1")
+    c("P_Brownian", "p_brownian", "Pval0_fast", "Pval0")
+  } else c("P_random", "p_random", "Pval1_fast", "Pval1")
   if (!is.null(p_col) && p_col %in% candidates && p_col %in% names(result)) {
     return(as.numeric(result[[p_col]]))
   }
@@ -717,6 +733,7 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
     p_name <- if (is.null(p_col)) default_p else p_col
     p_value <- if (identical(method, "D") &&
                    (is.null(p_col) || p_col %in% c("P_random", "P_Brownian",
+                    "p_random", "p_brownian",
                     "Pval1", "Pval0", "Pval1_fast", "Pval0_fast"))) {
       .d_plot_p(result, .resolve_d_null("auto", p_col), p_col)
     } else if (p_name %in% names(result)) result[[p_name]] else NA_real_
@@ -745,6 +762,9 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
       )
       if ("lambda_profile_fast" %in% names(result)) {
         out$profile <- I(result$lambda_profile_fast)
+        if ("lambda_CI_intervals_fast" %in% names(result)) {
+          out$ci_intervals <- I(result$lambda_CI_intervals_fast)
+        }
         out$ci_lower <- if ("lambda_CI_lower_fast" %in% names(result)) {
           as.numeric(result$lambda_CI_lower_fast)
         } else {
@@ -812,6 +832,9 @@ plot_signal <- function(result, p_col = NULL, alpha = 0.05, main = NULL,
       )
       if (!is.null(result$lambda_profile)) {
         out$profile <- I(list(result$lambda_profile))
+        if (!is.null(result$lambda_CI_intervals)) {
+          out$ci_intervals <- I(list(result$lambda_CI_intervals))
+        }
         out$ci_lower <- if (!is.null(result$lambda_CI)) {
           as.numeric(result$lambda_CI[["lower"]])
         } else {

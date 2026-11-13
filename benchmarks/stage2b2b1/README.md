@@ -1,3 +1,12 @@
+> **Retired benchmark drivers:** Historical results in this directory are retained.
+> The old comparison drivers and frozen inspection oracle were retired during
+> the reference/old-version test cleanup. They can be recovered from pre-cleanup
+> Git history. Current inspection fixtures now test current contracts directly,
+> rather than requiring equality with the retired implementation.
+>
+> The original README below is retained as historical context; its driver
+> commands describe the retired workflow and are no longer runnable as written.
+
 # fastphylosig 0.2.0 Stage 2B2B Candidate 1
 
 This directory contains a read-only paired benchmark for the Candidate 1

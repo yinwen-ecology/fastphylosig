@@ -20,7 +20,7 @@ test_that("distinct-length exponent batches preserve ACE values and RNG", {
   expect_error(fast_ace_fit_prepare_cpp(w$edge,w$edge_length,state,w$rate$rate_index,-1L),"non-negative")
 })
 
-test_that("thread choices retain the complete ARD optimizer trajectory", {
+test_that("thread choices exactly replay every ARD optimizer input", {
   set.seed(714);tr<-ape::rtree(2048);state<-sample.int(4L,2048,TRUE)
   w<-.fast_ace_workspace(.fast_ace_tree_workspace(tr),"ARD",4L)
   run<-function(threads) {
@@ -32,14 +32,25 @@ test_that("thread choices retain the complete ARD optimizer trajectory", {
     fit<-nlminb(rep(.1,12),dev,lower=rep(0,12),upper=rep(1e50,12),control=list(iter.max=15L))
     list(fit=fit,calls=calls,seed=.Random.seed,next_normal=rnorm(5),next_uniform=runif(5))
   }
-  expected<-run(1L)
-  expect_identical(run(2L),expected)
-  expect_identical(run(4L),expected)
+  runs <- lapply(c(1L, 2L, 4L), run)
+  .expect_ace_thread_replay(w, state, runs)
 })
 
-test_that("Delta honors an explicit serial ACE option without changing results", {
+test_that("Delta preserves sampling across ACE threads at fixed fitted rates", {
+  original_nlminb <- stats::nlminb
+  original_recheck <- .fast_ace_recheck_rate_scale
+  original_option <- getOption("fastphylosig.ace_threads")
+  run_fixture <- function() {
+  # Hold the external optimizer fixed: real ACE posterior and sampler still run.
+  testthat::local_mocked_bindings(nlminb = function(start, objective, ...) {
+    list(par = start, objective = objective(start), convergence = 0L,
+      message = "fixed-rate integration test", iterations = 0L,
+      evaluations = c("function" = 1L))
+  }, .package = "stats")
+  testthat::local_mocked_bindings(.fast_ace_recheck_rate_scale =
+    function(dev, first, start, workspace) first)
   old<-getOption("fastphylosig.ace_threads")
-  on.exit(options(fastphylosig.ace_threads=old))
+  on.exit(options(fastphylosig.ace_threads=old), add = TRUE)
   set.seed(13);tr<-ape::rtree(1100);y<-setNames(factor(sample(letters[1:4],1100,TRUE)),tr$tip.label)
   w<-.fast_ace_workspace(.fast_ace_tree_workspace(tr),"ARD",4L)
   run<-function(threads) {
@@ -48,4 +59,9 @@ test_that("Delta honors an explicit serial ACE option without changing results",
     list(result=result,seed=.Random.seed,next_normal=rnorm(5))
   }
   expect_identical(run(0L),run(1L))
+  }
+  run_fixture()
+  expect_identical(stats::nlminb, original_nlminb)
+  expect_identical(.fast_ace_recheck_rate_scale, original_recheck)
+  expect_identical(getOption("fastphylosig.ace_threads"), original_option)
 })

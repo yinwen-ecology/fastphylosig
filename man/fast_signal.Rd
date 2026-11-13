@@ -46,6 +46,19 @@ to this function. Advanced users can call \code{fast_k()},
 they need method-specific simulation, profile, null-retention, MCMC, or
 diagnostic controls. \code{fast_ace()} is the specialist ancestral-state ML
 function used by the Delta workflow.
+
+The approximate likelihood-ratio confidence set can have disconnected
+components. \code{lambda_CI_intervals} contains all grid-detected components
+(as a data frame with \code{lower} and \code{upper} columns), and
+\code{lambda_CI_disconnected} identifies a set with more than one component.
+The legacy \code{lambda_CI} bounds give the envelope of this set; values in
+between disconnected components are not included in the confidence set.
+For table results the corresponding fields are
+\code{lambda_CI_intervals_fast}, \code{lambda_CI_disconnected_fast}, and
+\code{lambda_CI_lower_fast}/\code{lambda_CI_upper_fast}.
+The set remains a profile-grid approximation: narrow components between grid
+points may be missed, and non-finite evaluations are not interpolated across.
+Increase \code{lambda_profile_points} to assess grid sensitivity.
 }
 \value{
 The original result class and shape returned by the selected production

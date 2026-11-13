@@ -49,10 +49,35 @@ test_that("prepared ACE fits reuse the existing pruning kernel exactly", {
       expect_identical(fast_ace_discrete_deviance_cpp(w$edge,w$edge_length,state,w$rate$rate_index,p,TRUE),expected)
       expect_identical(fast_ace_fit_deviance_cpp(ptr,p),expected)
     }
-    # nlminb must follow exactly the same path, including convergence/message.
-    a <- suppressWarnings(.fast_ace_fit_workspace(state,as.character(seq_len(k)),w,.1,estimate_se=FALSE))
-    b <- suppressWarnings(.fast_ace_fit_workspace(state,as.character(seq_len(k)),w,.1,estimate_se=FALSE,reuse_buffers=FALSE))
-    expect_identical(a,b)
+    # PORT/MKL may choose different optimizer paths. Check each returned fit
+    # at its own parameters, while retaining strict same-parameter equality.
+    for (reuse in c(TRUE, FALSE)) {
+      warnings <- list()
+      fit <- withCallingHandlers(.fast_ace_fit_workspace(state,
+        as.character(seq_len(k)), w, .1, estimate_se = FALSE,
+        reuse_buffers = reuse), warning = function(cnd) {
+          warnings[[length(warnings) + 1L]] <<- cnd
+          invokeRestart("muffleWarning")
+        })
+      p <- fit$rates
+      expected <- fast_ace_discrete_deviance_cpp(w$edge, w$edge_length,
+        state, w$rate$rate_index, p, FALSE)
+      expect_identical(fast_ace_fit_deviance_cpp(ptr, p), expected)
+      expect_equal(fit$loglik, -expected / 2, tolerance = 1e-12)
+      ordinary <- fast_ace_discrete_liks_cpp(w$edge, w$edge_length,
+        state, w$rate$rate_index, p, FALSE, FALSE)
+      prepared <- fast_ace_fit_liks_cpp(ptr, p, FALSE)
+      expect_identical(prepared, ordinary)
+      expect_equal(unname(fit$lik.anc), unname(ordinary$lik.anc),
+        tolerance = 1e-12)
+      expect_true(all(is.finite(p) & p >= 0))
+      expect_true(all(is.finite(fit$lik.anc)))
+      if (fit$convergence != 0L) {
+        expect_true(any(vapply(warnings, inherits, logical(1),
+          what = "fastphylosig_optimizer_warning")))
+        expect_true(nzchar(fit$message))
+      }
+    }
     seed <- .Random.seed
     fast_ace_fit_release_cpp(ptr)
     fast_ace_fit_release_cpp(ptr)

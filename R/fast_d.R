@@ -97,15 +97,6 @@ fast_d <- function(tree, x = NULL, test = TRUE, nsim = 1000,
     .runtime_stage(runtime, "Simulating random and Brownian nulls...")
   }
 
-  if (isTRUE(verbose) && (length(removed_tree) || length(removed_data))) {
-    message(sprintf(
-      paste(
-        "Matched %d species; removed %d tree tips and %d data rows before",
-        "trait-wise NA pruning."
-      ),
-      length(matched), length(removed_tree), length(removed_data)
-    ))
-  }
 
   bias0 <- NULL
   if (!is.null(rnd.bias)) {

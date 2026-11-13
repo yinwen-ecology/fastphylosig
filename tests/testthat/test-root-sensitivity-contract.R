@@ -181,13 +181,25 @@ test_that("legal root placements preserve topology and match K/lambda references
         ref_lambda <- suppressWarnings(phytools::phylosig(
           rooted, x, method = "lambda", test = FALSE, se = NULL
         ))
+        global <- .lambda_dense_reference(rooted, x)
         testthat::expect_equal(
-          got_lambda$lambda, unname(ref_lambda$lambda), tolerance = 1e-5,
-          info = paste(kind, n, root_name, "lambda")
+          got_lambda$lambda, global$lambda, tolerance = 1e-4,
+          info = paste(kind, n, root_name, "global lambda")
         )
         testthat::expect_equal(
-          got_lambda$logL, unname(ref_lambda$logL), tolerance = 5e-4,
-          info = paste(kind, n, root_name, "lambda logL")
+          got_lambda$logL, global$logL, tolerance = 1e-8,
+          info = paste(kind, n, root_name, "global lambda logL")
+        )
+        testthat::expect_equal(
+          got_lambda$logL, global$evaluate(got_lambda$lambda)[["logL"]],
+          tolerance = 1e-10, info = paste(kind, n, root_name, "fixed surface")
+        )
+        # phytools is retained as a comparison, not as a requirement to
+        # reproduce a lower likelihood from its interior/local optimizer.
+        testthat::expect_gte(got_lambda$logL + 1e-8, ref_lambda$logL)
+        testthat::expect_equal(
+          unname(ref_lambda$logL), global$evaluate(ref_lambda$lambda)[["logL"]],
+          tolerance = 1e-8, info = paste(kind, n, root_name, "phytools surface")
         )
       }
       x <- .root_contract_continuous(roots[[1L]])

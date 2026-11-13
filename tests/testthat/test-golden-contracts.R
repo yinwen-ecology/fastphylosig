@@ -174,19 +174,52 @@ test_that("golden lambda likelihood and profile contract are stable", {
 
   expect_s3_class(fit, "phylosig")
   expect_equal(attr(fit, "method"), "lambda")
-  expect_equal(fit$lambda, 6.61069613518961e-05, tolerance = 1e-5)
-  expect_equal(fit$logL, -6.04621136219611, tolerance = 1e-5)
-  expect_equal(fit$logL0, -6.04617125212792, tolerance = 1e-5)
+  expect_equal(fit$lambda, 0, tolerance = 0)
+  expect_equal(fit$logL, -6.04617125212792, tolerance = 1e-12)
+  expect_equal(fit$logL0, -6.04617125212792, tolerance = 1e-12)
   expect_equal(fit$P, 1, tolerance = 1e-12)
   C <- ape::vcv.phylo(.golden_tree())
   y <- .golden_continuous()[, "trait_a"]
-  Cl <- fit$lambda * (C - diag(diag(C))) + diag(diag(C))
-  invCl <- solve(Cl)
-  gls_mean <- sum(invCl %*% y) / sum(invCl)
-  centered <- y - gls_mean
-  sigma2 <- drop(t(centered) %*% invCl %*% centered) / length(y)
-  expect_equal(gls_mean, 0.867858568028865, tolerance = 1e-10)
-  expect_equal(sigma2, 0.861839629072312, tolerance = 1e-10)
+  # At lambda=0 the covariance is diagonal. Derive the GLS quantities
+  # directly from its inverse-variance weights, independently of the fit.
+  weights <- 1 / diag(C)
+  gls_mean <- sum(weights * y) / sum(weights)
+  sigma2 <- sum(weights * (y - gls_mean)^2) / length(y)
+  expect_equal(gls_mean, 243 / 280, tolerance = 1e-14)
+  expect_equal(sigma2, 0.8618223443223442, tolerance = 1e-14)
+  expect_equal(fit$gls_mean, gls_mean, tolerance = 1e-12)
+  expect_equal(fit$sig2, sigma2, tolerance = 1e-12)
+  expect_equal(fit$logL, -.5 * (4 * (1 + log(2*pi) + log(sigma2)) +
+                                sum(log(diag(C)))), tolerance = 1e-12)
+
+  # Analytic global-boundary proof for the two 2x2 covariance blocks:
+  # A=1'V^-1 1=A_num/D, B=1'V^-1 y=B_num/D, S=y'V^-1 y=S_num/D.
+  # With Q=S_num*A_num-B_num^2, the profiled residual is Q/(D*A_num).
+  # Thus -2*logL' has numerator
+  # N=4*Q'*D*A_num-3*D'*Q*A_num-4*A_num'*Q*D, over positive Q*D*A_num.
+  # All Bernstein coefficients of N on [0,1] are positive, proving logL
+  # strictly decreases throughout the legal interval: its maximum is zero.
+  mul <- function(a, b) as.numeric(convolve(a, rev(b), type = "open"))
+  add <- function(a, b) {
+    length(a) <- length(b) <- max(length(a), length(b))
+    a[is.na(a)] <- 0; b[is.na(b)] <- 0
+    a + b
+  }
+  derivative <- function(a) seq_len(length(a)-1L) * a[-1L]
+  d1 <- c(1.95, 0, -.64); d2 <- c(1.95, 0, -.81)
+  D <- mul(d1, d2)
+  A <- add(mul(c(2.8, -1.6), d2), mul(c(2.8, -1.8), d1))
+  B <- add(mul(c(.89, -.4), d2), mul(c(3.97, -2.43), d1))
+  S <- add(mul(c(2.797, 1.344), d2), mul(c(8.143, -1.656), d1))
+  Q <- add(mul(S, A), -mul(B, B))
+  N <- add(add(4 * mul(mul(derivative(Q), D), A),
+               -3 * mul(mul(derivative(D), Q), A)),
+           -4 * mul(mul(derivative(A), Q), D))
+  degree <- length(N) - 1L
+  bernstein <- vapply(0:degree, function(k) {
+    sum(N[seq_len(k+1L)] * choose(k, 0:k) / choose(degree, 0:k))
+  }, numeric(1))
+  expect_gt(min(bernstein), 390) # Wide margin against polynomial roundoff.
   expect_equal(fastphylosig:::.max_lambda(.golden_tree()), 1,
                tolerance = 1e-12)
   expect_equal(max(0, 2 * (fit$logL - fit$logL0)), 0,
@@ -260,7 +293,9 @@ test_that("golden ER ancestral likelihoods are stable", {
 
   expect_s3_class(fit, "ace")
   expect_equal(fit$loglik, -3.285635060172, tolerance = 1e-8)
-  expect_equal(fit$rates, 0.668752665860438, tolerance = 1e-8)
+  # The historical optimizer rate is approximate; analytic score root is
+  # 0.668752673378436. Keep likelihood and ancestral tolerances unchanged.
+  expect_equal(fit$rates, 0.668752665860438, tolerance = 1e-7)
   expect_equal(fit$lik.anc, matrix(
     c(0.379570009827257, 0.322736327202790, 0.297693662969953,
       0.724615560559838, 0.138848938803113, 0.136535500637049,

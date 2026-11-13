@@ -1,3 +1,46 @@
+# fastphylosig 0.3.6
+
+1. Improve the accuracy and reliability of lambda fitting through broader
+   searches and likelihood-based refinement of confidence-interval boundaries.
+   Return disconnected confidence intervals separately, improve handling of
+   extreme trait values and branch lengths, correct the matrix orientation in
+   the multi-trait reference calculation, and fix observed narrow-gap omissions
+   by reusing optimizer search points. Finite grids still cannot guarantee
+   detection of every arbitrarily narrow component or gap.
+2. Strengthen ACE/ARD robustness to branch-length units and state renaming,
+   add recovery for some incomplete fits, and protect standard-error calculation.
+   Non-finite, non-positive-definite or unusable Hessians now yield unavailable
+   standard errors rather than potentially misleading partial values. These
+   changes do not guarantee a global optimum or identical optimizer trajectories
+   across numerical environments.
+3. Correct Delta random-permutation P values from `b/B` to `(b+1)/(B+1)`, avoiding
+   zero P values from finite random samples. Keep ties in the exceedance count.
+   If any permutation fails, return unavailable P and Monte Carlo standard error
+   rather than infer from the successful subset; retain the observed estimate
+   and simulation diagnostics. Align Monte Carlo error calculation with the
+   corrected P value, leaving it unavailable at zero/all exceedances. Fix
+   misaligned batch diagnostics, parallel worker installation conflicts and
+   single-retained-iteration chain handling. Custom permutations must satisfy
+   the documented sampling assumptions for valid random-permutation inference.
+4. Improve numerical stability of K and D for extreme data and complete internal
+   node-index checks. Optimize D Brownian threshold selection for trees with at
+   least 2,048 tips without changing the sampling logic, simulation count or
+   random-number stream. Runtime gains depend on the workload; broader searches
+   and interval refinement can add work elsewhere.
+5. Correct the reported number of removed tree tips in
+   `match_tree_data(prune = FALSE)`.
+6. Correct the association between D plot P values and their null models, and
+   fix conflicts between user-supplied and default `plot_signal()` arguments.
+   Display disconnected lambda confidence intervals as separate segments.
+7. Remove redundant definitions, unused internal helpers and obsolete reference
+   code, and add regression tests and independent numerical checks for the
+   corrected behavior.
+
+These are result-affecting fixes, not only performance changes. Affected lambda
+estimates/intervals, ACE fits and downstream Delta results may differ from 0.3.5.
+Public exported functions are retained. The existing lambda lower/upper CI fields
+now describe the outer envelope; use `lambda_CI_intervals` to retain gaps.
+
 # fastphylosig 0.3.5
 
 - Correct the ARD ancestral-state downpass to use the child contribution

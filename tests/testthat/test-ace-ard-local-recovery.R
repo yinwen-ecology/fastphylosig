@@ -24,14 +24,25 @@ test_that("bounded ARD recovery agrees with independent likelihoods at matching 
     expect_lt(max(abs(rowSums(f$lik.anc)-1)),1e-12)
     expect_false(any(vapply(notes,inherits,logical(1),"fastphylosig_optimizer_warning")))
     # A platform may converge on its first attempt. Validate that answer above;
-    # only a real retry has an unfinished baseline and a retry warning.
+    # bounded ARD retry starts unfinished; scale recovery may improve a
+    # nominally converged local solution and also emits a retry warning.
     retry <- f$diagnostics$optimizer_retry
     expect_identical(any(vapply(notes,inherits,logical(1),
       "fastphylosig_optimizer_retry_warning")), !is.null(retry))
     if(!is.null(retry)) {
       baseline_reference <- .ace_recovery_reference_deviance(a,retry$original$par)
       expect_lt(current_reference,baseline_reference)
-      expect_identical(retry$original$convergence,1L)
+      if (!is.null(f$diagnostics$rate_scale_recovery)) {
+        expect_identical(f$diagnostics$method, "branch-scale optimizer recovery")
+        # This captured fixture escapes a nominally converged local basin.
+        expect_identical(retry$original$convergence, 0L)
+        expect_gt(f$diagnostics$deviance_improvement, 0)
+        expect_equal(f$diagnostics$attempts$objective[
+          f$diagnostics$selected_attempt], current_reference, tolerance = 1e-8)
+      } else {
+        expect_identical(f$diagnostics$method, "bounded scaled ARD recovery")
+        expect_identical(retry$original$convergence, 1L)
+      }
       expect_true(isTRUE(retry$recovered))
     }
   }

@@ -27,7 +27,7 @@ test_that("mixed exponent caches and batches retain ACE values and RNG", {
   }
 })
 
-test_that("mixed-length thread choices retain ARD objective trajectories", {
+test_that("mixed-length threads exactly replay every optimizer input", {
   set.seed(619); tr <- ape::rtree(4096)
   rows <- sample.int(nrow(tr$edge), nrow(tr$edge) %/% 2L)
   tr$edge.length[rows] <- pmax(.01, round(tr$edge.length[rows], 2))
@@ -46,7 +46,6 @@ test_that("mixed-length thread choices retain ARD objective trajectories", {
       control = list(iter.max = 15L))
     list(fit = fit, calls = calls, seed = .Random.seed, next_normal = rnorm(5), next_uniform = runif(5))
   }
-  expected <- run(1L)
-  expect_identical(run(2L), expected)
-  expect_identical(run(4L), expected)
+  runs <- lapply(c(1L, 2L, 4L), run)
+  .expect_ace_thread_replay(w, state, runs)
 })

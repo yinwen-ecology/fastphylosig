@@ -200,10 +200,10 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
     native_pool=native_pool,native_key=key))
 }
 
-.fast_ace_fit_workspace <- function(tip_state, lvls, workspace, ip,
+.fast_ace_fit_workspace_impl <- function(tip_state, lvls, workspace, ip,
                                     CI = TRUE, marginal = FALSE,
                                     estimate_se = TRUE,
-                                    reuse_buffers = !isTRUE(estimate_se),
+                                    reuse_buffers = TRUE,
                                     fit_strategy = "default", recover_ard = FALSE) {
   rate <- workspace$rate
   par0 <- rep(ip, length.out = rate$np)
@@ -211,9 +211,9 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
   recovery_guard <- FALSE
   er_recoveries <- 0
   stable_recoveries <- probability_recoveries <- 0
-  # Delta keeps nlminb unchanged. An analysis pool can reuse immutable geometry
+  # An analysis pool can reuse immutable geometry
   # across fits; otherwise this closure owns and releases its native scratch.
-  dev <- if (isTRUE(reuse_buffers) && !isTRUE(estimate_se)) {
+  dev <- if (isTRUE(reuse_buffers)) {
     threads <- if(is.null(workspace$fit_threads))getOption("fastphylosig.ace_threads",0L) else workspace$fit_threads
     pool <- workspace$native_pool
     if(!is.null(pool) && identical(pool$pid,Sys.getpid()) && pool$budget>0) {
@@ -241,11 +241,19 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
     value[[1L]]
   }
 
-  fit <- if (identical(fit_strategy, "multistart"))
-    .fast_ace_multistart(dev, par0, workspace) else stats::nlminb(
-    start = par0, objective = dev,
-    lower = rep(0, rate$np), upper = rep(1e50, rate$np)
-  )
+  # Optimize dimensionless transition intensities, retaining ip in the
+  # physical inverse-branch units supplied by the caller.
+  branch_unit <- stats::median(workspace$edge_length)
+  fit <- if (identical(fit_strategy, "multistart")) {
+    .fast_ace_multistart(dev, par0, workspace)
+  } else {
+    z <- stats::nlminb(start = par0 * branch_unit,
+      objective = function(p) dev(p / branch_unit),
+      lower = rep(0, rate$np),
+      upper = rep(min(.Machine$double.xmax, 1e50 * branch_unit), rate$np))
+    z$par <- z$par / branch_unit
+    z
+  }
   if(isTRUE(recover_ard) && identical(fit_strategy,"default") &&
       identical(workspace$model,"ARD") && fit$convergence != 0L) {
     recovery_guard <- !is.null(prepared)
@@ -254,26 +262,35 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
     fit <- .fast_ace_recover_ard(recovery_dev,fit,recheck=recovery_guard)
   }
 
+  # A fixed initial rate can land on a numerically flat high-rate surface
+  # after an ordinary change of branch-length units. Retain the original
+  # start and solver, but accept a scale-aware restart if it proves better.
+  if (identical(fit_strategy, "default")) {
+    scale_dev <- if (recovery_guard) recovery_dev else dev
+    fit <- .fast_ace_recheck_rate_scale(scale_dev, fit, par0, workspace)
+  }
+
   rate_se <- rep(NaN, rate$np)
   if (isTRUE(estimate_se)) {
+    # nlm's absolute finite-difference floor is inappropriate when a change
+    # of branch units makes physical rates tiny (or very large). Work in a
+    # comparable rate unit for the information matrix, then undo that unit.
+    largest_rate <- max(abs(fit$par))
+    information_unit <- if (is.finite(largest_rate) && largest_rate > 0 &&
+        (largest_rate < .1 || largest_rate > 10)) largest_rate else 1
+    information_dev <- if (information_unit == 1) dev else
+      function(p) dev(p * information_unit)
     hessian_fit <- try(
       suppressWarnings(stats::nlm(
-        f = dev, p = fit$par, iterlim = 1, stepmax = 0, hessian = TRUE
+        f = information_dev, p = fit$par / information_unit,
+        iterlim = 1, stepmax = 0, hessian = TRUE
       )),
       silent = TRUE
     )
-    rate_se <- if (inherits(hessian_fit, "try-error") ||
-        any(diag(hessian_fit$hessian) == 0)) {
-      rep(NaN, rate$np)
-    } else {
-      solved <- try(solve(hessian_fit$hessian), silent = TRUE)
-      if (inherits(solved, "try-error")) {
-        rep(NaN, rate$np)
-      } else {
-        # dev = -2 * loglik, so observed information is Hessian(dev) / 2.
-        sqrt(2 * diag(solved))
-      }
-    }
+    rate_se <- .fast_ace_rate_standard_errors(
+      if (inherits(hessian_fit, "try-error")) NULL else hessian_fit$hessian,
+      rate$np, information_unit
+    )
   }
 
   obj <- list(
@@ -287,7 +304,10 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
   if (!is.null(fit$diagnostics)) obj$diagnostics <- fit$diagnostics
   if(!is.null(fit$diagnostics$optimizer_retry)) {
     retry <- fit$diagnostics$optimizer_retry
-    warning(structure(list(message=paste0("ACE attempted bounded ARD optimizer recovery; ",
+    recovery_label <- if (!is.null(fit$diagnostics$rate_scale_recovery))
+      "branch-scale" else "bounded ARD"
+    warning(structure(list(message=paste0("ACE attempted ", recovery_label,
+      " optimizer recovery; ",
       if(retry$recovered) "a converged candidate was selected." else "optimization remains unfinished."),
       call=NULL,recovered=retry$recovered,diagnostics=fit$diagnostics),
       class=c("fastphylosig_optimizer_retry_warning","warning","condition")))
@@ -343,15 +363,41 @@ fast_ace <- function(x, phy = NULL, type = "discrete", method = "ML", CI = TRUE,
   obj
 }
 
+.fast_ace_rate_standard_errors <- function(hessian, np, information_unit = 1) {
+  unavailable <- function() {
+    warning(structure(list(
+      message = paste0("Transition-rate standard errors are unavailable: ",
+        "the likelihood curvature is invalid or cannot be reliably inverted. ",
+        "Rate estimates and ancestral-state probabilities are still returned."),
+      call = NULL), class = c("fastphylosig_ace_se_warning", "warning", "condition")))
+    rep(NaN, np)
+  }
+  # An invertible but indefinite Hessian is not a covariance matrix, even
+  # when some (or all) inverse diagonal entries happen to be positive.
+  if (!is.matrix(hessian) || !identical(dim(hessian), c(as.integer(np), as.integer(np))) ||
+      any(!is.finite(hessian)) || !isSymmetric(hessian)) return(unavailable())
+  positive <- try(chol(hessian), silent = TRUE)
+  if (inherits(positive, "try-error")) return(unavailable())
+  # Retain the established arithmetic for valid curvature. dev = -2 * loglik.
+  solved <- try(solve(hessian), silent = TRUE)
+  if (inherits(solved, "try-error") || any(!is.finite(solved)) ||
+      any(diag(solved) <= 0)) return(unavailable())
+  se <- information_unit * sqrt(2 * diag(solved))
+  if (any(!is.finite(se))) return(unavailable())
+  se
+}
+
 # Optional common-ARD reference search; all attempts reuse one native objective.
 # No random starts or convergence relabelling.
 .fast_ace_multistart <- function(dev, par0, workspace) {
   attempts <- list()
+  branch_unit <- stats::median(workspace$edge_length)
   extended <- list(iter.max = 1500L, eval.max = 4000L)
   run <- function(start, label, control = list()) {
-    z <- tryCatch(stats::nlminb(start = start, objective = dev,
-      lower = rep(0, length(par0)), upper = rep(1e50, length(par0)),
+    z <- tryCatch(stats::nlminb(start = start * branch_unit, objective = function(p) dev(p / branch_unit),
+      lower = rep(0, length(par0)), upper = rep(min(.Machine$double.xmax, 1e50 * branch_unit), length(par0)),
       control = control), error = identity)
+    if (!inherits(z, "error")) z$par <- z$par / branch_unit
     failed <- inherits(z, "error")
     attempts[[length(attempts) + 1L]] <<- list(label = label, start = start,
       fit = z, valid = !failed && is.finite(z$objective) && z$objective < 1e49 &&

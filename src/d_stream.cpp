@@ -235,9 +235,32 @@ Rcpp::List phylo_d_stream_cpp(const arma::vec& observed,
         sorted_values[static_cast<std::size_t>(tip)] =
           brownian_tip_values[static_cast<std::size_t>(tip)];
       }
-      std::sort(sorted_values.begin(), sorted_values.end());
-      const double threshold =
-        fastphylosig::quantile_type7_sorted(sorted_values, prop_state1);
+      double threshold;
+      // Selection only pays off for large trees. Preserve the original sort
+      // for small trees and nonfinite simulated values. Select the same two
+      // order statistics as type 7; do not change interpolation or RNG draws.
+      if (n_tip < 2048 ||
+          !std::all_of(sorted_values.begin(), sorted_values.end(),
+                       [](double x) { return std::isfinite(x); })) {
+        std::sort(sorted_values.begin(), sorted_values.end());
+        threshold = fastphylosig::quantile_type7_sorted(sorted_values, prop_state1);
+      } else {
+        const double h = 1.0 + static_cast<double>(n_tip - 1) * prop_state1;
+        const int lo = static_cast<int>(std::floor(h));
+        const double gamma = h - static_cast<double>(lo);
+        if (h <= 1.0) {
+          threshold = *std::min_element(sorted_values.begin(), sorted_values.end());
+        } else if (lo >= n_tip) {
+          threshold = *std::max_element(sorted_values.begin(), sorted_values.end());
+        } else {
+          std::nth_element(sorted_values.begin(), sorted_values.begin() + lo,
+                           sorted_values.end());
+          const double upper = sorted_values[static_cast<std::size_t>(lo)];
+          const double lower = *std::max_element(sorted_values.begin(),
+                                                sorted_values.begin() + lo);
+          threshold = (1.0 - gamma) * lower + gamma * upper;
+        }
+      }
       for (int tip = 0; tip < n_tip; ++tip) {
         brownian_states(tip, c) =
           brownian_tip_values[static_cast<std::size_t>(tip)] < threshold ?
