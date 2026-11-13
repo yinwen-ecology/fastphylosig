@@ -4,7 +4,10 @@ k-public-contract.rds was captured from the independently installed repaired
 fastphylosig 0.3.5 library final-verification/library (2026-11-11), using
 R 4.6.1. Provenance is also embedded in the fixture. Tests never regenerate it.
 Inputs are the four-tip golden tree and two fixed numeric traits, rather than
-ape::rtree output. RNG kind is fixed explicitly and restored after capture.
+ape::rtree output. The complete RNG configuration is pinned with RNGversion("4.6.1") and explicit
+uniform/normal/sample kinds, then restored after capture. This also fixes the
+binomial-generator metadata introduced in newer R versions; K does not draw
+binomial variates. The complete seed vectors are still compared exactly.
 
 Coverage: vector and batch public fast_k results, explicit four-row permutations
 and 31 internal permutations, complete null draws, exact initial/final RNG states,

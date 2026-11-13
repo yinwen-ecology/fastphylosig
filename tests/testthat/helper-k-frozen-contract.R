@@ -31,6 +31,14 @@
     else if (exists(".Random.seed", .GlobalEnv, inherits=FALSE))
       rm(".Random.seed", envir=.GlobalEnv)
   })
+  # Pin the complete R 4.6.1 RNG configuration used by this frozen fixture.
+  # R-devel adds a binomial-generator code to .Random.seed[1]. K uses no
+  # binomial draws, but restoring the historical configuration keeps the
+  # full seed comparison exact rather than discarding any state metadata.
+  withCallingHandlers(RNGversion("4.6.1"), warning = function(w) {
+    if (identical(conditionMessage(w), "Buggy BTPE algorithm used for rbinom()"))
+      invokeRestart("muffleWarning")
+  })
   RNGkind("Mersenne-Twister", "Inversion", "Rejection")
   input <- .compat_k_input()
   out <- list()

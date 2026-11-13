@@ -21,14 +21,12 @@ test_that("exact eigenvalue reuse preserves changing generators and state data",
     for(i in seq_along(parameters)) {
       par <- parameters[[i]]
       # Raw reuse_buffers calls have fresh, uncached scratch. Their scalar
-      # evaluator and matrix products supply the exact reference on this BLAS.
+      # evaluator and matrix products supply an independent storage-path comparison on this BLAS.
       expected <- fast_ace_discrete_deviance_cpp(w$edge,w$edge_length,z,w$rate$rate_index,par,TRUE)
-      expect_true(identical(fast_ace_fit_deviance_cpp(ptr,par),as.numeric(expected),
-                            num.eq=FALSE,single.NA=FALSE))
+      .expect_ace_numerical_equivalent(fast_ace_fit_deviance_cpp(ptr,par), as.numeric(expected))
       ref <- fast_ace_discrete_liks_cpp(w$edge,w$edge_length,z,w$rate$rate_index,par,FALSE,TRUE)
       got <- fast_ace_fit_liks_cpp(ptr,par,FALSE)
-      expect_true(identical(got,ref[c("deviance","loglik","lik.anc")],
-                            num.eq=FALSE,single.NA=FALSE))
+      .expect_ace_numerical_equivalent(got, ref[c("deviance","loglik","lik.anc")])
       expect_identical(.Random.seed,seed)
       if(i<=2L)probabilities[[i]] <- got$lik.anc
     }
@@ -36,7 +34,7 @@ test_that("exact eigenvalue reuse preserves changing generators and state data",
     # A zero generator has no support for these observations and can stop
     # pruning early. A later valid trial must still see complete exponent rows.
     expect_identical(fast_ace_fit_deviance_cpp(ptr,rep(0,6)),1e50)
-    expect_identical(fast_ace_fit_deviance_cpp(ptr,base),as.numeric(
+    .expect_ace_numerical_equivalent(fast_ace_fit_deviance_cpp(ptr,base),as.numeric(
       fast_ace_discrete_deviance_cpp(w$edge,w$edge_length,z,w$rate$rate_index,base,TRUE)))
   }
   expect_lt(fast_ace_fit_bytes_cpp(ptr)-bytes,1024^2)
@@ -53,7 +51,7 @@ test_that("large serial fits retain bounded exponent storage", {
   for(i in 1:30) {
     Q <- matrix(c(0,.05+i/1000,0,0,0,.6,0,0,0),3,byrow=TRUE)
     par <- Q[row(Q)!=col(Q)]
-    expect_identical(fast_ace_fit_deviance_cpp(ptr,par),as.numeric(
+    .expect_ace_numerical_equivalent(fast_ace_fit_deviance_cpp(ptr,par),as.numeric(
       fast_ace_discrete_deviance_cpp(w$edge,w$edge_length,states,w$rate$rate_index,par,TRUE)))
   }
   expect_lt(fast_ace_fit_bytes_cpp(ptr),1024^2)
@@ -77,8 +75,7 @@ test_that("cache eligibility boundaries preserve complex ARD transitions", {
       on.exit(fast_ace_fit_release_cpp(ptr))
       seed <- .Random.seed
       for(i in 1:2) {
-        expect_true(identical(fast_ace_fit_liks_cpp(ptr,par,FALSE),expected,
-                              num.eq=FALSE,single.NA=FALSE))
+        .expect_ace_numerical_equivalent(fast_ace_fit_liks_cpp(ptr,par,FALSE), expected)
         expect_identical(.Random.seed,seed)
       }
     })

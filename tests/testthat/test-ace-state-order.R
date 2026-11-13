@@ -1,5 +1,8 @@
 test_that("ARD fixed-rate fits do not depend on state names", {
   original_nlminb <- stats::nlminb
+  # Resolve ape's lazy optimizer import before temporarily mocking stats.
+  # Otherwise a later ace() call can retain the mock after stats is restored.
+  original_ape_nlminb <- get("nlminb", asNamespace("ape"), inherits = TRUE)
   original_recheck <- .fast_ace_recheck_rate_scale
   run_fixture <- function() {
     testthat::local_mocked_bindings(nlminb = function(start, objective, ...) {
@@ -13,7 +16,10 @@ test_that("ARD fixed-rate fits do not depend on state names", {
   for (k in 2:5) {
     set.seed(808)
     tree <- ape::rtree(48)
-    x <- ape::rTraitDisc(tree, model = "ER", k = k, rate = .4)
+    # Relabelling needs every state present; stochastic simulation can omit one.
+    x <- stats::setNames(factor(rep(letters[seq_len(k)], length.out = 48),
+      levels = letters[seq_len(k)]), tree$tip.label)
+    expect_identical(sort(unique(as.integer(x))), seq_len(k))
     labels <- levels(x)
     baseline <- suppressWarnings(fast_ace(x, tree, model = "ARD", progress = FALSE))
     for (permutation in list(rev(seq_len(k)), c(seq.int(2L, k), 1L))) {
@@ -40,13 +46,16 @@ test_that("ARD fixed-rate fits do not depend on state names", {
   }
   run_fixture()
   expect_identical(stats::nlminb, original_nlminb)
+  expect_identical(get("nlminb", asNamespace("ape"), inherits = TRUE),
+                   original_ape_nlminb)
   expect_identical(.fast_ace_recheck_rate_scale, original_recheck)
 })
 
 test_that("ARD external initial parameters and diagnostic orders are preserved", {
   set.seed(808)
   tree <- ape::rtree(48)
-  x <- ape::rTraitDisc(tree, model = "ER", k = 4, rate = .4)
+  x <- stats::setNames(factor(rep(letters[1:4], length.out = 48),
+    levels = letters[1:4]), tree$tip.label)
   w <- .fast_ace_workspace(.fast_ace_tree_workspace(tree), "ARD", 4L)
   states <- as.integer(x)
   labels <- levels(x)
@@ -102,6 +111,9 @@ test_that("ARD external initial parameters and diagnostic orders are preserved",
 
 test_that("Delta fixed-rate ARD preserves sampling under relabelling", {
   original_nlminb <- stats::nlminb
+  # Resolve ape's lazy optimizer import before temporarily mocking stats.
+  # Otherwise a later ace() call can retain the mock after stats is restored.
+  original_ape_nlminb <- get("nlminb", asNamespace("ape"), inherits = TRUE)
   original_recheck <- .fast_ace_recheck_rate_scale
   run_fixture <- function() {
     testthat::local_mocked_bindings(nlminb = function(start, objective, ...) {
@@ -115,7 +127,8 @@ test_that("Delta fixed-rate ARD preserves sampling under relabelling", {
 
   set.seed(808)
   tree <- ape::rtree(48)
-  x <- ape::rTraitDisc(tree, model = "ER", k = 4, rate = .4)
+  x <- stats::setNames(factor(rep(letters[1:4], length.out = 48),
+    levels = letters[1:4]), tree$tip.label)
   y <- stats::setNames(rev(levels(x))[as.integer(x)], names(x))
   fit <- function(z) {
     set.seed(123)
@@ -132,6 +145,8 @@ test_that("Delta fixed-rate ARD preserves sampling under relabelling", {
   }
   run_fixture()
   expect_identical(stats::nlminb, original_nlminb)
+  expect_identical(get("nlminb", asNamespace("ape"), inherits = TRUE),
+                   original_ape_nlminb)
   expect_identical(.fast_ace_recheck_rate_scale, original_recheck)
 })
 

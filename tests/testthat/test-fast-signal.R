@@ -409,8 +409,13 @@ test_that("ACE point likelihoods retain ER/ARD reference compatibility", {
   ))
   fast_ard <- fast_ace(x_ard, tree, model = "ARD")
   expect_lt(abs(ref_ard$loglik - fast_ard$loglik), 1e-8)
-  # Different optimizers can differ in rates on a near-optimal flat surface.
-  expect_lt(max(abs(ref_ard$rates - fast_ard$rates)), 1e-6)
+  # Independent optimizers need not return identical rates on a flat surface.
+  # Validate each fitted rate vector against the same mathematical likelihood,
+  # rather than making cross-optimizer parameter agreement an accuracy oracle.
+  expect_true(all(is.finite(fast_ard$rates) & fast_ard$rates >= 0))
+  ref_independent <- .ace_math_loglik(tree, as.integer(x_ard),
+    .ace_math_q(ref_ard$index.matrix, ref_ard$rates)) + log(nlevels(x_ard))
+  expect_equal(ref_ard$loglik, ref_independent, tolerance = 1e-10)
   independent <- .ace_math_loglik(tree, as.integer(x_ard),
     .ace_math_q(fast_ard$index.matrix, fast_ard$rates)) + log(nlevels(x_ard))
   expect_equal(fast_ard$loglik, independent, tolerance = 1e-10)
